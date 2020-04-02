@@ -5,7 +5,14 @@
 {-# Language ExistentialQuantification #-}
 {-# Language ScopedTypeVariables #-}
 
-module Main where
+module Main (main) where
+
+data MyGADT s where
+  IntGADT :: MyGADT Int
+  StringGADT :: MyGADT String
+
+fn :: MyGADT Int -> ()
+fn IntGADT = ()
 
 main :: IO ()
-main = pure ()
+main = pure $ fn IntGADT
