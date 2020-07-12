@@ -35,6 +35,9 @@ executables:
     - -with-rtsopts=-N
     dependencies:
       - haskell-scratch
+      - containers
+      - scientific
+      - aeson
 
 default-extensions:
   - ApplicativeDo
