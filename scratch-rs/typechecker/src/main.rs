@@ -426,7 +426,7 @@ fn coerce_ctype<T>(c: CType<Concrete>) -> CType<T> {
     }
 }
 
-fn ctype_to_concrete_unsafe(c: &CType<ArgValue>) -> ConcreteType {
+fn argvalue_to_concrete_unsafe(c: &CType<ArgValue>) -> ConcreteType {
     match c {
         MInt => MInt,
         MNat => MNat,
@@ -446,17 +446,17 @@ fn ctype_to_concrete_unsafe(c: &CType<ArgValue>) -> ConcreteType {
 fn box_aux_argvalue_to_concrete_unsafe(aux: &Box<AuxCT<ArgValue>>) -> Box<AuxCT<Concrete>> {
     match aux.as_ref() {
         AuxCT::Aux(av) => match av {
-            ArgValue::ValueArg(ct) => Box::new(AuxCT::AuxCT(ctype_to_concrete_unsafe(ct))),
+            ArgValue::ValueArg(ct) => Box::new(AuxCT::AuxCT(argvalue_to_concrete_unsafe(ct))),
             ArgValue::TypeArg(_) => panic!("Type arg unexpected here"),
         },
-        AuxCT::AuxCT(c) => Box::new(AuxCT::AuxCT(ctype_to_concrete_unsafe(c))),
+        AuxCT::AuxCT(c) => Box::new(AuxCT::AuxCT(argvalue_to_concrete_unsafe(c))),
     }
 }
 
 fn arg_value_to_concrete(c: ArgValue) -> ConcreteType {
     match c {
         ArgValue::TypeArg(_) => panic!("Unexpected"),
-        ArgValue::ValueArg(ct) => ctype_to_concrete_unsafe(&ct),
+        ArgValue::ValueArg(ct) => argvalue_to_concrete_unsafe(&ct),
     }
 }
 
