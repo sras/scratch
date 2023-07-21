@@ -476,10 +476,9 @@ fn typecheck<'a>(
     mut stack: StackState,
 ) -> Result<StackState, &'a str> {
     for instruction in instructions {
-        let sref = &mut stack;
-        match typecheck_one(instruction, (*sref).clone()) {
+        match typecheck_one(instruction, stack.clone()) {
             Result::Ok(s) => {
-                *sref = s;
+                stack = s;
                 println!("{:?}", stack);
             }
             Err(s) => return Err(s),
