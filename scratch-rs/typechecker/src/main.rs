@@ -476,10 +476,9 @@ fn typecheck<'a>(
     mut stack: StackState,
 ) -> Result<StackState, &'a str> {
     for instruction in instructions {
-        match typecheck_one(instruction, stack.clone()) {
+        match typecheck_one(instruction, stack) {
             Result::Ok(s) => {
                 stack = s;
-                println!("{:?}", stack);
             }
             Err(s) => return Err(s),
         }
