@@ -375,8 +375,8 @@ fn unify_stack<'a>(
     result: &mut HashMap<char, ConcreteType>,
     sem_stack_in: Vec<StackArg>,
     sem_stack_out: Vec<StackResult>,
-    stack_state: StackState,
-) -> Result<StackState, &'a str> {
+    stack_state: &mut StackState,
+) -> Result<(), &'a str> {
     let mut stack_index: usize = 0;
     let mut t_result = Result::Ok(());
     let mut s_tail: StackState;
@@ -398,7 +398,8 @@ fn unify_stack<'a>(
         Result::Ok(_) => match make_result_stack(result, sem_stack_out) {
             Result::Ok(mut rs) => {
                 rs.append(&mut s_tail);
-                Result::Ok(rs)
+                *stack_state = rs;
+                Result::Ok(())
             }
             Result::Err(s) => Result::Err(s),
         },
@@ -476,29 +477,27 @@ fn typecheck<'a>(
     mut stack: StackState,
 ) -> Result<StackState, &'a str> {
     for instruction in instructions {
-        match typecheck_one(instruction, stack) {
-            Result::Ok(s) => {
-                stack = s;
-            }
-            Err(s) => return Err(s),
-        }
+        typecheck_one(instruction, &mut stack)?
     }
     return Result::Ok(stack);
 }
 
 fn typecheck_one<'a>(
     instruction: Instruction<'a>,
-    stack: StackState,
-) -> Result<StackState, &'a str> {
+    stack: &mut StackState,
+) -> Result<(), &'a str> {
     match MICHELSON_INSTRUCTIONS.get(instruction.name) {
-        Some(s) => match unify_args(instruction.args, s.args.clone()) {
+        Some(s) => {
+            match unify_args(instruction.args, s.args.clone()) {
             Result::Ok(ref mut result) => {
-                return unify_stack(result, s.input_stack.clone(), s.output_stack.clone(), stack);
+                unify_stack(result, s.input_stack.clone(), s.output_stack.clone(), stack)?;
+                    return Result::Ok(());
+
             }
             Result::Err(err) => {
                 return Result::Err(err);
             }
-        },
+        }},
         _ => {
             return Result::Err("Instruction not found");
         }
