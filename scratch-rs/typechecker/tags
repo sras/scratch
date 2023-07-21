@@ -1,0 +1,60 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+ArgValue	/home/sras/work/serokell/projects/tezos-rust/typechecker/src/main.rs	/^enum ArgValue {$/;"	g
+AuxCT	/home/sras/work/serokell/projects/tezos-rust/typechecker/src/main.rs	/^enum AuxCT<T> {$/;"	g
+CType	/home/sras/work/serokell/projects/tezos-rust/typechecker/src/main.rs	/^enum CType<T> {$/;"	g
+Concrete	/home/sras/work/serokell/projects/tezos-rust/typechecker/src/main.rs	/^enum Concrete {}$/;"	g
+ConcreteType	/home/sras/work/serokell/projects/tezos-rust/typechecker/src/main.rs	/^type ConcreteType = CType<Concrete>;$/;"	T
+Constraint	/home/sras/work/serokell/projects/tezos-rust/typechecker/src/main.rs	/^enum Constraint {$/;"	g
+INIT	/home/sras/.cargo/registry/src/index.crates.io-6f17d22bba15001f/lazy_static-1.4.0/src/core_lazy.rs	/^    pub const INIT: Self = Lazy(Once::INIT);$/;"	c
+INIT	/home/sras/.cargo/registry/src/index.crates.io-6f17d22bba15001f/lazy_static-1.4.0/src/inline_lazy.rs	/^    pub const INIT: Self = Lazy(Cell::new(None), ONCE_INIT);$/;"	c
+Instruction	/home/sras/work/serokell/projects/tezos-rust/typechecker/src/main.rs	/^struct Instruction<'a> {$/;"	s
+InstructionSem	/home/sras/work/serokell/projects/tezos-rust/typechecker/src/main.rs	/^struct InstructionSem {$/;"	s
+Lazy	/home/sras/.cargo/registry/src/index.crates.io-6f17d22bba15001f/lazy_static-1.4.0/src/core_lazy.rs	/^pub struct Lazy<T: Sync>(Once<T>);$/;"	s
+Lazy	/home/sras/.cargo/registry/src/index.crates.io-6f17d22bba15001f/lazy_static-1.4.0/src/inline_lazy.rs	/^pub struct Lazy<T: Sync>(Cell<Option<T>>, Once);$/;"	s
+LazyStatic	/home/sras/.cargo/registry/src/index.crates.io-6f17d22bba15001f/lazy_static-1.4.0/src/lib.rs	/^pub trait LazyStatic {$/;"	t
+StackArg	/home/sras/work/serokell/projects/tezos-rust/typechecker/src/main.rs	/^type StackArg = Constraint;$/;"	T
+StackResult	/home/sras/work/serokell/projects/tezos-rust/typechecker/src/main.rs	/^enum StackResult {$/;"	g
+StackState	/home/sras/work/serokell/projects/tezos-rust/typechecker/src/main.rs	/^type StackState = Vec<ConcreteType>;$/;"	T
+Target	/home/sras/.cargo/registry/src/index.crates.io-6f17d22bba15001f/lazy_static-1.4.0/src/lib.rs	/^            type Target = $T;$/;"	T
+__lazy_static_create	/home/sras/.cargo/registry/src/index.crates.io-6f17d22bba15001f/lazy_static-1.4.0/src/core_lazy.rs	/^macro_rules! __lazy_static_create {$/;"	d
+__lazy_static_create	/home/sras/.cargo/registry/src/index.crates.io-6f17d22bba15001f/lazy_static-1.4.0/src/inline_lazy.rs	/^macro_rules! __lazy_static_create {$/;"	d
+__lazy_static_internal	/home/sras/.cargo/registry/src/index.crates.io-6f17d22bba15001f/lazy_static-1.4.0/src/lib.rs	/^macro_rules! __lazy_static_internal {$/;"	d
+__stability	/home/sras/.cargo/registry/src/index.crates.io-6f17d22bba15001f/lazy_static-1.4.0/src/lib.rs	/^                fn __stability() -> &'static $T {$/;"	f
+__static_ref_initialize	/home/sras/.cargo/registry/src/index.crates.io-6f17d22bba15001f/lazy_static-1.4.0/src/lib.rs	/^                fn __static_ref_initialize() -> $T { $e }$/;"	f
+arg_value_to_concrete	/home/sras/work/serokell/projects/tezos-rust/typechecker/src/main.rs	/^fn arg_value_to_concrete(c: ArgValue) -> ConcreteType {$/;"	f
+box_aux_ctype_to_concrete_unsafe	/home/sras/work/serokell/projects/tezos-rust/typechecker/src/main.rs	/^fn box_aux_ctype_to_concrete_unsafe<T>(aux: &Box<AuxCT<T>>) -> Box<AuxCT<Concrete>> {$/;"	f
+clone	/home/sras/work/serokell/projects/tezos-rust/typechecker/src/main.rs	/^    fn clone(&self) -> Self {$/;"	f
+coerce_box_auxct	/home/sras/work/serokell/projects/tezos-rust/typechecker/src/main.rs	/^fn coerce_box_auxct<T>(aux: Box<AuxCT<Concrete>>) -> Box<AuxCT<T>> {$/;"	f
+coerce_ctype	/home/sras/work/serokell/projects/tezos-rust/typechecker/src/main.rs	/^fn coerce_ctype<T>(c: CType<Concrete>) -> CType<T> {$/;"	f
+concrete_to_arg_constraint	/home/sras/work/serokell/projects/tezos-rust/typechecker/src/main.rs	/^fn concrete_to_arg_constraint(c: ConcreteType) -> Constraint {$/;"	f
+ctype_to_concrete_unsafe	/home/sras/work/serokell/projects/tezos-rust/typechecker/src/main.rs	/^fn ctype_to_concrete_unsafe<T>(c: &CType<T>) -> ConcreteType {$/;"	f
+deref	/home/sras/.cargo/registry/src/index.crates.io-6f17d22bba15001f/lazy_static-1.4.0/src/lib.rs	/^            fn deref(&self) -> &$T {$/;"	f
+get	/home/sras/.cargo/registry/src/index.crates.io-6f17d22bba15001f/lazy_static-1.4.0/src/core_lazy.rs	/^    pub fn get<F>(&'static self, builder: F) -> &T$/;"	f
+get	/home/sras/.cargo/registry/src/index.crates.io-6f17d22bba15001f/lazy_static-1.4.0/src/inline_lazy.rs	/^    pub fn get<F>(&'static self, f: F) -> &T$/;"	f
+initialize	/home/sras/.cargo/registry/src/index.crates.io-6f17d22bba15001f/lazy_static-1.4.0/src/lib.rs	/^            fn initialize(lazy: &Self) {$/;"	f
+initialize	/home/sras/.cargo/registry/src/index.crates.io-6f17d22bba15001f/lazy_static-1.4.0/src/lib.rs	/^    fn initialize(lazy: &Self);$/;"	f
+initialize	/home/sras/.cargo/registry/src/index.crates.io-6f17d22bba15001f/lazy_static-1.4.0/src/lib.rs	/^pub fn initialize<T: LazyStatic>(lazy: &T) {$/;"	f
+lazy_static	/home/sras/.cargo/registry/src/index.crates.io-6f17d22bba15001f/lazy_static-1.4.0/src/lib.rs	/^macro_rules! lazy_static {$/;"	d
+main	/home/sras/.cargo/registry/src/index.crates.io-6f17d22bba15001f/lazy_static-1.4.0/src/lib.rs	/^fn main() {$/;"	f
+main	/home/sras/work/serokell/projects/tezos-rust/typechecker/src/main.rs	/^fn main() {$/;"	f
+make_result_stack	/home/sras/work/serokell/projects/tezos-rust/typechecker/src/main.rs	/^fn make_result_stack<'a>($/;"	f
+map_box_aux	/home/sras/work/serokell/projects/tezos-rust/typechecker/src/main.rs	/^fn map_box_aux<T: Clone, H>(aux: &Box<AuxCT<T>>, cb: fn(T) -> H) -> Box<AuxCT<H>> {$/;"	f
+map_ctype	/home/sras/work/serokell/projects/tezos-rust/typechecker/src/main.rs	/^fn map_ctype<T: Clone, H>(ct: &CType<T>, cb: fn(T) -> H) -> CType<H> {$/;"	f
+mk_ctype	/home/sras/work/serokell/projects/tezos-rust/typechecker/src/main.rs	/^fn mk_ctype(result: &mut HashMap<char, ConcreteType>, ct: CType<StackResult>) -> ConcreteType {$/;"	f
+ref	/home/sras/.cargo/registry/src/index.crates.io-6f17d22bba15001f/lazy_static-1.4.0/src/lib.rs	/^    static ref COUNT: usize = HASHMAP.len();$/;"	c
+ref	/home/sras/.cargo/registry/src/index.crates.io-6f17d22bba15001f/lazy_static-1.4.0/src/lib.rs	/^    static ref EXAMPLE: u8 = 42;$/;"	c
+ref	/home/sras/.cargo/registry/src/index.crates.io-6f17d22bba15001f/lazy_static-1.4.0/src/lib.rs	/^    static ref HASHMAP: HashMap<u32, &'static str> = {$/;"	c
+ref	/home/sras/.cargo/registry/src/index.crates.io-6f17d22bba15001f/lazy_static-1.4.0/src/lib.rs	/^    static ref NUMBER: u32 = times_two(21);$/;"	c
+ref	/home/sras/work/serokell/projects/tezos-rust/typechecker/src/main.rs	/^    static ref MICHELSON_INSTRUCTIONS: HashMap<&'static str, InstructionSem> = HashMap::from([$/;"	c
+set_arg_to	/home/sras/work/serokell/projects/tezos-rust/typechecker/src/main.rs	/^fn set_arg_to<'a>($/;"	f
+stack_result_aux_to_ctype_aux	/home/sras/work/serokell/projects/tezos-rust/typechecker/src/main.rs	/^fn stack_result_aux_to_ctype_aux($/;"	f
+stack_result_to_ctype	/home/sras/work/serokell/projects/tezos-rust/typechecker/src/main.rs	/^fn stack_result_to_ctype($/;"	f
+times_two	/home/sras/.cargo/registry/src/index.crates.io-6f17d22bba15001f/lazy_static-1.4.0/src/lib.rs	/^fn times_two(n: u32) -> u32 { n * 2 }$/;"	f
+typecheck	/home/sras/work/serokell/projects/tezos-rust/typechecker/src/main.rs	/^fn typecheck<'a>($/;"	f
+typecheck_one	/home/sras/work/serokell/projects/tezos-rust/typechecker/src/main.rs	/^fn typecheck_one<'a>($/;"	f
+unify_arg	/home/sras/work/serokell/projects/tezos-rust/typechecker/src/main.rs	/^fn unify_arg<'a>($/;"	f
+unify_arg_aux	/home/sras/work/serokell/projects/tezos-rust/typechecker/src/main.rs	/^fn unify_arg_aux<'a>($/;"	f
+unify_args	/home/sras/work/serokell/projects/tezos-rust/typechecker/src/main.rs	/^fn unify_args<'a>($/;"	f
+unify_stack	/home/sras/work/serokell/projects/tezos-rust/typechecker/src/main.rs	/^fn unify_stack<'a>($/;"	f
+wrap_ctype	/home/sras/work/serokell/projects/tezos-rust/typechecker/src/main.rs	/^fn wrap_ctype<T>(ct: ConcreteType, cb: fn(CType<T>) -> T) -> T {$/;"	f
