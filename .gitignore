@@ -3,3 +3,4 @@ haskell-scratch.cabal
 dist-newstyle
 *~
 target
+tags
