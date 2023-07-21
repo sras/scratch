@@ -474,12 +474,12 @@ fn wrap_ctype<T>(ct: ConcreteType, cb: fn(CType<T>) -> T) -> T {
 
 fn typecheck<'a>(
     instructions: Vec<Instruction<'a>>,
-    mut stack: StackState,
-) -> Result<StackState, &'a str> {
+    stack: &mut StackState,
+) -> Result<(), &'a str> {
     for instruction in instructions {
-        typecheck_one(instruction, &mut stack)?
+        typecheck_one(instruction, stack)?
     }
-    return Result::Ok(stack);
+    return Result::Ok(());
 }
 
 fn typecheck_one<'a>(instruction: Instruction<'a>, stack: &mut StackState) -> Result<(), &'a str> {
@@ -584,5 +584,7 @@ fn main() {
             args: vec![],
         },
     ];
-    println!("{:?}", typecheck(instructions, Vec::from([])));
+    let mut stack = Vec::from([]);
+    typecheck(instructions, &mut stack);
+    println!("{:?}", stack);
 }
