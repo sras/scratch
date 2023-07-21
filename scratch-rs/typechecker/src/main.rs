@@ -482,22 +482,17 @@ fn typecheck<'a>(
     return Result::Ok(stack);
 }
 
-fn typecheck_one<'a>(
-    instruction: Instruction<'a>,
-    stack: &mut StackState,
-) -> Result<(), &'a str> {
+fn typecheck_one<'a>(instruction: Instruction<'a>, stack: &mut StackState) -> Result<(), &'a str> {
     match MICHELSON_INSTRUCTIONS.get(instruction.name) {
-        Some(s) => {
-            match unify_args(instruction.args, s.args.clone()) {
+        Some(s) => match unify_args(instruction.args, s.args.clone()) {
             Result::Ok(ref mut result) => {
                 unify_stack(result, s.input_stack.clone(), s.output_stack.clone(), stack)?;
-                    return Result::Ok(());
-
+                return Result::Ok(());
             }
             Result::Err(err) => {
                 return Result::Err(err);
             }
-        }},
+        },
         _ => {
             return Result::Err("Instruction not found");
         }
