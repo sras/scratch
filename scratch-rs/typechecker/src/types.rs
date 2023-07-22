@@ -1,6 +1,6 @@
 use core::fmt::Debug;
 
-use Constraint as CON;
+use Constraint::*;
 
 #[derive(Debug, Clone, Eq, PartialEq)]
 pub enum Concrete {}
@@ -46,17 +46,17 @@ pub enum Constraint {
 impl Clone for Constraint {
     fn clone(&self) -> Self {
         match self {
-            CON::Arg(ct) => {
-                return CON::Arg(ct.clone());
+            Arg(ct) => {
+                return Arg(ct.clone());
             }
-            CON::Warg(c) => {
-                return CON::Warg(c.clone());
+            Warg(c) => {
+                return Warg(c.clone());
             }
-            CON::TypeArg(c) => {
-                return CON::TypeArg(c.clone());
+            TypeArg(c) => {
+                return TypeArg(c.clone());
             }
-            CON::TypeArgRef(c) => {
-                return CON::TypeArgRef(c.clone());
+            TypeArgRef(c) => {
+                return TypeArgRef(c.clone());
             }
         }
     }

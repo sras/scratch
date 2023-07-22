@@ -2,16 +2,15 @@
 extern crate lazy_static;
 
 mod types;
+use types::*;
 
 use std::collections::HashMap;
 
-use types::ArgValue as AV;
-use types::CTBox::*;
-use types::CType::*;
-use types::Constraint as CON;
-use types::Constraint::*;
-use types::StackResult::*;
-use types::*;
+use ArgValue as AV;
+use CTBox::*;
+use CType::*;
+use Constraint::*;
+use StackResult::*;
 
 impl<T: Clone> Clone for CType<T> {
     fn clone(&self) -> Self {
@@ -77,7 +76,7 @@ lazy_static! {
         (
             "PUSH",
             InstructionDef {
-                args: Vec::from([TypeArg('a'), CON::TypeArgRef('a')]),
+                args: Vec::from([TypeArg('a'), TypeArgRef('a')]),
                 input_stack: Vec::from([]),
                 output_stack: Vec::from([SRArgRef('a')])
             }
@@ -99,9 +98,9 @@ lazy_static! {
                 args: Vec::from([
                     TypeArg('a'),
                     TypeArg('b'),
-                    CON::Arg(MLambda(
-                        Box::new(CTOther(CON::TypeArgRef('a'))),
-                        Box::new(CTOther(CON::TypeArgRef('b')))
+                    Arg(MLambda(
+                        Box::new(CTOther(TypeArgRef('a'))),
+                        Box::new(CTOther(TypeArgRef('b')))
                     ))
                 ]),
                 input_stack: Vec::from([]),
@@ -125,7 +124,7 @@ fn unify_arg_aux<'a>(
 ) -> Result<(), &'a str> {
     let constraint = match arg_con.as_ref() {
         CTOther(c) => c.clone(),
-        CTSelf(arg_con_) => CON::Arg(arg_con_.clone()),
+        CTSelf(arg_con_) => Arg(arg_con_.clone()),
     };
     match arg.as_ref() {
         CTSelf(arg_) => {
@@ -152,23 +151,23 @@ fn unify_concrete_arg<'a>(
     arg_con: Constraint,
 ) -> Result<(), &'a str> {
     match arg_con {
-        CON::Warg(c) => {
+        Warg(c) => {
             add_symbol(result, c, arg);
             return Result::Ok(());
         }
-        CON::TypeArg(c) => {
+        TypeArg(c) => {
             add_symbol(result, c, arg.clone());
             return Result::Ok(());
         }
-        CON::TypeArgRef(c) => match result.get(&c) {
+        TypeArgRef(c) => match result.get(&c) {
             Some(tt) => {
-                return unify_concrete_arg(result, arg, CON::Arg(coerce_ctype((*tt).clone())));
+                return unify_concrete_arg(result, arg, Arg(coerce_ctype((*tt).clone())));
             }
             _ => {
                 return Result::Err("Unknown type ref");
             }
         },
-        CON::Arg(c) => match c {
+        Arg(c) => match c {
             MList(ic) => match arg {
                 MList(iv) => {
                     return unify_arg_aux(result, iv, ic);
@@ -231,7 +230,7 @@ fn unify_arg<'a>(
 ) -> Result<(), &'a str> {
     match arg {
         AV::TypeArg(ct) => match arg_con {
-            CON::TypeArg(c) => {
+            TypeArg(c) => {
                 add_symbol(result, c, ct.clone());
                 return Result::Ok(());
             }
