@@ -212,7 +212,7 @@ fn unify_args<'a>(
     return Result::Ok(result);
 }
 
-fn unify_arg_<'a>(
+fn unify_concrete_arg<'a>(
     result: &mut HashMap<char, ConcreteType>,
     arg: ConcreteType,
     arg_con: Constraint,
@@ -228,7 +228,7 @@ fn unify_arg_<'a>(
         }
         CON::TypeArgRef(c) => match result.get(&c) {
             Some(tt) => {
-                return unify_arg_(result, arg, CON::Arg(coerce_ctype((*tt).clone())));
+                return unify_concrete_arg(result, arg, CON::Arg(coerce_ctype((*tt).clone())));
             }
             _ => {
                 return Result::Err("Unknown type ref");
@@ -306,7 +306,7 @@ fn unify_arg<'a>(
             }
         },
         ArgValue::ValueArg(ct) => {
-            return unify_arg_(result, ct, arg_con);
+            return unify_concrete_arg(result, ct, arg_con);
         }
     }
 }
@@ -380,7 +380,7 @@ fn unify_stack<'a>(
     let mut s_tail: StackState;
     for constraint in sem_stack_in {
         let stack_elem = stack_state[stack_index].clone();
-        unify_arg_(result, coerce_ctype(stack_elem), constraint)?;
+        unify_concrete_arg(result, coerce_ctype(stack_elem), constraint)?;
         stack_index = stack_index + 1;
     }
     s_tail = stack_state[stack_index..].to_vec();
