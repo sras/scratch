@@ -5,6 +5,7 @@ use core::fmt::Debug;
 use std::collections::HashMap;
 
 use CType::*;
+use CTBox::*;
 use Constraint as CON;
 use Constraint::*;
 use StackResult::*;
@@ -19,17 +20,29 @@ enum CType<T> {
     MNat,
     MInt,
     MString,
-    MPair(Box<AuxCT<T>>, Box<AuxCT<T>>),
-    MList(Box<AuxCT<T>>),
-    MLambda(Box<AuxCT<T>>, Box<AuxCT<T>>),
+    MPair(Box<CTBox<T>>, Box<CTBox<T>>),
+    MList(Box<CTBox<T>>),
+    MLambda(Box<CTBox<T>>, Box<CTBox<T>>),
 }
 
-fn map_box_aux<T: Clone, H>(aux: &Box<AuxCT<T>>, cb: fn(T) -> H) -> Box<AuxCT<H>> {
+#[derive(Debug, Eq, PartialEq)]
+enum CTBox<T> {
+    CTOther(T),
+    CTSelf(CType<T>),
+}
+
+#[derive(Debug, Clone)]
+enum ArgValue {
+    TypeArg(ConcreteType),
+    ValueArg(CType<ArgValue>),
+}
+
+fn map_box_aux<T: Clone, H>(aux: &Box<CTBox<T>>, cb: fn(T) -> H) -> Box<CTBox<H>> {
     match aux.as_ref() {
-        AuxCT::Aux(t) => {
-            return Box::new(AuxCT::Aux(cb((*t).clone())));
+        CTOther(t) => {
+            return Box::new(CTOther(cb((*t).clone())));
         }
-        AuxCT::AuxCT(c) => Box::new(AuxCT::AuxCT(map_ctype(c, cb))),
+        CTSelf(c) => Box::new(CTSelf(map_ctype(c, cb))),
     }
 }
 
@@ -50,25 +63,13 @@ impl<T: Clone> Clone for CType<T> {
     }
 }
 
-#[derive(Debug, Eq, PartialEq)]
-enum AuxCT<T> {
-    Aux(T),
-    AuxCT(CType<T>),
-}
-
-impl<T: Clone> Clone for AuxCT<T> {
+impl<T: Clone> Clone for CTBox<T> {
     fn clone(&self) -> Self {
         match self {
-            AuxCT::AuxCT(a) => AuxCT::AuxCT(a.clone()),
-            AuxCT::Aux(a) => AuxCT::Aux(a.clone()),
+            CTSelf(a) => CTSelf(a.clone()),
+            CTOther(a) => CTOther(a.clone()),
         }
     }
-}
-
-#[derive(Debug, Clone)]
-enum ArgValue {
-    TypeArg(ConcreteType),
-    ValueArg(CType<ArgValue>),
 }
 
 struct Instruction<'a> {
@@ -137,9 +138,9 @@ lazy_static! {
                 args: Vec::from([]),
                 input_stack: Vec::from([
                     Warg('a'),
-                    Arg(MList(Box::new(AuxCT::Aux(TypeArgRef('a')))))
+                    Arg(MList(Box::new(CTOther(TypeArgRef('a')))))
                 ]),
-                output_stack: Vec::from([SRCType(MList(Box::new(AuxCT::Aux(SRArgRef('a')))))])
+                output_stack: Vec::from([SRCType(MList(Box::new(CTOther(SRArgRef('a')))))])
             }
         ),
         (
@@ -156,8 +157,8 @@ lazy_static! {
                 args: Vec::from([]),
                 input_stack: Vec::from([Warg('a'), Warg('b')]),
                 output_stack: Vec::from([SRCType(MPair(
-                    Box::new(AuxCT::Aux(SRArgRef('a'))),
-                    Box::new(AuxCT::Aux(SRArgRef('b')))
+                    Box::new(CTOther(SRArgRef('a'))),
+                    Box::new(CTOther(SRArgRef('b')))
                 ))])
             }
         ),
@@ -168,27 +169,26 @@ lazy_static! {
                     TypeArg('a'),
                     TypeArg('b'),
                     CON::Arg(MLambda(
-                        Box::new(AuxCT::Aux(CON::TypeArgRef('a'))),
-                        Box::new(AuxCT::Aux(CON::TypeArgRef('b')))
+                        Box::new(CTOther(CON::TypeArgRef('a'))),
+                        Box::new(CTOther(CON::TypeArgRef('b')))
                     ))
                 ]),
                 input_stack: Vec::from([]),
                 output_stack: Vec::from([SRCType(MLambda(
-                    Box::new(AuxCT::Aux(SRArgRef('a'))),
-                    Box::new(AuxCT::Aux(SRArgRef('b')))
+                    Box::new(CTOther(SRArgRef('a'))),
+                    Box::new(CTOther(SRArgRef('b')))
                 ))])
             }
         )
     ]);
 }
 
-fn set_arg_to<'a>(
+fn add_symbol<'a>(
     result: &mut HashMap<char, ConcreteType>,
     arg_con: char,
     type_: ConcreteType,
-) -> Result<(), &'a str> {
+) {
     result.insert(arg_con, type_);
-    return Result::Ok(());
 }
 
 fn concrete_to_arg_constraint(c: ConcreteType) -> Constraint {
@@ -197,18 +197,18 @@ fn concrete_to_arg_constraint(c: ConcreteType) -> Constraint {
 
 fn unify_arg_aux<'a>(
     result: &mut HashMap<char, ConcreteType>,
-    arg: Box<AuxCT<ArgValue>>,
-    arg_con: Box<AuxCT<Constraint>>,
+    arg: Box<CTBox<ArgValue>>,
+    arg_con: Box<CTBox<Constraint>>,
 ) -> Result<(), &'a str> {
     let constraint = match arg_con.as_ref() {
-        AuxCT::Aux(c) => c.clone(),
-        AuxCT::AuxCT(arg_con_) => CON::Arg(arg_con_.clone()),
+        CTOther(c) => c.clone(),
+        CTSelf(arg_con_) => CON::Arg(arg_con_.clone()),
     };
     match arg.as_ref() {
-        AuxCT::AuxCT(arg_) => {
+        CTSelf(arg_) => {
             return unify_arg(result, ArgValue::ValueArg((*arg_).clone()), constraint);
         }
-        AuxCT::Aux(arg_) => {
+        CTOther(arg_) => {
             return unify_arg(result, (*arg_).clone(), constraint);
         }
     }
@@ -232,11 +232,13 @@ fn unify_arg<'a>(
 ) -> Result<(), &'a str> {
     match arg_con {
         CON::Warg(c) => {
-            return set_arg_to(result, c, arg_value_to_concrete(arg));
+            add_symbol(result, c, arg_value_to_concrete(arg));
+            return Result::Ok(());
         }
         CON::TypeArg(c) => match arg {
             ArgValue::TypeArg(ct) => {
-                return set_arg_to(result, c, ct.clone());
+                add_symbol(result, c, ct.clone());
+                return Result::Ok(());
             }
             _ => return Result::Err("Expecting a type name, but found something else..."),
         },
@@ -342,13 +344,13 @@ fn mk_ctype(result: &mut HashMap<char, ConcreteType>, ct: &CType<StackResult>) -
 
 fn stack_result_aux_to_ctype_aux(
     result: &mut HashMap<char, ConcreteType>,
-    aux: &AuxCT<StackResult>,
-) -> Box<AuxCT<Concrete>> {
+    aux: &CTBox<StackResult>,
+) -> Box<CTBox<Concrete>> {
     match aux {
-        AuxCT::Aux(t) => {
-            return Box::new(AuxCT::AuxCT(stack_result_to_ctype(result, t)));
+        CTOther(t) => {
+            return Box::new(CTSelf(stack_result_to_ctype(result, t)));
         }
-        AuxCT::AuxCT(c) => Box::new(AuxCT::AuxCT(mk_ctype(result, c))),
+        CTSelf(c) => Box::new(CTSelf(mk_ctype(result, c))),
     }
 }
 
@@ -388,12 +390,12 @@ fn unify_stack<'a>(
     return Result::Ok(());
 }
 
-fn coerce_box_auxct<T>(aux: Box<AuxCT<Concrete>>) -> Box<AuxCT<T>> {
+fn coerce_box_auxct<T>(aux: Box<CTBox<Concrete>>) -> Box<CTBox<T>> {
     match aux.as_ref() {
-        AuxCT::Aux(_) => {
+        CTOther(_) => {
             panic!("Impossible!")
         }
-        AuxCT::AuxCT(c) => Box::new(AuxCT::AuxCT(coerce_ctype(c.clone()))),
+        CTSelf(c) => Box::new(CTSelf(coerce_ctype(c.clone()))),
     }
 }
 
@@ -425,13 +427,13 @@ fn argvalue_to_concrete_unsafe(c: &CType<ArgValue>) -> ConcreteType {
     }
 }
 
-fn box_aux_argvalue_to_concrete_unsafe(aux: &Box<AuxCT<ArgValue>>) -> Box<AuxCT<Concrete>> {
+fn box_aux_argvalue_to_concrete_unsafe(aux: &Box<CTBox<ArgValue>>) -> Box<CTBox<Concrete>> {
     match aux.as_ref() {
-        AuxCT::Aux(av) => match av {
-            ArgValue::ValueArg(ct) => Box::new(AuxCT::AuxCT(argvalue_to_concrete_unsafe(ct))),
+        CTOther(av) => match av {
+            ArgValue::ValueArg(ct) => Box::new(CTSelf(argvalue_to_concrete_unsafe(ct))),
             ArgValue::TypeArg(_) => panic!("Type arg unexpected here"),
         },
-        AuxCT::AuxCT(c) => Box::new(AuxCT::AuxCT(argvalue_to_concrete_unsafe(c))),
+        CTSelf(c) => Box::new(CTSelf(argvalue_to_concrete_unsafe(c))),
     }
 }
 
@@ -487,17 +489,17 @@ fn main() {
             name: "PUSH",
             args: vec![
                 ArgValue::TypeArg(MPair(
-                    Box::new(AuxCT::AuxCT(MNat)),
-                    Box::new(AuxCT::AuxCT(MPair(
-                        Box::new(AuxCT::AuxCT(MNat)),
-                        Box::new(AuxCT::AuxCT(MNat)),
+                    Box::new(CTSelf(MNat)),
+                    Box::new(CTSelf(MPair(
+                        Box::new(CTSelf(MNat)),
+                        Box::new(CTSelf(MNat)),
                     ))),
                 )),
                 ArgValue::ValueArg(MPair(
-                    Box::new(AuxCT::AuxCT(MNat)),
-                    Box::new(AuxCT::AuxCT(MPair(
-                        Box::new(AuxCT::AuxCT(MNat)),
-                        Box::new(AuxCT::AuxCT(MNat)),
+                    Box::new(CTSelf(MNat)),
+                    Box::new(CTSelf(MPair(
+                        Box::new(CTSelf(MNat)),
+                        Box::new(CTSelf(MNat)),
                     ))),
                 )),
             ],
@@ -508,8 +510,8 @@ fn main() {
                 ArgValue::TypeArg(MNat),
                 ArgValue::TypeArg(MInt),
                 ArgValue::ValueArg(MLambda(
-                    Box::new(AuxCT::AuxCT(MNat)),
-                    Box::new(AuxCT::AuxCT(MInt)),
+                    Box::new(CTSelf(MNat)),
+                    Box::new(CTSelf(MInt)),
                 )),
             ],
         },
@@ -517,12 +519,12 @@ fn main() {
             name: "PUSH",
             args: vec![
                 ArgValue::TypeArg(MPair(
-                    Box::new(AuxCT::AuxCT(MNat)),
-                    Box::new(AuxCT::AuxCT(MString)),
+                    Box::new(CTSelf(MNat)),
+                    Box::new(CTSelf(MString)),
                 )),
                 ArgValue::ValueArg(MPair(
-                    Box::new(AuxCT::AuxCT(MNat)),
-                    Box::new(AuxCT::AuxCT(MString)),
+                    Box::new(CTSelf(MNat)),
+                    Box::new(CTSelf(MString)),
                 )),
             ],
         },
@@ -553,8 +555,8 @@ fn main() {
         Instruction {
             name: "PUSH",
             args: vec![
-                ArgValue::TypeArg(MList(Box::new(AuxCT::AuxCT(MNat)))),
-                ArgValue::ValueArg(MList(Box::new(AuxCT::AuxCT(MNat)))),
+                ArgValue::TypeArg(MList(Box::new(CTSelf(MNat)))),
+                ArgValue::ValueArg(MList(Box::new(CTSelf(MNat)))),
             ],
         },
         Instruction {
