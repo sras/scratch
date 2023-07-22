@@ -219,18 +219,10 @@ fn unify_args<'a>(
     arg_cons: Vec<Constraint>,
 ) -> Result<HashMap<char, ConcreteType>, &'a str> {
     let mut result = HashMap::from([]);
-    let mut uresult: Result<(), &'a str> = Result::Ok(());
     for (arg, con) in args.iter().zip(arg_cons.iter()) {
-        uresult = uresult.and_then(|_| unify_arg(&mut result, arg.clone(), con.clone()));
+        unify_arg(&mut result, arg.clone(), con.clone())?;
     }
-    match uresult {
-        Ok(()) => {
-            return Result::Ok(result);
-        }
-        Err(s) => {
-            return Result::Err(s);
-        }
-    }
+    return Result::Ok(result);
 }
 
 fn unify_arg<'a>(
@@ -378,33 +370,22 @@ fn unify_stack<'a>(
     stack_state: &mut StackState,
 ) -> Result<(), &'a str> {
     let mut stack_index: usize = 0;
-    let mut t_result = Result::Ok(());
     let mut s_tail: StackState;
     for constraint in sem_stack_in {
         let stack_elem = stack_state[stack_index].clone();
-        t_result = t_result.and_then(|_| {
-            unify_arg(
-                result,
-                ArgValue::ValueArg(coerce_ctype(stack_elem)),
-                constraint,
-            )
-        });
-
+        unify_arg(
+            result,
+            ArgValue::ValueArg(coerce_ctype(stack_elem)),
+            constraint,
+        )?;
         stack_index = stack_index + 1;
     }
     s_tail = stack_state[stack_index..].to_vec();
 
-    match t_result {
-        Result::Ok(_) => match make_result_stack(result, sem_stack_out) {
-            Result::Ok(mut rs) => {
-                rs.append(&mut s_tail);
-                *stack_state = rs;
-                Result::Ok(())
-            }
-            Result::Err(s) => Result::Err(s),
-        },
-        Result::Err(s) => return Result::Err(s),
-    }
+    let mut rs = make_result_stack(result, sem_stack_out)?;
+    rs.append(&mut s_tail);
+    *stack_state = rs;
+    return Result::Ok(());
 }
 
 fn coerce_box_auxct<T>(aux: Box<AuxCT<Concrete>>) -> Box<AuxCT<T>> {
