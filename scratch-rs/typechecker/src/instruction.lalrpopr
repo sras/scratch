@@ -1,15 +1,19 @@
 use std::str::FromStr;
-use crate::types::*;
+use crate::types;
+use crate::types::CType::*;
+use crate::types::CTBox::*;
+use crate::types::ConcreteType;
 grammar;
 
-pub Expr: crate::types::Expr = {
-  <t:Term> => Expr::TermExpr(t),
-  <t:Expr> "+" <u:Term> => Expr::BinExpr(Box::new(t), Box::new(Expr::TermExpr(u)))
+pub MType: ConcreteType = {
+  "int" => MInt,
+  "nat" => MNat,
+  "pair" <t1:MType> <t2:MType> => MPair (Box::new(CTSelf( t1)), Box::new(CTSelf(t2))),
 };
 
-Term: Term = {
-    <n:Nat> => Term(n),
-    "(" <t:Term> ")" => t,
-};
+MSymbol: String = <s:r"[a-z][a-z0-9]+"> => String::from(s);
 
-Nat: u32 = <s:r"[0-9]+"> => i32::from_str(s).unwrap();
+MInt: i32 = {
+  "+" <n:MNat> => n as i32,
+}
+MNat: u32 = <s:r"[0-9]+"> => u32::from_str(s).unwrap();
