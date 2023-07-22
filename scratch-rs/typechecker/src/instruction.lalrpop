@@ -9,6 +9,7 @@ pub MType: ConcreteType = {
   "int" => MInt,
   "nat" => MNat,
   "pair" <t1:MType> <t2:MType> => MPair (Box::new(CTSelf( t1)), Box::new(CTSelf(t2))),
+  "("<t:MType>")" => t
 };
 
 MSymbol: String = <s:r"[a-z][a-z0-9]+"> => String::from(s);

@@ -1,5 +1,5 @@
 // auto-generated: "lalrpop 0.20.0"
-// sha3: ed5db0ecc55adbf95929a2c8df134e84e338642981448425769b3dc5b55b4d87
+// sha3: 223ac71bda5682df238d86076550bd9546b8cc2204ce3a05d3d20e25072a1748
 use std::str::FromStr;
 use crate::types;
 use crate::types::CType::*;
@@ -39,22 +39,28 @@ mod __parse__MType {
     }
     const __ACTION: &[i8] = &[
         // State 0
-        0, 5, 6, 2, 0, 0,
+        2, 0, 0, 6, 7, 3, 0, 0,
         // State 1
-        0, 5, 6, 2, 0, 0,
+        2, 0, 0, 6, 7, 3, 0, 0,
         // State 2
-        0, 5, 6, 2, 0, 0,
+        2, 0, 0, 6, 7, 3, 0, 0,
         // State 3
-        0, 0, 0, 0, 0, 0,
+        2, 0, 0, 6, 7, 3, 0, 0,
         // State 4
-        0, -4, -4, -4, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0,
         // State 5
-        0, -5, -5, -5, 0, 0,
+        -4, -4, 0, -4, -4, -4, 0, 0,
         // State 6
-        0, -6, -6, -6, 0, 0,
+        -5, -5, 0, -5, -5, -5, 0, 0,
+        // State 7
+        0, 9, 0, 0, 0, 0, 0, 0,
+        // State 8
+        -7, -7, 0, -7, -7, -7, 0, 0,
+        // State 9
+        -6, -6, 0, -6, -6, -6, 0, 0,
     ];
     fn __action(state: i8, integer: usize) -> i8 {
-        __ACTION[(state as usize) * 6 + integer]
+        __ACTION[(state as usize) * 8 + integer]
     }
     const __EOF_ACTION: &[i8] = &[
         // State 0
@@ -64,25 +70,34 @@ mod __parse__MType {
         // State 2
         0,
         // State 3
-        -7,
+        0,
         // State 4
-        -4,
+        -8,
         // State 5
-        -5,
+        -4,
         // State 6
+        -5,
+        // State 7
+        0,
+        // State 8
+        -7,
+        // State 9
         -6,
     ];
     fn __goto(state: i8, nt: usize) -> i8 {
         match nt {
             3 => match state {
-                0 => 3,
-                2 => 6,
-                _ => 2,
+                0 => 4,
+                1 => 7,
+                3 => 9,
+                _ => 3,
             },
             _ => 0,
         }
     }
     const __TERMINAL: &[&str] = &[
+        r###""(""###,
+        r###"")""###,
         r###""+""###,
         r###""int""###,
         r###""nat""###,
@@ -157,7 +172,7 @@ mod __parse__MType {
 
         #[inline]
         fn error_action(&self, state: i8) -> i8 {
-            __action(state, 6 - 1)
+            __action(state, 8 - 1)
         }
 
         #[inline]
@@ -228,8 +243,10 @@ mod __parse__MType {
             Token(3, _) if true => Some(1),
             Token(4, _) if true => Some(2),
             Token(5, _) if true => Some(3),
-            Token(0, _) if true => Some(4),
-            Token(1, _) if true => Some(5),
+            Token(6, _) if true => Some(4),
+            Token(7, _) if true => Some(5),
+            Token(0, _) if true => Some(6),
+            Token(1, _) if true => Some(7),
             _ => None,
         }
     }
@@ -242,8 +259,8 @@ mod __parse__MType {
     ) -> __Symbol<'input>
     {
         match __token_index {
-            0 | 1 | 2 | 3 | 4 | 5 => match __token {
-                Token(2, __tok0) | Token(3, __tok0) | Token(4, __tok0) | Token(5, __tok0) | Token(0, __tok0) | Token(1, __tok0) if true => __Symbol::Variant0(__tok0),
+            0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 => match __token {
+                Token(2, __tok0) | Token(3, __tok0) | Token(4, __tok0) | Token(5, __tok0) | Token(6, __tok0) | Token(7, __tok0) | Token(0, __tok0) | Token(1, __tok0) if true => __Symbol::Variant0(__tok0),
                 _ => unreachable!(),
             },
             _ => unreachable!(),
@@ -293,7 +310,13 @@ mod __parse__MType {
                     nonterminal_produced: 3,
                 }
             }
-            6 => __state_machine::SimulatedReduce::Accept,
+            6 => {
+                __state_machine::SimulatedReduce::Reduce {
+                    states_to_pop: 3,
+                    nonterminal_produced: 3,
+                }
+            }
+            7 => __state_machine::SimulatedReduce::Accept,
             _ => panic!("invalid reduction index {}", __reduce_index)
         }
     }
@@ -393,6 +416,9 @@ mod __parse__MType {
                 __reduce5(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&())>)
             }
             6 => {
+                __reduce6(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&())>)
+            }
+            7 => {
                 // __MType = MType => ActionFn(0);
                 let __sym0 = __pop_Variant4(__symbols);
                 let __start = __sym0.0;
@@ -477,13 +503,13 @@ mod __parse__MType {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // MInt = "+", MNat => ActionFn(5);
+        // MInt = "+", MNat => ActionFn(6);
         assert!(__symbols.len() >= 2);
         let __sym1 = __pop_Variant2(__symbols);
         let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0;
         let __end = __sym1.2;
-        let __nt = super::__action5::<>(input, __sym0, __sym1);
+        let __nt = super::__action6::<>(input, __sym0, __sym1);
         __symbols.push((__start, __Symbol::Variant1(__nt), __end));
         (2, 0)
     }
@@ -496,11 +522,11 @@ mod __parse__MType {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // MNat = r#"[0-9]+"# => ActionFn(6);
+        // MNat = r#"[0-9]+"# => ActionFn(7);
         let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0;
         let __end = __sym0.2;
-        let __nt = super::__action6::<>(input, __sym0);
+        let __nt = super::__action7::<>(input, __sym0);
         __symbols.push((__start, __Symbol::Variant2(__nt), __end));
         (1, 1)
     }
@@ -513,11 +539,11 @@ mod __parse__MType {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // MSymbol = r#"[a-z][a-z0-9]+"# => ActionFn(4);
+        // MSymbol = r#"[a-z][a-z0-9]+"# => ActionFn(5);
         let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0;
         let __end = __sym0.2;
-        let __nt = super::__action4::<>(input, __sym0);
+        let __nt = super::__action5::<>(input, __sym0);
         __symbols.push((__start, __Symbol::Variant3(__nt), __end));
         (1, 2)
     }
@@ -575,6 +601,26 @@ mod __parse__MType {
         __symbols.push((__start, __Symbol::Variant4(__nt), __end));
         (3, 3)
     }
+    pub(crate) fn __reduce6<
+        'input,
+    >(
+        input: &'input str,
+        __lookahead_start: Option<&usize>,
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
+        _: core::marker::PhantomData<(&'input ())>,
+    ) -> (usize, usize)
+    {
+        // MType = "(", MType, ")" => ActionFn(4);
+        assert!(__symbols.len() >= 3);
+        let __sym2 = __pop_Variant0(__symbols);
+        let __sym1 = __pop_Variant4(__symbols);
+        let __sym0 = __pop_Variant0(__symbols);
+        let __start = __sym0.0;
+        let __end = __sym2.2;
+        let __nt = super::__action4::<>(input, __sym0, __sym1, __sym2);
+        __symbols.push((__start, __Symbol::Variant4(__nt), __end));
+        (3, 3)
+    }
 }
 pub use self::__parse__MType::MTypeParser;
 #[cfg_attr(rustfmt, rustfmt_skip)]
@@ -595,6 +641,8 @@ mod __intern_token {
         let __strs: &[(&str, bool)] = &[
             ("^([0-9]+)", false),
             ("^((?:[a-z][0-9a-z]+))", false),
+            ("^(\\()", false),
+            ("^(\\))", false),
             ("^(\\+)", false),
             ("^((?:int))", false),
             ("^((?:nat))", false),
@@ -662,6 +710,20 @@ fn __action4<
     'input,
 >(
     input: &'input str,
+    (_, _, _): (usize, &'input str, usize),
+    (_, t, _): (usize, ConcreteType, usize),
+    (_, _, _): (usize, &'input str, usize),
+) -> ConcreteType
+{
+    t
+}
+
+#[allow(unused_variables)]
+#[allow(clippy::too_many_arguments)]
+fn __action5<
+    'input,
+>(
+    input: &'input str,
     (_, s, _): (usize, &'input str, usize),
 ) -> String
 {
@@ -670,7 +732,7 @@ fn __action4<
 
 #[allow(unused_variables)]
 #[allow(clippy::too_many_arguments)]
-fn __action5<
+fn __action6<
     'input,
 >(
     input: &'input str,
@@ -683,7 +745,7 @@ fn __action5<
 
 #[allow(unused_variables)]
 #[allow(clippy::too_many_arguments)]
-fn __action6<
+fn __action7<
     'input,
 >(
     input: &'input str,

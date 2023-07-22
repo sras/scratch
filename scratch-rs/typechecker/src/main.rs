@@ -449,7 +449,7 @@ fn main() {
         },
         Instruction {
             name: "PUSH",
-            args: vec![ArgValue::TypeArg(MInt), ArgValue::ValueArg(MInt)],
+            args: vec![ArgValue::TypeArg(MNat), ArgValue::ValueArg(MNat)],
         },
         Instruction {
             name: "ADD",
@@ -459,5 +459,5 @@ fn main() {
     let mut stack = Vec::from([]);
     let result = typecheck(instructions, &mut stack);
     println!("{:?} {:?}", result, stack);
-    //println!("{:?}", instruction::MTypeParser::new().parse("pair int nat"));
+    println!("{:?}", instruction::MTypeParser::new().parse("pair int (pair nat nat)"));
 }
