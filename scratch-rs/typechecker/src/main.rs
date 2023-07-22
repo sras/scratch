@@ -133,6 +133,14 @@ lazy_static! {
             }
         ),
         (
+            "ADD",
+            InstructionSem {
+                args: Vec::from([]),
+                input_stack: Vec::from([Warg('a'), TypeArgRef('a')]),
+                output_stack: Vec::from([SRArgRef('a')])
+            }
+        ),
+        (
             "CONS",
             InstructionSem {
                 args: Vec::from([]),
@@ -507,6 +515,18 @@ fn main() {
         },
         Instruction {
             name: "CONS",
+            args: vec![],
+        },
+        Instruction {
+            name: "PUSH",
+            args: vec![ArgValue::TypeArg(MNat), ArgValue::ValueArg(MNat)],
+        },
+        Instruction {
+            name: "PUSH",
+            args: vec![ArgValue::TypeArg(MInt), ArgValue::ValueArg(MInt)],
+        },
+        Instruction {
+            name: "ADD",
             args: vec![],
         },
     ];
