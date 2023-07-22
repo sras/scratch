@@ -567,6 +567,6 @@ fn main() {
         },
     ];
     let mut stack = Vec::from([]);
-    typecheck(instructions, &mut stack);
-    println!("{:?}", stack);
+    let result = typecheck(instructions, &mut stack);
+    println!("{:?} {:?}", result, stack);
 }
