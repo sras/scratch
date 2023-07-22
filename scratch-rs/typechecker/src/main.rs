@@ -4,8 +4,8 @@ extern crate lazy_static;
 use core::fmt::Debug;
 use std::collections::HashMap;
 
-use CType::*;
 use CTBox::*;
+use CType::*;
 use Constraint as CON;
 use Constraint::*;
 use StackResult::*;
@@ -34,7 +34,7 @@ enum CTBox<T> {
 #[derive(Debug, Clone)]
 enum ArgValue {
     TypeArg(ConcreteType),
-    ValueArg(CType<ArgValue>),
+    ValueArg(ConcreteType),
 }
 
 fn map_box_aux<T: Clone, H>(aux: &Box<CTBox<T>>, cb: fn(T) -> H) -> Box<CTBox<H>> {
@@ -136,10 +136,7 @@ lazy_static! {
             "CONS",
             InstructionSem {
                 args: Vec::from([]),
-                input_stack: Vec::from([
-                    Warg('a'),
-                    Arg(MList(Box::new(CTOther(TypeArgRef('a')))))
-                ]),
+                input_stack: Vec::from([Warg('a'), Arg(MList(Box::new(CTOther(TypeArgRef('a')))))]),
                 output_stack: Vec::from([SRCType(MList(Box::new(CTOther(SRArgRef('a')))))])
             }
         ),
@@ -183,21 +180,13 @@ lazy_static! {
     ]);
 }
 
-fn add_symbol<'a>(
-    result: &mut HashMap<char, ConcreteType>,
-    arg_con: char,
-    type_: ConcreteType,
-) {
+fn add_symbol<'a>(result: &mut HashMap<char, ConcreteType>, arg_con: char, type_: ConcreteType) {
     result.insert(arg_con, type_);
-}
-
-fn concrete_to_arg_constraint(c: ConcreteType) -> Constraint {
-    return wrap_ctype(c, |ct| CON::Arg(ct));
 }
 
 fn unify_arg_aux<'a>(
     result: &mut HashMap<char, ConcreteType>,
-    arg: Box<CTBox<ArgValue>>,
+    arg: Box<CTBox<Concrete>>,
     arg_con: Box<CTBox<Constraint>>,
 ) -> Result<(), &'a str> {
     let constraint = match arg_con.as_ref() {
@@ -208,9 +197,7 @@ fn unify_arg_aux<'a>(
         CTSelf(arg_) => {
             return unify_arg(result, ArgValue::ValueArg((*arg_).clone()), constraint);
         }
-        CTOther(arg_) => {
-            return unify_arg(result, (*arg_).clone(), constraint);
-        }
+        _ => panic!("Impossible!"),
     }
 }
 
@@ -225,26 +212,23 @@ fn unify_args<'a>(
     return Result::Ok(result);
 }
 
-fn unify_arg<'a>(
+fn unify_arg_<'a>(
     result: &mut HashMap<char, ConcreteType>,
-    arg: ArgValue,
+    arg: ConcreteType,
     arg_con: Constraint,
 ) -> Result<(), &'a str> {
     match arg_con {
         CON::Warg(c) => {
-            add_symbol(result, c, arg_value_to_concrete(arg));
+            add_symbol(result, c, arg);
             return Result::Ok(());
         }
-        CON::TypeArg(c) => match arg {
-            ArgValue::TypeArg(ct) => {
-                add_symbol(result, c, ct.clone());
-                return Result::Ok(());
-            }
-            _ => return Result::Err("Expecting a type name, but found something else..."),
-        },
+        CON::TypeArg(c) => {
+            add_symbol(result, c, arg.clone());
+            return Result::Ok(());
+        }
         CON::TypeArgRef(c) => match result.get(&c) {
             Some(tt) => {
-                return unify_arg(result, arg, concrete_to_arg_constraint((*tt).clone()));
+                return unify_arg_(result, arg, CON::Arg(coerce_ctype((*tt).clone())));
             }
             _ => {
                 return Result::Err("Unknown type ref");
@@ -252,7 +236,7 @@ fn unify_arg<'a>(
         },
         CON::Arg(c) => match c {
             MList(ic) => match arg {
-                ArgValue::ValueArg(CType::MList(iv)) => {
+                CType::MList(iv) => {
                     return unify_arg_aux(result, iv, ic);
                 }
 
@@ -261,7 +245,7 @@ fn unify_arg<'a>(
                 }
             },
             MLambda(vin, vout) => match arg {
-                ArgValue::ValueArg(CType::MLambda(cin, cout)) => {
+                CType::MLambda(cin, cout) => {
                     return unify_arg_aux(result, cin, vin)
                         .and_then(|_| unify_arg_aux(result, cout, vout));
                 }
@@ -270,7 +254,7 @@ fn unify_arg<'a>(
                 }
             },
             MPair(cl, cr) => match arg {
-                ArgValue::ValueArg(CType::MPair(vl, vr)) => {
+                CType::MPair(vl, vr) => {
                     return unify_arg_aux(result, vl, cl)
                         .and_then(|_| unify_arg_aux(result, vr, cr));
                 }
@@ -279,7 +263,7 @@ fn unify_arg<'a>(
                 }
             },
             CType::MNat => match arg {
-                ArgValue::ValueArg(CType::MNat) => {
+                CType::MNat => {
                     return Result::Ok(());
                 }
                 _ => {
@@ -287,7 +271,7 @@ fn unify_arg<'a>(
                 }
             },
             CType::MInt => match arg {
-                ArgValue::ValueArg(CType::MInt) => {
+                CType::MInt => {
                     return Result::Ok(());
                 }
                 _ => {
@@ -295,7 +279,7 @@ fn unify_arg<'a>(
                 }
             },
             CType::MString => match arg {
-                ArgValue::ValueArg(CType::MString) => {
+                CType::MString => {
                     return Result::Ok(());
                 }
                 _ => {
@@ -303,6 +287,27 @@ fn unify_arg<'a>(
                 }
             },
         },
+    }
+}
+
+fn unify_arg<'a>(
+    result: &mut HashMap<char, ConcreteType>,
+    arg: ArgValue,
+    arg_con: Constraint,
+) -> Result<(), &'a str> {
+    match arg {
+        ArgValue::TypeArg(ct) => match arg_con {
+            CON::TypeArg(c) => {
+                add_symbol(result, c, ct.clone());
+                return Result::Ok(());
+            }
+            _ => {
+                panic!("Unexpected type name argument");
+            }
+        },
+        ArgValue::ValueArg(ct) => {
+            return unify_arg_(result, ct, arg_con);
+        }
     }
 }
 
@@ -375,11 +380,7 @@ fn unify_stack<'a>(
     let mut s_tail: StackState;
     for constraint in sem_stack_in {
         let stack_elem = stack_state[stack_index].clone();
-        unify_arg(
-            result,
-            ArgValue::ValueArg(coerce_ctype(stack_elem)),
-            constraint,
-        )?;
+        unify_arg_(result, coerce_ctype(stack_elem), constraint)?;
         stack_index = stack_index + 1;
     }
     s_tail = stack_state[stack_index..].to_vec();
@@ -407,51 +408,6 @@ fn coerce_ctype<T>(c: CType<Concrete>) -> CType<T> {
         MPair(l, r) => MPair(coerce_box_auxct(l), coerce_box_auxct(r)),
         MLambda(l, r) => MLambda(coerce_box_auxct(l), coerce_box_auxct(r)),
         MList(l) => MList(coerce_box_auxct(l)),
-    }
-}
-
-fn argvalue_to_concrete_unsafe(c: &CType<ArgValue>) -> ConcreteType {
-    match c {
-        MInt => MInt,
-        MNat => MNat,
-        MString => MString,
-        MList(l) => MList(box_aux_argvalue_to_concrete_unsafe(l)),
-        MPair(l, r) => MPair(
-            box_aux_argvalue_to_concrete_unsafe(l),
-            box_aux_argvalue_to_concrete_unsafe(r),
-        ),
-        MLambda(l, r) => MLambda(
-            box_aux_argvalue_to_concrete_unsafe(l),
-            box_aux_argvalue_to_concrete_unsafe(r),
-        ),
-    }
-}
-
-fn box_aux_argvalue_to_concrete_unsafe(aux: &Box<CTBox<ArgValue>>) -> Box<CTBox<Concrete>> {
-    match aux.as_ref() {
-        CTOther(av) => match av {
-            ArgValue::ValueArg(ct) => Box::new(CTSelf(argvalue_to_concrete_unsafe(ct))),
-            ArgValue::TypeArg(_) => panic!("Type arg unexpected here"),
-        },
-        CTSelf(c) => Box::new(CTSelf(argvalue_to_concrete_unsafe(c))),
-    }
-}
-
-fn arg_value_to_concrete(c: ArgValue) -> ConcreteType {
-    match c {
-        ArgValue::TypeArg(_) => panic!("Unexpected"),
-        ArgValue::ValueArg(ct) => argvalue_to_concrete_unsafe(&ct),
-    }
-}
-
-fn wrap_ctype<T>(ct: ConcreteType, cb: fn(CType<T>) -> T) -> T {
-    match ct {
-        MNat => cb(MNat),
-        MInt => cb(MInt),
-        MString => cb(MString),
-        MList(l) => cb(MList(coerce_box_auxct(l))),
-        MPair(l, r) => cb(MPair(coerce_box_auxct(l), coerce_box_auxct(r))),
-        MLambda(l, r) => cb(MLambda(coerce_box_auxct(l), coerce_box_auxct(r))),
     }
 }
 
@@ -509,23 +465,14 @@ fn main() {
             args: vec![
                 ArgValue::TypeArg(MNat),
                 ArgValue::TypeArg(MInt),
-                ArgValue::ValueArg(MLambda(
-                    Box::new(CTSelf(MNat)),
-                    Box::new(CTSelf(MInt)),
-                )),
+                ArgValue::ValueArg(MLambda(Box::new(CTSelf(MNat)), Box::new(CTSelf(MInt)))),
             ],
         },
         Instruction {
             name: "PUSH",
             args: vec![
-                ArgValue::TypeArg(MPair(
-                    Box::new(CTSelf(MNat)),
-                    Box::new(CTSelf(MString)),
-                )),
-                ArgValue::ValueArg(MPair(
-                    Box::new(CTSelf(MNat)),
-                    Box::new(CTSelf(MString)),
-                )),
+                ArgValue::TypeArg(MPair(Box::new(CTSelf(MNat)), Box::new(CTSelf(MString)))),
+                ArgValue::ValueArg(MPair(Box::new(CTSelf(MNat)), Box::new(CTSelf(MString)))),
             ],
         },
         Instruction {
