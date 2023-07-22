@@ -306,7 +306,7 @@ fn unify_arg<'a>(
 
 fn stack_result_to_ctype(
     result: &mut HashMap<char, ConcreteType>,
-    sr: StackResult,
+    sr: &StackResult,
 ) -> ConcreteType {
     match sr {
         SRArgRef(c) => match result.get(&c) {
@@ -323,26 +323,26 @@ fn stack_result_to_ctype(
     }
 }
 
-fn mk_ctype(result: &mut HashMap<char, ConcreteType>, ct: CType<StackResult>) -> ConcreteType {
+fn mk_ctype(result: &mut HashMap<char, ConcreteType>, ct: &CType<StackResult>) -> ConcreteType {
     match ct {
         MInt => MInt,
         MNat => MNat,
         MString => MString,
-        MList(l) => MList(stack_result_aux_to_ctype_aux(result, *l.clone())),
+        MList(l) => MList(stack_result_aux_to_ctype_aux(result, &l)),
         MPair(l, r) => MPair(
-            stack_result_aux_to_ctype_aux(result, *l.clone()),
-            stack_result_aux_to_ctype_aux(result, *r.clone()),
+            stack_result_aux_to_ctype_aux(result, &l),
+            stack_result_aux_to_ctype_aux(result, &r),
         ),
         MLambda(l, r) => MLambda(
-            stack_result_aux_to_ctype_aux(result, *l.clone()),
-            stack_result_aux_to_ctype_aux(result, *r.clone()),
+            stack_result_aux_to_ctype_aux(result, &l),
+            stack_result_aux_to_ctype_aux(result, &r),
         ),
     }
 }
 
 fn stack_result_aux_to_ctype_aux(
     result: &mut HashMap<char, ConcreteType>,
-    aux: AuxCT<StackResult>,
+    aux: &AuxCT<StackResult>,
 ) -> Box<AuxCT<Concrete>> {
     match aux {
         AuxCT::Aux(t) => {
@@ -358,7 +358,7 @@ fn make_result_stack<'a>(
 ) -> Result<StackState, &'a str> {
     let mut result_stack: StackState = vec![];
     for i in sem_stack_out {
-        result_stack.push(stack_result_to_ctype(result, i));
+        result_stack.push(stack_result_to_ctype(result, &i));
     }
     return Result::Ok(result_stack);
 }
