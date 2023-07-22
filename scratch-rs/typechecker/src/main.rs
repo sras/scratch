@@ -351,12 +351,10 @@ fn stack_result_aux_to_ctype_aux(
     result: &mut HashMap<char, ConcreteType>,
     aux: &CTBox<StackResult>,
 ) -> Box<CTBox<Concrete>> {
-    match aux {
-        CTOther(t) => {
-            return Box::new(CTSelf(stack_result_to_ctype(result, t)));
-        }
-        CTSelf(c) => Box::new(CTSelf(mk_ctype(result, c))),
-    }
+    Box::new(match aux {
+        CTOther(t) => CTSelf(stack_result_to_ctype(result, t)),
+        CTSelf(c) => CTSelf(mk_ctype(result, c)),
+    })
 }
 
 fn make_result_stack<'a>(
@@ -377,16 +375,13 @@ fn unify_stack<'a>(
     stack_state: &mut StackState,
 ) -> Result<(), &'a str> {
     let mut stack_index: usize = 0;
-    let mut s_tail: StackState;
     for constraint in sem_stack_in {
         let stack_elem = stack_state[stack_index].clone();
         unify_concrete_arg(result, coerce_ctype(stack_elem), constraint)?;
         stack_index = stack_index + 1;
     }
-    s_tail = stack_state[stack_index..].to_vec();
-
     let mut rs = make_result_stack(result, sem_stack_out)?;
-    rs.append(&mut s_tail);
+    rs.append(&mut stack_state[stack_index..].to_vec());
     *stack_state = rs;
     return Result::Ok(());
 }
