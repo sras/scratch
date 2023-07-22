@@ -1,40 +1,31 @@
 #[macro_use]
 extern crate lazy_static;
 
-use core::fmt::Debug;
+mod types;
+
 use std::collections::HashMap;
 
-use CTBox::*;
-use CType::*;
-use Constraint as CON;
-use Constraint::*;
-use StackResult::*;
+use types::ArgValue as AV;
+use types::CTBox::*;
+use types::CType::*;
+use types::Constraint as CON;
+use types::Constraint::*;
+use types::StackResult::*;
+use types::*;
 
-#[derive(Debug, Clone, Eq, PartialEq)]
-enum Concrete {}
-
-type ConcreteType = CType<Concrete>;
-
-#[derive(Debug, Eq, PartialEq)]
-enum CType<T> {
-    MNat,
-    MInt,
-    MString,
-    MPair(Box<CTBox<T>>, Box<CTBox<T>>),
-    MList(Box<CTBox<T>>),
-    MLambda(Box<CTBox<T>>, Box<CTBox<T>>),
+impl<T: Clone> Clone for CType<T> {
+    fn clone(&self) -> Self {
+        return map_ctype(self, |x| x);
+    }
 }
 
-#[derive(Debug, Eq, PartialEq)]
-enum CTBox<T> {
-    CTOther(T),
-    CTSelf(CType<T>),
-}
-
-#[derive(Debug, Clone)]
-enum ArgValue {
-    TypeArg(ConcreteType),
-    ValueArg(ConcreteType),
+impl<T: Clone> Clone for CTBox<T> {
+    fn clone(&self) -> Self {
+        match self {
+            CTSelf(a) => CTSelf(a.clone()),
+            CTOther(a) => CTOther(a.clone()),
+        }
+    }
 }
 
 fn map_box_aux<T: Clone, H>(aux: &Box<CTBox<T>>, cb: fn(T) -> H) -> Box<CTBox<H>> {
@@ -57,76 +48,11 @@ fn map_ctype<T: Clone, H>(ct: &CType<T>, cb: fn(T) -> H) -> CType<H> {
     }
 }
 
-impl<T: Clone> Clone for CType<T> {
-    fn clone(&self) -> Self {
-        return map_ctype(self, |x| x);
-    }
-}
-
-impl<T: Clone> Clone for CTBox<T> {
-    fn clone(&self) -> Self {
-        match self {
-            CTSelf(a) => CTSelf(a.clone()),
-            CTOther(a) => CTOther(a.clone()),
-        }
-    }
-}
-
-struct Instruction<'a> {
-    name: &'a str,
-    args: Vec<ArgValue>,
-}
-
-#[derive(Debug)]
-enum Constraint {
-    Arg(CType<Constraint>), // An argument that accept a value of a certain type.
-    Warg(char),             // An type variable.
-    TypeArg(char),          // A argument that accept a type name, like Nat.
-    TypeArgRef(char),       // A argument that accept a value of a type referred by
-                            // previously encountered TypeArg.
-}
-
-impl Clone for Constraint {
-    fn clone(&self) -> Self {
-        match self {
-            CON::Arg(ct) => {
-                return CON::Arg(ct.clone());
-            }
-            CON::Warg(c) => {
-                return CON::Warg(c.clone());
-            }
-            CON::TypeArg(c) => {
-                return CON::TypeArg(c.clone());
-            }
-            CON::TypeArgRef(c) => {
-                return CON::TypeArgRef(c.clone());
-            }
-        }
-    }
-}
-
-type StackArg = Constraint;
-
-#[derive(Debug, Clone)]
-enum StackResult {
-    SRCType(CType<StackResult>),
-    SRArgRef(char),
-}
-
-type StackState = Vec<ConcreteType>;
-
-#[derive(Debug)]
-struct InstructionSem {
-    args: Vec<Constraint>,
-    input_stack: Vec<StackArg>,
-    output_stack: Vec<StackResult>,
-}
-
 lazy_static! {
-    static ref MICHELSON_INSTRUCTIONS: HashMap<&'static str, InstructionSem> = HashMap::from([
+    static ref MICHELSON_INSTRUCTIONS: HashMap<&'static str, InstructionDef> = HashMap::from([
         (
             "DROP",
-            InstructionSem {
+            InstructionDef {
                 args: Vec::from([]),
                 input_stack: Vec::from([Warg('a')]),
                 output_stack: Vec::from([])
@@ -134,7 +60,7 @@ lazy_static! {
         ),
         (
             "ADD",
-            InstructionSem {
+            InstructionDef {
                 args: Vec::from([]),
                 input_stack: Vec::from([Warg('a'), TypeArgRef('a')]),
                 output_stack: Vec::from([SRArgRef('a')])
@@ -142,7 +68,7 @@ lazy_static! {
         ),
         (
             "CONS",
-            InstructionSem {
+            InstructionDef {
                 args: Vec::from([]),
                 input_stack: Vec::from([Warg('a'), Arg(MList(Box::new(CTOther(TypeArgRef('a')))))]),
                 output_stack: Vec::from([SRCType(MList(Box::new(CTOther(SRArgRef('a')))))])
@@ -150,7 +76,7 @@ lazy_static! {
         ),
         (
             "PUSH",
-            InstructionSem {
+            InstructionDef {
                 args: Vec::from([TypeArg('a'), CON::TypeArgRef('a')]),
                 input_stack: Vec::from([]),
                 output_stack: Vec::from([SRArgRef('a')])
@@ -158,7 +84,7 @@ lazy_static! {
         ),
         (
             "PAIR",
-            InstructionSem {
+            InstructionDef {
                 args: Vec::from([]),
                 input_stack: Vec::from([Warg('a'), Warg('b')]),
                 output_stack: Vec::from([SRCType(MPair(
@@ -169,7 +95,7 @@ lazy_static! {
         ),
         (
             "LAMBDA",
-            InstructionSem {
+            InstructionDef {
                 args: Vec::from([
                     TypeArg('a'),
                     TypeArg('b'),
@@ -244,7 +170,7 @@ fn unify_concrete_arg<'a>(
         },
         CON::Arg(c) => match c {
             MList(ic) => match arg {
-                CType::MList(iv) => {
+                MList(iv) => {
                     return unify_arg_aux(result, iv, ic);
                 }
 
@@ -253,7 +179,7 @@ fn unify_concrete_arg<'a>(
                 }
             },
             MLambda(vin, vout) => match arg {
-                CType::MLambda(cin, cout) => {
+                MLambda(cin, cout) => {
                     return unify_arg_aux(result, cin, vin)
                         .and_then(|_| unify_arg_aux(result, cout, vout));
                 }
@@ -262,7 +188,7 @@ fn unify_concrete_arg<'a>(
                 }
             },
             MPair(cl, cr) => match arg {
-                CType::MPair(vl, vr) => {
+                MPair(vl, vr) => {
                     return unify_arg_aux(result, vl, cl)
                         .and_then(|_| unify_arg_aux(result, vr, cr));
                 }
@@ -270,24 +196,24 @@ fn unify_concrete_arg<'a>(
                     return Result::Err("Expecting a pair but got something else...");
                 }
             },
-            CType::MNat => match arg {
-                CType::MNat => {
+            MNat => match arg {
+                MNat => {
                     return Result::Ok(());
                 }
                 _ => {
                     return Result::Err("Expecting a `Nat`, but found something else...");
                 }
             },
-            CType::MInt => match arg {
-                CType::MInt => {
+            MInt => match arg {
+                MInt => {
                     return Result::Ok(());
                 }
                 _ => {
                     return Result::Err("Expecting a `Int`, but found something else...");
                 }
             },
-            CType::MString => match arg {
-                CType::MString => {
+            MString => match arg {
+                MString => {
                     return Result::Ok(());
                 }
                 _ => {
@@ -304,7 +230,7 @@ fn unify_arg<'a>(
     arg_con: Constraint,
 ) -> Result<(), &'a str> {
     match arg {
-        ArgValue::TypeArg(ct) => match arg_con {
+        AV::TypeArg(ct) => match arg_con {
             CON::TypeArg(c) => {
                 add_symbol(result, c, ct.clone());
                 return Result::Ok(());
@@ -313,7 +239,7 @@ fn unify_arg<'a>(
                 panic!("Unexpected type name argument");
             }
         },
-        ArgValue::ValueArg(ct) => {
+        AV::ValueArg(ct) => {
             return unify_concrete_arg(result, ct, arg_con);
         }
     }
