@@ -459,5 +459,5 @@ fn main() {
     let mut stack = Vec::from([]);
     let result = typecheck(instructions, &mut stack);
     println!("{:?} {:?}", result, stack);
-    println!("{:?}", instruction::McTypeParser::new().parse("pair int (pair nat nat)"));
+    println!("{:?}", instruction::InstructionParser::new().parse("push nat 5"));
 }

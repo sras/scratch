@@ -9,17 +9,17 @@ use crate::types::ArgValue::*;
 grammar<'a>;
 
 pub Instruction: Instruction = {
-  <s:Identifier> <a:args> => Instruction { name : s, args: a },
+  <s:Identifier> <a:Args> => Instruction { name : s, args: a },
 }
 
-pub arg: ArgValue = {
+pub Arg: ArgValue = {
   <v:McLitNumber> => ValueArg(MNat),
   <t:McType> => TypeArg(t)
 }
 
-args: Vec<ArgValue> = {
-  <h:arg>","<mut t:args> => { t.insert(0, h); t },
-  <s:arg> => vec!(s),
+pub Args: Vec<ArgValue> = {
+  <h:Arg> <mut t:Args> => { t.insert(0, h); t },
+  <s:Arg> => vec!(s),
 }
 
 pub McType: ConcreteType = {
@@ -29,6 +29,6 @@ pub McType: ConcreteType = {
   "("<t:McType>")" => t
 };
 
-Identifier: String = <s:r"[a-z][a-z0-9]+"> => String::from(s);
+pub Identifier: String = <s:r"[a-z][a-z0-9]+"> => String::from(s);
 
 McLitNumber: u32 = <s:r"[0-9]+"> => u32::from_str(s).unwrap();

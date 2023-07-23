@@ -29,6 +29,7 @@ pub enum ArgValue {
     ValueArg(ConcreteType),
 }
 
+#[derive(Debug)]
 pub struct Instruction {
     pub name: String,
     pub args: Vec<ArgValue>,
