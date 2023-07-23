@@ -3,18 +3,32 @@ use crate::types;
 use crate::types::CType::*;
 use crate::types::CTBox::*;
 use crate::types::ConcreteType;
-grammar;
+use crate::types::Instruction;
+use crate::types::ArgValue;
+use crate::types::ArgValue::*;
+grammar<'a>;
 
-pub MType: ConcreteType = {
+pub Instruction: Instruction = {
+  <s:Identifier> <a:args> => Instruction { name : s, args: a },
+}
+
+pub arg: ArgValue = {
+  <v:McLitNumber> => ValueArg(MNat),
+  <t:McType> => TypeArg(t)
+}
+
+args: Vec<ArgValue> = {
+  <h:arg>","<mut t:args> => { t.insert(0, h); t },
+  <s:arg> => vec!(s),
+}
+
+pub McType: ConcreteType = {
   "int" => MInt,
   "nat" => MNat,
-  "pair" <t1:MType> <t2:MType> => MPair (Box::new(CTSelf( t1)), Box::new(CTSelf(t2))),
-  "("<t:MType>")" => t
+  "pair" <t1:McType> <t2:McType> => MPair (Box::new(CTSelf( t1)), Box::new(CTSelf(t2))),
+  "("<t:McType>")" => t
 };
 
-MSymbol: String = <s:r"[a-z][a-z0-9]+"> => String::from(s);
+Identifier: String = <s:r"[a-z][a-z0-9]+"> => String::from(s);
 
-MInt: i32 = {
-  "+" <n:MNat> => n as i32,
-}
-MNat: u32 = <s:r"[0-9]+"> => u32::from_str(s).unwrap();
+McLitNumber: u32 = <s:r"[0-9]+"> => u32::from_str(s).unwrap();

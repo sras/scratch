@@ -49,9 +49,9 @@ fn map_ctype<T: Clone, H>(ct: &CType<T>, cb: fn(T) -> H) -> CType<H> {
 }
 
 lazy_static! {
-    static ref MICHELSON_INSTRUCTIONS: HashMap<&'static str, InstructionDef> = HashMap::from([
+    static ref MICHELSON_INSTRUCTIONS: HashMap<String, InstructionDef> = HashMap::from([
         (
-            "DROP",
+            String::from("DROP"),
             InstructionDef {
                 args: Vec::from([]),
                 input_stack: Vec::from([Warg('a')]),
@@ -59,7 +59,7 @@ lazy_static! {
             }
         ),
         (
-            "ADD",
+            String::from("ADD"),
             InstructionDef {
                 args: Vec::from([]),
                 input_stack: Vec::from([Warg('a'), TypeArgRef('a')]),
@@ -67,7 +67,7 @@ lazy_static! {
             }
         ),
         (
-            "CONS",
+            String::from("CONS"),
             InstructionDef {
                 args: Vec::from([]),
                 input_stack: Vec::from([Warg('a'), Arg(MList(Box::new(CTOther(TypeArgRef('a')))))]),
@@ -75,7 +75,7 @@ lazy_static! {
             }
         ),
         (
-            "PUSH",
+            String::from("PUSH"),
             InstructionDef {
                 args: Vec::from([TypeArg('a'), TypeArgRef('a')]),
                 input_stack: Vec::from([]),
@@ -83,7 +83,7 @@ lazy_static! {
             }
         ),
         (
-            "PAIR",
+            String::from("PAIR"),
             InstructionDef {
                 args: Vec::from([]),
                 input_stack: Vec::from([Warg('a'), Warg('b')]),
@@ -94,7 +94,7 @@ lazy_static! {
             }
         ),
         (
-            "LAMBDA",
+            String::from("LAMBDA"),
             InstructionDef {
                 args: Vec::from([
                     TypeArg('a'),
@@ -341,7 +341,7 @@ fn coerce_ctype<T>(c: CType<Concrete>) -> CType<T> {
 }
 
 fn typecheck<'a>(
-    instructions: Vec<Instruction<'a>>,
+    instructions: Vec<Instruction>,
     stack: &mut StackState,
 ) -> Result<(), &'a str> {
     for instruction in instructions {
@@ -350,8 +350,8 @@ fn typecheck<'a>(
     return Result::Ok(());
 }
 
-fn typecheck_one<'a>(instruction: Instruction<'a>, stack: &mut StackState) -> Result<(), &'a str> {
-    match MICHELSON_INSTRUCTIONS.get(instruction.name) {
+fn typecheck_one<'a>(instruction: Instruction, stack: &mut StackState) -> Result<(), &'a str> {
+    match MICHELSON_INSTRUCTIONS.get(&instruction.name) {
         Some(s) => {
             let mut result = unify_args(instruction.args, s.args.clone())?;
             unify_stack(
@@ -371,7 +371,7 @@ fn typecheck_one<'a>(instruction: Instruction<'a>, stack: &mut StackState) -> Re
 fn main() {
     let instructions: Vec<Instruction> = vec![
         Instruction {
-            name: "PUSH",
+            name: String::from("PUSH"),
             args: vec![
                 ArgValue::TypeArg(MPair(
                     Box::new(CTSelf(MNat)),
@@ -390,7 +390,7 @@ fn main() {
             ],
         },
         Instruction {
-            name: "LAMBDA",
+            name: String::from("LAMBDA"),
             args: vec![
                 ArgValue::TypeArg(MNat),
                 ArgValue::TypeArg(MInt),
@@ -398,66 +398,66 @@ fn main() {
             ],
         },
         Instruction {
-            name: "PUSH",
+            name: String::from("PUSH"),
             args: vec![
                 ArgValue::TypeArg(MPair(Box::new(CTSelf(MNat)), Box::new(CTSelf(MString)))),
                 ArgValue::ValueArg(MPair(Box::new(CTSelf(MNat)), Box::new(CTSelf(MString)))),
             ],
         },
         Instruction {
-            name: "DROP",
+            name: String::from("DROP"),
             args: vec![],
         },
         Instruction {
-            name: "DROP",
+            name: String::from("DROP"),
             args: vec![],
         },
         Instruction {
-            name: "DROP",
+            name: String::from("DROP"),
             args: vec![],
         },
         Instruction {
-            name: "PUSH",
+            name: String::from("PUSH"),
             args: vec![ArgValue::TypeArg(MNat), ArgValue::ValueArg(MNat)],
         },
         Instruction {
-            name: "PUSH",
+            name: String::from("PUSH"),
             args: vec![ArgValue::TypeArg(MInt), ArgValue::ValueArg(MInt)],
         },
         Instruction {
-            name: "PAIR",
+            name: String::from("PAIR"),
             args: vec![],
         },
         Instruction {
-            name: "PUSH",
+            name: String::from("PUSH"),
             args: vec![
                 ArgValue::TypeArg(MList(Box::new(CTSelf(MNat)))),
                 ArgValue::ValueArg(MList(Box::new(CTSelf(MNat)))),
             ],
         },
         Instruction {
-            name: "PUSH",
+            name: String::from("PUSH"),
             args: vec![ArgValue::TypeArg(MNat), ArgValue::ValueArg(MNat)],
         },
         Instruction {
-            name: "CONS",
+            name: String::from("CONS"),
             args: vec![],
         },
         Instruction {
-            name: "PUSH",
+            name: String::from("PUSH"),
             args: vec![ArgValue::TypeArg(MNat), ArgValue::ValueArg(MNat)],
         },
         Instruction {
-            name: "PUSH",
+            name: String::from("PUSH"),
             args: vec![ArgValue::TypeArg(MNat), ArgValue::ValueArg(MNat)],
         },
         Instruction {
-            name: "ADD",
+            name: String::from("ADD"),
             args: vec![],
         },
     ];
     let mut stack = Vec::from([]);
     let result = typecheck(instructions, &mut stack);
     println!("{:?} {:?}", result, stack);
-    println!("{:?}", instruction::MTypeParser::new().parse("pair int (pair nat nat)"));
+    println!("{:?}", instruction::McTypeParser::new().parse("pair int (pair nat nat)"));
 }
