@@ -26,6 +26,21 @@ pub enum MValue {
     VLambda(Vec<Instruction>)
 }
 
+pub enum McLiteral {
+    Atomic(AtomicLiteral),
+    Composite(Box<CompositeLiteral>)
+}
+
+pub enum AtomicLiteral {
+    ALNumber(u32),
+    ALString(String),
+    }
+
+pub enum CompositeLiteral {
+    CLPair(McLiteral, McLiteral),
+    CLLambda(Vec<Instruction>)
+}
+
 #[derive(Debug, Eq, PartialEq)]
 pub enum CTBox<T> {
     CTOther(T),
