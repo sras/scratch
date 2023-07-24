@@ -17,28 +17,22 @@ pub enum CType<T> {
     MLambda(Box<CTBox<T>>, Box<CTBox<T>>),
 }
 
-pub enum MValue {
-    VNat(u32),
-    VInt(i32),
-    VString(String),
-    VPair(Box<MValue>, Box<MValue>),
-    VList(Vec<MValue>),
-    VLambda(Vec<Instruction>)
+#[derive(Debug, Clone)]
+pub enum McValue {
+    AtomicValue(AtomicValue),
+    CompositeValue(Box<CompositeValue>)
 }
 
-pub enum McLiteral {
-    Atomic(AtomicLiteral),
-    Composite(Box<CompositeLiteral>)
-}
-
-pub enum AtomicLiteral {
-    ALNumber(u32),
-    ALString(String),
+#[derive(Debug, Clone)]
+pub enum AtomicValue {
+    AVNumber(u32),
+    AVString(String),
     }
 
-pub enum CompositeLiteral {
-    CLPair(McLiteral, McLiteral),
-    CLLambda(Vec<Instruction>)
+#[derive(Debug, Clone)]
+pub enum CompositeValue {
+    CVPair(McValue, McValue),
+    CVLambda(Vec<Instruction>)
 }
 
 #[derive(Debug, Eq, PartialEq)]
@@ -53,7 +47,7 @@ pub enum ArgValue {
     ValueArg(ConcreteType),
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct Instruction {
     pub name: String,
     pub args: Vec<ArgValue>,

@@ -5,15 +5,13 @@ use crate::types::CTBox::*;
 use crate::types::ConcreteType;
 use crate::types::Instruction;
 use crate::types::ArgValue;
-use crate::types::MValue;
-use crate::types::MValue::*;
 use crate::types::ArgValue::*;
-use crate::types::McLiteral;
-use crate::types::McLiteral::*;
-use crate::types::AtomicLiteral;
-use crate::types::AtomicLiteral::*;
-use crate::types::CompositeLiteral;
-use crate::types::CompositeLiteral::*;
+use crate::types::McValue;
+use crate::types::McValue::*;
+use crate::types::AtomicValue;
+use crate::types::AtomicValue::*;
+use crate::types::CompositeValue;
+use crate::types::CompositeValue::*;
 grammar;
 
 pub Instruction: Instruction = {
@@ -21,12 +19,8 @@ pub Instruction: Instruction = {
 }
 
 pub Arg: ArgValue = {
-  <v:McLitNumber> => ValueArg(MNat),
+  <v:McValue> => ValueArg(v),
   <t:McType> => TypeArg(t)
-}
-
-pub MValue: MValue = {
-  <v:McLitNumber> => VNat(v),
 }
 
 pub Args: Vec<ArgValue> = {
@@ -34,19 +28,19 @@ pub Args: Vec<ArgValue> = {
   <s:Arg> => vec!(s),
 }
 
-pub McLiteral: McLiteral = {
-  <a:AtomicLiteral> => Atomic(a),
-  <a:CompositeLiteral> => Composite(Box::new(a))
+pub McValue: McValue = {
+  <a:AtomicValue> => AtomicValue(a),
+  <a:CompositeValue> => CompositeValue(Box::new(a))
 }
 
-pub AtomicLiteral: AtomicLiteral = {
-  <a:McLitNumber> => ALNumber(a),
-  <s:McLitString> => ALString(s)
+pub AtomicValue: AtomicValue = {
+  <a:McLitNumber> => AVNumber(a),
+  <s:McLitString> => AVString(s)
 }
 
-pub CompositeLiteral: CompositeLiteral = {
-  "Pair" <l: McLiteral> <r: McLiteral> => CLPair(l, r),
-  "{"<ins:InstructionList>"}" => CLLambda(ins)
+pub CompositeValue: CompositeValue = {
+  "Pair" <l: McValue> <r: McValue> => CVPair(l, r),
+  "{"<ins:InstructionList>"}" => CVLambda(ins)
 }
 
 pub InstructionList:Vec<Instruction> = {
