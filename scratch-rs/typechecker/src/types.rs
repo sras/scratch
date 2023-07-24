@@ -17,6 +17,15 @@ pub enum CType<T> {
     MLambda(Box<CTBox<T>>, Box<CTBox<T>>),
 }
 
+pub enum MValue {
+    VNat(u32),
+    VInt(i32),
+    VString(String),
+    VPair(Box<MValue>, Box<MValue>),
+    VList(Vec<MValue>),
+    VLambda(Vec<Instruction>)
+}
+
 #[derive(Debug, Eq, PartialEq)]
 pub enum CTBox<T> {
     CTOther(T),
