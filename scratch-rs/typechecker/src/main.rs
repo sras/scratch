@@ -1,7 +1,7 @@
 #[macro_use]
 extern crate lazy_static;
 
-mod instruction;
+//mod instruction;
 mod types;
 use types::*;
 
@@ -123,126 +123,137 @@ fn unify_arg_aux<'a>(
     arg: Box<CTBox<Concrete>>,
     arg_con: Box<CTBox<Constraint>>,
 ) -> Result<(), &'a str> {
-    let constraint = match arg_con.as_ref() {
-        CTOther(c) => c.clone(),
-        CTSelf(arg_con_) => Arg(arg_con_.clone()),
-    };
-    match arg.as_ref() {
-        CTSelf(arg_) => {
-            return unify_arg(result, ArgValue::ValueArg((*arg_).clone()), constraint);
-        }
-        _ => panic!("Impossible!"),
-    }
+    panic!("");
+    // let constraint = match arg_con.as_ref() {
+    //     CTOther(c) => c.clone(),
+    //     CTSelf(arg_con_) => Arg(arg_con_.clone()),
+    // };
+    // match arg.as_ref() {
+    //     CTSelf(arg_) => {
+    //         return unify_arg(result, ArgValue::ValueArg((*arg_).clone()), constraint);
+    //     }
+    //     _ => panic!("Impossible!"),
+    // }
 }
 
 fn unify_args<'a>(
-    args: Vec<ArgValue>,
+    args: Vec<ArgValue<SomeValue>>,
     arg_cons: Vec<Constraint>,
-) -> Result<HashMap<char, ConcreteType>, &'a str> {
+) -> Result<(HashMap<char, ConcreteType>, Vec<ArgValue<MValue>>), &'a str> {
     let mut result = HashMap::from([]);
+    let mut args_ = vec![];
     for (arg, con) in args.iter().zip(arg_cons.iter()) {
-        unify_arg(&mut result, arg.clone(), con.clone())?;
+        args_.push(unify_arg(&mut result, arg.clone(), con.clone())?);
     }
-    return Result::Ok(result);
+    return Result::Ok((result, args_));
 }
 
 fn unify_concrete_arg<'a>(
     result: &mut HashMap<char, ConcreteType>,
     arg: ConcreteType,
-    arg_con: Constraint,
+    arg_con: &Constraint,
 ) -> Result<(), &'a str> {
-    match arg_con {
-        Warg(c) => {
-            add_symbol(result, c, arg);
-            return Result::Ok(());
-        }
-        TypeArg(c) => {
-            add_symbol(result, c, arg.clone());
-            return Result::Ok(());
-        }
-        TypeArgRef(c) => match result.get(&c) {
-            Some(tt) => {
-                return unify_concrete_arg(result, arg, Arg(coerce_ctype((*tt).clone())));
-            }
-            _ => {
-                return Result::Err("Unknown type ref");
-            }
-        },
-        Arg(c) => match c {
-            MList(ic) => match arg {
-                MList(iv) => {
-                    return unify_arg_aux(result, iv, ic);
-                }
+    panic!("");
+    //match arg_con {
+    //    Warg(c) => {
+    //        add_symbol(result, c, arg);
+    //        return Result::Ok(());
+    //    }
+    //    TypeArg(c) => {
+    //        add_symbol(result, c, arg.clone());
+    //        return Result::Ok(());
+    //    }
+    //    TypeArgRef(c) => match result.get(&c) {
+    //        Some(tt) => {
+    //            return unify_concrete_arg(result, arg, Arg(coerce_ctype((*tt).clone())));
+    //        }
+    //        _ => {
+    //            return Result::Err("Unknown type ref");
+    //        }
+    //    },
+    //    Arg(c) => match c {
+    //        MList(ic) => match arg {
+    //            MList(iv) => {
+    //                return unify_arg_aux(result, iv, ic);
+    //            }
 
-                _ => {
-                    return Result::Err("Expecting a list but got something else...");
-                }
-            },
-            MLambda(vin, vout) => match arg {
-                MLambda(cin, cout) => {
-                    return unify_arg_aux(result, cin, vin)
-                        .and_then(|_| unify_arg_aux(result, cout, vout));
-                }
-                _ => {
-                    return Result::Err("Expecting a lambda but got something else...");
-                }
-            },
-            MPair(cl, cr) => match arg {
-                MPair(vl, vr) => {
-                    return unify_arg_aux(result, vl, cl)
-                        .and_then(|_| unify_arg_aux(result, vr, cr));
-                }
-                _ => {
-                    return Result::Err("Expecting a pair but got something else...");
-                }
-            },
-            MNat => match arg {
-                MNat => {
-                    return Result::Ok(());
-                }
-                _ => {
-                    return Result::Err("Expecting a `Nat`, but found something else...");
-                }
-            },
-            MInt => match arg {
-                MInt => {
-                    return Result::Ok(());
-                }
-                _ => {
-                    return Result::Err("Expecting a `Int`, but found something else...");
-                }
-            },
-            MString => match arg {
-                MString => {
-                    return Result::Ok(());
-                }
-                _ => {
-                    return Result::Err("Expecting a `String`, but found something else...");
-                }
-            },
-        },
-    }
+    //            _ => {
+    //                return Result::Err("Expecting a list but got something else...");
+    //            }
+    //        },
+    //        MLambda(vin, vout) => match arg {
+    //            MLambda(cin, cout) => {
+    //                return unify_arg_aux(result, cin, vin)
+    //                    .and_then(|_| unify_arg_aux(result, cout, vout));
+    //            }
+    //            _ => {
+    //                return Result::Err("Expecting a lambda but got something else...");
+    //            }
+    //        },
+    //        MPair(cl, cr) => match arg {
+    //            MPair(vl, vr) => {
+    //                return unify_arg_aux(result, vl, cl)
+    //                    .and_then(|_| unify_arg_aux(result, vr, cr));
+    //            }
+    //            _ => {
+    //                return Result::Err("Expecting a pair but got something else...");
+    //            }
+    //        },
+    //        MNat => match arg {
+    //            MNat => {
+    //                return Result::Ok(());
+    //            }
+    //            _ => {
+    //                return Result::Err("Expecting a `Nat`, but found something else...");
+    //            }
+    //        },
+    //        MInt => match arg {
+    //            MInt => {
+    //                return Result::Ok(());
+    //            }
+    //            _ => {
+    //                return Result::Err("Expecting a `Int`, but found something else...");
+    //            }
+    //        },
+    //        MString => match arg {
+    //            MString => {
+    //                return Result::Ok(());
+    //            }
+    //            _ => {
+    //                return Result::Err("Expecting a `String`, but found something else...");
+    //            }
+    //        },
+    //    },
+    //}
 }
 
 fn unify_arg<'a>(
     result: &mut HashMap<char, ConcreteType>,
-    arg: ArgValue,
+    arg: ArgValue<SomeValue>,
     arg_con: Constraint,
-) -> Result<(), &'a str> {
+) -> Result<ArgValue<MValue>, &'a str> {
     match arg {
         AV::TypeArg(ct) => match arg_con {
             TypeArg(c) => {
                 add_symbol(result, c, ct.clone());
-                return Result::Ok(());
+                return Result::Ok(AV::TypeArg(ct));
             }
             _ => {
                 panic!("Unexpected type name argument");
             }
         },
-        AV::ValueArg(ct) => {
-            return unify_concrete_arg(result, ct, arg_con);
+        AV::ValueArg(someVal) => {
+            let (m, c) = type_check_value(result, someVal, &arg_con)?;
+            unify_concrete_arg(result, c, &arg_con)?;
+            return Ok(AV::ValueArg(m));
         }
     }
+}
+
+fn type_check_value<'a>(result: &mut HashMap<char, ConcreteType>,
+    someVal: SomeValue,
+    arg_con: &Constraint) -> Result<(MValue, ConcreteType), &'a str> {
+    panic!("");
 }
 
 fn stack_result_to_ctype(
@@ -302,6 +313,10 @@ fn make_result_stack<'a>(
     return Result::Ok(result_stack);
 }
 
+fn mvalue_to_concrete_type(v: MValue) -> ConcreteType {
+    panic!("");
+}
+
 fn unify_stack<'a>(
     result: &mut HashMap<char, ConcreteType>,
     sem_stack_in: Vec<StackArg>,
@@ -311,7 +326,7 @@ fn unify_stack<'a>(
     let mut stack_index: usize = 0;
     for constraint in sem_stack_in {
         let stack_elem = stack_state[stack_index].clone();
-        unify_concrete_arg(result, coerce_ctype(stack_elem), constraint)?;
+        unify_concrete_arg(result, coerce_ctype(stack_elem), &constraint)?;
         stack_index = stack_index + 1;
     }
     let mut rs = make_result_stack(result, sem_stack_out)?;
@@ -341,26 +356,33 @@ fn coerce_ctype<T>(c: CType<Concrete>) -> CType<T> {
 }
 
 fn typecheck<'a>(
-    instructions: Vec<Instruction>,
+    instructions: Vec<Instruction<SomeValue>>,
     stack: &mut StackState,
-) -> Result<(), &'a str> {
+) -> Result<Vec<Instruction<MValue>>, &'a str> {
+    let mut result: Vec<Instruction<MValue>> = vec![];
     for instruction in instructions {
-        typecheck_one(instruction, stack)?
+        result.push(typecheck_one(instruction, stack)?);
     }
-    return Result::Ok(());
+    return Result::Ok(result);
 }
 
-fn typecheck_one<'a>(instruction: Instruction, stack: &mut StackState) -> Result<(), &'a str> {
+fn typecheck_one<'a>(
+    instruction: Instruction<SomeValue>,
+    stack: &mut StackState,
+) -> Result<Instruction<MValue>, &'a str> {
     match MICHELSON_INSTRUCTIONS.get(&instruction.name) {
         Some(s) => {
-            let mut result = unify_args(instruction.args, s.args.clone())?;
+            let (mut result, args_) = unify_args(instruction.args, s.args.clone())?;
             unify_stack(
                 &mut result,
                 s.input_stack.clone(),
                 s.output_stack.clone(),
                 stack,
             )?;
-            return Result::Ok(());
+            return Result::Ok(Instruction {
+                args: args_,
+                name: instruction.name,
+            });
         }
         _ => {
             return Result::Err("Instruction not found");
@@ -369,95 +391,95 @@ fn typecheck_one<'a>(instruction: Instruction, stack: &mut StackState) -> Result
 }
 
 fn main() {
-    let instructions: Vec<Instruction> = vec![
-        Instruction {
-            name: String::from("PUSH"),
-            args: vec![
-                ArgValue::TypeArg(MPair(
-                    Box::new(CTSelf(MNat)),
-                    Box::new(CTSelf(MPair(
-                        Box::new(CTSelf(MNat)),
-                        Box::new(CTSelf(MNat)),
-                    ))),
-                )),
-                ArgValue::ValueArg(MPair(
-                    Box::new(CTSelf(MNat)),
-                    Box::new(CTSelf(MPair(
-                        Box::new(CTSelf(MNat)),
-                        Box::new(CTSelf(MNat)),
-                    ))),
-                )),
-            ],
-        },
-        Instruction {
-            name: String::from("LAMBDA"),
-            args: vec![
-                ArgValue::TypeArg(MNat),
-                ArgValue::TypeArg(MInt),
-                ArgValue::ValueArg(MLambda(Box::new(CTSelf(MNat)), Box::new(CTSelf(MInt)))),
-            ],
-        },
-        Instruction {
-            name: String::from("PUSH"),
-            args: vec![
-                ArgValue::TypeArg(MPair(Box::new(CTSelf(MNat)), Box::new(CTSelf(MString)))),
-                ArgValue::ValueArg(MPair(Box::new(CTSelf(MNat)), Box::new(CTSelf(MString)))),
-            ],
-        },
-        Instruction {
-            name: String::from("DROP"),
-            args: vec![],
-        },
-        Instruction {
-            name: String::from("DROP"),
-            args: vec![],
-        },
-        Instruction {
-            name: String::from("DROP"),
-            args: vec![],
-        },
-        Instruction {
-            name: String::from("PUSH"),
-            args: vec![ArgValue::TypeArg(MNat), ArgValue::ValueArg(MNat)],
-        },
-        Instruction {
-            name: String::from("PUSH"),
-            args: vec![ArgValue::TypeArg(MInt), ArgValue::ValueArg(MInt)],
-        },
-        Instruction {
-            name: String::from("PAIR"),
-            args: vec![],
-        },
-        Instruction {
-            name: String::from("PUSH"),
-            args: vec![
-                ArgValue::TypeArg(MList(Box::new(CTSelf(MNat)))),
-                ArgValue::ValueArg(MList(Box::new(CTSelf(MNat)))),
-            ],
-        },
-        Instruction {
-            name: String::from("PUSH"),
-            args: vec![ArgValue::TypeArg(MNat), ArgValue::ValueArg(MNat)],
-        },
-        Instruction {
-            name: String::from("CONS"),
-            args: vec![],
-        },
-        Instruction {
-            name: String::from("PUSH"),
-            args: vec![ArgValue::TypeArg(MNat), ArgValue::ValueArg(MNat)],
-        },
-        Instruction {
-            name: String::from("PUSH"),
-            args: vec![ArgValue::TypeArg(MNat), ArgValue::ValueArg(MNat)],
-        },
-        Instruction {
-            name: String::from("ADD"),
-            args: vec![],
-        },
+    let instructions: Vec<Instruction<SomeValue>> = vec![
+        //Instruction {
+        //    name: String::from("PUSH"),
+        //    args: vec![
+        //        ArgValue::TypeArg(MPair(
+        //            Box::new(CTSelf(MNat)),
+        //            Box::new(CTSelf(MPair(
+        //                Box::new(CTSelf(MNat)),
+        //                Box::new(CTSelf(MNat)),
+        //            ))),
+        //        )),
+        //        ArgValue::ValueArg(MPair(
+        //            Box::new(CTSelf(MNat)),
+        //            Box::new(CTSelf(MPair(
+        //                Box::new(CTSelf(MNat)),
+        //                Box::new(CTSelf(MNat)),
+        //            ))),
+        //        )),
+        //    ],
+        //},
+        //Instruction {
+        //    name: String::from("LAMBDA"),
+        //    args: vec![
+        //        ArgValue::TypeArg(MNat),
+        //        ArgValue::TypeArg(MInt),
+        //        ArgValue::ValueArg(MLambda(Box::new(CTSelf(MNat)), Box::new(CTSelf(MInt)))),
+        //    ],
+        //},
+        //Instruction {
+        //    name: String::from("PUSH"),
+        //    args: vec![
+        //        ArgValue::TypeArg(MPair(Box::new(CTSelf(MNat)), Box::new(CTSelf(MString)))),
+        //        ArgValue::ValueArg(MPair(Box::new(CTSelf(MNat)), Box::new(CTSelf(MString)))),
+        //    ],
+        //},
+        //Instruction {
+        //    name: String::from("DROP"),
+        //    args: vec![],
+        //},
+        //Instruction {
+        //    name: String::from("DROP"),
+        //    args: vec![],
+        //},
+        //Instruction {
+        //    name: String::from("DROP"),
+        //    args: vec![],
+        //},
+        //Instruction {
+        //    name: String::from("PUSH"),
+        //    args: vec![ArgValue::TypeArg(MNat), ArgValue::ValueArg(MNat)],
+        //},
+        //Instruction {
+        //    name: String::from("PUSH"),
+        //    args: vec![ArgValue::TypeArg(MInt), ArgValue::ValueArg(MInt)],
+        //},
+        //Instruction {
+        //    name: String::from("PAIR"),
+        //    args: vec![],
+        //},
+        //Instruction {
+        //    name: String::from("PUSH"),
+        //    args: vec![
+        //        ArgValue::TypeArg(MList(Box::new(CTSelf(MNat)))),
+        //        ArgValue::ValueArg(MList(Box::new(CTSelf(MNat)))),
+        //    ],
+        //},
+        //Instruction {
+        //    name: String::from("PUSH"),
+        //    args: vec![ArgValue::TypeArg(MNat), ArgValue::ValueArg(MNat)],
+        //},
+        //Instruction {
+        //    name: String::from("CONS"),
+        //    args: vec![],
+        //},
+        //Instruction {
+        //    name: String::from("PUSH"),
+        //    args: vec![ArgValue::TypeArg(MNat), ArgValue::ValueArg(MNat)],
+        //},
+        //Instruction {
+        //    name: String::from("PUSH"),
+        //    args: vec![ArgValue::TypeArg(MNat), ArgValue::ValueArg(MNat)],
+        //},
+        //Instruction {
+        //    name: String::from("ADD"),
+        //    args: vec![],
+        //},
     ];
     let mut stack = Vec::from([]);
     let result = typecheck(instructions, &mut stack);
-    println!("{:?} {:?}", result, stack);
+    //println!("{:?} {:?}", result, stack);
     //println!("{:?}", instruction::InstructionParser::new().parse("push nat 5"));
 }

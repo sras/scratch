@@ -18,7 +18,7 @@ pub enum CType<T> {
 }
 
 #[derive(Debug, Clone)]
-pub enum McValue {
+pub enum SomeValue {
     AtomicValue(AtomicValue),
     CompositeValue(Box<CompositeValue>)
 }
@@ -29,10 +29,19 @@ pub enum AtomicValue {
     AVString(String),
     }
 
+pub enum MValue {
+    VNat(u32),
+    VInt(i32),
+    VString(String),
+    VPair(Box<MValue>, Box<MValue>),
+    VList(Vec<MValue>),
+    VLambda(Vec<Instruction<MValue>>)
+}
+
 #[derive(Debug, Clone)]
 pub enum CompositeValue {
-    CVPair(McValue, McValue),
-    CVLambda(Vec<Instruction>)
+    CVPair(SomeValue, SomeValue),
+    CVLambda(Vec<Instruction<SomeValue>>)
 }
 
 #[derive(Debug, Eq, PartialEq)]
@@ -42,15 +51,15 @@ pub enum CTBox<T> {
 }
 
 #[derive(Debug, Clone)]
-pub enum ArgValue {
+pub enum ArgValue<T> {
     TypeArg(ConcreteType),
-    ValueArg(ConcreteType),
+    ValueArg(T),
 }
 
 #[derive(Debug, Clone)]
-pub struct Instruction {
+pub struct Instruction<T> {
     pub name: String,
-    pub args: Vec<ArgValue>,
+    pub args: Vec<ArgValue<T>>,
 }
 
 #[derive(Debug)]

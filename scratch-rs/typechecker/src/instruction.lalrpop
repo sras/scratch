@@ -6,8 +6,8 @@ use crate::types::ConcreteType;
 use crate::types::Instruction;
 use crate::types::ArgValue;
 use crate::types::ArgValue::*;
-use crate::types::McValue;
-use crate::types::McValue::*;
+use crate::types::SomeValue;
+use crate::types::SomeValue::*;
 use crate::types::AtomicValue;
 use crate::types::AtomicValue::*;
 use crate::types::CompositeValue;
@@ -19,8 +19,8 @@ pub Instruction: Instruction = {
 }
 
 pub Arg: ArgValue = {
-  <v:McValue> => ValueArg(v),
-  <t:McType> => TypeArg(t)
+  <v:SomeValue> => ValueArg(v),
+  <t:ConcreteType> => TypeArg(t)
 }
 
 pub Args: Vec<ArgValue> = {
@@ -28,7 +28,7 @@ pub Args: Vec<ArgValue> = {
   <s:Arg> => vec!(s),
 }
 
-pub McValue: McValue = {
+pub SomeValue: SomeValue = {
   <a:AtomicValue> => AtomicValue(a),
   <a:CompositeValue> => CompositeValue(Box::new(a))
 }
@@ -39,7 +39,7 @@ pub AtomicValue: AtomicValue = {
 }
 
 pub CompositeValue: CompositeValue = {
-  "Pair" <l: McValue> <r: McValue> => CVPair(l, r),
+  "Pair" <l: SomeValue> <r: SomeValue> => CVPair(l, r),
   "{"<ins:InstructionList>"}" => CVLambda(ins)
 }
 
@@ -48,11 +48,11 @@ pub InstructionList:Vec<Instruction> = {
   <i:Instruction>":"<mut is:InstructionList> => { is.insert(0, i); is }
 }
 
-pub McType: ConcreteType = {
+pub ConcreteType: ConcreteType = {
   "int" => MInt,
   "nat" => MNat,
-  "pair" <t1:McType> <t2:McType> => MPair (Box::new(CTSelf( t1)), Box::new(CTSelf(t2))),
-  "("<t:McType>")" => t
+  "pair" <t1:ConcreteType> <t2:ConcreteType> => MPair (Box::new(CTSelf( t1)), Box::new(CTSelf(t2))),
+  "("<t:ConcreteType>")" => t
 };
 
 pub Identifier: String = <s:r"[a-z][a-z0-9]+"> => String::from(s);
