@@ -246,7 +246,7 @@ fn unify_arg<'a>(
             }
         },
         AV::ValueArg(someVal) => {
-            let m: MValue = match arg_con {
+            let (m, ct): (MValue, ConcreteType) = match arg_con {
                 TypeArg(_) => {
                     panic!("Unexpected value argument");
                 }
@@ -262,8 +262,7 @@ fn unify_arg<'a>(
                     None => panic!("Couldnt resolve type"),
                 },
             };
-            let c = value_to_type(&m);
-            unify_concrete_arg(result, c, &arg_con)?;
+            unify_concrete_arg(result, ct, &arg_con)?;
             return Ok(AV::ValueArg(m));
         }
     }
@@ -320,7 +319,7 @@ fn type_check_value_<'a>(
     result: &HashMap<char, ConcreteType>,
     someVal: &SomeValue,
     target_box: Box<CTBox<Concrete>>,
-) -> Result<MValue, &'a str> {
+) -> Result<(MValue, ConcreteType), &'a str> {
     match target_box.as_ref() {
         CTSelf(ctype) => type_check_value(result, someVal, ctype),
         _ => panic!("Impossible"),
@@ -331,29 +330,33 @@ fn type_check_value<'a>(
     result: &HashMap<char, ConcreteType>,
     someVal: &SomeValue,
     target: &ConcreteType,
-) -> Result<MValue, &'a str> {
+) -> Result<(MValue, ConcreteType), &'a str> {
     match (target, someVal) {
         (MNat, Atomic(AVNumber(n))) => match u32::try_from(*n) {
-            Ok(n1) => Ok(VNat(n1)),
+            Ok(n1) => Ok((VNat(n1), MNat)),
             Err(_) => Err("Expecting a Nat but found an Int"),
         },
-        (MInt, Atomic(AVNumber(n))) => Ok(VInt(*n)),
-        (MString, Atomic(AVString(s))) => Ok(VString(s.clone())),
+        (MInt, Atomic(AVNumber(n))) => Ok((VInt(*n), MInt)),
+        (MString, Atomic(AVString(s))) => Ok((VString(s.clone()), MString)),
         (MList(c), Composite(cv)) => match cv.as_ref() {
             CVList(items) => {
                 let mut il: Vec<MValue> = vec![];
                 for i in items {
-                    il.push(type_check_value_(result, i, c.clone())?);
+                    let (mv, _) = type_check_value_(result, i, c.clone())?;
+                    il.push(mv);
                 }
-                return Ok(VList(il));
+                return Ok((VList(il), MList(c.clone())));
             }
             _ => Err("Expecting a List but found something else..."),
         },
         (MPair(c1, c2), Composite(cv)) => match cv.as_ref() {
             CVPair(sv1, sv2) => {
-                let ct1 = type_check_value_(result, sv1, c1.clone())?;
-                let ct2 = type_check_value_(result, sv2, c2.clone())?;
-                return Result::Ok(VPair(Box::new(ct1), Box::new(ct2)));
+                let (mv1, ct1) = type_check_value_(result, sv1, c1.clone())?;
+                let (mv2, ct2) = type_check_value_(result, sv2, c2.clone())?;
+                return Result::Ok((
+                    VPair(Box::new(mv1), Box::new(mv2)),
+                    MPair(Box::new(CTSelf(ct1)), Box::new(CTSelf(ct2))),
+                ));
             }
             _ => Err("Expecting a Pair but found something else..."),
         },
@@ -502,12 +505,13 @@ fn main() {
         Instruction {
             name: String::from("PUSH"),
             args: vec![
-                ArgValue::TypeArg(MPair(
-                    Box::new(CTSelf(MNat)),
-                    Box::new(CTSelf(MNat)),
-                )),
-                ArgValue::ValueArg(Composite(Box::new(CVPair(Atomic(AVNumber(22)), Atomic(AVNumber(22))))))
-            ]},
+                ArgValue::TypeArg(MPair(Box::new(CTSelf(MNat)), Box::new(CTSelf(MNat)))),
+                ArgValue::ValueArg(Composite(Box::new(CVPair(
+                    Atomic(AVNumber(22)),
+                    Atomic(AVNumber(22)),
+                )))),
+            ],
+        },
         //Instruction {
         //    name: String::from("LAMBDA"),
         //    args: vec![
