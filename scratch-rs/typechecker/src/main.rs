@@ -123,17 +123,16 @@ fn unify_arg_aux<'a>(
     arg: Box<CTBox<Concrete>>,
     arg_con: Box<CTBox<Constraint>>,
 ) -> Result<(), &'a str> {
-    panic!("");
-    // let constraint = match arg_con.as_ref() {
-    //     CTOther(c) => c.clone(),
-    //     CTSelf(arg_con_) => Arg(arg_con_.clone()),
-    // };
-    // match arg.as_ref() {
-    //     CTSelf(arg_) => {
-    //         return unify_arg(result, ArgValue::ValueArg((*arg_).clone()), constraint);
-    //     }
-    //     _ => panic!("Impossible!"),
-    // }
+    let constraint = match arg_con.as_ref() {
+        CTOther(c) => c.clone(),
+        CTSelf(arg_con_) => Arg(arg_con_.clone()),
+    };
+    match arg.as_ref() {
+        CTSelf(arg_) => {
+            return unify_concrete_arg(result, (*arg_).clone(), &constraint);
+        }
+        _ => panic!("Impossible!"),
+    }
 }
 
 fn unify_args<'a>(
@@ -153,78 +152,77 @@ fn unify_concrete_arg<'a>(
     arg: ConcreteType,
     arg_con: &Constraint,
 ) -> Result<(), &'a str> {
-    panic!("");
-    //match arg_con {
-    //    Warg(c) => {
-    //        add_symbol(result, c, arg);
-    //        return Result::Ok(());
-    //    }
-    //    TypeArg(c) => {
-    //        add_symbol(result, c, arg.clone());
-    //        return Result::Ok(());
-    //    }
-    //    TypeArgRef(c) => match result.get(&c) {
-    //        Some(tt) => {
-    //            return unify_concrete_arg(result, arg, Arg(coerce_ctype((*tt).clone())));
-    //        }
-    //        _ => {
-    //            return Result::Err("Unknown type ref");
-    //        }
-    //    },
-    //    Arg(c) => match c {
-    //        MList(ic) => match arg {
-    //            MList(iv) => {
-    //                return unify_arg_aux(result, iv, ic);
-    //            }
+    match arg_con {
+        Warg(c) => {
+            add_symbol(result, c.clone(), arg);
+            return Result::Ok(());
+        }
+        TypeArg(c) => {
+            add_symbol(result, c.clone(), arg.clone());
+            return Result::Ok(());
+        }
+        TypeArgRef(c) => match result.get(&c) {
+            Some(tt) => {
+                return unify_concrete_arg(result, arg, &Arg(coerce_ctype((*tt).clone())));
+            }
+            _ => {
+                return Result::Err("Unknown type ref");
+            }
+        },
+        Arg(c) => match c {
+            MList(ic) => match arg {
+                MList(iv) => {
+                    return unify_arg_aux(result, iv, ic.clone());
+                }
 
-    //            _ => {
-    //                return Result::Err("Expecting a list but got something else...");
-    //            }
-    //        },
-    //        MLambda(vin, vout) => match arg {
-    //            MLambda(cin, cout) => {
-    //                return unify_arg_aux(result, cin, vin)
-    //                    .and_then(|_| unify_arg_aux(result, cout, vout));
-    //            }
-    //            _ => {
-    //                return Result::Err("Expecting a lambda but got something else...");
-    //            }
-    //        },
-    //        MPair(cl, cr) => match arg {
-    //            MPair(vl, vr) => {
-    //                return unify_arg_aux(result, vl, cl)
-    //                    .and_then(|_| unify_arg_aux(result, vr, cr));
-    //            }
-    //            _ => {
-    //                return Result::Err("Expecting a pair but got something else...");
-    //            }
-    //        },
-    //        MNat => match arg {
-    //            MNat => {
-    //                return Result::Ok(());
-    //            }
-    //            _ => {
-    //                return Result::Err("Expecting a `Nat`, but found something else...");
-    //            }
-    //        },
-    //        MInt => match arg {
-    //            MInt => {
-    //                return Result::Ok(());
-    //            }
-    //            _ => {
-    //                return Result::Err("Expecting a `Int`, but found something else...");
-    //            }
-    //        },
-    //        MString => match arg {
-    //            MString => {
-    //                return Result::Ok(());
-    //            }
-    //            _ => {
-    //                return Result::Err("Expecting a `String`, but found something else...");
-    //            }
-    //        },
-    //    },
-    //}
+                _ => {
+                    return Result::Err("Expecting a list but got something else...");
+                }
+            },
+            MLambda(vin, vout) => match arg {
+                MLambda(cin, cout) => {
+                    return unify_arg_aux(result, cin, vin.clone())
+                        .and_then(|_| unify_arg_aux(result, cout, vout.clone()));
+                }
+                _ => {
+                    return Result::Err("Expecting a lambda but got something else...");
+                }
+            },
+            MPair(cl, cr) => match arg {
+                MPair(vl, vr) => {
+                    return unify_arg_aux(result, vl, cl.clone())
+                        .and_then(|_| unify_arg_aux(result, vr, cr.clone()));
+                }
+                _ => {
+                    return Result::Err("Expecting a pair but got something else...");
+                }
+            },
+            MNat => match arg {
+                MNat => {
+                    return Result::Ok(());
+                }
+                _ => {
+                    return Result::Err("Expecting a `Nat`, but found something else...");
+                }
+            },
+            MInt => match arg {
+                MInt => {
+                    return Result::Ok(());
+                }
+                _ => {
+                    return Result::Err("Expecting a `Int`, but found something else...");
+                }
+            },
+            MString => match arg {
+                MString => {
+                    return Result::Ok(());
+                }
+                _ => {
+                    return Result::Err("Expecting a `String`, but found something else...");
+                }
+            },
+        },
+    }
 }
 
 fn unify_arg<'a>(
@@ -243,16 +241,71 @@ fn unify_arg<'a>(
             }
         },
         AV::ValueArg(someVal) => {
-            let (m, c) = type_check_value(result, someVal, &arg_con)?;
+            let m: MValue = match arg_con {
+                TypeArg(_) => {
+                    panic!("Unexpected value argument");
+                }
+                Warg(x) => {
+                    panic!("Unexpected wildcard type encountered");
+                }
+                TypeArgRef(ref c) => match result.get(&c) {
+                    Some(ct) => type_check_value(result, someVal, ct)?,
+                    None => panic!("Symbol resolution failed! {:?}", c),
+                },
+                Arg(_) => match constraint_to_ctype(&arg_con) {
+                    Some(concrete_type) => type_check_value(result, someVal, &concrete_type)?,
+                    None => panic!("Couldnt resolve type"),
+                },
+            };
+            let c = value_to_type(&m);
             unify_concrete_arg(result, c, &arg_con)?;
             return Ok(AV::ValueArg(m));
         }
     }
 }
 
-fn type_check_value<'a>(result: &mut HashMap<char, ConcreteType>,
+fn constraint_to_ctype(c: &Constraint) -> Option<ConcreteType> {
+    match c {
+        Arg(ctc) => match ctc {
+            MInt => Some(MInt),
+            MNat => Some(MNat),
+            MString => Some(MString),
+            MPair(l, r) => Some(MPair(
+                boxed_ctbox_constrain_to_ctype(l)?,
+                boxed_ctbox_constrain_to_ctype(r)?,
+            )),
+            MList(l) => Some(MList(boxed_ctbox_constrain_to_ctype(l)?)),
+            MLambda(l, r) => Some(MLambda(
+                boxed_ctbox_constrain_to_ctype(l)?,
+                boxed_ctbox_constrain_to_ctype(r)?,
+            )),
+        },
+        _ => panic!("Unimplemented"),
+    }
+}
+
+fn boxed_ctbox_constrain_to_ctype(c: &CTBox<Constraint>) -> Option<Box<CTBox<Concrete>>> {
+    match c {
+        CTOther(c) => match constraint_to_ctype(c) {
+            Some(x) => Some(Box::new(CTSelf(x))),
+            None => None,
+        },
+        CTSelf(c) => match constraint_to_ctype(&Arg(c.clone())) {
+            Some(x) => Some(Box::new(CTSelf(x))),
+            None => None,
+        },
+    }
+}
+
+fn value_to_type<'a>(v: &MValue) -> ConcreteType {
+    panic!("");
+}
+
+fn type_check_value<'a>(
+    result: &HashMap<char, ConcreteType>,
     someVal: SomeValue,
-    arg_con: &Constraint) -> Result<(MValue, ConcreteType), &'a str> {
+    arg_con: &ConcreteType,
+) -> Result<MValue, &'a str> {
     panic!("");
 }
 
@@ -311,10 +364,6 @@ fn make_result_stack<'a>(
         result_stack.push(stack_result_to_ctype(result, &i));
     }
     return Result::Ok(result_stack);
-}
-
-fn mvalue_to_concrete_type(v: MValue) -> ConcreteType {
-    panic!("");
 }
 
 fn unify_stack<'a>(
