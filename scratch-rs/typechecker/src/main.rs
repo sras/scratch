@@ -6,11 +6,16 @@ mod types;
 use types::*;
 
 use std::collections::HashMap;
+use std::convert::TryFrom;
 
 use ArgValue as AV;
+use AtomicValue::*;
 use CTBox::*;
 use CType::*;
+use CompositeValue::*;
 use Constraint::*;
+use MValue::*;
+use SomeValue::*;
 use StackResult::*;
 
 impl<T: Clone> Clone for CType<T> {
@@ -245,15 +250,15 @@ fn unify_arg<'a>(
                 TypeArg(_) => {
                     panic!("Unexpected value argument");
                 }
-                Warg(x) => {
+                Warg(_) => {
                     panic!("Unexpected wildcard type encountered");
                 }
                 TypeArgRef(ref c) => match result.get(&c) {
-                    Some(ct) => type_check_value(result, someVal, ct)?,
+                    Some(ct) => type_check_value(result, &someVal, ct)?,
                     None => panic!("Symbol resolution failed! {:?}", c),
                 },
-                Arg(_) => match constraint_to_ctype(&arg_con) {
-                    Some(concrete_type) => type_check_value(result, someVal, &concrete_type)?,
+                Arg(_) => match constraint_to_ctype(result, &arg_con) {
+                    Some(concrete_type) => type_check_value(result, &someVal, &concrete_type)?,
                     None => panic!("Couldnt resolve type"),
                 },
             };
@@ -264,33 +269,43 @@ fn unify_arg<'a>(
     }
 }
 
-fn constraint_to_ctype(c: &Constraint) -> Option<ConcreteType> {
+fn constraint_to_ctype(
+    result: &HashMap<char, ConcreteType>,
+    c: &Constraint,
+) -> Option<ConcreteType> {
     match c {
         Arg(ctc) => match ctc {
             MInt => Some(MInt),
             MNat => Some(MNat),
             MString => Some(MString),
             MPair(l, r) => Some(MPair(
-                boxed_ctbox_constrain_to_ctype(l)?,
-                boxed_ctbox_constrain_to_ctype(r)?,
+                boxed_ctbox_constrain_to_ctype(result, l)?,
+                boxed_ctbox_constrain_to_ctype(result, r)?,
             )),
-            MList(l) => Some(MList(boxed_ctbox_constrain_to_ctype(l)?)),
+            MList(l) => Some(MList(boxed_ctbox_constrain_to_ctype(result, l)?)),
             MLambda(l, r) => Some(MLambda(
-                boxed_ctbox_constrain_to_ctype(l)?,
-                boxed_ctbox_constrain_to_ctype(r)?,
+                boxed_ctbox_constrain_to_ctype(result, l)?,
+                boxed_ctbox_constrain_to_ctype(result, r)?,
             )),
         },
-        _ => panic!("Unimplemented"),
+        TypeArgRef(c) => match result.get(&c) {
+            Some(ct) => Some(ct.clone()),
+            None => None,
+        },
+        _ => None,
     }
 }
 
-fn boxed_ctbox_constrain_to_ctype(c: &CTBox<Constraint>) -> Option<Box<CTBox<Concrete>>> {
+fn boxed_ctbox_constrain_to_ctype(
+    result: &HashMap<char, ConcreteType>,
+    c: &CTBox<Constraint>,
+) -> Option<Box<CTBox<Concrete>>> {
     match c {
-        CTOther(c) => match constraint_to_ctype(c) {
+        CTOther(c) => match constraint_to_ctype(result, c) {
             Some(x) => Some(Box::new(CTSelf(x))),
             None => None,
         },
-        CTSelf(c) => match constraint_to_ctype(&Arg(c.clone())) {
+        CTSelf(c) => match constraint_to_ctype(result, &Arg(c.clone())) {
             Some(x) => Some(Box::new(CTSelf(x))),
             None => None,
         },
@@ -301,12 +316,55 @@ fn value_to_type<'a>(v: &MValue) -> ConcreteType {
     panic!("");
 }
 
+fn type_check_value_<'a>(
+    result: &HashMap<char, ConcreteType>,
+    someVal: &SomeValue,
+    target_box: Box<CTBox<Concrete>>,
+) -> Result<MValue, &'a str> {
+    match target_box.as_ref() {
+        CTSelf(ctype) => type_check_value(result, someVal, ctype),
+        _ => panic!("Impossible"),
+    }
+}
+
 fn type_check_value<'a>(
     result: &HashMap<char, ConcreteType>,
-    someVal: SomeValue,
-    arg_con: &ConcreteType,
+    someVal: &SomeValue,
+    target: &ConcreteType,
 ) -> Result<MValue, &'a str> {
-    panic!("");
+    match (target, someVal) {
+        (MNat, Atomic(AVNumber(n))) => match u32::try_from(*n) {
+            Ok(n1) => Ok(VNat(n1)),
+            Err(_) => Err("Expecting a Nat but found an Int"),
+        },
+        (MInt, Atomic(AVNumber(n))) => Ok(VInt(*n)),
+        (MString, Atomic(AVString(s))) => Ok(VString(s.clone())),
+        (MList(c), Composite(cv)) => match cv.as_ref() {
+            CVList(items) => {
+                let mut il: Vec<MValue> = vec![];
+                for i in items {
+                    il.push(type_check_value_(result, i, c.clone())?);
+                }
+                return Ok(VList(il));
+            }
+            _ => Err("Expecting a List but found something else..."),
+        },
+        (MPair(c1, c2), Composite(cv)) => match cv.as_ref() {
+            CVPair(sv1, sv2) => {
+                let ct1 = type_check_value_(result, sv1, c1.clone())?;
+                let ct2 = type_check_value_(result, sv2, c2.clone())?;
+                return Result::Ok(VPair(Box::new(ct1), Box::new(ct2)));
+            }
+            _ => Err("Expecting a Pair but found something else..."),
+        },
+        (MLambda(c1, c2), Composite(cv)) => match cv.as_ref() {
+            CVLambda(_) => {
+                panic!("Unimplemented!");
+            }
+            _ => Err("Expecting a Lambda but found something else..."),
+        },
+        _ => Err("Error type mismatch"),
+    }
 }
 
 fn stack_result_to_ctype(

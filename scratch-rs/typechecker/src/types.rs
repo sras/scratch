@@ -19,13 +19,13 @@ pub enum CType<T> {
 
 #[derive(Debug, Clone)]
 pub enum SomeValue {
-    AtomicValue(AtomicValue),
-    CompositeValue(Box<CompositeValue>)
+    Atomic(AtomicValue),
+    Composite(Box<CompositeValue>)
 }
 
 #[derive(Debug, Clone)]
 pub enum AtomicValue {
-    AVNumber(u32),
+    AVNumber(i32),
     AVString(String),
     }
 
@@ -41,7 +41,8 @@ pub enum MValue {
 #[derive(Debug, Clone)]
 pub enum CompositeValue {
     CVPair(SomeValue, SomeValue),
-    CVLambda(Vec<Instruction<SomeValue>>)
+    CVLambda(Vec<Instruction<SomeValue>>),
+    CVList(Vec<SomeValue>)
 }
 
 #[derive(Debug, Eq, PartialEq)]
