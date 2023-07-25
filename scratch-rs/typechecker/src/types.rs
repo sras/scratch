@@ -29,6 +29,7 @@ pub enum AtomicValue {
     AVString(String),
     }
 
+#[derive(Debug, Clone)]
 pub enum MValue {
     VNat(u32),
     VInt(i32),

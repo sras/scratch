@@ -499,25 +499,15 @@ fn typecheck_one<'a>(
 
 fn main() {
     let instructions: Vec<Instruction<SomeValue>> = vec![
-        //Instruction {
-        //    name: String::from("PUSH"),
-        //    args: vec![
-        //        ArgValue::TypeArg(MPair(
-        //            Box::new(CTSelf(MNat)),
-        //            Box::new(CTSelf(MPair(
-        //                Box::new(CTSelf(MNat)),
-        //                Box::new(CTSelf(MNat)),
-        //            ))),
-        //        )),
-        //        ArgValue::ValueArg(MPair(
-        //            Box::new(CTSelf(MNat)),
-        //            Box::new(CTSelf(MPair(
-        //                Box::new(CTSelf(MNat)),
-        //                Box::new(CTSelf(MNat)),
-        //            ))),
-        //        )),
-        //    ],
-        //},
+        Instruction {
+            name: String::from("PUSH"),
+            args: vec![
+                ArgValue::TypeArg(MPair(
+                    Box::new(CTSelf(MNat)),
+                    Box::new(CTSelf(MNat)),
+                )),
+                ArgValue::ValueArg(Composite(Box::new(CVPair(Atomic(AVNumber(22)), Atomic(AVNumber(22))))))
+            ]},
         //Instruction {
         //    name: String::from("LAMBDA"),
         //    args: vec![
@@ -587,6 +577,6 @@ fn main() {
     ];
     let mut stack = Vec::from([]);
     let result = typecheck(instructions, &mut stack);
-    //println!("{:?} {:?}", result, stack);
+    println!("{:?} {:?}", result, stack);
     //println!("{:?}", instruction::InstructionParser::new().parse("push nat 5"));
 }
