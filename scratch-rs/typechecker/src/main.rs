@@ -33,8 +33,8 @@ impl<T: Clone> Clone for MNesting<T> {
     }
 }
 
-fn map_nesting<T: Clone, H>(aux: &Box<MNesting<T>>, cb: fn(T) -> H) -> Box<MNesting<H>> {
-    match aux.as_ref() {
+fn map_nesting<T: Clone, H>(nesting: &Box<MNesting<T>>, cb: fn(T) -> H) -> Box<MNesting<H>> {
+    match nesting.as_ref() {
         Other(t) => {
             return Box::new(Other(cb((*t).clone())));
         }
@@ -406,7 +406,7 @@ fn type_check_value<'a>(
     }
 }
 
-fn stack_resolved_to_ctype(
+fn stack_result_to_concrete_type(
     resolved: &mut HashMap<char, ConcreteType>,
     sr: &StackResult,
 ) -> ConcreteType {
@@ -430,24 +430,24 @@ fn mk_ctype(resolved: &mut HashMap<char, ConcreteType>, ct: &MType<StackResult>)
         MInt => MInt,
         MNat => MNat,
         MString => MString,
-        MList(l) => MList(stack_resolved_aux_to_ctype_aux(resolved, &l)),
+        MList(l) => MList(stack_result_nesting_to_concrete_nesting(resolved, &l)),
         MPair(l, r) => MPair(
-            stack_resolved_aux_to_ctype_aux(resolved, &l),
-            stack_resolved_aux_to_ctype_aux(resolved, &r),
+            stack_result_nesting_to_concrete_nesting(resolved, &l),
+            stack_result_nesting_to_concrete_nesting(resolved, &r),
         ),
         MLambda(l, r) => MLambda(
-            stack_resolved_aux_to_ctype_aux(resolved, &l),
-            stack_resolved_aux_to_ctype_aux(resolved, &r),
+            stack_result_nesting_to_concrete_nesting(resolved, &l),
+            stack_result_nesting_to_concrete_nesting(resolved, &r),
         ),
     }
 }
 
-fn stack_resolved_aux_to_ctype_aux(
+fn stack_result_nesting_to_concrete_nesting(
     resolved: &mut HashMap<char, ConcreteType>,
-    aux: &MNesting<StackResult>,
+    nesting: &MNesting<StackResult>,
 ) -> Box<MNesting<Concrete>> {
-    Box::new(match aux {
-        Other(t) => Nested(stack_resolved_to_ctype(resolved, t)),
+    Box::new(match nesting {
+        Other(t) => Nested(stack_result_to_concrete_type(resolved, t)),
         Nested(c) => Nested(mk_ctype(resolved, c)),
     })
 }
@@ -458,7 +458,7 @@ fn make_resolved_stack<'a>(
 ) -> Result<StackState, &'a str> {
     let mut resolved_stack: StackState = vec![];
     for i in sem_stack_out {
-        resolved_stack.push(stack_resolved_to_ctype(resolved, &i));
+        resolved_stack.push(stack_result_to_concrete_type(resolved, &i));
     }
     return Result::Ok(resolved_stack);
 }
@@ -484,8 +484,8 @@ fn unify_stack<'a>(
     return Result::Ok(());
 }
 
-fn coerce_box_auxct<T>(aux: &Box<MNesting<Concrete>>) -> Box<MNesting<T>> {
-    Box::new(Nested(coerce_ctype(unwrap_ctbox(aux))))
+fn coerce_nested<T>(nested: &Box<MNesting<Concrete>>) -> Box<MNesting<T>> {
+    Box::new(Nested(coerce_ctype(unwrap_ctbox(nested))))
 }
 
 fn coerce_ctype<T>(c: &MType<Concrete>) -> MType<T> {
@@ -493,9 +493,9 @@ fn coerce_ctype<T>(c: &MType<Concrete>) -> MType<T> {
         MInt => MInt,
         MNat => MNat,
         MString => MString,
-        MPair(l, r) => MPair(coerce_box_auxct(l), coerce_box_auxct(r)),
-        MLambda(l, r) => MLambda(coerce_box_auxct(l), coerce_box_auxct(r)),
-        MList(l) => MList(coerce_box_auxct(l)),
+        MPair(l, r) => MPair(coerce_nested(l), coerce_nested(r)),
+        MLambda(l, r) => MLambda(coerce_nested(l), coerce_nested(r)),
+        MList(l) => MList(coerce_nested(l)),
     }
 }
 
