@@ -315,7 +315,7 @@ fn value_to_type<'a>(v: &MValue) -> ConcreteType {
     panic!("");
 }
 
-fn type_check_value_<'a>(
+fn typecheck_value_<'a>(
     result: &HashMap<char, ConcreteType>,
     someVal: &SomeValue,
     target_box: Box<CTBox<Concrete>>,
@@ -342,7 +342,7 @@ fn type_check_value<'a>(
             CVList(items) => {
                 let mut il: Vec<MValue> = vec![];
                 for i in items {
-                    let (mv, _) = type_check_value_(result, i, c.clone())?;
+                    let (mv, _) = typecheck_value_(result, i, c.clone())?;
                     il.push(mv);
                 }
                 return Ok((VList(il), MList(c.clone())));
@@ -351,8 +351,8 @@ fn type_check_value<'a>(
         },
         (MPair(c1, c2), Composite(cv)) => match cv.as_ref() {
             CVPair(sv1, sv2) => {
-                let (mv1, ct1) = type_check_value_(result, sv1, c1.clone())?;
-                let (mv2, ct2) = type_check_value_(result, sv2, c2.clone())?;
+                let (mv1, ct1) = typecheck_value_(result, sv1, c1.clone())?;
+                let (mv2, ct2) = typecheck_value_(result, sv2, c2.clone())?;
                 return Result::Ok((
                     VPair(Box::new(mv1), Box::new(mv2)),
                     MPair(Box::new(CTSelf(ct1)), Box::new(CTSelf(ct2))),
@@ -501,90 +501,14 @@ fn typecheck_one<'a>(
 }
 
 fn main() {
-    let instructions: Vec<Instruction<SomeValue>> = vec![
-        Instruction {
-            name: String::from("PUSH"),
-            args: vec![
-                ArgValue::TypeArg(MPair(Box::new(CTSelf(MNat)), Box::new(CTSelf(MNat)))),
-                ArgValue::ValueArg(Composite(Box::new(CVPair(
-                    Atomic(AVNumber(22)),
-                    Atomic(AVNumber(22)),
-                )))),
-            ],
-        },
-        //Instruction {
-        //    name: String::from("LAMBDA"),
-        //    args: vec![
-        //        ArgValue::TypeArg(MNat),
-        //        ArgValue::TypeArg(MInt),
-        //        ArgValue::ValueArg(MLambda(Box::new(CTSelf(MNat)), Box::new(CTSelf(MInt)))),
-        //    ],
-        //},
-        //Instruction {
-        //    name: String::from("PUSH"),
-        //    args: vec![
-        //        ArgValue::TypeArg(MPair(Box::new(CTSelf(MNat)), Box::new(CTSelf(MString)))),
-        //        ArgValue::ValueArg(MPair(Box::new(CTSelf(MNat)), Box::new(CTSelf(MString)))),
-        //    ],
-        //},
-        //Instruction {
-        //    name: String::from("DROP"),
-        //    args: vec![],
-        //},
-        //Instruction {
-        //    name: String::from("DROP"),
-        //    args: vec![],
-        //},
-        //Instruction {
-        //    name: String::from("DROP"),
-        //    args: vec![],
-        //},
-        //Instruction {
-        //    name: String::from("PUSH"),
-        //    args: vec![ArgValue::TypeArg(MNat), ArgValue::ValueArg(MNat)],
-        //},
-        //Instruction {
-        //    name: String::from("PUSH"),
-        //    args: vec![ArgValue::TypeArg(MInt), ArgValue::ValueArg(MInt)],
-        //},
-        //Instruction {
-        //    name: String::from("PAIR"),
-        //    args: vec![],
-        //},
-        //Instruction {
-        //    name: String::from("PUSH"),
-        //    args: vec![
-        //        ArgValue::TypeArg(MList(Box::new(CTSelf(MNat)))),
-        //        ArgValue::ValueArg(MList(Box::new(CTSelf(MNat)))),
-        //    ],
-        //},
-        //Instruction {
-        //    name: String::from("PUSH"),
-        //    args: vec![ArgValue::TypeArg(MNat), ArgValue::ValueArg(MNat)],
-        //},
-        //Instruction {
-        //    name: String::from("CONS"),
-        //    args: vec![],
-        //},
-        //Instruction {
-        //    name: String::from("PUSH"),
-        //    args: vec![ArgValue::TypeArg(MNat), ArgValue::ValueArg(MNat)],
-        //},
-        //Instruction {
-        //    name: String::from("PUSH"),
-        //    args: vec![ArgValue::TypeArg(MNat), ArgValue::ValueArg(MNat)],
-        //},
-        //Instruction {
-        //    name: String::from("ADD"),
-        //    args: vec![],
-        //},
-    ];
     let mut stack = Vec::from([]);
-    let result = typecheck(instructions, &mut stack);
-    println!("{:?} {:?}", result, stack);
-    println!(
-        "{:?}",
-        instruction::InstructionListParser::new()
-            .parse("push nat 5;push (pair nat (pair int nat)) 5")
-    );
+    match instruction::InstructionListParser::new()
+        .parse("PUSH nat 5;PUSH (pair nat int) (Pair 5 10);DROP")
+    {
+        Result::Ok(parsed_instructions) => {
+            let result = typecheck(parsed_instructions, &mut stack);
+            println!("{:?}", stack);
+        }
+        Result::Err(s) => println!("{}", s),
+    }
 }

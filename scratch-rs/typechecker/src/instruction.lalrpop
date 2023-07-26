@@ -16,6 +16,7 @@ grammar;
 
 pub Instruction: Instruction<SomeValue> = {
   <s:Identifier> <a:Args> => Instruction { name : s, args: a },
+  <s:Identifier> => Instruction { name : s, args: vec![] },
 }
 
 pub Arg: ArgValue<SomeValue> = {
@@ -30,7 +31,8 @@ pub Args: Vec<ArgValue<SomeValue>> = {
 
 pub SomeValue: SomeValue = {
   <a:AtomicValue> => Atomic(a),
-  <a:CompositeValue> => Composite(Box::new(a))
+  <a:CompositeValue> => Composite(Box::new(a)),
+  "("<s:SomeValue>")" => s
 }
 
 pub AtomicValue: AtomicValue = {
@@ -55,7 +57,7 @@ pub ConcreteType: ConcreteType = {
   "("<t:ConcreteType>")" => t
 };
 
-pub Identifier: String = <s:r"[a-z][a-z0-9]+"> => String::from(s);
+pub Identifier: String = <s:r"[A-Za-z][A-Za-z0-9]+"> => String::from(s);
 
 McLitString: String = <s:r#""[a-z0-9]+""#> => s[1..s.len()-1].into();
 McLitNumber: i32 = <s:r"([+-]?)[0-9]+"> => i32::from_str(s).unwrap();
