@@ -10,10 +10,10 @@ use std::convert::TryFrom;
 
 use ArgValue as AV;
 use AtomicValue::*;
-use MNesting::*;
-use MType::*;
 use CompositeValue::*;
 use Constraint::*;
+use MNesting::*;
+use MType::*;
 use MValue::*;
 use SomeValue::*;
 use StackResult::*;
@@ -483,7 +483,6 @@ fn unify_stack<'a>(
 
 fn coerce_box_auxct<T>(aux: &Box<MNesting<Concrete>>) -> Box<MNesting<T>> {
     Box::new(Nested(coerce_ctype(unwrap_ctbox(aux))))
-
 }
 
 fn coerce_ctype<T>(c: &MType<Concrete>) -> MType<T> {
@@ -528,18 +527,18 @@ fn typecheck_one<'a>(
 }
 
 fn main() {
-    //let mut stack = Vec::from([]);
-    //match instruction::InstructionListParser::new().parse(
-    //    "LAMBDA nat (pair nat nat) {DUP;PAIR};PUSH nat 5;PUSH (pair nat int) (Pair 5 10);DROP",
-    //) {
-    //    Result::Ok(parsed_instructions) => match typecheck(&parsed_instructions, &mut stack) {
-    //        Result::Ok(_) => {
-    //            println!("{:?}", stack);
-    //        }
-    //        Err(s) => {
-    //            println!("{}", s);
-    //        }
-    //    },
-    //    Result::Err(s) => println!("{}", s),
-    //}
+    let mut stack = Vec::from([]);
+    match instruction::InstructionListParser::new().parse(
+        "LAMBDA nat (pair nat nat) {DUP;PAIR};PUSH nat 5;PUSH (pair nat int) (Pair 5 10);DROP",
+    ) {
+        Result::Ok(parsed_instructions) => match typecheck(&parsed_instructions, &mut stack) {
+            Result::Ok(_) => {
+                println!("{:?}", stack);
+            }
+            Err(s) => {
+                println!("{}", s);
+            }
+        },
+        Result::Err(s) => println!("{}", s),
+    }
 }
