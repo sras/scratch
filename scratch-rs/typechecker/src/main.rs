@@ -339,10 +339,10 @@ fn unwrap_ctbox(c: &MNesting<Concrete>) -> &ConcreteType {
 
 fn type_check_value<'a>(
     resolved: &HashMap<char, ConcreteType>,
-    someVal: &SomeValue,
+    some_val: &SomeValue,
     target: &ConcreteType,
 ) -> Result<(MValue, ConcreteType), &'a str> {
-    match (target, someVal) {
+    match (target, some_val) {
         (MNat, Atomic(AVNumber(n))) => match u32::try_from(*n) {
             Ok(n1) => Ok((VNat(n1), MNat)),
             Err(_) => Err("Expecting a Nat but found an Int"),
@@ -550,13 +550,15 @@ mod tests {
     use crate::Instruction;
     use crate::instruction::InstructionListParser;
     use crate::SomeValue;
+    use crate::StackState;
     use crate::MValue;
     use crate::typecheck;
     fn typecheck_<'a>(
         instructions: &Vec<Instruction<SomeValue>>,
-    ) -> Result<Vec<Instruction<MValue>>, &'a str> {
+    ) -> Result<StackState, &'a str> {
         let mut stack = Vec::from([]);
-        typecheck(instructions, &mut stack)
+        typecheck(instructions, &mut stack)?;
+        return Result::Ok(stack);
     }
     fn parse(src: &str)-> Vec<Instruction<SomeValue>> {
         let p = InstructionListParser::new();
@@ -568,13 +570,20 @@ mod tests {
 
     #[test]
     fn test_type_checking_simple() {
+        // Type check behavior.
         assert!(Result::is_ok(&typecheck_(&parse("PUSH nat 5"))));
         assert!(Result::is_ok(&typecheck_(&parse("PUSH (pair nat nat) (Pair 2 3)"))));
         assert!(Result::is_ok(&typecheck_(&parse("PUSH (pair nat nat) (Pair 2 3);DROP"))));
+        assert!(Result::is_ok(&typecheck_(&parse("PUSH nat 5; PUSH nat 5;ADD"))));
 
         assert!(Result::is_err(&typecheck_(&parse("PUSH nat \"5\""))));
         assert!(Result::is_err(&typecheck_(&parse("PUSH (pair nat nat) 5"))));
         assert!(Result::is_err(&typecheck_(&parse("PUSH (pair nat nat) (Pair 2 3);DROP;DROP"))));
+        assert!(Result::is_err(&typecheck_(&parse("PUSH nat 5;ADD"))));
+
+        // Stack result tests.
+        assert_eq!(typecheck_(&parse("PUSH nat 5; PUSH nat 5;ADD")).unwrap().len(), 1);
+        assert_eq!(typecheck_(&parse("PUSH nat 5")).unwrap().len(), 1);
     }
 
 }

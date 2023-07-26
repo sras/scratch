@@ -53,6 +53,7 @@ pub InstructionList:Vec<Instruction<SomeValue>> = {
 pub ConcreteType: ConcreteType = {
   "int" => MInt,
   "nat" => MNat,
+  "string" => MString,
   "pair" <t1:ConcreteType> <t2:ConcreteType> => MPair (Box::new(Nested( t1)), Box::new(Nested(t2))),
   "("<t:ConcreteType>")" => t
 };
