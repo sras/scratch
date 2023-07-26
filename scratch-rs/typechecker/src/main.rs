@@ -547,24 +547,22 @@ fn main() {
 }
 
 mod tests {
-    use crate::Instruction;
     use crate::instruction::InstructionListParser;
+    use crate::typecheck;
+    use crate::Instruction;
+    use crate::MValue;
     use crate::SomeValue;
     use crate::StackState;
-    use crate::MValue;
-    use crate::typecheck;
-    fn typecheck_<'a>(
-        instructions: &Vec<Instruction<SomeValue>>,
-    ) -> Result<StackState, &'a str> {
+    fn typecheck_<'a>(instructions: &Vec<Instruction<SomeValue>>) -> Result<StackState, &'a str> {
         let mut stack = Vec::from([]);
         typecheck(instructions, &mut stack)?;
         return Result::Ok(stack);
     }
-    fn parse(src: &str)-> Vec<Instruction<SomeValue>> {
+    fn parse(src: &str) -> Vec<Instruction<SomeValue>> {
         let p = InstructionListParser::new();
         match p.parse(src) {
             Ok(s) => s,
-            _ => panic!("Parse failed")
+            _ => panic!("Parse failed"),
         }
     }
 
@@ -572,18 +570,30 @@ mod tests {
     fn test_type_checking_simple() {
         // Type check behavior.
         assert!(Result::is_ok(&typecheck_(&parse("PUSH nat 5"))));
-        assert!(Result::is_ok(&typecheck_(&parse("PUSH (pair nat nat) (Pair 2 3)"))));
-        assert!(Result::is_ok(&typecheck_(&parse("PUSH (pair nat nat) (Pair 2 3);DROP"))));
-        assert!(Result::is_ok(&typecheck_(&parse("PUSH nat 5; PUSH nat 5;ADD"))));
+        assert!(Result::is_ok(&typecheck_(&parse(
+            "PUSH (pair nat nat) (Pair 2 3)"
+        ))));
+        assert!(Result::is_ok(&typecheck_(&parse(
+            "PUSH (pair nat nat) (Pair 2 3);DROP"
+        ))));
+        assert!(Result::is_ok(&typecheck_(&parse(
+            "PUSH nat 5; PUSH nat 5;ADD"
+        ))));
 
         assert!(Result::is_err(&typecheck_(&parse("PUSH nat \"5\""))));
         assert!(Result::is_err(&typecheck_(&parse("PUSH (pair nat nat) 5"))));
-        assert!(Result::is_err(&typecheck_(&parse("PUSH (pair nat nat) (Pair 2 3);DROP;DROP"))));
+        assert!(Result::is_err(&typecheck_(&parse(
+            "PUSH (pair nat nat) (Pair 2 3);DROP;DROP"
+        ))));
         assert!(Result::is_err(&typecheck_(&parse("PUSH nat 5;ADD"))));
 
         // Stack result tests.
-        assert_eq!(typecheck_(&parse("PUSH nat 5; PUSH nat 5;ADD")).unwrap().len(), 1);
+        assert_eq!(
+            typecheck_(&parse("PUSH nat 5; PUSH nat 5;ADD"))
+                .unwrap()
+                .len(),
+            1
+        );
         assert_eq!(typecheck_(&parse("PUSH nat 5")).unwrap().len(), 1);
     }
-
 }
