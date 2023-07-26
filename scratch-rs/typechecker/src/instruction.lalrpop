@@ -45,7 +45,7 @@ pub CompositeValue: CompositeValue = {
 
 pub InstructionList:Vec<Instruction<SomeValue>> = {
   <i:Instruction> => vec!(i),
-  <i:Instruction>":"<mut is:InstructionList> => { is.insert(0, i); is }
+  <i:Instruction>";"<mut is:InstructionList> => { is.insert(0, i); is }
 }
 
 pub ConcreteType: ConcreteType = {

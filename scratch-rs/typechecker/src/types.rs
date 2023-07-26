@@ -12,7 +12,7 @@ pub enum CType<T> {
     MNat,
     MInt,
     MString,
-    MPair(Box<CTBox<T>>, Box<CTBox<T>>),
+    MPair(Box<(CTBox<T>)>, Box<CTBox<T>>),
     MList(Box<CTBox<T>>),
     MLambda(Box<CTBox<T>>, Box<CTBox<T>>),
 }
@@ -20,14 +20,14 @@ pub enum CType<T> {
 #[derive(Debug, Clone)]
 pub enum SomeValue {
     Atomic(AtomicValue),
-    Composite(Box<CompositeValue>)
+    Composite(Box<CompositeValue>),
 }
 
 #[derive(Debug, Clone)]
 pub enum AtomicValue {
     AVNumber(i32),
     AVString(String),
-    }
+}
 
 #[derive(Debug, Clone)]
 pub enum MValue {
@@ -36,14 +36,14 @@ pub enum MValue {
     VString(String),
     VPair(Box<MValue>, Box<MValue>),
     VList(Vec<MValue>),
-    VLambda(Vec<Instruction<MValue>>)
+    VLambda(Vec<Instruction<MValue>>),
 }
 
 #[derive(Debug, Clone)]
 pub enum CompositeValue {
     CVPair(SomeValue, SomeValue),
     CVLambda(Vec<Instruction<SomeValue>>),
-    CVList(Vec<SomeValue>)
+    CVList(Vec<SomeValue>),
 }
 
 #[derive(Debug, Eq, PartialEq)]

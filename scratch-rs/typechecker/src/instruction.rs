@@ -1,5 +1,5 @@
 // auto-generated: "lalrpop 0.20.0"
-// sha3: 16e46f03799d925f6362e13e3c280f6393ab6c51a4fc1f55c7c40c76a5e852f4
+// sha3: 7e7f974cd293b9201392e525eedee03c29db38df1072cd159b0698b8dfd92428
 use std::str::FromStr;
 use crate::types;
 use crate::types::CType::*;
@@ -233,7 +233,7 @@ mod __parse__Arg {
     const __TERMINAL: &[&str] = &[
         r###""(""###,
         r###"")""###,
-        r###"":""###,
+        r###"";""###,
         r###""Pair""###,
         r###""int""###,
         r###""nat""###,
@@ -1172,7 +1172,7 @@ mod __parse__Arg {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // InstructionList = Instruction, ":", InstructionList => ActionFn(21);
+        // InstructionList = Instruction, ";", InstructionList => ActionFn(21);
         assert!(__symbols.len() >= 3);
         let __sym2 = __pop_Variant8(__symbols);
         let __sym1 = __pop_Variant0(__symbols);
@@ -1600,7 +1600,7 @@ mod __parse__Args {
     const __TERMINAL: &[&str] = &[
         r###""(""###,
         r###"")""###,
-        r###"":""###,
+        r###"";""###,
         r###""Pair""###,
         r###""int""###,
         r###""nat""###,
@@ -2539,7 +2539,7 @@ mod __parse__Args {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // InstructionList = Instruction, ":", InstructionList => ActionFn(21);
+        // InstructionList = Instruction, ";", InstructionList => ActionFn(21);
         assert!(__symbols.len() >= 3);
         let __sym2 = __pop_Variant8(__symbols);
         let __sym1 = __pop_Variant0(__symbols);
@@ -2839,7 +2839,7 @@ mod __parse__AtomicValue {
     const __TERMINAL: &[&str] = &[
         r###""(""###,
         r###"")""###,
-        r###"":""###,
+        r###"";""###,
         r###""Pair""###,
         r###""int""###,
         r###""nat""###,
@@ -3778,7 +3778,7 @@ mod __parse__AtomicValue {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // InstructionList = Instruction, ":", InstructionList => ActionFn(21);
+        // InstructionList = Instruction, ";", InstructionList => ActionFn(21);
         assert!(__symbols.len() >= 3);
         let __sym2 = __pop_Variant8(__symbols);
         let __sym1 = __pop_Variant0(__symbols);
@@ -4208,7 +4208,7 @@ mod __parse__CompositeValue {
     const __TERMINAL: &[&str] = &[
         r###""(""###,
         r###"")""###,
-        r###"":""###,
+        r###"";""###,
         r###""Pair""###,
         r###""int""###,
         r###""nat""###,
@@ -5147,7 +5147,7 @@ mod __parse__CompositeValue {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // InstructionList = Instruction, ":", InstructionList => ActionFn(21);
+        // InstructionList = Instruction, ";", InstructionList => ActionFn(21);
         assert!(__symbols.len() >= 3);
         let __sym2 = __pop_Variant8(__symbols);
         let __sym1 = __pop_Variant0(__symbols);
@@ -5466,7 +5466,7 @@ mod __parse__ConcreteType {
     const __TERMINAL: &[&str] = &[
         r###""(""###,
         r###"")""###,
-        r###"":""###,
+        r###"";""###,
         r###""Pair""###,
         r###""int""###,
         r###""nat""###,
@@ -6405,7 +6405,7 @@ mod __parse__ConcreteType {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // InstructionList = Instruction, ":", InstructionList => ActionFn(21);
+        // InstructionList = Instruction, ";", InstructionList => ActionFn(21);
         assert!(__symbols.len() >= 3);
         let __sym2 = __pop_Variant8(__symbols);
         let __sym1 = __pop_Variant0(__symbols);
@@ -6691,7 +6691,7 @@ mod __parse__Identifier {
     const __TERMINAL: &[&str] = &[
         r###""(""###,
         r###"")""###,
-        r###"":""###,
+        r###"";""###,
         r###""Pair""###,
         r###""int""###,
         r###""nat""###,
@@ -7630,7 +7630,7 @@ mod __parse__Identifier {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // InstructionList = Instruction, ":", InstructionList => ActionFn(21);
+        // InstructionList = Instruction, ";", InstructionList => ActionFn(21);
         assert!(__symbols.len() >= 3);
         let __sym2 = __pop_Variant8(__symbols);
         let __sym1 = __pop_Variant0(__symbols);
@@ -8060,7 +8060,7 @@ mod __parse__Instruction {
     const __TERMINAL: &[&str] = &[
         r###""(""###,
         r###"")""###,
-        r###"":""###,
+        r###"";""###,
         r###""Pair""###,
         r###""int""###,
         r###""nat""###,
@@ -8999,7 +8999,7 @@ mod __parse__Instruction {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // InstructionList = Instruction, ":", InstructionList => ActionFn(21);
+        // InstructionList = Instruction, ";", InstructionList => ActionFn(21);
         assert!(__symbols.len() >= 3);
         let __sym2 = __pop_Variant8(__symbols);
         let __sym1 = __pop_Variant0(__symbols);
@@ -9427,7 +9427,7 @@ mod __parse__InstructionList {
     const __TERMINAL: &[&str] = &[
         r###""(""###,
         r###"")""###,
-        r###"":""###,
+        r###"";""###,
         r###""Pair""###,
         r###""int""###,
         r###""nat""###,
@@ -10366,7 +10366,7 @@ mod __parse__InstructionList {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // InstructionList = Instruction, ":", InstructionList => ActionFn(21);
+        // InstructionList = Instruction, ";", InstructionList => ActionFn(21);
         assert!(__symbols.len() >= 3);
         let __sym2 = __pop_Variant8(__symbols);
         let __sym1 = __pop_Variant0(__symbols);
@@ -10794,7 +10794,7 @@ mod __parse__SomeValue {
     const __TERMINAL: &[&str] = &[
         r###""(""###,
         r###"")""###,
-        r###"":""###,
+        r###"";""###,
         r###""Pair""###,
         r###""int""###,
         r###""nat""###,
@@ -11733,7 +11733,7 @@ mod __parse__SomeValue {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // InstructionList = Instruction, ":", InstructionList => ActionFn(21);
+        // InstructionList = Instruction, ";", InstructionList => ActionFn(21);
         assert!(__symbols.len() >= 3);
         let __sym2 = __pop_Variant8(__symbols);
         let __sym1 = __pop_Variant0(__symbols);
@@ -11980,7 +11980,7 @@ mod __intern_token {
             ("^((?:[a-z][0-9a-z]+))", false),
             ("^(\\()", false),
             ("^(\\))", false),
-            ("^(:)", false),
+            ("^(;)", false),
             ("^((?:Pair))", false),
             ("^((?:int))", false),
             ("^((?:nat))", false),

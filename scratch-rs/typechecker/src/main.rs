@@ -584,6 +584,7 @@ fn main() {
     println!("{:?} {:?}", result, stack);
     println!(
         "{:?}",
-        instruction::InstructionListParser::new().parse("push (pair nat (pair int nat)) 5")
+        instruction::InstructionListParser::new()
+            .parse("push nat 5;push (pair nat (pair int nat)) 5")
     );
 }
