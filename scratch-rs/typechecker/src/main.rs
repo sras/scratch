@@ -1,7 +1,7 @@
 #[macro_use]
 extern crate lazy_static;
 
-//mod instruction;
+mod instruction;
 mod types;
 use types::*;
 
@@ -582,5 +582,5 @@ fn main() {
     let mut stack = Vec::from([]);
     let result = typecheck(instructions, &mut stack);
     println!("{:?} {:?}", result, stack);
-    //println!("{:?}", instruction::InstructionParser::new().parse("push nat 5"));
+    println!("{:?}", instruction::InstructionListParser::new().parse("push (pair nat (pair int nat)) 5"));
 }

@@ -14,23 +14,23 @@ use crate::types::CompositeValue;
 use crate::types::CompositeValue::*;
 grammar;
 
-pub Instruction: Instruction = {
+pub Instruction: Instruction<SomeValue> = {
   <s:Identifier> <a:Args> => Instruction { name : s, args: a },
 }
 
-pub Arg: ArgValue = {
+pub Arg: ArgValue<SomeValue> = {
   <v:SomeValue> => ValueArg(v),
   <t:ConcreteType> => TypeArg(t)
 }
 
-pub Args: Vec<ArgValue> = {
+pub Args: Vec<ArgValue<SomeValue>> = {
   <h:Arg> <mut t:Args> => { t.insert(0, h); t },
   <s:Arg> => vec!(s),
 }
 
 pub SomeValue: SomeValue = {
-  <a:AtomicValue> => AtomicValue(a),
-  <a:CompositeValue> => CompositeValue(Box::new(a))
+  <a:AtomicValue> => Atomic(a),
+  <a:CompositeValue> => Composite(Box::new(a))
 }
 
 pub AtomicValue: AtomicValue = {
@@ -43,7 +43,7 @@ pub CompositeValue: CompositeValue = {
   "{"<ins:InstructionList>"}" => CVLambda(ins)
 }
 
-pub InstructionList:Vec<Instruction> = {
+pub InstructionList:Vec<Instruction<SomeValue>> = {
   <i:Instruction> => vec!(i),
   <i:Instruction>":"<mut is:InstructionList> => { is.insert(0, i); is }
 }
@@ -58,4 +58,4 @@ pub ConcreteType: ConcreteType = {
 pub Identifier: String = <s:r"[a-z][a-z0-9]+"> => String::from(s);
 
 McLitString: String = <s:r#""[a-z0-9]+""#> => s[1..s.len()-1].into();
-McLitNumber: u32 = <s:r"[0-9]+"> => u32::from_str(s).unwrap();
+McLitNumber: i32 = <s:r"([+-]?)[0-9]+"> => i32::from_str(s).unwrap();

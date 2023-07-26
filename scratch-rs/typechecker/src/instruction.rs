@@ -1,5 +1,5 @@
 // auto-generated: "lalrpop 0.20.0"
-// sha3: f2d442e8215e6581f5409b6c01dd0c9403e82fa4a75be045feab1e559e7a8a67
+// sha3: 16e46f03799d925f6362e13e3c280f6393ab6c51a4fc1f55c7c40c76a5e852f4
 use std::str::FromStr;
 use crate::types;
 use crate::types::CType::*;
@@ -50,15 +50,15 @@ mod __parse__Arg {
     pub(crate) enum __Symbol<'input>
      {
         Variant0(&'input str),
-        Variant1(ArgValue),
-        Variant2(Vec<ArgValue>),
+        Variant1(ArgValue<SomeValue>),
+        Variant2(Vec<ArgValue<SomeValue>>),
         Variant3(AtomicValue),
         Variant4(CompositeValue),
         Variant5(ConcreteType),
         Variant6(String),
-        Variant7(Instruction),
-        Variant8(Vec<Instruction>),
-        Variant9(u32),
+        Variant7(Instruction<SomeValue>),
+        Variant8(Vec<Instruction<SomeValue>>),
+        Variant9(i32),
         Variant10(SomeValue),
     }
     const __ACTION: &[i8] = &[
@@ -241,7 +241,7 @@ mod __parse__Arg {
         r###""{""###,
         r###""}""###,
         r###"r#"\"[a-z0-9]+\""#"###,
-        r###"r#"[0-9]+"#"###,
+        r###"r#"([+-]?)[0-9]+"#"###,
         r###"r#"[a-z][a-z0-9]+"#"###,
     ];
     fn __expected_tokens(__state: i8) -> alloc::vec::Vec<alloc::string::String> {
@@ -283,7 +283,7 @@ mod __parse__Arg {
         type Token = Token<'input>;
         type TokenIndex = usize;
         type Symbol = __Symbol<'input>;
-        type Success = ArgValue;
+        type Success = ArgValue<SomeValue>;
         type StateIndex = i8;
         type Action = i8;
         type ReduceIndex = i8;
@@ -609,7 +609,7 @@ mod __parse__Arg {
         >(
             &self,
             input: &'input str,
-        ) -> Result<ArgValue, __lalrpop_util::ParseError<usize, Token<'input>, &'static str>>
+        ) -> Result<ArgValue<SomeValue>, __lalrpop_util::ParseError<usize, Token<'input>, &'static str>>
         {
             let mut __tokens = self.builder.matcher(input);
             __state_machine::Parser::drive(
@@ -663,7 +663,7 @@ mod __parse__Arg {
         __states: &mut alloc::vec::Vec<i8>,
         __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
         _: core::marker::PhantomData<(&'input ())>,
-    ) -> Option<Result<ArgValue,__lalrpop_util::ParseError<usize, Token<'input>, &'static str>>>
+    ) -> Option<Result<ArgValue<SomeValue>,__lalrpop_util::ParseError<usize, Token<'input>, &'static str>>>
     {
         let (__pop_states, __nonterminal) = match __action {
             0 => {
@@ -775,7 +775,7 @@ mod __parse__Arg {
       'input,
     >(
         __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>
-    ) -> (usize, ArgValue, usize)
+    ) -> (usize, ArgValue<SomeValue>, usize)
      {
         match __symbols.pop() {
             Some((__l, __Symbol::Variant1(__v), __r)) => (__l, __v, __r),
@@ -819,7 +819,7 @@ mod __parse__Arg {
       'input,
     >(
         __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>
-    ) -> (usize, Instruction, usize)
+    ) -> (usize, Instruction<SomeValue>, usize)
      {
         match __symbols.pop() {
             Some((__l, __Symbol::Variant7(__v), __r)) => (__l, __v, __r),
@@ -852,7 +852,7 @@ mod __parse__Arg {
       'input,
     >(
         __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>
-    ) -> (usize, Vec<ArgValue>, usize)
+    ) -> (usize, Vec<ArgValue<SomeValue>>, usize)
      {
         match __symbols.pop() {
             Some((__l, __Symbol::Variant2(__v), __r)) => (__l, __v, __r),
@@ -863,7 +863,7 @@ mod __parse__Arg {
       'input,
     >(
         __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>
-    ) -> (usize, Vec<Instruction>, usize)
+    ) -> (usize, Vec<Instruction<SomeValue>>, usize)
      {
         match __symbols.pop() {
             Some((__l, __Symbol::Variant8(__v), __r)) => (__l, __v, __r),
@@ -874,7 +874,7 @@ mod __parse__Arg {
       'input,
     >(
         __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>
-    ) -> (usize, u32, usize)
+    ) -> (usize, i32, usize)
      {
         match __symbols.pop() {
             Some((__l, __Symbol::Variant9(__v), __r)) => (__l, __v, __r),
@@ -1192,7 +1192,7 @@ mod __parse__Arg {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // McLitNumber = r#"[0-9]+"# => ActionFn(28);
+        // McLitNumber = r#"([+-]?)[0-9]+"# => ActionFn(28);
         let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0;
         let __end = __sym0.2;
@@ -1419,15 +1419,15 @@ mod __parse__Args {
     pub(crate) enum __Symbol<'input>
      {
         Variant0(&'input str),
-        Variant1(ArgValue),
-        Variant2(Vec<ArgValue>),
+        Variant1(ArgValue<SomeValue>),
+        Variant2(Vec<ArgValue<SomeValue>>),
         Variant3(AtomicValue),
         Variant4(CompositeValue),
         Variant5(ConcreteType),
         Variant6(String),
-        Variant7(Instruction),
-        Variant8(Vec<Instruction>),
-        Variant9(u32),
+        Variant7(Instruction<SomeValue>),
+        Variant8(Vec<Instruction<SomeValue>>),
+        Variant9(i32),
         Variant10(SomeValue),
     }
     const __ACTION: &[i8] = &[
@@ -1608,7 +1608,7 @@ mod __parse__Args {
         r###""{""###,
         r###""}""###,
         r###"r#"\"[a-z0-9]+\""#"###,
-        r###"r#"[0-9]+"#"###,
+        r###"r#"([+-]?)[0-9]+"#"###,
         r###"r#"[a-z][a-z0-9]+"#"###,
     ];
     fn __expected_tokens(__state: i8) -> alloc::vec::Vec<alloc::string::String> {
@@ -1650,7 +1650,7 @@ mod __parse__Args {
         type Token = Token<'input>;
         type TokenIndex = usize;
         type Symbol = __Symbol<'input>;
-        type Success = Vec<ArgValue>;
+        type Success = Vec<ArgValue<SomeValue>>;
         type StateIndex = i8;
         type Action = i8;
         type ReduceIndex = i8;
@@ -1976,7 +1976,7 @@ mod __parse__Args {
         >(
             &self,
             input: &'input str,
-        ) -> Result<Vec<ArgValue>, __lalrpop_util::ParseError<usize, Token<'input>, &'static str>>
+        ) -> Result<Vec<ArgValue<SomeValue>>, __lalrpop_util::ParseError<usize, Token<'input>, &'static str>>
         {
             let mut __tokens = self.builder.matcher(input);
             __state_machine::Parser::drive(
@@ -2030,7 +2030,7 @@ mod __parse__Args {
         __states: &mut alloc::vec::Vec<i8>,
         __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
         _: core::marker::PhantomData<(&'input ())>,
-    ) -> Option<Result<Vec<ArgValue>,__lalrpop_util::ParseError<usize, Token<'input>, &'static str>>>
+    ) -> Option<Result<Vec<ArgValue<SomeValue>>,__lalrpop_util::ParseError<usize, Token<'input>, &'static str>>>
     {
         let (__pop_states, __nonterminal) = match __action {
             0 => {
@@ -2142,7 +2142,7 @@ mod __parse__Args {
       'input,
     >(
         __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>
-    ) -> (usize, ArgValue, usize)
+    ) -> (usize, ArgValue<SomeValue>, usize)
      {
         match __symbols.pop() {
             Some((__l, __Symbol::Variant1(__v), __r)) => (__l, __v, __r),
@@ -2186,7 +2186,7 @@ mod __parse__Args {
       'input,
     >(
         __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>
-    ) -> (usize, Instruction, usize)
+    ) -> (usize, Instruction<SomeValue>, usize)
      {
         match __symbols.pop() {
             Some((__l, __Symbol::Variant7(__v), __r)) => (__l, __v, __r),
@@ -2219,7 +2219,7 @@ mod __parse__Args {
       'input,
     >(
         __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>
-    ) -> (usize, Vec<ArgValue>, usize)
+    ) -> (usize, Vec<ArgValue<SomeValue>>, usize)
      {
         match __symbols.pop() {
             Some((__l, __Symbol::Variant2(__v), __r)) => (__l, __v, __r),
@@ -2230,7 +2230,7 @@ mod __parse__Args {
       'input,
     >(
         __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>
-    ) -> (usize, Vec<Instruction>, usize)
+    ) -> (usize, Vec<Instruction<SomeValue>>, usize)
      {
         match __symbols.pop() {
             Some((__l, __Symbol::Variant8(__v), __r)) => (__l, __v, __r),
@@ -2241,7 +2241,7 @@ mod __parse__Args {
       'input,
     >(
         __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>
-    ) -> (usize, u32, usize)
+    ) -> (usize, i32, usize)
      {
         match __symbols.pop() {
             Some((__l, __Symbol::Variant9(__v), __r)) => (__l, __v, __r),
@@ -2559,7 +2559,7 @@ mod __parse__Args {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // McLitNumber = r#"[0-9]+"# => ActionFn(28);
+        // McLitNumber = r#"([+-]?)[0-9]+"# => ActionFn(28);
         let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0;
         let __end = __sym0.2;
@@ -2786,15 +2786,15 @@ mod __parse__AtomicValue {
     pub(crate) enum __Symbol<'input>
      {
         Variant0(&'input str),
-        Variant1(ArgValue),
-        Variant2(Vec<ArgValue>),
+        Variant1(ArgValue<SomeValue>),
+        Variant2(Vec<ArgValue<SomeValue>>),
         Variant3(AtomicValue),
         Variant4(CompositeValue),
         Variant5(ConcreteType),
         Variant6(String),
-        Variant7(Instruction),
-        Variant8(Vec<Instruction>),
-        Variant9(u32),
+        Variant7(Instruction<SomeValue>),
+        Variant8(Vec<Instruction<SomeValue>>),
+        Variant9(i32),
         Variant10(SomeValue),
     }
     const __ACTION: &[i8] = &[
@@ -2847,7 +2847,7 @@ mod __parse__AtomicValue {
         r###""{""###,
         r###""}""###,
         r###"r#"\"[a-z0-9]+\""#"###,
-        r###"r#"[0-9]+"#"###,
+        r###"r#"([+-]?)[0-9]+"#"###,
         r###"r#"[a-z][a-z0-9]+"#"###,
     ];
     fn __expected_tokens(__state: i8) -> alloc::vec::Vec<alloc::string::String> {
@@ -3381,7 +3381,7 @@ mod __parse__AtomicValue {
       'input,
     >(
         __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>
-    ) -> (usize, ArgValue, usize)
+    ) -> (usize, ArgValue<SomeValue>, usize)
      {
         match __symbols.pop() {
             Some((__l, __Symbol::Variant1(__v), __r)) => (__l, __v, __r),
@@ -3425,7 +3425,7 @@ mod __parse__AtomicValue {
       'input,
     >(
         __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>
-    ) -> (usize, Instruction, usize)
+    ) -> (usize, Instruction<SomeValue>, usize)
      {
         match __symbols.pop() {
             Some((__l, __Symbol::Variant7(__v), __r)) => (__l, __v, __r),
@@ -3458,7 +3458,7 @@ mod __parse__AtomicValue {
       'input,
     >(
         __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>
-    ) -> (usize, Vec<ArgValue>, usize)
+    ) -> (usize, Vec<ArgValue<SomeValue>>, usize)
      {
         match __symbols.pop() {
             Some((__l, __Symbol::Variant2(__v), __r)) => (__l, __v, __r),
@@ -3469,7 +3469,7 @@ mod __parse__AtomicValue {
       'input,
     >(
         __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>
-    ) -> (usize, Vec<Instruction>, usize)
+    ) -> (usize, Vec<Instruction<SomeValue>>, usize)
      {
         match __symbols.pop() {
             Some((__l, __Symbol::Variant8(__v), __r)) => (__l, __v, __r),
@@ -3480,7 +3480,7 @@ mod __parse__AtomicValue {
       'input,
     >(
         __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>
-    ) -> (usize, u32, usize)
+    ) -> (usize, i32, usize)
      {
         match __symbols.pop() {
             Some((__l, __Symbol::Variant9(__v), __r)) => (__l, __v, __r),
@@ -3798,7 +3798,7 @@ mod __parse__AtomicValue {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // McLitNumber = r#"[0-9]+"# => ActionFn(28);
+        // McLitNumber = r#"([+-]?)[0-9]+"# => ActionFn(28);
         let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0;
         let __end = __sym0.2;
@@ -4025,15 +4025,15 @@ mod __parse__CompositeValue {
     pub(crate) enum __Symbol<'input>
      {
         Variant0(&'input str),
-        Variant1(ArgValue),
-        Variant2(Vec<ArgValue>),
+        Variant1(ArgValue<SomeValue>),
+        Variant2(Vec<ArgValue<SomeValue>>),
         Variant3(AtomicValue),
         Variant4(CompositeValue),
         Variant5(ConcreteType),
         Variant6(String),
-        Variant7(Instruction),
-        Variant8(Vec<Instruction>),
-        Variant9(u32),
+        Variant7(Instruction<SomeValue>),
+        Variant8(Vec<Instruction<SomeValue>>),
+        Variant9(i32),
         Variant10(SomeValue),
     }
     const __ACTION: &[i8] = &[
@@ -4216,7 +4216,7 @@ mod __parse__CompositeValue {
         r###""{""###,
         r###""}""###,
         r###"r#"\"[a-z0-9]+\""#"###,
-        r###"r#"[0-9]+"#"###,
+        r###"r#"([+-]?)[0-9]+"#"###,
         r###"r#"[a-z][a-z0-9]+"#"###,
     ];
     fn __expected_tokens(__state: i8) -> alloc::vec::Vec<alloc::string::String> {
@@ -4750,7 +4750,7 @@ mod __parse__CompositeValue {
       'input,
     >(
         __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>
-    ) -> (usize, ArgValue, usize)
+    ) -> (usize, ArgValue<SomeValue>, usize)
      {
         match __symbols.pop() {
             Some((__l, __Symbol::Variant1(__v), __r)) => (__l, __v, __r),
@@ -4794,7 +4794,7 @@ mod __parse__CompositeValue {
       'input,
     >(
         __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>
-    ) -> (usize, Instruction, usize)
+    ) -> (usize, Instruction<SomeValue>, usize)
      {
         match __symbols.pop() {
             Some((__l, __Symbol::Variant7(__v), __r)) => (__l, __v, __r),
@@ -4827,7 +4827,7 @@ mod __parse__CompositeValue {
       'input,
     >(
         __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>
-    ) -> (usize, Vec<ArgValue>, usize)
+    ) -> (usize, Vec<ArgValue<SomeValue>>, usize)
      {
         match __symbols.pop() {
             Some((__l, __Symbol::Variant2(__v), __r)) => (__l, __v, __r),
@@ -4838,7 +4838,7 @@ mod __parse__CompositeValue {
       'input,
     >(
         __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>
-    ) -> (usize, Vec<Instruction>, usize)
+    ) -> (usize, Vec<Instruction<SomeValue>>, usize)
      {
         match __symbols.pop() {
             Some((__l, __Symbol::Variant8(__v), __r)) => (__l, __v, __r),
@@ -4849,7 +4849,7 @@ mod __parse__CompositeValue {
       'input,
     >(
         __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>
-    ) -> (usize, u32, usize)
+    ) -> (usize, i32, usize)
      {
         match __symbols.pop() {
             Some((__l, __Symbol::Variant9(__v), __r)) => (__l, __v, __r),
@@ -5167,7 +5167,7 @@ mod __parse__CompositeValue {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // McLitNumber = r#"[0-9]+"# => ActionFn(28);
+        // McLitNumber = r#"([+-]?)[0-9]+"# => ActionFn(28);
         let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0;
         let __end = __sym0.2;
@@ -5394,15 +5394,15 @@ mod __parse__ConcreteType {
     pub(crate) enum __Symbol<'input>
      {
         Variant0(&'input str),
-        Variant1(ArgValue),
-        Variant2(Vec<ArgValue>),
+        Variant1(ArgValue<SomeValue>),
+        Variant2(Vec<ArgValue<SomeValue>>),
         Variant3(AtomicValue),
         Variant4(CompositeValue),
         Variant5(ConcreteType),
         Variant6(String),
-        Variant7(Instruction),
-        Variant8(Vec<Instruction>),
-        Variant9(u32),
+        Variant7(Instruction<SomeValue>),
+        Variant8(Vec<Instruction<SomeValue>>),
+        Variant9(i32),
         Variant10(SomeValue),
     }
     const __ACTION: &[i8] = &[
@@ -5474,7 +5474,7 @@ mod __parse__ConcreteType {
         r###""{""###,
         r###""}""###,
         r###"r#"\"[a-z0-9]+\""#"###,
-        r###"r#"[0-9]+"#"###,
+        r###"r#"([+-]?)[0-9]+"#"###,
         r###"r#"[a-z][a-z0-9]+"#"###,
     ];
     fn __expected_tokens(__state: i8) -> alloc::vec::Vec<alloc::string::String> {
@@ -6008,7 +6008,7 @@ mod __parse__ConcreteType {
       'input,
     >(
         __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>
-    ) -> (usize, ArgValue, usize)
+    ) -> (usize, ArgValue<SomeValue>, usize)
      {
         match __symbols.pop() {
             Some((__l, __Symbol::Variant1(__v), __r)) => (__l, __v, __r),
@@ -6052,7 +6052,7 @@ mod __parse__ConcreteType {
       'input,
     >(
         __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>
-    ) -> (usize, Instruction, usize)
+    ) -> (usize, Instruction<SomeValue>, usize)
      {
         match __symbols.pop() {
             Some((__l, __Symbol::Variant7(__v), __r)) => (__l, __v, __r),
@@ -6085,7 +6085,7 @@ mod __parse__ConcreteType {
       'input,
     >(
         __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>
-    ) -> (usize, Vec<ArgValue>, usize)
+    ) -> (usize, Vec<ArgValue<SomeValue>>, usize)
      {
         match __symbols.pop() {
             Some((__l, __Symbol::Variant2(__v), __r)) => (__l, __v, __r),
@@ -6096,7 +6096,7 @@ mod __parse__ConcreteType {
       'input,
     >(
         __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>
-    ) -> (usize, Vec<Instruction>, usize)
+    ) -> (usize, Vec<Instruction<SomeValue>>, usize)
      {
         match __symbols.pop() {
             Some((__l, __Symbol::Variant8(__v), __r)) => (__l, __v, __r),
@@ -6107,7 +6107,7 @@ mod __parse__ConcreteType {
       'input,
     >(
         __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>
-    ) -> (usize, u32, usize)
+    ) -> (usize, i32, usize)
      {
         match __symbols.pop() {
             Some((__l, __Symbol::Variant9(__v), __r)) => (__l, __v, __r),
@@ -6425,7 +6425,7 @@ mod __parse__ConcreteType {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // McLitNumber = r#"[0-9]+"# => ActionFn(28);
+        // McLitNumber = r#"([+-]?)[0-9]+"# => ActionFn(28);
         let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0;
         let __end = __sym0.2;
@@ -6652,15 +6652,15 @@ mod __parse__Identifier {
     pub(crate) enum __Symbol<'input>
      {
         Variant0(&'input str),
-        Variant1(ArgValue),
-        Variant2(Vec<ArgValue>),
+        Variant1(ArgValue<SomeValue>),
+        Variant2(Vec<ArgValue<SomeValue>>),
         Variant3(AtomicValue),
         Variant4(CompositeValue),
         Variant5(ConcreteType),
         Variant6(String),
-        Variant7(Instruction),
-        Variant8(Vec<Instruction>),
-        Variant9(u32),
+        Variant7(Instruction<SomeValue>),
+        Variant8(Vec<Instruction<SomeValue>>),
+        Variant9(i32),
         Variant10(SomeValue),
     }
     const __ACTION: &[i8] = &[
@@ -6699,7 +6699,7 @@ mod __parse__Identifier {
         r###""{""###,
         r###""}""###,
         r###"r#"\"[a-z0-9]+\""#"###,
-        r###"r#"[0-9]+"#"###,
+        r###"r#"([+-]?)[0-9]+"#"###,
         r###"r#"[a-z][a-z0-9]+"#"###,
     ];
     fn __expected_tokens(__state: i8) -> alloc::vec::Vec<alloc::string::String> {
@@ -7233,7 +7233,7 @@ mod __parse__Identifier {
       'input,
     >(
         __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>
-    ) -> (usize, ArgValue, usize)
+    ) -> (usize, ArgValue<SomeValue>, usize)
      {
         match __symbols.pop() {
             Some((__l, __Symbol::Variant1(__v), __r)) => (__l, __v, __r),
@@ -7277,7 +7277,7 @@ mod __parse__Identifier {
       'input,
     >(
         __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>
-    ) -> (usize, Instruction, usize)
+    ) -> (usize, Instruction<SomeValue>, usize)
      {
         match __symbols.pop() {
             Some((__l, __Symbol::Variant7(__v), __r)) => (__l, __v, __r),
@@ -7310,7 +7310,7 @@ mod __parse__Identifier {
       'input,
     >(
         __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>
-    ) -> (usize, Vec<ArgValue>, usize)
+    ) -> (usize, Vec<ArgValue<SomeValue>>, usize)
      {
         match __symbols.pop() {
             Some((__l, __Symbol::Variant2(__v), __r)) => (__l, __v, __r),
@@ -7321,7 +7321,7 @@ mod __parse__Identifier {
       'input,
     >(
         __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>
-    ) -> (usize, Vec<Instruction>, usize)
+    ) -> (usize, Vec<Instruction<SomeValue>>, usize)
      {
         match __symbols.pop() {
             Some((__l, __Symbol::Variant8(__v), __r)) => (__l, __v, __r),
@@ -7332,7 +7332,7 @@ mod __parse__Identifier {
       'input,
     >(
         __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>
-    ) -> (usize, u32, usize)
+    ) -> (usize, i32, usize)
      {
         match __symbols.pop() {
             Some((__l, __Symbol::Variant9(__v), __r)) => (__l, __v, __r),
@@ -7650,7 +7650,7 @@ mod __parse__Identifier {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // McLitNumber = r#"[0-9]+"# => ActionFn(28);
+        // McLitNumber = r#"([+-]?)[0-9]+"# => ActionFn(28);
         let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0;
         let __end = __sym0.2;
@@ -7877,15 +7877,15 @@ mod __parse__Instruction {
     pub(crate) enum __Symbol<'input>
      {
         Variant0(&'input str),
-        Variant1(ArgValue),
-        Variant2(Vec<ArgValue>),
+        Variant1(ArgValue<SomeValue>),
+        Variant2(Vec<ArgValue<SomeValue>>),
         Variant3(AtomicValue),
         Variant4(CompositeValue),
         Variant5(ConcreteType),
         Variant6(String),
-        Variant7(Instruction),
-        Variant8(Vec<Instruction>),
-        Variant9(u32),
+        Variant7(Instruction<SomeValue>),
+        Variant8(Vec<Instruction<SomeValue>>),
+        Variant9(i32),
         Variant10(SomeValue),
     }
     const __ACTION: &[i8] = &[
@@ -8068,7 +8068,7 @@ mod __parse__Instruction {
         r###""{""###,
         r###""}""###,
         r###"r#"\"[a-z0-9]+\""#"###,
-        r###"r#"[0-9]+"#"###,
+        r###"r#"([+-]?)[0-9]+"#"###,
         r###"r#"[a-z][a-z0-9]+"#"###,
     ];
     fn __expected_tokens(__state: i8) -> alloc::vec::Vec<alloc::string::String> {
@@ -8110,7 +8110,7 @@ mod __parse__Instruction {
         type Token = Token<'input>;
         type TokenIndex = usize;
         type Symbol = __Symbol<'input>;
-        type Success = Instruction;
+        type Success = Instruction<SomeValue>;
         type StateIndex = i8;
         type Action = i8;
         type ReduceIndex = i8;
@@ -8436,7 +8436,7 @@ mod __parse__Instruction {
         >(
             &self,
             input: &'input str,
-        ) -> Result<Instruction, __lalrpop_util::ParseError<usize, Token<'input>, &'static str>>
+        ) -> Result<Instruction<SomeValue>, __lalrpop_util::ParseError<usize, Token<'input>, &'static str>>
         {
             let mut __tokens = self.builder.matcher(input);
             __state_machine::Parser::drive(
@@ -8490,7 +8490,7 @@ mod __parse__Instruction {
         __states: &mut alloc::vec::Vec<i8>,
         __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
         _: core::marker::PhantomData<(&'input ())>,
-    ) -> Option<Result<Instruction,__lalrpop_util::ParseError<usize, Token<'input>, &'static str>>>
+    ) -> Option<Result<Instruction<SomeValue>,__lalrpop_util::ParseError<usize, Token<'input>, &'static str>>>
     {
         let (__pop_states, __nonterminal) = match __action {
             0 => {
@@ -8602,7 +8602,7 @@ mod __parse__Instruction {
       'input,
     >(
         __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>
-    ) -> (usize, ArgValue, usize)
+    ) -> (usize, ArgValue<SomeValue>, usize)
      {
         match __symbols.pop() {
             Some((__l, __Symbol::Variant1(__v), __r)) => (__l, __v, __r),
@@ -8646,7 +8646,7 @@ mod __parse__Instruction {
       'input,
     >(
         __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>
-    ) -> (usize, Instruction, usize)
+    ) -> (usize, Instruction<SomeValue>, usize)
      {
         match __symbols.pop() {
             Some((__l, __Symbol::Variant7(__v), __r)) => (__l, __v, __r),
@@ -8679,7 +8679,7 @@ mod __parse__Instruction {
       'input,
     >(
         __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>
-    ) -> (usize, Vec<ArgValue>, usize)
+    ) -> (usize, Vec<ArgValue<SomeValue>>, usize)
      {
         match __symbols.pop() {
             Some((__l, __Symbol::Variant2(__v), __r)) => (__l, __v, __r),
@@ -8690,7 +8690,7 @@ mod __parse__Instruction {
       'input,
     >(
         __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>
-    ) -> (usize, Vec<Instruction>, usize)
+    ) -> (usize, Vec<Instruction<SomeValue>>, usize)
      {
         match __symbols.pop() {
             Some((__l, __Symbol::Variant8(__v), __r)) => (__l, __v, __r),
@@ -8701,7 +8701,7 @@ mod __parse__Instruction {
       'input,
     >(
         __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>
-    ) -> (usize, u32, usize)
+    ) -> (usize, i32, usize)
      {
         match __symbols.pop() {
             Some((__l, __Symbol::Variant9(__v), __r)) => (__l, __v, __r),
@@ -9019,7 +9019,7 @@ mod __parse__Instruction {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // McLitNumber = r#"[0-9]+"# => ActionFn(28);
+        // McLitNumber = r#"([+-]?)[0-9]+"# => ActionFn(28);
         let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0;
         let __end = __sym0.2;
@@ -9246,15 +9246,15 @@ mod __parse__InstructionList {
     pub(crate) enum __Symbol<'input>
      {
         Variant0(&'input str),
-        Variant1(ArgValue),
-        Variant2(Vec<ArgValue>),
+        Variant1(ArgValue<SomeValue>),
+        Variant2(Vec<ArgValue<SomeValue>>),
         Variant3(AtomicValue),
         Variant4(CompositeValue),
         Variant5(ConcreteType),
         Variant6(String),
-        Variant7(Instruction),
-        Variant8(Vec<Instruction>),
-        Variant9(u32),
+        Variant7(Instruction<SomeValue>),
+        Variant8(Vec<Instruction<SomeValue>>),
+        Variant9(i32),
         Variant10(SomeValue),
     }
     const __ACTION: &[i8] = &[
@@ -9435,7 +9435,7 @@ mod __parse__InstructionList {
         r###""{""###,
         r###""}""###,
         r###"r#"\"[a-z0-9]+\""#"###,
-        r###"r#"[0-9]+"#"###,
+        r###"r#"([+-]?)[0-9]+"#"###,
         r###"r#"[a-z][a-z0-9]+"#"###,
     ];
     fn __expected_tokens(__state: i8) -> alloc::vec::Vec<alloc::string::String> {
@@ -9477,7 +9477,7 @@ mod __parse__InstructionList {
         type Token = Token<'input>;
         type TokenIndex = usize;
         type Symbol = __Symbol<'input>;
-        type Success = Vec<Instruction>;
+        type Success = Vec<Instruction<SomeValue>>;
         type StateIndex = i8;
         type Action = i8;
         type ReduceIndex = i8;
@@ -9803,7 +9803,7 @@ mod __parse__InstructionList {
         >(
             &self,
             input: &'input str,
-        ) -> Result<Vec<Instruction>, __lalrpop_util::ParseError<usize, Token<'input>, &'static str>>
+        ) -> Result<Vec<Instruction<SomeValue>>, __lalrpop_util::ParseError<usize, Token<'input>, &'static str>>
         {
             let mut __tokens = self.builder.matcher(input);
             __state_machine::Parser::drive(
@@ -9857,7 +9857,7 @@ mod __parse__InstructionList {
         __states: &mut alloc::vec::Vec<i8>,
         __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
         _: core::marker::PhantomData<(&'input ())>,
-    ) -> Option<Result<Vec<Instruction>,__lalrpop_util::ParseError<usize, Token<'input>, &'static str>>>
+    ) -> Option<Result<Vec<Instruction<SomeValue>>,__lalrpop_util::ParseError<usize, Token<'input>, &'static str>>>
     {
         let (__pop_states, __nonterminal) = match __action {
             0 => {
@@ -9969,7 +9969,7 @@ mod __parse__InstructionList {
       'input,
     >(
         __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>
-    ) -> (usize, ArgValue, usize)
+    ) -> (usize, ArgValue<SomeValue>, usize)
      {
         match __symbols.pop() {
             Some((__l, __Symbol::Variant1(__v), __r)) => (__l, __v, __r),
@@ -10013,7 +10013,7 @@ mod __parse__InstructionList {
       'input,
     >(
         __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>
-    ) -> (usize, Instruction, usize)
+    ) -> (usize, Instruction<SomeValue>, usize)
      {
         match __symbols.pop() {
             Some((__l, __Symbol::Variant7(__v), __r)) => (__l, __v, __r),
@@ -10046,7 +10046,7 @@ mod __parse__InstructionList {
       'input,
     >(
         __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>
-    ) -> (usize, Vec<ArgValue>, usize)
+    ) -> (usize, Vec<ArgValue<SomeValue>>, usize)
      {
         match __symbols.pop() {
             Some((__l, __Symbol::Variant2(__v), __r)) => (__l, __v, __r),
@@ -10057,7 +10057,7 @@ mod __parse__InstructionList {
       'input,
     >(
         __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>
-    ) -> (usize, Vec<Instruction>, usize)
+    ) -> (usize, Vec<Instruction<SomeValue>>, usize)
      {
         match __symbols.pop() {
             Some((__l, __Symbol::Variant8(__v), __r)) => (__l, __v, __r),
@@ -10068,7 +10068,7 @@ mod __parse__InstructionList {
       'input,
     >(
         __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>
-    ) -> (usize, u32, usize)
+    ) -> (usize, i32, usize)
      {
         match __symbols.pop() {
             Some((__l, __Symbol::Variant9(__v), __r)) => (__l, __v, __r),
@@ -10386,7 +10386,7 @@ mod __parse__InstructionList {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // McLitNumber = r#"[0-9]+"# => ActionFn(28);
+        // McLitNumber = r#"([+-]?)[0-9]+"# => ActionFn(28);
         let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0;
         let __end = __sym0.2;
@@ -10613,15 +10613,15 @@ mod __parse__SomeValue {
     pub(crate) enum __Symbol<'input>
      {
         Variant0(&'input str),
-        Variant1(ArgValue),
-        Variant2(Vec<ArgValue>),
+        Variant1(ArgValue<SomeValue>),
+        Variant2(Vec<ArgValue<SomeValue>>),
         Variant3(AtomicValue),
         Variant4(CompositeValue),
         Variant5(ConcreteType),
         Variant6(String),
-        Variant7(Instruction),
-        Variant8(Vec<Instruction>),
-        Variant9(u32),
+        Variant7(Instruction<SomeValue>),
+        Variant8(Vec<Instruction<SomeValue>>),
+        Variant9(i32),
         Variant10(SomeValue),
     }
     const __ACTION: &[i8] = &[
@@ -10802,7 +10802,7 @@ mod __parse__SomeValue {
         r###""{""###,
         r###""}""###,
         r###"r#"\"[a-z0-9]+\""#"###,
-        r###"r#"[0-9]+"#"###,
+        r###"r#"([+-]?)[0-9]+"#"###,
         r###"r#"[a-z][a-z0-9]+"#"###,
     ];
     fn __expected_tokens(__state: i8) -> alloc::vec::Vec<alloc::string::String> {
@@ -11336,7 +11336,7 @@ mod __parse__SomeValue {
       'input,
     >(
         __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>
-    ) -> (usize, ArgValue, usize)
+    ) -> (usize, ArgValue<SomeValue>, usize)
      {
         match __symbols.pop() {
             Some((__l, __Symbol::Variant1(__v), __r)) => (__l, __v, __r),
@@ -11380,7 +11380,7 @@ mod __parse__SomeValue {
       'input,
     >(
         __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>
-    ) -> (usize, Instruction, usize)
+    ) -> (usize, Instruction<SomeValue>, usize)
      {
         match __symbols.pop() {
             Some((__l, __Symbol::Variant7(__v), __r)) => (__l, __v, __r),
@@ -11413,7 +11413,7 @@ mod __parse__SomeValue {
       'input,
     >(
         __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>
-    ) -> (usize, Vec<ArgValue>, usize)
+    ) -> (usize, Vec<ArgValue<SomeValue>>, usize)
      {
         match __symbols.pop() {
             Some((__l, __Symbol::Variant2(__v), __r)) => (__l, __v, __r),
@@ -11424,7 +11424,7 @@ mod __parse__SomeValue {
       'input,
     >(
         __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>
-    ) -> (usize, Vec<Instruction>, usize)
+    ) -> (usize, Vec<Instruction<SomeValue>>, usize)
      {
         match __symbols.pop() {
             Some((__l, __Symbol::Variant8(__v), __r)) => (__l, __v, __r),
@@ -11435,7 +11435,7 @@ mod __parse__SomeValue {
       'input,
     >(
         __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>
-    ) -> (usize, u32, usize)
+    ) -> (usize, i32, usize)
      {
         match __symbols.pop() {
             Some((__l, __Symbol::Variant9(__v), __r)) => (__l, __v, __r),
@@ -11753,7 +11753,7 @@ mod __parse__SomeValue {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // McLitNumber = r#"[0-9]+"# => ActionFn(28);
+        // McLitNumber = r#"([+-]?)[0-9]+"# => ActionFn(28);
         let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0;
         let __end = __sym0.2;
@@ -11976,7 +11976,7 @@ mod __intern_token {
     pub fn new_builder() -> __lalrpop_util::lexer::MatcherBuilder {
         let __strs: &[(&str, bool)] = &[
             ("^((?:\"[0-9a-z]+\"))", false),
-            ("^([0-9]+)", false),
+            ("^((?:([\\+\\-]?)[0-9]+))", false),
             ("^((?:[a-z][0-9a-z]+))", false),
             ("^(\\()", false),
             ("^(\\))", false),
@@ -12000,8 +12000,8 @@ fn __action0<
     'input,
 >(
     input: &'input str,
-    (_, __0, _): (usize, Instruction, usize),
-) -> Instruction
+    (_, __0, _): (usize, Instruction<SomeValue>, usize),
+) -> Instruction<SomeValue>
 {
     __0
 }
@@ -12012,8 +12012,8 @@ fn __action1<
     'input,
 >(
     input: &'input str,
-    (_, __0, _): (usize, ArgValue, usize),
-) -> ArgValue
+    (_, __0, _): (usize, ArgValue<SomeValue>, usize),
+) -> ArgValue<SomeValue>
 {
     __0
 }
@@ -12024,8 +12024,8 @@ fn __action2<
     'input,
 >(
     input: &'input str,
-    (_, __0, _): (usize, Vec<ArgValue>, usize),
-) -> Vec<ArgValue>
+    (_, __0, _): (usize, Vec<ArgValue<SomeValue>>, usize),
+) -> Vec<ArgValue<SomeValue>>
 {
     __0
 }
@@ -12072,8 +12072,8 @@ fn __action6<
     'input,
 >(
     input: &'input str,
-    (_, __0, _): (usize, Vec<Instruction>, usize),
-) -> Vec<Instruction>
+    (_, __0, _): (usize, Vec<Instruction<SomeValue>>, usize),
+) -> Vec<Instruction<SomeValue>>
 {
     __0
 }
@@ -12109,8 +12109,8 @@ fn __action9<
 >(
     input: &'input str,
     (_, s, _): (usize, String, usize),
-    (_, a, _): (usize, Vec<ArgValue>, usize),
-) -> Instruction
+    (_, a, _): (usize, Vec<ArgValue<SomeValue>>, usize),
+) -> Instruction<SomeValue>
 {
     Instruction { name : s, args: a }
 }
@@ -12122,7 +12122,7 @@ fn __action10<
 >(
     input: &'input str,
     (_, v, _): (usize, SomeValue, usize),
-) -> ArgValue
+) -> ArgValue<SomeValue>
 {
     ValueArg(v)
 }
@@ -12134,7 +12134,7 @@ fn __action11<
 >(
     input: &'input str,
     (_, t, _): (usize, ConcreteType, usize),
-) -> ArgValue
+) -> ArgValue<SomeValue>
 {
     TypeArg(t)
 }
@@ -12145,9 +12145,9 @@ fn __action12<
     'input,
 >(
     input: &'input str,
-    (_, h, _): (usize, ArgValue, usize),
-    (_, mut t, _): (usize, Vec<ArgValue>, usize),
-) -> Vec<ArgValue>
+    (_, h, _): (usize, ArgValue<SomeValue>, usize),
+    (_, mut t, _): (usize, Vec<ArgValue<SomeValue>>, usize),
+) -> Vec<ArgValue<SomeValue>>
 {
     { t.insert(0, h); t }
 }
@@ -12158,8 +12158,8 @@ fn __action13<
     'input,
 >(
     input: &'input str,
-    (_, s, _): (usize, ArgValue, usize),
-) -> Vec<ArgValue>
+    (_, s, _): (usize, ArgValue<SomeValue>, usize),
+) -> Vec<ArgValue<SomeValue>>
 {
     vec!(s)
 }
@@ -12173,7 +12173,7 @@ fn __action14<
     (_, a, _): (usize, AtomicValue, usize),
 ) -> SomeValue
 {
-    AtomicValue(a)
+    Atomic(a)
 }
 
 #[allow(unused_variables)]
@@ -12185,7 +12185,7 @@ fn __action15<
     (_, a, _): (usize, CompositeValue, usize),
 ) -> SomeValue
 {
-    CompositeValue(Box::new(a))
+    Composite(Box::new(a))
 }
 
 #[allow(unused_variables)]
@@ -12194,7 +12194,7 @@ fn __action16<
     'input,
 >(
     input: &'input str,
-    (_, a, _): (usize, u32, usize),
+    (_, a, _): (usize, i32, usize),
 ) -> AtomicValue
 {
     AVNumber(a)
@@ -12233,7 +12233,7 @@ fn __action19<
 >(
     input: &'input str,
     (_, _, _): (usize, &'input str, usize),
-    (_, ins, _): (usize, Vec<Instruction>, usize),
+    (_, ins, _): (usize, Vec<Instruction<SomeValue>>, usize),
     (_, _, _): (usize, &'input str, usize),
 ) -> CompositeValue
 {
@@ -12246,8 +12246,8 @@ fn __action20<
     'input,
 >(
     input: &'input str,
-    (_, i, _): (usize, Instruction, usize),
-) -> Vec<Instruction>
+    (_, i, _): (usize, Instruction<SomeValue>, usize),
+) -> Vec<Instruction<SomeValue>>
 {
     vec!(i)
 }
@@ -12258,10 +12258,10 @@ fn __action21<
     'input,
 >(
     input: &'input str,
-    (_, i, _): (usize, Instruction, usize),
+    (_, i, _): (usize, Instruction<SomeValue>, usize),
     (_, _, _): (usize, &'input str, usize),
-    (_, mut is, _): (usize, Vec<Instruction>, usize),
-) -> Vec<Instruction>
+    (_, mut is, _): (usize, Vec<Instruction<SomeValue>>, usize),
+) -> Vec<Instruction<SomeValue>>
 {
     { is.insert(0, i); is }
 }
@@ -12349,9 +12349,9 @@ fn __action28<
 >(
     input: &'input str,
     (_, s, _): (usize, &'input str, usize),
-) -> u32
+) -> i32
 {
-    u32::from_str(s).unwrap()
+    i32::from_str(s).unwrap()
 }
 #[allow(clippy::type_complexity)]
 
