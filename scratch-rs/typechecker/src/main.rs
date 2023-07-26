@@ -119,12 +119,12 @@ lazy_static! {
     ]);
 }
 
-fn add_symbol<'a>(result: &mut HashMap<char, ConcreteType>, arg_con: char, type_: ConcreteType) {
-    result.insert(arg_con, type_);
+fn add_symbol<'a>(resolved: &mut HashMap<char, ConcreteType>, arg_con: char, type_: ConcreteType) {
+    resolved.insert(arg_con, type_);
 }
 
 fn unify_arg_aux<'a>(
-    result: &mut HashMap<char, ConcreteType>,
+    resolved: &mut HashMap<char, ConcreteType>,
     arg: Box<CTBox<Concrete>>,
     arg_con: Box<CTBox<Constraint>>,
 ) -> Result<(), &'a str> {
@@ -134,7 +134,7 @@ fn unify_arg_aux<'a>(
     };
     match arg.as_ref() {
         CTSelf(arg_) => {
-            return unify_concrete_arg(result, (*arg_).clone(), &constraint);
+            return unify_concrete_arg(resolved, (*arg_).clone(), &constraint);
         }
         _ => panic!("Impossible!"),
     }
@@ -144,31 +144,31 @@ fn unify_args<'a>(
     args: Vec<ArgValue<SomeValue>>,
     arg_cons: Vec<Constraint>,
 ) -> Result<(HashMap<char, ConcreteType>, Vec<ArgValue<MValue>>), &'a str> {
-    let mut result = HashMap::from([]);
+    let mut resolved = HashMap::from([]);
     let mut args_ = vec![];
     for (arg, con) in args.iter().zip(arg_cons.iter()) {
-        args_.push(unify_arg(&mut result, arg.clone(), con.clone())?);
+        args_.push(unify_arg(&mut resolved, arg.clone(), con.clone())?);
     }
-    return Result::Ok((result, args_));
+    return Result::Ok((resolved, args_));
 }
 
 fn unify_concrete_arg<'a>(
-    result: &mut HashMap<char, ConcreteType>,
+    resolved: &mut HashMap<char, ConcreteType>,
     arg: ConcreteType,
     arg_con: &Constraint,
 ) -> Result<(), &'a str> {
     match arg_con {
         Warg(c) => {
-            add_symbol(result, c.clone(), arg);
+            add_symbol(resolved, c.clone(), arg);
             return Result::Ok(());
         }
         TypeArg(c) => {
-            add_symbol(result, c.clone(), arg.clone());
+            add_symbol(resolved, c.clone(), arg.clone());
             return Result::Ok(());
         }
-        TypeArgRef(c) => match result.get(&c) {
+        TypeArgRef(c) => match resolved.get(&c) {
             Some(tt) => {
-                return unify_concrete_arg(result, arg, &Arg(coerce_ctype((*tt).clone())));
+                return unify_concrete_arg(resolved, arg, &Arg(coerce_ctype((*tt).clone())));
             }
             _ => {
                 return Result::Err("Unknown type ref");
@@ -177,7 +177,7 @@ fn unify_concrete_arg<'a>(
         Arg(c) => match c {
             MList(ic) => match arg {
                 MList(iv) => {
-                    return unify_arg_aux(result, iv, ic.clone());
+                    return unify_arg_aux(resolved, iv, ic.clone());
                 }
 
                 _ => {
@@ -186,8 +186,8 @@ fn unify_concrete_arg<'a>(
             },
             MLambda(vin, vout) => match arg {
                 MLambda(cin, cout) => {
-                    return unify_arg_aux(result, cin, vin.clone())
-                        .and_then(|_| unify_arg_aux(result, cout, vout.clone()));
+                    return unify_arg_aux(resolved, cin, vin.clone())
+                        .and_then(|_| unify_arg_aux(resolved, cout, vout.clone()));
                 }
                 _ => {
                     return Result::Err("Expecting a lambda but got something else...");
@@ -195,8 +195,8 @@ fn unify_concrete_arg<'a>(
             },
             MPair(cl, cr) => match arg {
                 MPair(vl, vr) => {
-                    return unify_arg_aux(result, vl, cl.clone())
-                        .and_then(|_| unify_arg_aux(result, vr, cr.clone()));
+                    return unify_arg_aux(resolved, vl, cl.clone())
+                        .and_then(|_| unify_arg_aux(resolved, vr, cr.clone()));
                 }
                 _ => {
                     return Result::Err("Expecting a pair but got something else...");
@@ -231,14 +231,14 @@ fn unify_concrete_arg<'a>(
 }
 
 fn unify_arg<'a>(
-    result: &mut HashMap<char, ConcreteType>,
+    resolved: &mut HashMap<char, ConcreteType>,
     arg: ArgValue<SomeValue>,
     arg_con: Constraint,
 ) -> Result<ArgValue<MValue>, &'a str> {
     match arg {
         AV::TypeArg(ct) => match arg_con {
             TypeArg(c) => {
-                add_symbol(result, c, ct.clone());
+                add_symbol(resolved, c, ct.clone());
                 return Result::Ok(AV::TypeArg(ct));
             }
             _ => {
@@ -253,23 +253,23 @@ fn unify_arg<'a>(
                 Warg(_) => {
                     panic!("Unexpected wildcard type encountered");
                 }
-                TypeArgRef(ref c) => match result.get(&c) {
-                    Some(ct) => type_check_value(result, &someVal, ct)?,
+                TypeArgRef(ref c) => match resolved.get(&c) {
+                    Some(ct) => type_check_value(resolved, &someVal, ct)?,
                     None => panic!("Symbol resolution failed! {:?}", c),
                 },
-                Arg(_) => match constraint_to_ctype(result, &arg_con) {
-                    Some(concrete_type) => type_check_value(result, &someVal, &concrete_type)?,
+                Arg(_) => match constraint_to_ctype(resolved, &arg_con) {
+                    Some(concrete_type) => type_check_value(resolved, &someVal, &concrete_type)?,
                     None => panic!("Couldnt resolve type"),
                 },
             };
-            unify_concrete_arg(result, ct, &arg_con)?;
+            unify_concrete_arg(resolved, ct, &arg_con)?;
             return Ok(AV::ValueArg(m));
         }
     }
 }
 
 fn constraint_to_ctype(
-    result: &HashMap<char, ConcreteType>,
+    resolved: &HashMap<char, ConcreteType>,
     c: &Constraint,
 ) -> Option<ConcreteType> {
     match c {
@@ -278,16 +278,16 @@ fn constraint_to_ctype(
             MNat => Some(MNat),
             MString => Some(MString),
             MPair(l, r) => Some(MPair(
-                boxed_ctbox_constrain_to_ctype(result, l)?,
-                boxed_ctbox_constrain_to_ctype(result, r)?,
+                boxed_ctbox_constrain_to_ctype(resolved, l)?,
+                boxed_ctbox_constrain_to_ctype(resolved, r)?,
             )),
-            MList(l) => Some(MList(boxed_ctbox_constrain_to_ctype(result, l)?)),
+            MList(l) => Some(MList(boxed_ctbox_constrain_to_ctype(resolved, l)?)),
             MLambda(l, r) => Some(MLambda(
-                boxed_ctbox_constrain_to_ctype(result, l)?,
-                boxed_ctbox_constrain_to_ctype(result, r)?,
+                boxed_ctbox_constrain_to_ctype(resolved, l)?,
+                boxed_ctbox_constrain_to_ctype(resolved, r)?,
             )),
         },
-        TypeArgRef(c) => match result.get(&c) {
+        TypeArgRef(c) => match resolved.get(&c) {
             Some(ct) => Some(ct.clone()),
             None => None,
         },
@@ -296,15 +296,15 @@ fn constraint_to_ctype(
 }
 
 fn boxed_ctbox_constrain_to_ctype(
-    result: &HashMap<char, ConcreteType>,
+    resolved: &HashMap<char, ConcreteType>,
     c: &CTBox<Constraint>,
 ) -> Option<Box<CTBox<Concrete>>> {
     match c {
-        CTOther(c) => match constraint_to_ctype(result, c) {
+        CTOther(c) => match constraint_to_ctype(resolved, c) {
             Some(x) => Some(Box::new(CTSelf(x))),
             None => None,
         },
-        CTSelf(c) => match constraint_to_ctype(result, &Arg(c.clone())) {
+        CTSelf(c) => match constraint_to_ctype(resolved, &Arg(c.clone())) {
             Some(x) => Some(Box::new(CTSelf(x))),
             None => None,
         },
@@ -316,18 +316,18 @@ fn value_to_type<'a>(v: &MValue) -> ConcreteType {
 }
 
 fn typecheck_value_<'a>(
-    result: &HashMap<char, ConcreteType>,
+    resolved: &HashMap<char, ConcreteType>,
     someVal: &SomeValue,
     target_box: Box<CTBox<Concrete>>,
 ) -> Result<(MValue, ConcreteType), &'a str> {
     match target_box.as_ref() {
-        CTSelf(ctype) => type_check_value(result, someVal, ctype),
+        CTSelf(ctype) => type_check_value(resolved, someVal, ctype),
         _ => panic!("Impossible"),
     }
 }
 
 fn type_check_value<'a>(
-    result: &HashMap<char, ConcreteType>,
+    resolved: &HashMap<char, ConcreteType>,
     someVal: &SomeValue,
     target: &ConcreteType,
 ) -> Result<(MValue, ConcreteType), &'a str> {
@@ -342,7 +342,7 @@ fn type_check_value<'a>(
             CVList(items) => {
                 let mut il: Vec<MValue> = vec![];
                 for i in items {
-                    let (mv, _) = typecheck_value_(result, i, c.clone())?;
+                    let (mv, _) = typecheck_value_(resolved, i, c.clone())?;
                     il.push(mv);
                 }
                 return Ok((VList(il), MList(c.clone())));
@@ -351,8 +351,8 @@ fn type_check_value<'a>(
         },
         (MPair(c1, c2), Composite(cv)) => match cv.as_ref() {
             CVPair(sv1, sv2) => {
-                let (mv1, ct1) = typecheck_value_(result, sv1, c1.clone())?;
-                let (mv2, ct2) = typecheck_value_(result, sv2, c2.clone())?;
+                let (mv1, ct1) = typecheck_value_(resolved, sv1, c1.clone())?;
+                let (mv2, ct2) = typecheck_value_(resolved, sv2, c2.clone())?;
                 return Result::Ok((
                     VPair(Box::new(mv1), Box::new(mv2)),
                     MPair(Box::new(CTSelf(ct1)), Box::new(CTSelf(ct2))),
@@ -370,12 +370,12 @@ fn type_check_value<'a>(
     }
 }
 
-fn stack_result_to_ctype(
-    result: &mut HashMap<char, ConcreteType>,
+fn stack_resolved_to_ctype(
+    resolved: &mut HashMap<char, ConcreteType>,
     sr: &StackResult,
 ) -> ConcreteType {
     match sr {
-        SRArgRef(c) => match result.get(&c) {
+        SRArgRef(c) => match resolved.get(&c) {
             Some(ct) => {
                 return (*ct).clone();
             }
@@ -384,51 +384,51 @@ fn stack_result_to_ctype(
             }
         },
         SRCType(ctype) => {
-            return mk_ctype(result, ctype);
+            return mk_ctype(resolved, ctype);
         }
     }
 }
 
-fn mk_ctype(result: &mut HashMap<char, ConcreteType>, ct: &CType<StackResult>) -> ConcreteType {
+fn mk_ctype(resolved: &mut HashMap<char, ConcreteType>, ct: &CType<StackResult>) -> ConcreteType {
     match ct {
         MInt => MInt,
         MNat => MNat,
         MString => MString,
-        MList(l) => MList(stack_result_aux_to_ctype_aux(result, &l)),
+        MList(l) => MList(stack_resolved_aux_to_ctype_aux(resolved, &l)),
         MPair(l, r) => MPair(
-            stack_result_aux_to_ctype_aux(result, &l),
-            stack_result_aux_to_ctype_aux(result, &r),
+            stack_resolved_aux_to_ctype_aux(resolved, &l),
+            stack_resolved_aux_to_ctype_aux(resolved, &r),
         ),
         MLambda(l, r) => MLambda(
-            stack_result_aux_to_ctype_aux(result, &l),
-            stack_result_aux_to_ctype_aux(result, &r),
+            stack_resolved_aux_to_ctype_aux(resolved, &l),
+            stack_resolved_aux_to_ctype_aux(resolved, &r),
         ),
     }
 }
 
-fn stack_result_aux_to_ctype_aux(
-    result: &mut HashMap<char, ConcreteType>,
+fn stack_resolved_aux_to_ctype_aux(
+    resolved: &mut HashMap<char, ConcreteType>,
     aux: &CTBox<StackResult>,
 ) -> Box<CTBox<Concrete>> {
     Box::new(match aux {
-        CTOther(t) => CTSelf(stack_result_to_ctype(result, t)),
-        CTSelf(c) => CTSelf(mk_ctype(result, c)),
+        CTOther(t) => CTSelf(stack_resolved_to_ctype(resolved, t)),
+        CTSelf(c) => CTSelf(mk_ctype(resolved, c)),
     })
 }
 
-fn make_result_stack<'a>(
-    result: &mut HashMap<char, ConcreteType>,
+fn make_resolved_stack<'a>(
+    resolved: &mut HashMap<char, ConcreteType>,
     sem_stack_out: Vec<StackResult>,
 ) -> Result<StackState, &'a str> {
-    let mut result_stack: StackState = vec![];
+    let mut resolved_stack: StackState = vec![];
     for i in sem_stack_out {
-        result_stack.push(stack_result_to_ctype(result, &i));
+        resolved_stack.push(stack_resolved_to_ctype(resolved, &i));
     }
-    return Result::Ok(result_stack);
+    return Result::Ok(resolved_stack);
 }
 
 fn unify_stack<'a>(
-    result: &mut HashMap<char, ConcreteType>,
+    resolved: &mut HashMap<char, ConcreteType>,
     sem_stack_in: Vec<StackArg>,
     sem_stack_out: Vec<StackResult>,
     stack_state: &mut StackState,
@@ -436,10 +436,10 @@ fn unify_stack<'a>(
     let mut stack_index: usize = 0;
     for constraint in sem_stack_in {
         let stack_elem = stack_state[stack_index].clone();
-        unify_concrete_arg(result, coerce_ctype(stack_elem), &constraint)?;
+        unify_concrete_arg(resolved, coerce_ctype(stack_elem), &constraint)?;
         stack_index = stack_index + 1;
     }
-    let mut rs = make_result_stack(result, sem_stack_out)?;
+    let mut rs = make_resolved_stack(resolved, sem_stack_out)?;
     rs.append(&mut stack_state[stack_index..].to_vec());
     *stack_state = rs;
     return Result::Ok(());
@@ -469,11 +469,11 @@ fn typecheck<'a>(
     instructions: Vec<Instruction<SomeValue>>,
     stack: &mut StackState,
 ) -> Result<Vec<Instruction<MValue>>, &'a str> {
-    let mut result: Vec<Instruction<MValue>> = vec![];
+    let mut resolved: Vec<Instruction<MValue>> = vec![];
     for instruction in instructions {
-        result.push(typecheck_one(instruction, stack)?);
+        resolved.push(typecheck_one(instruction, stack)?);
     }
-    return Result::Ok(result);
+    return Result::Ok(resolved);
 }
 
 fn typecheck_one<'a>(
@@ -482,9 +482,9 @@ fn typecheck_one<'a>(
 ) -> Result<Instruction<MValue>, &'a str> {
     match MICHELSON_INSTRUCTIONS.get(&instruction.name) {
         Some(s) => {
-            let (mut result, args_) = unify_args(instruction.args, s.args.clone())?;
+            let (mut resolved, args_) = unify_args(instruction.args, s.args.clone())?;
             unify_stack(
-                &mut result,
+                &mut resolved,
                 s.input_stack.clone(),
                 s.output_stack.clone(),
                 stack,
@@ -506,7 +506,7 @@ fn main() {
         .parse("PUSH nat 5;PUSH (pair nat int) (Pair 5 10);DROP")
     {
         Result::Ok(parsed_instructions) => {
-            let result = typecheck(parsed_instructions, &mut stack);
+            let resolved = typecheck(parsed_instructions, &mut stack);
             println!("{:?}", stack);
         }
         Result::Err(s) => println!("{}", s),
