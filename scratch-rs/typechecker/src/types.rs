@@ -12,7 +12,7 @@ pub enum CType<T> {
     MNat,
     MInt,
     MString,
-    MPair(Box<(CTBox<T>)>, Box<CTBox<T>>),
+    MPair(Box<CTBox<T>>, Box<CTBox<T>>),
     MList(Box<CTBox<T>>),
     MLambda(Box<CTBox<T>>, Box<CTBox<T>>),
 }

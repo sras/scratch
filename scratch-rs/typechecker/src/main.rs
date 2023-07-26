@@ -56,6 +56,14 @@ fn map_ctype<T: Clone, H>(ct: &CType<T>, cb: fn(T) -> H) -> CType<H> {
 lazy_static! {
     static ref MICHELSON_INSTRUCTIONS: HashMap<String, InstructionDef> = HashMap::from([
         (
+            String::from("DUP"),
+            InstructionDef {
+                args: Vec::from([]),
+                input_stack: Vec::from([Warg('a')]),
+                output_stack: Vec::from([SRArgRef('a'), SRArgRef('a')])
+            }
+        ),
+        (
             String::from("DROP"),
             InstructionDef {
                 args: Vec::from([]),
@@ -141,7 +149,7 @@ fn unify_arg_aux<'a>(
 }
 
 fn unify_args<'a>(
-    args: Vec<ArgValue<SomeValue>>,
+    args: &Vec<ArgValue<SomeValue>>,
     arg_cons: &Vec<Constraint>,
 ) -> Result<(HashMap<char, ConcreteType>, Vec<ArgValue<MValue>>), &'a str> {
     let mut resolved = HashMap::from([]);
@@ -245,7 +253,7 @@ fn unify_arg<'a>(
                 panic!("Unexpected type name argument");
             }
         },
-        AV::ValueArg(someVal) => {
+        AV::ValueArg(some_val) => {
             let (m, ct): (MValue, ConcreteType) = match arg_con {
                 TypeArg(_) => {
                     panic!("Unexpected value argument");
@@ -254,11 +262,11 @@ fn unify_arg<'a>(
                     panic!("Unexpected wildcard type encountered");
                 }
                 TypeArgRef(ref c) => match resolved.get(&c) {
-                    Some(ct) => type_check_value(resolved, &someVal, ct)?,
+                    Some(ct) => type_check_value(resolved, &some_val, ct)?,
                     None => panic!("Symbol resolution failed! {:?}", c),
                 },
                 Arg(_) => match constraint_to_ctype(resolved, &arg_con) {
-                    Some(concrete_type) => type_check_value(resolved, &someVal, &concrete_type)?,
+                    Some(concrete_type) => type_check_value(resolved, &some_val, &concrete_type)?,
                     None => panic!("Couldnt resolve type"),
                 },
             };
@@ -311,10 +319,6 @@ fn boxed_ctbox_constrain_to_ctype(
     }
 }
 
-fn value_to_type<'a>(v: &MValue) -> ConcreteType {
-    panic!("");
-}
-
 fn typecheck_value_<'a>(
     resolved: &HashMap<char, ConcreteType>,
     someVal: &SomeValue,
@@ -323,6 +327,13 @@ fn typecheck_value_<'a>(
     match target_box.as_ref() {
         CTSelf(ctype) => type_check_value(resolved, someVal, ctype),
         _ => panic!("Impossible"),
+    }
+}
+
+fn unwrap_ctbox(c: &CTBox<Concrete>) -> &ConcreteType {
+    match c {
+        CTOther(_) => panic!("Impossible!"),
+        CTSelf(x) => return x,
     }
 }
 
@@ -361,8 +372,33 @@ fn type_check_value<'a>(
             _ => Err("Expecting a Pair but found something else..."),
         },
         (MLambda(c1, c2), Composite(cv)) => match cv.as_ref() {
-            CVLambda(_) => {
-                panic!("Unimplemented!");
+            CVLambda(instructions) => {
+                let lambda_input = unwrap_ctbox(c1);
+                let lambda_output = unwrap_ctbox(c2);
+                let mut stack: StackState = Vec::from([lambda_input.clone()]);
+                match typecheck(instructions, &mut stack) {
+                    Ok(tins) => match stack[..] {
+                        [ref real_out] => {
+                            if (*real_out) == (*lambda_output) {
+                                return Result::Ok((
+                                    VLambda(tins),
+                                    MLambda(
+                                        Box::new(CTSelf(lambda_input.clone())),
+                                        Box::new(CTSelf(lambda_output.clone())),
+                                    ),
+                                ));
+                            } else {
+                                return Err("Lambda does not match the expected type");
+                            }
+                        }
+                        _ => {
+                            return Err("Lambda produces more then one element on stack!");
+                        }
+                    },
+                    Err(s) => {
+                        return Err(s);
+                    }
+                }
             }
             _ => Err("Expecting a Lambda but found something else..."),
         },
@@ -446,12 +482,7 @@ fn unify_stack<'a>(
 }
 
 fn coerce_box_auxct<T>(aux: &Box<CTBox<Concrete>>) -> Box<CTBox<T>> {
-    match aux.as_ref() {
-        CTOther(_) => {
-            panic!("Impossible!")
-        }
-        CTSelf(c) => Box::new(CTSelf(coerce_ctype(c))),
-    }
+    Box::new(CTSelf(coerce_ctype(unwrap_ctbox(aux))))
 }
 
 fn coerce_ctype<T>(c: &CType<Concrete>) -> CType<T> {
@@ -466,7 +497,7 @@ fn coerce_ctype<T>(c: &CType<Concrete>) -> CType<T> {
 }
 
 fn typecheck<'a>(
-    instructions: Vec<Instruction<SomeValue>>,
+    instructions: &Vec<Instruction<SomeValue>>,
     stack: &mut StackState,
 ) -> Result<Vec<Instruction<MValue>>, &'a str> {
     let mut resolved: Vec<Instruction<MValue>> = vec![];
@@ -477,16 +508,16 @@ fn typecheck<'a>(
 }
 
 fn typecheck_one<'a>(
-    instruction: Instruction<SomeValue>,
+    instruction: &Instruction<SomeValue>,
     stack: &mut StackState,
 ) -> Result<Instruction<MValue>, &'a str> {
     match MICHELSON_INSTRUCTIONS.get(&instruction.name) {
         Some(s) => {
-            let (mut resolved, args_) = unify_args(instruction.args, &s.args)?;
+            let (mut resolved, args_) = unify_args(&instruction.args, &s.args)?;
             unify_stack(&mut resolved, &s.input_stack, &s.output_stack, stack)?;
             return Result::Ok(Instruction {
                 args: args_,
-                name: instruction.name,
+                name: instruction.name.clone(),
             });
         }
         _ => {
@@ -497,13 +528,17 @@ fn typecheck_one<'a>(
 
 fn main() {
     let mut stack = Vec::from([]);
-    match instruction::InstructionListParser::new()
-        .parse("PUSH nat 5;PUSH (pair nat int) (Pair 5 10);DROP")
-    {
-        Result::Ok(parsed_instructions) => {
-            let resolved = typecheck(parsed_instructions, &mut stack);
-            println!("{:?}", stack);
-        }
+    match instruction::InstructionListParser::new().parse(
+        "LAMBDA nat (pair nat nat) {DUP;PAIR};PUSH nat 5;PUSH (pair nat int) (Pair 5 10);DROP",
+    ) {
+        Result::Ok(parsed_instructions) => match typecheck(&parsed_instructions, &mut stack) {
+            Result::Ok(_) => {
+                println!("{:?}", stack);
+            }
+            Err(s) => {
+                println!("{}", s);
+            }
+        },
         Result::Err(s) => println!("{}", s),
     }
 }

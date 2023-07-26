@@ -1,7 +1,6 @@
 // auto-generated: "lalrpop 0.20.0"
 // sha3: 5c4f7c26ec982c1aad55e08ee97c979505713452d8af7c52947dd25563a1103c
 use std::str::FromStr;
-use crate::types;
 use crate::types::CType::*;
 use crate::types::CTBox::*;
 use crate::types::ConcreteType;
@@ -287,13 +286,13 @@ mod __parse__Arg {
         }).collect()
     }
     pub(crate) struct __StateMachine<'input>
-    where 
+    where
     {
         input: &'input str,
         __phantom: core::marker::PhantomData<(&'input ())>,
     }
     impl<'input> __state_machine::ParserDefinition for __StateMachine<'input>
-    where 
+    where
     {
         type Location = usize;
         type Error = &'static str;
@@ -1726,13 +1725,13 @@ mod __parse__Args {
         }).collect()
     }
     pub(crate) struct __StateMachine<'input>
-    where 
+    where
     {
         input: &'input str,
         __phantom: core::marker::PhantomData<(&'input ())>,
     }
     impl<'input> __state_machine::ParserDefinition for __StateMachine<'input>
-    where 
+    where
     {
         type Location = usize;
         type Error = &'static str;
@@ -3020,13 +3019,13 @@ mod __parse__AtomicValue {
         }).collect()
     }
     pub(crate) struct __StateMachine<'input>
-    where 
+    where
     {
         input: &'input str,
         __phantom: core::marker::PhantomData<(&'input ())>,
     }
     impl<'input> __state_machine::ParserDefinition for __StateMachine<'input>
-    where 
+    where
     {
         type Location = usize;
         type Error = &'static str;
@@ -4461,13 +4460,13 @@ mod __parse__CompositeValue {
         }).collect()
     }
     pub(crate) struct __StateMachine<'input>
-    where 
+    where
     {
         input: &'input str,
         __phantom: core::marker::PhantomData<(&'input ())>,
     }
     impl<'input> __state_machine::ParserDefinition for __StateMachine<'input>
-    where 
+    where
     {
         type Location = usize;
         type Error = &'static str;
@@ -5774,13 +5773,13 @@ mod __parse__ConcreteType {
         }).collect()
     }
     pub(crate) struct __StateMachine<'input>
-    where 
+    where
     {
         input: &'input str,
         __phantom: core::marker::PhantomData<(&'input ())>,
     }
     impl<'input> __state_machine::ParserDefinition for __StateMachine<'input>
-    where 
+    where
     {
         type Location = usize;
         type Error = &'static str;
@@ -7054,13 +7053,13 @@ mod __parse__Identifier {
         }).collect()
     }
     pub(crate) struct __StateMachine<'input>
-    where 
+    where
     {
         input: &'input str,
         __phantom: core::marker::PhantomData<(&'input ())>,
     }
     impl<'input> __state_machine::ParserDefinition for __StateMachine<'input>
-    where 
+    where
     {
         type Location = usize;
         type Error = &'static str;
@@ -8495,13 +8494,13 @@ mod __parse__Instruction {
         }).collect()
     }
     pub(crate) struct __StateMachine<'input>
-    where 
+    where
     {
         input: &'input str,
         __phantom: core::marker::PhantomData<(&'input ())>,
     }
     impl<'input> __state_machine::ParserDefinition for __StateMachine<'input>
-    where 
+    where
     {
         type Location = usize;
         type Error = &'static str;
@@ -9934,13 +9933,13 @@ mod __parse__InstructionList {
         }).collect()
     }
     pub(crate) struct __StateMachine<'input>
-    where 
+    where
     {
         input: &'input str,
         __phantom: core::marker::PhantomData<(&'input ())>,
     }
     impl<'input> __state_machine::ParserDefinition for __StateMachine<'input>
-    where 
+    where
     {
         type Location = usize;
         type Error = &'static str;
@@ -11373,13 +11372,13 @@ mod __parse__SomeValue {
         }).collect()
     }
     pub(crate) struct __StateMachine<'input>
-    where 
+    where
     {
         input: &'input str,
         __phantom: core::marker::PhantomData<(&'input ())>,
     }
     impl<'input> __state_machine::ParserDefinition for __StateMachine<'input>
-    where 
+    where
     {
         type Location = usize;
         type Error = &'static str;
