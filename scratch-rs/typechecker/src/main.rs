@@ -119,13 +119,13 @@ lazy_static! {
     ]);
 }
 
-fn add_symbol<'a>(resolved: &mut HashMap<char, ConcreteType>, arg_con: char, type_: ConcreteType) {
-    resolved.insert(arg_con, type_);
+fn add_symbol<'a>(resolved: &mut HashMap<char, ConcreteType>, arg_con: char, type_: &ConcreteType) {
+    resolved.insert(arg_con, type_.clone());
 }
 
 fn unify_arg_aux<'a>(
     resolved: &mut HashMap<char, ConcreteType>,
-    arg: Box<CTBox<Concrete>>,
+    arg: &Box<CTBox<Concrete>>,
     arg_con: Box<CTBox<Constraint>>,
 ) -> Result<(), &'a str> {
     let constraint = match arg_con.as_ref() {
@@ -134,7 +134,7 @@ fn unify_arg_aux<'a>(
     };
     match arg.as_ref() {
         CTSelf(arg_) => {
-            return unify_concrete_arg(resolved, (*arg_).clone(), &constraint);
+            return unify_concrete_arg(resolved, arg_, &constraint);
         }
         _ => panic!("Impossible!"),
     }
@@ -142,7 +142,7 @@ fn unify_arg_aux<'a>(
 
 fn unify_args<'a>(
     args: Vec<ArgValue<SomeValue>>,
-    arg_cons: Vec<Constraint>,
+    arg_cons: &Vec<Constraint>,
 ) -> Result<(HashMap<char, ConcreteType>, Vec<ArgValue<MValue>>), &'a str> {
     let mut resolved = HashMap::from([]);
     let mut args_ = vec![];
@@ -154,7 +154,7 @@ fn unify_args<'a>(
 
 fn unify_concrete_arg<'a>(
     resolved: &mut HashMap<char, ConcreteType>,
-    arg: ConcreteType,
+    arg: &ConcreteType,
     arg_con: &Constraint,
 ) -> Result<(), &'a str> {
     match arg_con {
@@ -163,12 +163,12 @@ fn unify_concrete_arg<'a>(
             return Result::Ok(());
         }
         TypeArg(c) => {
-            add_symbol(resolved, c.clone(), arg.clone());
+            add_symbol(resolved, c.clone(), arg);
             return Result::Ok(());
         }
         TypeArgRef(c) => match resolved.get(&c) {
             Some(tt) => {
-                return unify_concrete_arg(resolved, arg, &Arg(coerce_ctype((*tt).clone())));
+                return unify_concrete_arg(resolved, arg, &Arg(coerce_ctype(tt)));
             }
             _ => {
                 return Result::Err("Unknown type ref");
@@ -238,7 +238,7 @@ fn unify_arg<'a>(
     match arg {
         AV::TypeArg(ct) => match arg_con {
             TypeArg(c) => {
-                add_symbol(resolved, c, ct.clone());
+                add_symbol(resolved, c, &ct);
                 return Result::Ok(AV::TypeArg(ct));
             }
             _ => {
@@ -262,7 +262,7 @@ fn unify_arg<'a>(
                     None => panic!("Couldnt resolve type"),
                 },
             };
-            unify_concrete_arg(resolved, ct, &arg_con)?;
+            unify_concrete_arg(resolved, &ct, &arg_con)?;
             return Ok(AV::ValueArg(m));
         }
     }
@@ -418,7 +418,7 @@ fn stack_resolved_aux_to_ctype_aux(
 
 fn make_resolved_stack<'a>(
     resolved: &mut HashMap<char, ConcreteType>,
-    sem_stack_out: Vec<StackResult>,
+    sem_stack_out: &Vec<StackResult>,
 ) -> Result<StackState, &'a str> {
     let mut resolved_stack: StackState = vec![];
     for i in sem_stack_out {
@@ -429,14 +429,14 @@ fn make_resolved_stack<'a>(
 
 fn unify_stack<'a>(
     resolved: &mut HashMap<char, ConcreteType>,
-    sem_stack_in: Vec<StackArg>,
-    sem_stack_out: Vec<StackResult>,
+    sem_stack_in: &Vec<StackArg>,
+    sem_stack_out: &Vec<StackResult>,
     stack_state: &mut StackState,
 ) -> Result<(), &'a str> {
     let mut stack_index: usize = 0;
     for constraint in sem_stack_in {
-        let stack_elem = stack_state[stack_index].clone();
-        unify_concrete_arg(resolved, coerce_ctype(stack_elem), &constraint)?;
+        let stack_elem = &stack_state[stack_index];
+        unify_concrete_arg(resolved, &coerce_ctype(stack_elem), &constraint)?;
         stack_index = stack_index + 1;
     }
     let mut rs = make_resolved_stack(resolved, sem_stack_out)?;
@@ -445,16 +445,16 @@ fn unify_stack<'a>(
     return Result::Ok(());
 }
 
-fn coerce_box_auxct<T>(aux: Box<CTBox<Concrete>>) -> Box<CTBox<T>> {
+fn coerce_box_auxct<T>(aux: &Box<CTBox<Concrete>>) -> Box<CTBox<T>> {
     match aux.as_ref() {
         CTOther(_) => {
             panic!("Impossible!")
         }
-        CTSelf(c) => Box::new(CTSelf(coerce_ctype(c.clone()))),
+        CTSelf(c) => Box::new(CTSelf(coerce_ctype(c))),
     }
 }
 
-fn coerce_ctype<T>(c: CType<Concrete>) -> CType<T> {
+fn coerce_ctype<T>(c: &CType<Concrete>) -> CType<T> {
     match c {
         MInt => MInt,
         MNat => MNat,
@@ -482,13 +482,8 @@ fn typecheck_one<'a>(
 ) -> Result<Instruction<MValue>, &'a str> {
     match MICHELSON_INSTRUCTIONS.get(&instruction.name) {
         Some(s) => {
-            let (mut resolved, args_) = unify_args(instruction.args, s.args.clone())?;
-            unify_stack(
-                &mut resolved,
-                s.input_stack.clone(),
-                s.output_stack.clone(),
-                stack,
-            )?;
+            let (mut resolved, args_) = unify_args(instruction.args, &s.args)?;
+            unify_stack(&mut resolved, &s.input_stack, &s.output_stack, stack)?;
             return Result::Ok(Instruction {
                 args: args_,
                 name: instruction.name,
