@@ -5,16 +5,16 @@ use Constraint::*;
 #[derive(Debug, Clone, Eq, PartialEq)]
 pub enum Concrete {}
 
-pub type ConcreteType = CType<Concrete>;
+pub type ConcreteType = MType<Concrete>;
 
 #[derive(Debug, Eq, PartialEq)]
-pub enum CType<T> {
+pub enum MType<T> {
     MNat,
     MInt,
     MString,
-    MPair(Box<CTBox<T>>, Box<CTBox<T>>),
-    MList(Box<CTBox<T>>),
-    MLambda(Box<CTBox<T>>, Box<CTBox<T>>),
+    MPair(Box<MNesting<T>>, Box<MNesting<T>>),
+    MList(Box<MNesting<T>>),
+    MLambda(Box<MNesting<T>>, Box<MNesting<T>>),
 }
 
 #[derive(Debug, Clone)]
@@ -47,9 +47,9 @@ pub enum CompositeValue {
 }
 
 #[derive(Debug, Eq, PartialEq)]
-pub enum CTBox<T> {
-    CTOther(T),
-    CTSelf(CType<T>),
+pub enum MNesting<T> {
+    Other(T),
+    Nested(MType<T>),
 }
 
 #[derive(Debug, Clone)]
@@ -66,7 +66,7 @@ pub struct Instruction<T> {
 
 #[derive(Debug)]
 pub enum Constraint {
-    Arg(CType<Constraint>), // An argument that accept a value of a certain type.
+    Arg(MType<Constraint>), // An argument that accept a value of a certain type.
     Warg(char),             // An type variable.
     TypeArg(char),          // A argument that accept a type name, like Nat.
     TypeArgRef(char),       // A argument that accept a value of a type referred by
@@ -96,7 +96,7 @@ pub type StackArg = Constraint;
 
 #[derive(Debug, Clone)]
 pub enum StackResult {
-    SRCType(CType<StackResult>),
+    SRMType(MType<StackResult>),
     SRArgRef(char),
 }
 

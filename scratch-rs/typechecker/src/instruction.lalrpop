@@ -1,7 +1,7 @@
 use std::str::FromStr;
 use crate::types;
-use crate::types::CType::*;
-use crate::types::CTBox::*;
+use crate::types::MType::*;
+use crate::types::MNesting::*;
 use crate::types::ConcreteType;
 use crate::types::Instruction;
 use crate::types::ArgValue;
@@ -53,7 +53,7 @@ pub InstructionList:Vec<Instruction<SomeValue>> = {
 pub ConcreteType: ConcreteType = {
   "int" => MInt,
   "nat" => MNat,
-  "pair" <t1:ConcreteType> <t2:ConcreteType> => MPair (Box::new(CTSelf( t1)), Box::new(CTSelf(t2))),
+  "pair" <t1:ConcreteType> <t2:ConcreteType> => MPair (Box::new(Nested( t1)), Box::new(Nested(t2))),
   "("<t:ConcreteType>")" => t
 };
 

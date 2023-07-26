@@ -1,8 +1,9 @@
 // auto-generated: "lalrpop 0.20.0"
-// sha3: 5c4f7c26ec982c1aad55e08ee97c979505713452d8af7c52947dd25563a1103c
+// sha3: 61ea6893257cc1c8afb84d3cd5c073cf2d2dcf2b66fb72b75d84c7db3a569cc7
 use std::str::FromStr;
-use crate::types::CType::*;
-use crate::types::CTBox::*;
+use crate::types;
+use crate::types::MType::*;
+use crate::types::MNesting::*;
 use crate::types::ConcreteType;
 use crate::types::Instruction;
 use crate::types::ArgValue;
@@ -26,8 +27,8 @@ mod __parse__Arg {
 
     use std::str::FromStr;
     use crate::types;
-    use crate::types::CType::*;
-    use crate::types::CTBox::*;
+    use crate::types::MType::*;
+    use crate::types::MNesting::*;
     use crate::types::ConcreteType;
     use crate::types::Instruction;
     use crate::types::ArgValue;
@@ -286,13 +287,13 @@ mod __parse__Arg {
         }).collect()
     }
     pub(crate) struct __StateMachine<'input>
-    where
+    where 
     {
         input: &'input str,
         __phantom: core::marker::PhantomData<(&'input ())>,
     }
     impl<'input> __state_machine::ParserDefinition for __StateMachine<'input>
-    where
+    where 
     {
         type Location = usize;
         type Error = &'static str;
@@ -1467,8 +1468,8 @@ mod __parse__Args {
 
     use std::str::FromStr;
     use crate::types;
-    use crate::types::CType::*;
-    use crate::types::CTBox::*;
+    use crate::types::MType::*;
+    use crate::types::MNesting::*;
     use crate::types::ConcreteType;
     use crate::types::Instruction;
     use crate::types::ArgValue;
@@ -1725,13 +1726,13 @@ mod __parse__Args {
         }).collect()
     }
     pub(crate) struct __StateMachine<'input>
-    where
+    where 
     {
         input: &'input str,
         __phantom: core::marker::PhantomData<(&'input ())>,
     }
     impl<'input> __state_machine::ParserDefinition for __StateMachine<'input>
-    where
+    where 
     {
         type Location = usize;
         type Error = &'static str;
@@ -2906,8 +2907,8 @@ mod __parse__AtomicValue {
 
     use std::str::FromStr;
     use crate::types;
-    use crate::types::CType::*;
-    use crate::types::CTBox::*;
+    use crate::types::MType::*;
+    use crate::types::MNesting::*;
     use crate::types::ConcreteType;
     use crate::types::Instruction;
     use crate::types::ArgValue;
@@ -3019,13 +3020,13 @@ mod __parse__AtomicValue {
         }).collect()
     }
     pub(crate) struct __StateMachine<'input>
-    where
+    where 
     {
         input: &'input str,
         __phantom: core::marker::PhantomData<(&'input ())>,
     }
     impl<'input> __state_machine::ParserDefinition for __StateMachine<'input>
-    where
+    where 
     {
         type Location = usize;
         type Error = &'static str;
@@ -4200,8 +4201,8 @@ mod __parse__CompositeValue {
 
     use std::str::FromStr;
     use crate::types;
-    use crate::types::CType::*;
-    use crate::types::CTBox::*;
+    use crate::types::MType::*;
+    use crate::types::MNesting::*;
     use crate::types::ConcreteType;
     use crate::types::Instruction;
     use crate::types::ArgValue;
@@ -4460,13 +4461,13 @@ mod __parse__CompositeValue {
         }).collect()
     }
     pub(crate) struct __StateMachine<'input>
-    where
+    where 
     {
         input: &'input str,
         __phantom: core::marker::PhantomData<(&'input ())>,
     }
     impl<'input> __state_machine::ParserDefinition for __StateMachine<'input>
-    where
+    where 
     {
         type Location = usize;
         type Error = &'static str;
@@ -5641,8 +5642,8 @@ mod __parse__ConcreteType {
 
     use std::str::FromStr;
     use crate::types;
-    use crate::types::CType::*;
-    use crate::types::CTBox::*;
+    use crate::types::MType::*;
+    use crate::types::MNesting::*;
     use crate::types::ConcreteType;
     use crate::types::Instruction;
     use crate::types::ArgValue;
@@ -5773,13 +5774,13 @@ mod __parse__ConcreteType {
         }).collect()
     }
     pub(crate) struct __StateMachine<'input>
-    where
+    where 
     {
         input: &'input str,
         __phantom: core::marker::PhantomData<(&'input ())>,
     }
     impl<'input> __state_machine::ParserDefinition for __StateMachine<'input>
-    where
+    where 
     {
         type Location = usize;
         type Error = &'static str;
@@ -6954,8 +6955,8 @@ mod __parse__Identifier {
 
     use std::str::FromStr;
     use crate::types;
-    use crate::types::CType::*;
-    use crate::types::CTBox::*;
+    use crate::types::MType::*;
+    use crate::types::MNesting::*;
     use crate::types::ConcreteType;
     use crate::types::Instruction;
     use crate::types::ArgValue;
@@ -7053,13 +7054,13 @@ mod __parse__Identifier {
         }).collect()
     }
     pub(crate) struct __StateMachine<'input>
-    where
+    where 
     {
         input: &'input str,
         __phantom: core::marker::PhantomData<(&'input ())>,
     }
     impl<'input> __state_machine::ParserDefinition for __StateMachine<'input>
-    where
+    where 
     {
         type Location = usize;
         type Error = &'static str;
@@ -8234,8 +8235,8 @@ mod __parse__Instruction {
 
     use std::str::FromStr;
     use crate::types;
-    use crate::types::CType::*;
-    use crate::types::CTBox::*;
+    use crate::types::MType::*;
+    use crate::types::MNesting::*;
     use crate::types::ConcreteType;
     use crate::types::Instruction;
     use crate::types::ArgValue;
@@ -8494,13 +8495,13 @@ mod __parse__Instruction {
         }).collect()
     }
     pub(crate) struct __StateMachine<'input>
-    where
+    where 
     {
         input: &'input str,
         __phantom: core::marker::PhantomData<(&'input ())>,
     }
     impl<'input> __state_machine::ParserDefinition for __StateMachine<'input>
-    where
+    where 
     {
         type Location = usize;
         type Error = &'static str;
@@ -9675,8 +9676,8 @@ mod __parse__InstructionList {
 
     use std::str::FromStr;
     use crate::types;
-    use crate::types::CType::*;
-    use crate::types::CTBox::*;
+    use crate::types::MType::*;
+    use crate::types::MNesting::*;
     use crate::types::ConcreteType;
     use crate::types::Instruction;
     use crate::types::ArgValue;
@@ -9933,13 +9934,13 @@ mod __parse__InstructionList {
         }).collect()
     }
     pub(crate) struct __StateMachine<'input>
-    where
+    where 
     {
         input: &'input str,
         __phantom: core::marker::PhantomData<(&'input ())>,
     }
     impl<'input> __state_machine::ParserDefinition for __StateMachine<'input>
-    where
+    where 
     {
         type Location = usize;
         type Error = &'static str;
@@ -11114,8 +11115,8 @@ mod __parse__SomeValue {
 
     use std::str::FromStr;
     use crate::types;
-    use crate::types::CType::*;
-    use crate::types::CTBox::*;
+    use crate::types::MType::*;
+    use crate::types::MNesting::*;
     use crate::types::ConcreteType;
     use crate::types::Instruction;
     use crate::types::ArgValue;
@@ -11372,13 +11373,13 @@ mod __parse__SomeValue {
         }).collect()
     }
     pub(crate) struct __StateMachine<'input>
-    where
+    where 
     {
         input: &'input str,
         __phantom: core::marker::PhantomData<(&'input ())>,
     }
     impl<'input> __state_machine::ParserDefinition for __StateMachine<'input>
-    where
+    where 
     {
         type Location = usize;
         type Error = &'static str;
@@ -12551,8 +12552,8 @@ mod __intern_token {
     #![allow(unused_imports)]
     use std::str::FromStr;
     use crate::types;
-    use crate::types::CType::*;
-    use crate::types::CTBox::*;
+    use crate::types::MType::*;
+    use crate::types::MNesting::*;
     use crate::types::ConcreteType;
     use crate::types::Instruction;
     use crate::types::ArgValue;
@@ -12923,7 +12924,7 @@ fn __action26<
     (_, t2, _): (usize, ConcreteType, usize),
 ) -> ConcreteType
 {
-    MPair (Box::new(CTSelf( t1)), Box::new(CTSelf(t2)))
+    MPair (Box::new(Nested( t1)), Box::new(Nested(t2)))
 }
 
 #[allow(unused_variables)]

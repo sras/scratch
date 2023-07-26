@@ -10,39 +10,39 @@ use std::convert::TryFrom;
 
 use ArgValue as AV;
 use AtomicValue::*;
-use CTBox::*;
-use CType::*;
+use MNesting::*;
+use MType::*;
 use CompositeValue::*;
 use Constraint::*;
 use MValue::*;
 use SomeValue::*;
 use StackResult::*;
 
-impl<T: Clone> Clone for CType<T> {
+impl<T: Clone> Clone for MType<T> {
     fn clone(&self) -> Self {
         return map_ctype(self, |x| x);
     }
 }
 
-impl<T: Clone> Clone for CTBox<T> {
+impl<T: Clone> Clone for MNesting<T> {
     fn clone(&self) -> Self {
         match self {
-            CTSelf(a) => CTSelf(a.clone()),
-            CTOther(a) => CTOther(a.clone()),
+            Nested(a) => Nested(a.clone()),
+            Other(a) => Other(a.clone()),
         }
     }
 }
 
-fn map_box_aux<T: Clone, H>(aux: &Box<CTBox<T>>, cb: fn(T) -> H) -> Box<CTBox<H>> {
+fn map_box_aux<T: Clone, H>(aux: &Box<MNesting<T>>, cb: fn(T) -> H) -> Box<MNesting<H>> {
     match aux.as_ref() {
-        CTOther(t) => {
-            return Box::new(CTOther(cb((*t).clone())));
+        Other(t) => {
+            return Box::new(Other(cb((*t).clone())));
         }
-        CTSelf(c) => Box::new(CTSelf(map_ctype(c, cb))),
+        Nested(c) => Box::new(Nested(map_ctype(c, cb))),
     }
 }
 
-fn map_ctype<T: Clone, H>(ct: &CType<T>, cb: fn(T) -> H) -> CType<H> {
+fn map_ctype<T: Clone, H>(ct: &MType<T>, cb: fn(T) -> H) -> MType<H> {
     match ct {
         MNat => MNat,
         MInt => MInt,
@@ -83,8 +83,8 @@ lazy_static! {
             String::from("CONS"),
             InstructionDef {
                 args: Vec::from([]),
-                input_stack: Vec::from([Warg('a'), Arg(MList(Box::new(CTOther(TypeArgRef('a')))))]),
-                output_stack: Vec::from([SRCType(MList(Box::new(CTOther(SRArgRef('a')))))])
+                input_stack: Vec::from([Warg('a'), Arg(MList(Box::new(Other(TypeArgRef('a')))))]),
+                output_stack: Vec::from([SRMType(MList(Box::new(Other(SRArgRef('a')))))])
             }
         ),
         (
@@ -100,9 +100,9 @@ lazy_static! {
             InstructionDef {
                 args: Vec::from([]),
                 input_stack: Vec::from([Warg('a'), Warg('b')]),
-                output_stack: Vec::from([SRCType(MPair(
-                    Box::new(CTOther(SRArgRef('a'))),
-                    Box::new(CTOther(SRArgRef('b')))
+                output_stack: Vec::from([SRMType(MPair(
+                    Box::new(Other(SRArgRef('a'))),
+                    Box::new(Other(SRArgRef('b')))
                 ))])
             }
         ),
@@ -113,14 +113,14 @@ lazy_static! {
                     TypeArg('a'),
                     TypeArg('b'),
                     Arg(MLambda(
-                        Box::new(CTOther(TypeArgRef('a'))),
-                        Box::new(CTOther(TypeArgRef('b')))
+                        Box::new(Other(TypeArgRef('a'))),
+                        Box::new(Other(TypeArgRef('b')))
                     ))
                 ]),
                 input_stack: Vec::from([]),
-                output_stack: Vec::from([SRCType(MLambda(
-                    Box::new(CTOther(SRArgRef('a'))),
-                    Box::new(CTOther(SRArgRef('b')))
+                output_stack: Vec::from([SRMType(MLambda(
+                    Box::new(Other(SRArgRef('a'))),
+                    Box::new(Other(SRArgRef('b')))
                 ))])
             }
         )
@@ -133,15 +133,15 @@ fn add_symbol<'a>(resolved: &mut HashMap<char, ConcreteType>, arg_con: char, typ
 
 fn unify_arg_aux<'a>(
     resolved: &mut HashMap<char, ConcreteType>,
-    arg: &Box<CTBox<Concrete>>,
-    arg_con: Box<CTBox<Constraint>>,
+    arg: &Box<MNesting<Concrete>>,
+    arg_con: Box<MNesting<Constraint>>,
 ) -> Result<(), &'a str> {
     let constraint = match arg_con.as_ref() {
-        CTOther(c) => c.clone(),
-        CTSelf(arg_con_) => Arg(arg_con_.clone()),
+        Other(c) => c.clone(),
+        Nested(arg_con_) => Arg(arg_con_.clone()),
     };
     match arg.as_ref() {
-        CTSelf(arg_) => {
+        Nested(arg_) => {
             return unify_concrete_arg(resolved, arg_, &constraint);
         }
         _ => panic!("Impossible!"),
@@ -305,15 +305,15 @@ fn constraint_to_ctype(
 
 fn boxed_ctbox_constrain_to_ctype(
     resolved: &HashMap<char, ConcreteType>,
-    c: &CTBox<Constraint>,
-) -> Option<Box<CTBox<Concrete>>> {
+    c: &MNesting<Constraint>,
+) -> Option<Box<MNesting<Concrete>>> {
     match c {
-        CTOther(c) => match constraint_to_ctype(resolved, c) {
-            Some(x) => Some(Box::new(CTSelf(x))),
+        Other(c) => match constraint_to_ctype(resolved, c) {
+            Some(x) => Some(Box::new(Nested(x))),
             None => None,
         },
-        CTSelf(c) => match constraint_to_ctype(resolved, &Arg(c.clone())) {
-            Some(x) => Some(Box::new(CTSelf(x))),
+        Nested(c) => match constraint_to_ctype(resolved, &Arg(c.clone())) {
+            Some(x) => Some(Box::new(Nested(x))),
             None => None,
         },
     }
@@ -322,18 +322,18 @@ fn boxed_ctbox_constrain_to_ctype(
 fn typecheck_value_<'a>(
     resolved: &HashMap<char, ConcreteType>,
     someVal: &SomeValue,
-    target_box: Box<CTBox<Concrete>>,
+    target_box: Box<MNesting<Concrete>>,
 ) -> Result<(MValue, ConcreteType), &'a str> {
     match target_box.as_ref() {
-        CTSelf(ctype) => type_check_value(resolved, someVal, ctype),
+        Nested(ctype) => type_check_value(resolved, someVal, ctype),
         _ => panic!("Impossible"),
     }
 }
 
-fn unwrap_ctbox(c: &CTBox<Concrete>) -> &ConcreteType {
+fn unwrap_ctbox(c: &MNesting<Concrete>) -> &ConcreteType {
     match c {
-        CTOther(_) => panic!("Impossible!"),
-        CTSelf(x) => return x,
+        Other(_) => panic!("Impossible!"),
+        Nested(x) => return x,
     }
 }
 
@@ -366,7 +366,7 @@ fn type_check_value<'a>(
                 let (mv2, ct2) = typecheck_value_(resolved, sv2, c2.clone())?;
                 return Result::Ok((
                     VPair(Box::new(mv1), Box::new(mv2)),
-                    MPair(Box::new(CTSelf(ct1)), Box::new(CTSelf(ct2))),
+                    MPair(Box::new(Nested(ct1)), Box::new(Nested(ct2))),
                 ));
             }
             _ => Err("Expecting a Pair but found something else..."),
@@ -383,8 +383,8 @@ fn type_check_value<'a>(
                                 return Result::Ok((
                                     VLambda(tins),
                                     MLambda(
-                                        Box::new(CTSelf(lambda_input.clone())),
-                                        Box::new(CTSelf(lambda_output.clone())),
+                                        Box::new(Nested(lambda_input.clone())),
+                                        Box::new(Nested(lambda_output.clone())),
                                     ),
                                 ));
                             } else {
@@ -419,13 +419,13 @@ fn stack_resolved_to_ctype(
                 panic!("Symbol resolution failed! {:?}", c)
             }
         },
-        SRCType(ctype) => {
+        SRMType(ctype) => {
             return mk_ctype(resolved, ctype);
         }
     }
 }
 
-fn mk_ctype(resolved: &mut HashMap<char, ConcreteType>, ct: &CType<StackResult>) -> ConcreteType {
+fn mk_ctype(resolved: &mut HashMap<char, ConcreteType>, ct: &MType<StackResult>) -> ConcreteType {
     match ct {
         MInt => MInt,
         MNat => MNat,
@@ -444,11 +444,11 @@ fn mk_ctype(resolved: &mut HashMap<char, ConcreteType>, ct: &CType<StackResult>)
 
 fn stack_resolved_aux_to_ctype_aux(
     resolved: &mut HashMap<char, ConcreteType>,
-    aux: &CTBox<StackResult>,
-) -> Box<CTBox<Concrete>> {
+    aux: &MNesting<StackResult>,
+) -> Box<MNesting<Concrete>> {
     Box::new(match aux {
-        CTOther(t) => CTSelf(stack_resolved_to_ctype(resolved, t)),
-        CTSelf(c) => CTSelf(mk_ctype(resolved, c)),
+        Other(t) => Nested(stack_resolved_to_ctype(resolved, t)),
+        Nested(c) => Nested(mk_ctype(resolved, c)),
     })
 }
 
@@ -481,11 +481,12 @@ fn unify_stack<'a>(
     return Result::Ok(());
 }
 
-fn coerce_box_auxct<T>(aux: &Box<CTBox<Concrete>>) -> Box<CTBox<T>> {
-    Box::new(CTSelf(coerce_ctype(unwrap_ctbox(aux))))
+fn coerce_box_auxct<T>(aux: &Box<MNesting<Concrete>>) -> Box<MNesting<T>> {
+    Box::new(Nested(coerce_ctype(unwrap_ctbox(aux))))
+
 }
 
-fn coerce_ctype<T>(c: &CType<Concrete>) -> CType<T> {
+fn coerce_ctype<T>(c: &MType<Concrete>) -> MType<T> {
     match c {
         MInt => MInt,
         MNat => MNat,
@@ -527,18 +528,18 @@ fn typecheck_one<'a>(
 }
 
 fn main() {
-    let mut stack = Vec::from([]);
-    match instruction::InstructionListParser::new().parse(
-        "LAMBDA nat (pair nat nat) {DUP;PAIR};PUSH nat 5;PUSH (pair nat int) (Pair 5 10);DROP",
-    ) {
-        Result::Ok(parsed_instructions) => match typecheck(&parsed_instructions, &mut stack) {
-            Result::Ok(_) => {
-                println!("{:?}", stack);
-            }
-            Err(s) => {
-                println!("{}", s);
-            }
-        },
-        Result::Err(s) => println!("{}", s),
-    }
+    //let mut stack = Vec::from([]);
+    //match instruction::InstructionListParser::new().parse(
+    //    "LAMBDA nat (pair nat nat) {DUP;PAIR};PUSH nat 5;PUSH (pair nat int) (Pair 5 10);DROP",
+    //) {
+    //    Result::Ok(parsed_instructions) => match typecheck(&parsed_instructions, &mut stack) {
+    //        Result::Ok(_) => {
+    //            println!("{:?}", stack);
+    //        }
+    //        Err(s) => {
+    //            println!("{}", s);
+    //        }
+    //    },
+    //    Result::Err(s) => println!("{}", s),
+    //}
 }
