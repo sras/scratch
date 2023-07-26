@@ -470,6 +470,9 @@ fn unify_stack<'a>(
     stack_state: &mut StackState,
 ) -> Result<(), &'a str> {
     let mut stack_index: usize = 0;
+    if stack_state.len() < sem_stack_in.len() {
+        return Result::Err("Stack was found too small for the operation");
+    }
     for constraint in sem_stack_in {
         let stack_elem = &stack_state[stack_index];
         unify_concrete_arg(resolved, &coerce_ctype(stack_elem), &constraint)?;
@@ -541,4 +544,37 @@ fn main() {
         },
         Result::Err(s) => println!("{}", s),
     }
+}
+
+mod tests {
+    use crate::Instruction;
+    use crate::instruction::InstructionListParser;
+    use crate::SomeValue;
+    use crate::MValue;
+    use crate::typecheck;
+    fn typecheck_<'a>(
+        instructions: &Vec<Instruction<SomeValue>>,
+    ) -> Result<Vec<Instruction<MValue>>, &'a str> {
+        let mut stack = Vec::from([]);
+        typecheck(instructions, &mut stack)
+    }
+    fn parse(src: &str)-> Vec<Instruction<SomeValue>> {
+        let p = InstructionListParser::new();
+        match p.parse(src) {
+            Ok(s) => s,
+            _ => panic!("Parse failed")
+        }
+    }
+
+    #[test]
+    fn test_type_checking_simple() {
+        assert!(Result::is_ok(&typecheck_(&parse("PUSH nat 5"))));
+        assert!(Result::is_ok(&typecheck_(&parse("PUSH (pair nat nat) (Pair 2 3)"))));
+        assert!(Result::is_ok(&typecheck_(&parse("PUSH (pair nat nat) (Pair 2 3);DROP"))));
+
+        assert!(Result::is_err(&typecheck_(&parse("PUSH nat \"5\""))));
+        assert!(Result::is_err(&typecheck_(&parse("PUSH (pair nat nat) 5"))));
+        assert!(Result::is_err(&typecheck_(&parse("PUSH (pair nat nat) (Pair 2 3);DROP;DROP"))));
+    }
+
 }
