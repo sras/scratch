@@ -33,7 +33,7 @@ impl<T: Clone> Clone for MNesting<T> {
     }
 }
 
-fn map_box_aux<T: Clone, H>(aux: &Box<MNesting<T>>, cb: fn(T) -> H) -> Box<MNesting<H>> {
+fn map_nesting<T: Clone, H>(aux: &Box<MNesting<T>>, cb: fn(T) -> H) -> Box<MNesting<H>> {
     match aux.as_ref() {
         Other(t) => {
             return Box::new(Other(cb((*t).clone())));
@@ -47,9 +47,9 @@ fn map_ctype<T: Clone, H>(ct: &MType<T>, cb: fn(T) -> H) -> MType<H> {
         MNat => MNat,
         MInt => MInt,
         MString => MString,
-        MPair(l, r) => MPair(map_box_aux(l, cb), map_box_aux(r, cb)),
-        MLambda(l, r) => MLambda(map_box_aux(l, cb), map_box_aux(r, cb)),
-        MList(l) => MList(map_box_aux(l, cb)),
+        MPair(l, r) => MPair(map_nesting(l, cb), map_nesting(r, cb)),
+        MLambda(l, r) => MLambda(map_nesting(l, cb), map_nesting(r, cb)),
+        MList(l) => MList(map_nesting(l, cb)),
     }
 }
 
@@ -131,7 +131,7 @@ fn add_symbol<'a>(resolved: &mut HashMap<char, ConcreteType>, arg_con: char, typ
     resolved.insert(arg_con, type_.clone());
 }
 
-fn unify_arg_aux<'a>(
+fn unify_arg_nested<'a>(
     resolved: &mut HashMap<char, ConcreteType>,
     arg: &Box<MNesting<Concrete>>,
     arg_con: Box<MNesting<Constraint>>,
@@ -185,7 +185,7 @@ fn unify_concrete_arg<'a>(
         Arg(c) => match c {
             MList(ic) => match arg {
                 MList(iv) => {
-                    return unify_arg_aux(resolved, iv, ic.clone());
+                    return unify_arg_nested(resolved, iv, ic.clone());
                 }
 
                 _ => {
@@ -194,8 +194,8 @@ fn unify_concrete_arg<'a>(
             },
             MLambda(vin, vout) => match arg {
                 MLambda(cin, cout) => {
-                    return unify_arg_aux(resolved, cin, vin.clone())
-                        .and_then(|_| unify_arg_aux(resolved, cout, vout.clone()));
+                    return unify_arg_nested(resolved, cin, vin.clone())
+                        .and_then(|_| unify_arg_nested(resolved, cout, vout.clone()));
                 }
                 _ => {
                     return Result::Err("Expecting a lambda but got something else...");
@@ -203,8 +203,8 @@ fn unify_concrete_arg<'a>(
             },
             MPair(cl, cr) => match arg {
                 MPair(vl, vr) => {
-                    return unify_arg_aux(resolved, vl, cl.clone())
-                        .and_then(|_| unify_arg_aux(resolved, vr, cr.clone()));
+                    return unify_arg_nested(resolved, vl, cl.clone())
+                        .and_then(|_| unify_arg_nested(resolved, vr, cr.clone()));
                 }
                 _ => {
                     return Result::Err("Expecting a pair but got something else...");
