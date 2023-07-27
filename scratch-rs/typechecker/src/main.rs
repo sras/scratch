@@ -286,13 +286,13 @@ fn constraint_to_ctype(
             MNat => Some(MNat),
             MString => Some(MString),
             MPair(l, r) => Some(MPair(
-                boxed_ctbox_constrain_to_ctype(resolved, l)?,
-                boxed_ctbox_constrain_to_ctype(resolved, r)?,
+                nested_constrain_to_nested_concrete(resolved, l)?,
+                nested_constrain_to_nested_concrete(resolved, r)?,
             )),
-            MList(l) => Some(MList(boxed_ctbox_constrain_to_ctype(resolved, l)?)),
+            MList(l) => Some(MList(nested_constrain_to_nested_concrete(resolved, l)?)),
             MLambda(l, r) => Some(MLambda(
-                boxed_ctbox_constrain_to_ctype(resolved, l)?,
-                boxed_ctbox_constrain_to_ctype(resolved, r)?,
+                nested_constrain_to_nested_concrete(resolved, l)?,
+                nested_constrain_to_nested_concrete(resolved, r)?,
             )),
         },
         TypeArgRef(c) => match resolved.get(&c) {
@@ -303,7 +303,7 @@ fn constraint_to_ctype(
     }
 }
 
-fn boxed_ctbox_constrain_to_ctype(
+fn nested_constrain_to_nested_concrete(
     resolved: &HashMap<char, ConcreteType>,
     c: &MNesting<Constraint>,
 ) -> Option<Box<MNesting<Concrete>>> {
