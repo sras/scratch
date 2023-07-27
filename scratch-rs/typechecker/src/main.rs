@@ -20,7 +20,7 @@ use StackResult::*;
 
 impl<T: Clone> Clone for MType<T> {
     fn clone(&self) -> Self {
-        return map_ctype(self, |x| x);
+        return map_mtype(self, |x| x);
     }
 }
 
@@ -38,11 +38,11 @@ fn map_nesting<T: Clone, H>(nesting: &Box<MNesting<T>>, cb: fn(T) -> H) -> Box<M
         Other(t) => {
             return Box::new(Other(cb((*t).clone())));
         }
-        Nested(c) => Box::new(Nested(map_ctype(c, cb))),
+        Nested(c) => Box::new(Nested(map_mtype(c, cb))),
     }
 }
 
-fn map_ctype<T: Clone, H>(ct: &MType<T>, cb: fn(T) -> H) -> MType<H> {
+fn map_mtype<T: Clone, H>(ct: &MType<T>, cb: fn(T) -> H) -> MType<H> {
     match ct {
         MNat => MNat,
         MInt => MInt,
@@ -176,7 +176,7 @@ fn unify_concrete_arg<'a>(
         }
         TypeArgRef(c) => match resolved.get(&c) {
             Some(tt) => {
-                return unify_concrete_arg(resolved, arg, &Arg(coerce_ctype(tt)));
+                return unify_concrete_arg(resolved, arg, &Arg(coerce_concrete(tt)));
             }
             _ => {
                 return Result::Err("Unknown type ref");
@@ -265,7 +265,7 @@ fn unify_arg<'a>(
                     Some(ct) => type_check_value(resolved, &some_val, ct)?,
                     None => panic!("Symbol resolution failed! {:?}", c),
                 },
-                Arg(_) => match constraint_to_ctype(resolved, &arg_con) {
+                Arg(_) => match constraint_to_concrete(resolved, &arg_con) {
                     Some(concrete_type) => type_check_value(resolved, &some_val, &concrete_type)?,
                     None => panic!("Couldnt resolve type"),
                 },
@@ -276,7 +276,7 @@ fn unify_arg<'a>(
     }
 }
 
-fn constraint_to_ctype(
+fn constraint_to_concrete(
     resolved: &HashMap<char, ConcreteType>,
     c: &Constraint,
 ) -> Option<ConcreteType> {
@@ -286,13 +286,13 @@ fn constraint_to_ctype(
             MNat => Some(MNat),
             MString => Some(MString),
             MPair(l, r) => Some(MPair(
-                nested_constrain_to_nested_concrete(resolved, l)?,
-                nested_constrain_to_nested_concrete(resolved, r)?,
+                constrain_to_concrete_nested(resolved, l)?,
+                constrain_to_concrete_nested(resolved, r)?,
             )),
-            MList(l) => Some(MList(nested_constrain_to_nested_concrete(resolved, l)?)),
+            MList(l) => Some(MList(constrain_to_concrete_nested(resolved, l)?)),
             MLambda(l, r) => Some(MLambda(
-                nested_constrain_to_nested_concrete(resolved, l)?,
-                nested_constrain_to_nested_concrete(resolved, r)?,
+                constrain_to_concrete_nested(resolved, l)?,
+                constrain_to_concrete_nested(resolved, r)?,
             )),
         },
         TypeArgRef(c) => match resolved.get(&c) {
@@ -303,16 +303,16 @@ fn constraint_to_ctype(
     }
 }
 
-fn nested_constrain_to_nested_concrete(
+fn constrain_to_concrete_nested(
     resolved: &HashMap<char, ConcreteType>,
     c: &MNesting<Constraint>,
 ) -> Option<Box<MNesting<Concrete>>> {
     match c {
-        Other(c) => match constraint_to_ctype(resolved, c) {
+        Other(c) => match constraint_to_concrete(resolved, c) {
             Some(x) => Some(Box::new(Nested(x))),
             None => None,
         },
-        Nested(c) => match constraint_to_ctype(resolved, &Arg(c.clone())) {
+        Nested(c) => match constraint_to_concrete(resolved, &Arg(c.clone())) {
             Some(x) => Some(Box::new(Nested(x))),
             None => None,
         },
@@ -433,19 +433,19 @@ fn stack_result_to_concrete_type_(
         MInt => MInt,
         MNat => MNat,
         MString => MString,
-        MList(l) => MList(nested_stack_result_nested_concrete(resolved, &l)),
+        MList(l) => MList(stack_result_to_concrete_nested(resolved, &l)),
         MPair(l, r) => MPair(
-            nested_stack_result_nested_concrete(resolved, &l),
-            nested_stack_result_nested_concrete(resolved, &r),
+            stack_result_to_concrete_nested(resolved, &l),
+            stack_result_to_concrete_nested(resolved, &r),
         ),
         MLambda(l, r) => MLambda(
-            nested_stack_result_nested_concrete(resolved, &l),
-            nested_stack_result_nested_concrete(resolved, &r),
+            stack_result_to_concrete_nested(resolved, &l),
+            stack_result_to_concrete_nested(resolved, &r),
         ),
     }
 }
 
-fn nested_stack_result_nested_concrete(
+fn stack_result_to_concrete_nested(
     resolved: &mut HashMap<char, ConcreteType>,
     nesting: &MNesting<StackResult>,
 ) -> Box<MNesting<Concrete>> {
@@ -478,7 +478,7 @@ fn unify_stack<'a>(
     }
     for constraint in sem_stack_in {
         let stack_elem = &stack_state[stack_index];
-        unify_concrete_arg(resolved, &coerce_ctype(stack_elem), &constraint)?;
+        unify_concrete_arg(resolved, &coerce_concrete(stack_elem), &constraint)?;
         stack_index = stack_index + 1;
     }
     let mut rs = make_resolved_stack(resolved, sem_stack_out)?;
@@ -488,10 +488,10 @@ fn unify_stack<'a>(
 }
 
 fn coerce_nested<T>(nested: &Box<MNesting<Concrete>>) -> Box<MNesting<T>> {
-    Box::new(Nested(coerce_ctype(unwrap_ctbox(nested))))
+    Box::new(Nested(coerce_concrete(unwrap_ctbox(nested))))
 }
 
-fn coerce_ctype<T>(c: &MType<Concrete>) -> MType<T> {
+fn coerce_concrete<T>(c: &MType<Concrete>) -> MType<T> {
     match c {
         MInt => MInt,
         MNat => MNat,
