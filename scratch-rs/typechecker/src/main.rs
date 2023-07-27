@@ -425,7 +425,10 @@ fn stack_result_to_concrete_type(
     }
 }
 
-fn stack_result_to_concrete_type_(resolved: &mut HashMap<char, ConcreteType>, ct: &MType<StackResult>) -> ConcreteType {
+fn stack_result_to_concrete_type_(
+    resolved: &mut HashMap<char, ConcreteType>,
+    ct: &MType<StackResult>,
+) -> ConcreteType {
     match ct {
         MInt => MInt,
         MNat => MNat,
