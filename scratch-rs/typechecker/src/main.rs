@@ -622,6 +622,7 @@ mod tests {
             4
         );
         assert_eq!(typecheck_(&parse("PUSH nat 5;DUP;DROP")).unwrap().len(), 1);
+        assert_eq!(typecheck_(&parse("PUSH (list nat) {5;6}")).unwrap().len(), 1);
         assert_eq!(
             typecheck_(&parse(
                 "LAMBDA nat (pair nat nat) {DUP;PAIR};PUSH nat 5;EXEC"
