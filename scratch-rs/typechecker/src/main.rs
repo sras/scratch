@@ -168,8 +168,8 @@ fn unify_args<'a>(
     args: &Vec<ArgValue<SomeValue>>,
     arg_cons: &Vec<Constraint>,
 ) -> Result<(ResolveCache, Vec<ArgValue<MValue>>), &'a str> {
-    let mut resolved = HashMap::from([]);
-    let mut args_ = vec![];
+    let mut resolved = HashMap::new();
+    let mut args_ = Vec::new();
     for (arg, con) in args.iter().zip(arg_cons.iter()) {
         args_.push(unify_arg(&mut resolved, arg.clone(), con.clone())?);
     }
