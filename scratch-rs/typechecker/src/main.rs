@@ -123,6 +123,20 @@ lazy_static! {
                     Box::new(Other(SRArgRef('b')))
                 ))])
             }
+        ),
+        (
+            String::from("EXEC"),
+            InstructionDef {
+                args: Vec::from([]),
+                input_stack: Vec::from([
+                    Warg('a'),
+                    Arg(MLambda(
+                        Box::new(Other(TypeArgRef('a'))),
+                        Box::new(Other(Warg('b')))
+                    ))
+                ]),
+                output_stack: Vec::from([SRArgRef('b')])
+            }
         )
     ]);
 }
@@ -597,5 +611,11 @@ mod tests {
             1
         );
         assert_eq!(typecheck_(&parse("PUSH nat 5")).unwrap().len(), 1);
+        assert_eq!(
+            typecheck_(&parse("PUSH nat 5;DUP;DUP;DUP")).unwrap().len(),
+            4
+        );
+        assert_eq!(typecheck_(&parse("PUSH nat 5;DUP;DROP")).unwrap().len(), 1);
+        assert_eq!(typecheck_(&parse("LAMBDA nat (pair nat nat) {DUP;PAIR};PUSH nat 5;EXEC")).unwrap().len(), 1);
     }
 }

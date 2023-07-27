@@ -17,6 +17,12 @@ pub enum MType<T> {
     MLambda(Box<MNesting<T>>, Box<MNesting<T>>),
 }
 
+#[derive(Debug, Eq, PartialEq)]
+pub enum MNesting<T> {
+    Other(T),
+    Nested(MType<T>),
+}
+
 #[derive(Debug, Clone)]
 pub enum SomeValue {
     Atomic(AtomicValue),
@@ -44,12 +50,6 @@ pub enum CompositeValue {
     CVPair(SomeValue, SomeValue),
     CVLambda(Vec<Instruction<SomeValue>>),
     CVList(Vec<SomeValue>),
-}
-
-#[derive(Debug, Eq, PartialEq)]
-pub enum MNesting<T> {
-    Other(T),
-    Nested(MType<T>),
 }
 
 #[derive(Debug, Clone)]
