@@ -1,7 +1,7 @@
 #[macro_use]
 extern crate lazy_static;
 
-mod instruction;
+mod parser;
 mod types;
 use types::*;
 
@@ -534,7 +534,7 @@ fn typecheck_one<'a>(
 
 fn main() {
     let mut stack = Vec::from([]);
-    match instruction::InstructionListParser::new().parse(
+    match parser::InstructionListParser::new().parse(
         "LAMBDA nat (pair nat nat) {DUP;PAIR};PUSH nat 5;PUSH (pair nat int) (Pair 5 10);DROP",
     ) {
         Result::Ok(parsed_instructions) => match typecheck(&parsed_instructions, &mut stack) {
@@ -550,7 +550,7 @@ fn main() {
 }
 
 mod tests {
-    use crate::instruction::InstructionListParser;
+    use crate::parser::InstructionListParser;
     use crate::typecheck;
     use crate::Instruction;
     use crate::SomeValue;
