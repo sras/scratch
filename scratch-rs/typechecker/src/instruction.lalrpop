@@ -1,5 +1,4 @@
 use std::str::FromStr;
-use crate::types;
 use crate::types::MType::*;
 use crate::types::MNesting::*;
 use crate::types::ConcreteType;
@@ -14,35 +13,41 @@ use crate::types::CompositeValue;
 use crate::types::CompositeValue::*;
 grammar;
 
-pub Instruction: Instruction<SomeValue> = {
+Instruction: Instruction<SomeValue> = {
   <s:Identifier> <a:Args> => Instruction { name : s, args: a },
   <s:Identifier> => Instruction { name : s, args: vec![] },
 }
 
-pub Arg: ArgValue<SomeValue> = {
+Arg: ArgValue<SomeValue> = {
   <v:SomeValue> => ValueArg(v),
   <t:ConcreteType> => TypeArg(t)
 }
 
-pub Args: Vec<ArgValue<SomeValue>> = {
+Args: Vec<ArgValue<SomeValue>> = {
   <h:Arg> <mut t:Args> => { t.insert(0, h); t },
   <s:Arg> => vec!(s),
 }
 
-pub SomeValue: SomeValue = {
+SomeValue: SomeValue = {
   <a:AtomicValue> => Atomic(a),
   <a:CompositeValue> => Composite(Box::new(a)),
   "("<s:SomeValue>")" => s
 }
 
-pub AtomicValue: AtomicValue = {
+AtomicValue: AtomicValue = {
   <a:McLitNumber> => AVNumber(a),
   <s:McLitString> => AVString(s)
 }
 
-pub CompositeValue: CompositeValue = {
+CompositeValue: CompositeValue = {
   "Pair" <l: SomeValue> <r: SomeValue> => CVPair(l, r),
+  "{"<sv:SomeValueList>"}" => CVList(sv),
   "{"<ins:InstructionList>"}" => CVLambda(ins)
+}
+
+SomeValueList:Vec<SomeValue> = {
+  <sv:SomeValue> => vec!(sv),
+  <sv:SomeValue>";"<mut svl:SomeValueList> => { svl.insert(0, sv); svl }
 }
 
 pub InstructionList:Vec<Instruction<SomeValue>> = {
@@ -50,7 +55,7 @@ pub InstructionList:Vec<Instruction<SomeValue>> = {
   <i:Instruction>";"<mut is:InstructionList> => { is.insert(0, i); is }
 }
 
-pub ConcreteType: ConcreteType = {
+ConcreteType: ConcreteType = {
   "int" => MInt,
   "nat" => MNat,
   "string" => MString,
@@ -58,7 +63,7 @@ pub ConcreteType: ConcreteType = {
   "("<t:ConcreteType>")" => t
 };
 
-pub Identifier: String = <s:r"[A-Za-z][A-Za-z0-9]+"> => String::from(s);
+Identifier: String = <s:r"[A-Za-z][A-Za-z0-9]+"> => String::from(s);
 
 McLitString: String = <s:r#""[a-z0-9]+""#> => s[1..s.len()-1].into();
 McLitNumber: i32 = <s:r"([+-]?)[0-9]+"> => i32::from_str(s).unwrap();

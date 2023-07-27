@@ -321,11 +321,11 @@ fn boxed_ctbox_constrain_to_ctype(
 
 fn typecheck_value_<'a>(
     resolved: &HashMap<char, ConcreteType>,
-    someVal: &SomeValue,
+    some_val: &SomeValue,
     target_box: Box<MNesting<Concrete>>,
 ) -> Result<(MValue, ConcreteType), &'a str> {
     match target_box.as_ref() {
-        Nested(ctype) => type_check_value(resolved, someVal, ctype),
+        Nested(ctype) => type_check_value(resolved, some_val, ctype),
         _ => panic!("Impossible"),
     }
 }
@@ -420,12 +420,12 @@ fn stack_result_to_concrete_type(
             }
         },
         SRMType(ctype) => {
-            return mk_ctype(resolved, ctype);
+            return stack_result_to_concrete_type_(resolved, ctype);
         }
     }
 }
 
-fn mk_ctype(resolved: &mut HashMap<char, ConcreteType>, ct: &MType<StackResult>) -> ConcreteType {
+fn stack_result_to_concrete_type_(resolved: &mut HashMap<char, ConcreteType>, ct: &MType<StackResult>) -> ConcreteType {
     match ct {
         MInt => MInt,
         MNat => MNat,
@@ -448,7 +448,7 @@ fn stack_result_nesting_to_concrete_nesting(
 ) -> Box<MNesting<Concrete>> {
     Box::new(match nesting {
         Other(t) => Nested(stack_result_to_concrete_type(resolved, t)),
-        Nested(c) => Nested(mk_ctype(resolved, c)),
+        Nested(c) => Nested(stack_result_to_concrete_type_(resolved, c)),
     })
 }
 
@@ -550,7 +550,6 @@ mod tests {
     use crate::instruction::InstructionListParser;
     use crate::typecheck;
     use crate::Instruction;
-    use crate::MValue;
     use crate::SomeValue;
     use crate::StackState;
     fn typecheck_<'a>(instructions: &Vec<Instruction<SomeValue>>) -> Result<StackState, &'a str> {
