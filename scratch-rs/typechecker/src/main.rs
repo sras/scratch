@@ -603,6 +603,10 @@ mod tests {
         ))));
         assert!(Result::is_err(&typecheck_(&parse("PUSH nat 5;ADD"))));
 
+        assert!(Result::is_err(&typecheck_(&parse(
+            "LAMBDA nat (pair nat nat) {DUP;PAIR};PUSH int 5;EXEC"
+        ))));
+
         // Stack result tests.
         assert_eq!(
             typecheck_(&parse("PUSH nat 5; PUSH nat 5;ADD"))
@@ -616,6 +620,13 @@ mod tests {
             4
         );
         assert_eq!(typecheck_(&parse("PUSH nat 5;DUP;DROP")).unwrap().len(), 1);
-        assert_eq!(typecheck_(&parse("LAMBDA nat (pair nat nat) {DUP;PAIR};PUSH nat 5;EXEC")).unwrap().len(), 1);
+        assert_eq!(
+            typecheck_(&parse(
+                "LAMBDA nat (pair nat nat) {DUP;PAIR};PUSH nat 5;EXEC"
+            ))
+            .unwrap()
+            .len(),
+            1
+        );
     }
 }
