@@ -18,6 +18,8 @@ use MValue::*;
 use SomeValue::*;
 use StackResult::*;
 
+type ResolveCache = HashMap<char, ConcreteType>;
+
 impl<T: Clone> Clone for MType<T> {
     fn clone(&self) -> Self {
         return map_mtype(self, |x| x);
@@ -141,12 +143,12 @@ lazy_static! {
     ]);
 }
 
-fn add_symbol<'a>(resolved: &mut HashMap<char, ConcreteType>, arg_con: char, type_: &ConcreteType) {
+fn add_symbol<'a>(resolved: &mut ResolveCache, arg_con: char, type_: &ConcreteType) {
     resolved.insert(arg_con, type_.clone());
 }
 
 fn unify_arg_nested<'a>(
-    resolved: &mut HashMap<char, ConcreteType>,
+    resolved: &mut ResolveCache,
     arg: &Box<MNesting<Concrete>>,
     arg_con: &Box<MNesting<Constraint>>,
 ) -> Result<(), &'a str> {
@@ -165,7 +167,7 @@ fn unify_arg_nested<'a>(
 fn unify_args<'a>(
     args: &Vec<ArgValue<SomeValue>>,
     arg_cons: &Vec<Constraint>,
-) -> Result<(HashMap<char, ConcreteType>, Vec<ArgValue<MValue>>), &'a str> {
+) -> Result<(ResolveCache, Vec<ArgValue<MValue>>), &'a str> {
     let mut resolved = HashMap::from([]);
     let mut args_ = vec![];
     for (arg, con) in args.iter().zip(arg_cons.iter()) {
@@ -175,7 +177,7 @@ fn unify_args<'a>(
 }
 
 fn unify_concrete_arg<'a>(
-    resolved: &mut HashMap<char, ConcreteType>,
+    resolved: &mut ResolveCache,
     arg: &ConcreteType,
     arg_con: &Constraint,
 ) -> Result<(), &'a str> {
@@ -253,7 +255,7 @@ fn unify_concrete_arg<'a>(
 }
 
 fn unify_arg<'a>(
-    resolved: &mut HashMap<char, ConcreteType>,
+    resolved: &mut ResolveCache,
     arg: ArgValue<SomeValue>,
     arg_con: Constraint,
 ) -> Result<ArgValue<MValue>, &'a str> {
@@ -291,7 +293,7 @@ fn unify_arg<'a>(
 }
 
 fn constraint_to_concrete(
-    resolved: &HashMap<char, ConcreteType>,
+    resolved: &ResolveCache,
     c: &Constraint,
 ) -> Option<ConcreteType> {
     match c {
@@ -318,7 +320,7 @@ fn constraint_to_concrete(
 }
 
 fn constrain_to_concrete_nested(
-    resolved: &HashMap<char, ConcreteType>,
+    resolved: &ResolveCache,
     c: &MNesting<Constraint>,
 ) -> Option<Box<MNesting<Concrete>>> {
     match c {
@@ -334,7 +336,7 @@ fn constrain_to_concrete_nested(
 }
 
 fn typecheck_value_<'a>(
-    resolved: &HashMap<char, ConcreteType>,
+    resolved: &ResolveCache,
     some_val: &SomeValue,
     target_box: Box<MNesting<Concrete>>,
 ) -> Result<(MValue, ConcreteType), &'a str> {
@@ -352,7 +354,7 @@ fn unwrap_ctbox(c: &MNesting<Concrete>) -> &ConcreteType {
 }
 
 fn type_check_value<'a>(
-    resolved: &HashMap<char, ConcreteType>,
+    resolved: &ResolveCache,
     some_val: &SomeValue,
     target: &ConcreteType,
 ) -> Result<(MValue, ConcreteType), &'a str> {
@@ -421,7 +423,7 @@ fn type_check_value<'a>(
 }
 
 fn stack_result_to_concrete_type(
-    resolved: &mut HashMap<char, ConcreteType>,
+    resolved: &mut ResolveCache,
     sr: &StackResult,
 ) -> ConcreteType {
     match sr {
@@ -440,7 +442,7 @@ fn stack_result_to_concrete_type(
 }
 
 fn stack_result_to_concrete_type_(
-    resolved: &mut HashMap<char, ConcreteType>,
+    resolved: &mut ResolveCache,
     ct: &MType<StackResult>,
 ) -> ConcreteType {
     match ct {
@@ -460,7 +462,7 @@ fn stack_result_to_concrete_type_(
 }
 
 fn stack_result_to_concrete_nested(
-    resolved: &mut HashMap<char, ConcreteType>,
+    resolved: &mut ResolveCache,
     nesting: &MNesting<StackResult>,
 ) -> Box<MNesting<Concrete>> {
     Box::new(match nesting {
@@ -470,7 +472,7 @@ fn stack_result_to_concrete_nested(
 }
 
 fn make_resolved_stack<'a>(
-    resolved: &mut HashMap<char, ConcreteType>,
+    resolved: &mut ResolveCache,
     sem_stack_out: &Vec<StackResult>,
 ) -> Result<StackState, &'a str> {
     let mut resolved_stack: StackState = vec![];
@@ -481,7 +483,7 @@ fn make_resolved_stack<'a>(
 }
 
 fn unify_stack<'a>(
-    resolved: &mut HashMap<char, ConcreteType>,
+    resolved: &mut ResolveCache,
     sem_stack_in: &Vec<StackArg>,
     sem_stack_out: &Vec<StackResult>,
     stack_state: &mut StackState,
