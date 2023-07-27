@@ -58,7 +58,7 @@ lazy_static! {
         (
             String::from("DUP"),
             InstructionDef {
-                args: Vec::from([]),
+                args: Vec::new(),
                 input_stack: Vec::from([Warg('a')]),
                 output_stack: Vec::from([SRArgRef('a'), SRArgRef('a')])
             }
@@ -66,15 +66,15 @@ lazy_static! {
         (
             String::from("DROP"),
             InstructionDef {
-                args: Vec::from([]),
+                args: Vec::new(),
                 input_stack: Vec::from([Warg('a')]),
-                output_stack: Vec::from([])
+                output_stack: Vec::new()
             }
         ),
         (
             String::from("ADD"),
             InstructionDef {
-                args: Vec::from([]),
+                args: Vec::new(),
                 input_stack: Vec::from([Warg('a'), TypeArgRef('a')]),
                 output_stack: Vec::from([SRArgRef('a')])
             }
@@ -82,7 +82,7 @@ lazy_static! {
         (
             String::from("CONS"),
             InstructionDef {
-                args: Vec::from([]),
+                args: Vec::new(),
                 input_stack: Vec::from([Warg('a'), Arg(MList(Box::new(Other(TypeArgRef('a')))))]),
                 output_stack: Vec::from([SRMType(MList(Box::new(Other(SRArgRef('a')))))])
             }
@@ -91,14 +91,14 @@ lazy_static! {
             String::from("PUSH"),
             InstructionDef {
                 args: Vec::from([TypeArg('a'), TypeArgRef('a')]),
-                input_stack: Vec::from([]),
+                input_stack: Vec::new(),
                 output_stack: Vec::from([SRArgRef('a')])
             }
         ),
         (
             String::from("PAIR"),
             InstructionDef {
-                args: Vec::from([]),
+                args: Vec::new(),
                 input_stack: Vec::from([Warg('a'), Warg('b')]),
                 output_stack: Vec::from([SRMType(MPair(
                     Box::new(Other(SRArgRef('a'))),
@@ -117,7 +117,7 @@ lazy_static! {
                         Box::new(Other(TypeArgRef('b')))
                     ))
                 ]),
-                input_stack: Vec::from([]),
+                input_stack: Vec::new(),
                 output_stack: Vec::from([SRMType(MLambda(
                     Box::new(Other(SRArgRef('a'))),
                     Box::new(Other(SRArgRef('b')))
@@ -127,7 +127,7 @@ lazy_static! {
         (
             String::from("EXEC"),
             InstructionDef {
-                args: Vec::from([]),
+                args: Vec::new(),
                 input_stack: Vec::from([
                     Warg('a'),
                     Arg(MLambda(
@@ -547,7 +547,7 @@ fn typecheck_one<'a>(
 }
 
 fn main() {
-    let mut stack = Vec::from([]);
+    let mut stack = Vec::new();
     match parser::InstructionListParser::new().parse(
         "LAMBDA nat (pair nat nat) {DUP;PAIR};PUSH nat 5;PUSH (pair nat int) (Pair 5 10);DROP",
     ) {
@@ -570,7 +570,7 @@ mod tests {
     use crate::SomeValue;
     use crate::StackState;
     fn typecheck_<'a>(instructions: &Vec<Instruction<SomeValue>>) -> Result<StackState, &'a str> {
-        let mut stack = Vec::from([]);
+        let mut stack = Vec::new();
         typecheck(instructions, &mut stack)?;
         return Result::Ok(stack);
     }
