@@ -433,19 +433,19 @@ fn stack_result_to_concrete_type_(
         MInt => MInt,
         MNat => MNat,
         MString => MString,
-        MList(l) => MList(stack_result_nesting_to_concrete_nesting(resolved, &l)),
+        MList(l) => MList(nested_stack_result_nested_concrete(resolved, &l)),
         MPair(l, r) => MPair(
-            stack_result_nesting_to_concrete_nesting(resolved, &l),
-            stack_result_nesting_to_concrete_nesting(resolved, &r),
+            nested_stack_result_nested_concrete(resolved, &l),
+            nested_stack_result_nested_concrete(resolved, &r),
         ),
         MLambda(l, r) => MLambda(
-            stack_result_nesting_to_concrete_nesting(resolved, &l),
-            stack_result_nesting_to_concrete_nesting(resolved, &r),
+            nested_stack_result_nested_concrete(resolved, &l),
+            nested_stack_result_nested_concrete(resolved, &r),
         ),
     }
 }
 
-fn stack_result_nesting_to_concrete_nesting(
+fn nested_stack_result_nested_concrete(
     resolved: &mut HashMap<char, ConcreteType>,
     nesting: &MNesting<StackResult>,
 ) -> Box<MNesting<Concrete>> {
