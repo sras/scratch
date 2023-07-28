@@ -32,7 +32,7 @@ fn map_mtype<T: Clone, H>(ct: &MType<T>, cb: fn(&T) -> H) -> MType<H> {
         MPair(l, r) => MPair(Box::new(map_mtype(l, cb)), Box::new(map_mtype(r, cb))),
         MLambda(l, r) => MLambda(Box::new(map_mtype(l, cb)), Box::new(map_mtype(r, cb))),
         MList(l) => MList(Box::new(map_mtype(l, cb))),
-        MWrapped(w) => MWrapped(cb(w))
+        MWrapped(w) => MWrapped(cb(w)),
     }
 }
 
@@ -66,7 +66,10 @@ lazy_static! {
             String::from("CONS"),
             InstructionDef {
                 args: Vec::new(),
-                input_stack: Vec::from([MWrapped(Warg('a')), MList(Box::new(MWrapped(TypeArgRef('a'))))]),
+                input_stack: Vec::from([
+                    MWrapped(Warg('a')),
+                    MList(Box::new(MWrapped(TypeArgRef('a'))))
+                ]),
                 output_stack: Vec::from([MList(Box::new(MWrapped('a')))])
             }
         ),
@@ -83,10 +86,7 @@ lazy_static! {
             InstructionDef {
                 args: Vec::new(),
                 input_stack: Vec::from([MWrapped(Warg('a')), MWrapped(Warg('b'))]),
-                output_stack: Vec::from([MPair(
-                        Box::new(MWrapped('a')),
-                        Box::new(MWrapped('b'))
-                        )])
+                output_stack: Vec::from([MPair(Box::new(MWrapped('a')), Box::new(MWrapped('b')))])
             }
         ),
         (
@@ -98,13 +98,13 @@ lazy_static! {
                     MLambda(
                         Box::new(MWrapped(TypeArgRef('a'))),
                         Box::new(MWrapped(TypeArgRef('b')))
-                        )
+                    )
                 ]),
                 input_stack: Vec::new(),
                 output_stack: Vec::from([MLambda(
-                        Box::new(MWrapped('a')),
-                        Box::new(MWrapped('b'))
-                        )])
+                    Box::new(MWrapped('a')),
+                    Box::new(MWrapped('b'))
+                )])
             }
         ),
         (
@@ -116,7 +116,7 @@ lazy_static! {
                     MLambda(
                         Box::new(MWrapped(TypeArgRef('a'))),
                         Box::new(MWrapped(Warg('b')))
-                        )
+                    )
                 ]),
                 output_stack: Vec::from([MWrapped('b')])
             }
@@ -321,10 +321,7 @@ fn typecheck_value<'a>(
                             if (*real_out) == lambda_output {
                                 return Result::Ok((
                                     VLambda(tins),
-                                    MLambda(
-                                        Box::new(lambda_input),
-                                        Box::new(lambda_output),
-                                    ),
+                                    MLambda(Box::new(lambda_input), Box::new(lambda_output)),
                                 ));
                             } else {
                                 return Err("Lambda does not match the expected type");
@@ -350,7 +347,10 @@ fn stack_result_to_concrete_type(resolved: &mut ResolveCache, sr: &StackResult) 
         MInt => MInt,
         MNat => MNat,
         MString => MString,
-        MList(l) => MList(Box::new(stack_result_to_concrete_type(resolved, l.as_ref()))),
+        MList(l) => MList(Box::new(stack_result_to_concrete_type(
+            resolved,
+            l.as_ref(),
+        ))),
         MPair(l, r) => MPair(
             Box::new(stack_result_to_concrete_type(resolved, &l)),
             Box::new(stack_result_to_concrete_type(resolved, &r)),
@@ -410,7 +410,7 @@ fn coerce_concrete<T>(c: &MType<Concrete>) -> MType<T> {
         MPair(l, r) => MPair(Box::new(coerce_concrete(l)), Box::new(coerce_concrete(r))),
         MLambda(l, r) => MLambda(Box::new(coerce_concrete(l)), Box::new(coerce_concrete(r))),
         MList(l) => MList(Box::new(coerce_concrete(l))),
-        MWrapped(_) => unreachable!()
+        MWrapped(_) => unreachable!(),
     }
 }
 
