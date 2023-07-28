@@ -8,50 +8,31 @@ use types::*;
 use std::collections::HashMap;
 use std::convert::TryFrom;
 
+use ArgConstraint::*;
 use ArgValue as AV;
 use AtomicValue::*;
 use CompositeValue::*;
-use Constraint::*;
-use MNesting::*;
 use MType::*;
 use MValue::*;
 use SomeValue::*;
-use StackResult::*;
 
 type ResolveCache = HashMap<char, ConcreteType>;
 
 impl<T: Clone> Clone for MType<T> {
     fn clone(&self) -> Self {
-        return map_mtype(self, |x| x);
+        return map_mtype(self, |_| unreachable!());
     }
 }
 
-impl<T: Clone> Clone for MNesting<T> {
-    fn clone(&self) -> Self {
-        match self {
-            Nested(a) => Nested(a.clone()),
-            Other(a) => Other(a.clone()),
-        }
-    }
-}
-
-fn map_nesting<T: Clone, H>(nesting: &Box<MNesting<T>>, cb: fn(T) -> H) -> Box<MNesting<H>> {
-    match nesting.as_ref() {
-        Other(t) => {
-            return Box::new(Other(cb((*t).clone())));
-        }
-        Nested(c) => Box::new(Nested(map_mtype(c, cb))),
-    }
-}
-
-fn map_mtype<T: Clone, H>(ct: &MType<T>, cb: fn(T) -> H) -> MType<H> {
+fn map_mtype<T: Clone, H>(ct: &MType<T>, cb: fn(&T) -> H) -> MType<H> {
     match ct {
         MNat => MNat,
         MInt => MInt,
         MString => MString,
-        MPair(l, r) => MPair(map_nesting(l, cb), map_nesting(r, cb)),
-        MLambda(l, r) => MLambda(map_nesting(l, cb), map_nesting(r, cb)),
-        MList(l) => MList(map_nesting(l, cb)),
+        MPair(l, r) => MPair(Box::new(map_mtype(l, cb)), Box::new(map_mtype(r, cb))),
+        MLambda(l, r) => MLambda(Box::new(map_mtype(l, cb)), Box::new(map_mtype(r, cb))),
+        MList(l) => MList(Box::new(map_mtype(l, cb))),
+        MWrapped(w) => MWrapped(cb(w))
     }
 }
 
@@ -61,15 +42,15 @@ lazy_static! {
             String::from("DUP"),
             InstructionDef {
                 args: Vec::new(),
-                input_stack: Vec::from([Warg('a')]),
-                output_stack: Vec::from([SRArgRef('a'), SRArgRef('a')])
+                input_stack: Vec::from([MWrapped(Warg('a'))]),
+                output_stack: Vec::from([MWrapped('a'), MWrapped('a')])
             }
         ),
         (
             String::from("DROP"),
             InstructionDef {
                 args: Vec::new(),
-                input_stack: Vec::from([Warg('a')]),
+                input_stack: Vec::from([MWrapped(Warg('a'))]),
                 output_stack: Vec::new()
             }
         ),
@@ -77,53 +58,53 @@ lazy_static! {
             String::from("ADD"),
             InstructionDef {
                 args: Vec::new(),
-                input_stack: Vec::from([Warg('a'), TypeArgRef('a')]),
-                output_stack: Vec::from([SRArgRef('a')])
+                input_stack: Vec::from([MWrapped(Warg('a')), MWrapped(TypeArgRef('a'))]),
+                output_stack: Vec::from([MWrapped('a')])
             }
         ),
         (
             String::from("CONS"),
             InstructionDef {
                 args: Vec::new(),
-                input_stack: Vec::from([Warg('a'), Arg(MList(Box::new(Other(TypeArgRef('a')))))]),
-                output_stack: Vec::from([SRMType(MList(Box::new(Other(SRArgRef('a')))))])
+                input_stack: Vec::from([MWrapped(Warg('a')), MList(Box::new(MWrapped(TypeArgRef('a'))))]),
+                output_stack: Vec::from([MList(Box::new(MWrapped('a')))])
             }
         ),
         (
             String::from("PUSH"),
             InstructionDef {
-                args: Vec::from([TypeArg('a'), TypeArgRef('a')]),
+                args: Vec::from([MWrapped(TypeArg('a')), MWrapped(TypeArgRef('a'))]),
                 input_stack: Vec::new(),
-                output_stack: Vec::from([SRArgRef('a')])
+                output_stack: Vec::from([MWrapped('a')])
             }
         ),
         (
             String::from("PAIR"),
             InstructionDef {
                 args: Vec::new(),
-                input_stack: Vec::from([Warg('a'), Warg('b')]),
-                output_stack: Vec::from([SRMType(MPair(
-                    Box::new(Other(SRArgRef('a'))),
-                    Box::new(Other(SRArgRef('b')))
-                ))])
+                input_stack: Vec::from([MWrapped(Warg('a')), MWrapped(Warg('b'))]),
+                output_stack: Vec::from([MPair(
+                        Box::new(MWrapped('a')),
+                        Box::new(MWrapped('b'))
+                        )])
             }
         ),
         (
             String::from("LAMBDA"),
             InstructionDef {
                 args: Vec::from([
-                    TypeArg('a'),
-                    TypeArg('b'),
-                    Arg(MLambda(
-                        Box::new(Other(TypeArgRef('a'))),
-                        Box::new(Other(TypeArgRef('b')))
-                    ))
+                    MWrapped(TypeArg('a')),
+                    MWrapped(TypeArg('b')),
+                    MLambda(
+                        Box::new(MWrapped(TypeArgRef('a'))),
+                        Box::new(MWrapped(TypeArgRef('b')))
+                        )
                 ]),
                 input_stack: Vec::new(),
-                output_stack: Vec::from([SRMType(MLambda(
-                    Box::new(Other(SRArgRef('a'))),
-                    Box::new(Other(SRArgRef('b')))
-                ))])
+                output_stack: Vec::from([MLambda(
+                        Box::new(MWrapped('a')),
+                        Box::new(MWrapped('b'))
+                        )])
             }
         ),
         (
@@ -131,13 +112,13 @@ lazy_static! {
             InstructionDef {
                 args: Vec::new(),
                 input_stack: Vec::from([
-                    Warg('a'),
-                    Arg(MLambda(
-                        Box::new(Other(TypeArgRef('a'))),
-                        Box::new(Other(Warg('b')))
-                    ))
+                    MWrapped(Warg('a')),
+                    MLambda(
+                        Box::new(MWrapped(TypeArgRef('a'))),
+                        Box::new(MWrapped(Warg('b')))
+                        )
                 ]),
-                output_stack: Vec::from([SRArgRef('b')])
+                output_stack: Vec::from([MWrapped('b')])
             }
         )
     ]);
@@ -147,23 +128,6 @@ fn add_symbol<'a>(resolved: &mut ResolveCache, arg_con: char, type_: &ConcreteTy
     resolved.insert(arg_con, type_.clone());
 }
 
-fn unify_arg_nested<'a>(
-    resolved: &mut ResolveCache,
-    arg: &Box<MNesting<Concrete>>,
-    arg_con: &Box<MNesting<Constraint>>,
-) -> Result<(), &'a str> {
-    let constraint = match arg_con.as_ref() {
-        Other(c) => c.clone(),
-        Nested(arg_con_) => Arg(arg_con_.clone()),
-    };
-    match arg.as_ref() {
-        Nested(arg_) => {
-            return unify_concrete_arg(resolved, arg_, &constraint);
-        }
-        _ => panic!("Impossible!"),
-    }
-}
-
 fn unify_args<'a>(
     args: &Vec<ArgValue<SomeValue>>,
     arg_cons: &Vec<Constraint>,
@@ -171,7 +135,7 @@ fn unify_args<'a>(
     let mut resolved = HashMap::new();
     let mut args_ = Vec::new();
     for (arg, con) in args.iter().zip(arg_cons.iter()) {
-        args_.push(unify_arg(&mut resolved, arg.clone(), con.clone())?);
+        args_.push(unify_arg(&mut resolved, arg, con.clone())?);
     }
     return Result::Ok((resolved, args_));
 }
@@ -182,88 +146,86 @@ fn unify_concrete_arg<'a>(
     arg_con: &Constraint,
 ) -> Result<(), &'a str> {
     match arg_con {
-        Warg(c) => {
+        MWrapped(Warg(c)) => {
             add_symbol(resolved, c.clone(), arg);
             return Result::Ok(());
         }
-        TypeArg(c) => {
+        MWrapped(TypeArg(c)) => {
             add_symbol(resolved, c.clone(), arg);
             return Result::Ok(());
         }
-        TypeArgRef(c) => match resolved.get(&c) {
+        MWrapped(TypeArgRef(c)) => match resolved.get(&c) {
             Some(tt) => {
-                return unify_concrete_arg(resolved, arg, &Arg(coerce_concrete(tt)));
+                return unify_concrete_arg(resolved, arg, &coerce_concrete(tt));
             }
             _ => {
                 return Result::Err("Unknown type ref");
             }
         },
-        Arg(c) => match c {
-            MList(ic) => match arg {
-                MList(iv) => {
-                    return unify_arg_nested(resolved, iv, ic);
-                }
+        MList(ic) => match arg {
+            MList(iv) => {
+                return unify_concrete_arg(resolved, iv.as_ref(), ic);
+            }
 
-                _ => {
-                    return Result::Err("Expecting a list but got something else...");
-                }
-            },
-            MLambda(vin, vout) => match arg {
-                MLambda(cin, cout) => {
-                    return unify_arg_nested(resolved, cin, vin)
-                        .and_then(|_| unify_arg_nested(resolved, cout, vout));
-                }
-                _ => {
-                    return Result::Err("Expecting a lambda but got something else...");
-                }
-            },
-            MPair(cl, cr) => match arg {
-                MPair(vl, vr) => {
-                    return unify_arg_nested(resolved, vl, cl)
-                        .and_then(|_| unify_arg_nested(resolved, vr, cr));
-                }
-                _ => {
-                    return Result::Err("Expecting a pair but got something else...");
-                }
-            },
-            MNat => match arg {
-                MNat => {
-                    return Result::Ok(());
-                }
-                _ => {
-                    return Result::Err("Expecting a `Nat`, but found something else...");
-                }
-            },
-            MInt => match arg {
-                MInt => {
-                    return Result::Ok(());
-                }
-                _ => {
-                    return Result::Err("Expecting a `Int`, but found something else...");
-                }
-            },
-            MString => match arg {
-                MString => {
-                    return Result::Ok(());
-                }
-                _ => {
-                    return Result::Err("Expecting a `String`, but found something else...");
-                }
-            },
+            _ => {
+                return Result::Err("Expecting a list but got something else...");
+            }
+        },
+        MLambda(vin, vout) => match arg {
+            MLambda(cin, cout) => {
+                return unify_concrete_arg(resolved, cin, vin)
+                    .and_then(|_| unify_concrete_arg(resolved, cout, vout));
+            }
+            _ => {
+                return Result::Err("Expecting a lambda but got something else...");
+            }
+        },
+        MPair(cl, cr) => match arg {
+            MPair(vl, vr) => {
+                return unify_concrete_arg(resolved, vl, cl)
+                    .and_then(|_| unify_concrete_arg(resolved, vr, cr));
+            }
+            _ => {
+                return Result::Err("Expecting a pair but got something else...");
+            }
+        },
+        MNat => match arg {
+            MNat => {
+                return Result::Ok(());
+            }
+            _ => {
+                return Result::Err("Expecting a `Nat`, but found something else...");
+            }
+        },
+        MInt => match arg {
+            MInt => {
+                return Result::Ok(());
+            }
+            _ => {
+                return Result::Err("Expecting a `Int`, but found something else...");
+            }
+        },
+        MString => match arg {
+            MString => {
+                return Result::Ok(());
+            }
+            _ => {
+                return Result::Err("Expecting a `String`, but found something else...");
+            }
         },
     }
 }
 
 fn unify_arg<'a>(
     resolved: &mut ResolveCache,
-    arg: ArgValue<SomeValue>,
-    arg_con: Constraint,
+    arg: &ArgValue<SomeValue>,
+    arg_con: &Constraint,
 ) -> Result<ArgValue<MValue>, &'a str> {
     match arg {
         AV::TypeArg(ct) => match arg_con {
-            TypeArg(c) => {
-                add_symbol(resolved, c, &ct);
-                return Result::Ok(AV::TypeArg(ct));
+            MWrapped(TypeArg(c)) => {
+                add_symbol(resolved, *c, &ct);
+                return Result::Ok(AV::TypeArg((*ct).clone()));
             }
             _ => {
                 panic!("Unexpected type name argument");
@@ -271,18 +233,18 @@ fn unify_arg<'a>(
         },
         AV::ValueArg(some_val) => {
             let (m, ct): (MValue, ConcreteType) = match arg_con {
-                TypeArg(_) => {
+                MWrapped(TypeArg(_)) => {
                     panic!("Unexpected value argument");
                 }
-                Warg(_) => {
+                MWrapped(Warg(_)) => {
                     panic!("Unexpected wildcard type encountered");
                 }
-                TypeArgRef(ref c) => match resolved.get(&c) {
-                    Some(ct) => type_check_value(resolved, &some_val, ct)?,
+                MWrapped(TypeArgRef(ref c)) => match resolved.get(&c) {
+                    Some(ct) => typecheck_value(resolved, &some_val, ct)?,
                     None => panic!("Symbol resolution failed! {:?}", c),
                 },
-                Arg(_) => match constraint_to_concrete(resolved, &arg_con) {
-                    Some(concrete_type) => type_check_value(resolved, &some_val, &concrete_type)?,
+                _ => match constraint_to_concrete(resolved, &arg_con) {
+                    Some(concrete_type) => typecheck_value(resolved, &some_val, &concrete_type)?,
                     None => panic!("Couldnt resolve type"),
                 },
             };
@@ -292,68 +254,29 @@ fn unify_arg<'a>(
     }
 }
 
-fn constraint_to_concrete(
-    resolved: &ResolveCache,
-    c: &Constraint,
-) -> Option<ConcreteType> {
+fn constraint_to_concrete(resolved: &ResolveCache, c: &Constraint) -> Option<ConcreteType> {
     match c {
-        Arg(ctc) => match ctc {
-            MInt => Some(MInt),
-            MNat => Some(MNat),
-            MString => Some(MString),
-            MPair(l, r) => Some(MPair(
-                constrain_to_concrete_nested(resolved, l)?,
-                constrain_to_concrete_nested(resolved, r)?,
-            )),
-            MList(l) => Some(MList(constrain_to_concrete_nested(resolved, l)?)),
-            MLambda(l, r) => Some(MLambda(
-                constrain_to_concrete_nested(resolved, l)?,
-                constrain_to_concrete_nested(resolved, r)?,
-            )),
-        },
-        TypeArgRef(c) => match resolved.get(&c) {
+        MWrapped(TypeArgRef(c)) => match resolved.get(&c) {
             Some(ct) => Some(ct.clone()),
             None => None,
         },
+        MInt => Some(MInt),
+        MNat => Some(MNat),
+        MString => Some(MString),
+        MPair(l, r) => Some(MPair(
+            Box::new(constraint_to_concrete(resolved, l)?),
+            Box::new(constraint_to_concrete(resolved, r)?),
+        )),
+        MList(l) => Some(MList(Box::new(constraint_to_concrete(resolved, l)?))),
+        MLambda(l, r) => Some(MLambda(
+            Box::new(constraint_to_concrete(resolved, l)?),
+            Box::new(constraint_to_concrete(resolved, r)?),
+        )),
         _ => None,
     }
 }
 
-fn constrain_to_concrete_nested(
-    resolved: &ResolveCache,
-    c: &MNesting<Constraint>,
-) -> Option<Box<MNesting<Concrete>>> {
-    match c {
-        Other(c) => match constraint_to_concrete(resolved, c) {
-            Some(x) => Some(Box::new(Nested(x))),
-            None => None,
-        },
-        Nested(c) => match constraint_to_concrete(resolved, &Arg(c.clone())) {
-            Some(x) => Some(Box::new(Nested(x))),
-            None => None,
-        },
-    }
-}
-
-fn typecheck_value_<'a>(
-    resolved: &ResolveCache,
-    some_val: &SomeValue,
-    target_box: Box<MNesting<Concrete>>,
-) -> Result<(MValue, ConcreteType), &'a str> {
-    match target_box.as_ref() {
-        Nested(ctype) => type_check_value(resolved, some_val, ctype),
-        _ => panic!("Impossible"),
-    }
-}
-
-fn unwrap_ctbox(c: &MNesting<Concrete>) -> &ConcreteType {
-    match c {
-        Other(_) => panic!("Impossible!"),
-        Nested(x) => return x,
-    }
-}
-
-fn type_check_value<'a>(
+fn typecheck_value<'a>(
     resolved: &ResolveCache,
     some_val: &SomeValue,
     target: &ConcreteType,
@@ -369,7 +292,7 @@ fn type_check_value<'a>(
             CVList(items) => {
                 let mut il: Vec<MValue> = vec![];
                 for i in items {
-                    let (mv, _) = typecheck_value_(resolved, i, c.clone())?;
+                    let (mv, _) = typecheck_value(resolved, i, c.as_ref())?;
                     il.push(mv);
                 }
                 return Ok((VList(il), MList(c.clone())));
@@ -378,29 +301,29 @@ fn type_check_value<'a>(
         },
         (MPair(c1, c2), Composite(cv)) => match cv.as_ref() {
             CVPair(sv1, sv2) => {
-                let (mv1, ct1) = typecheck_value_(resolved, sv1, c1.clone())?;
-                let (mv2, ct2) = typecheck_value_(resolved, sv2, c2.clone())?;
+                let (mv1, ct1) = typecheck_value(resolved, sv1, c1.as_ref())?;
+                let (mv2, ct2) = typecheck_value(resolved, sv2, c2.as_ref())?;
                 return Result::Ok((
                     VPair(Box::new(mv1), Box::new(mv2)),
-                    MPair(Box::new(Nested(ct1)), Box::new(Nested(ct2))),
+                    MPair(Box::new(ct1), Box::new(ct2)),
                 ));
             }
             _ => Err("Expecting a Pair but found something else..."),
         },
         (MLambda(c1, c2), Composite(cv)) => match cv.as_ref() {
             CVLambda(instructions) => {
-                let lambda_input = unwrap_ctbox(c1);
-                let lambda_output = unwrap_ctbox(c2);
+                let lambda_input = c1.as_ref().clone();
+                let lambda_output = c2.as_ref().clone();
                 let mut stack: StackState = Vec::from([lambda_input.clone()]);
                 match typecheck(instructions, &mut stack) {
                     Ok(tins) => match stack[..] {
                         [ref real_out] => {
-                            if (*real_out) == (*lambda_output) {
+                            if (*real_out) == lambda_output {
                                 return Result::Ok((
                                     VLambda(tins),
                                     MLambda(
-                                        Box::new(Nested(lambda_input.clone())),
-                                        Box::new(Nested(lambda_output.clone())),
+                                        Box::new(lambda_input),
+                                        Box::new(lambda_output),
                                     ),
                                 ));
                             } else {
@@ -422,12 +345,21 @@ fn type_check_value<'a>(
     }
 }
 
-fn stack_result_to_concrete_type(
-    resolved: &mut ResolveCache,
-    sr: &StackResult,
-) -> ConcreteType {
+fn stack_result_to_concrete_type(resolved: &mut ResolveCache, sr: &StackResult) -> ConcreteType {
     match sr {
-        SRArgRef(c) => match resolved.get(&c) {
+        MInt => MInt,
+        MNat => MNat,
+        MString => MString,
+        MList(l) => MList(Box::new(stack_result_to_concrete_type(resolved, l.as_ref()))),
+        MPair(l, r) => MPair(
+            Box::new(stack_result_to_concrete_type(resolved, &l)),
+            Box::new(stack_result_to_concrete_type(resolved, &r)),
+        ),
+        MLambda(l, r) => MLambda(
+            Box::new(stack_result_to_concrete_type(resolved, &l)),
+            Box::new(stack_result_to_concrete_type(resolved, &r)),
+        ),
+        MWrapped(c) => match resolved.get(&c) {
             Some(ct) => {
                 return (*ct).clone();
             }
@@ -435,40 +367,7 @@ fn stack_result_to_concrete_type(
                 panic!("Symbol resolution failed! {:?}", c)
             }
         },
-        SRMType(ctype) => {
-            return stack_result_to_concrete_type_(resolved, ctype);
-        }
     }
-}
-
-fn stack_result_to_concrete_type_(
-    resolved: &mut ResolveCache,
-    ct: &MType<StackResult>,
-) -> ConcreteType {
-    match ct {
-        MInt => MInt,
-        MNat => MNat,
-        MString => MString,
-        MList(l) => MList(stack_result_to_concrete_nested(resolved, &l)),
-        MPair(l, r) => MPair(
-            stack_result_to_concrete_nested(resolved, &l),
-            stack_result_to_concrete_nested(resolved, &r),
-        ),
-        MLambda(l, r) => MLambda(
-            stack_result_to_concrete_nested(resolved, &l),
-            stack_result_to_concrete_nested(resolved, &r),
-        ),
-    }
-}
-
-fn stack_result_to_concrete_nested(
-    resolved: &mut ResolveCache,
-    nesting: &MNesting<StackResult>,
-) -> Box<MNesting<Concrete>> {
-    Box::new(match nesting {
-        Other(t) => Nested(stack_result_to_concrete_type(resolved, t)),
-        Nested(c) => Nested(stack_result_to_concrete_type_(resolved, c)),
-    })
 }
 
 fn make_resolved_stack<'a>(
@@ -494,7 +393,7 @@ fn unify_stack<'a>(
     }
     for constraint in sem_stack_in {
         let stack_elem = &stack_state[stack_index];
-        unify_concrete_arg(resolved, &coerce_concrete(stack_elem), &constraint)?;
+        unify_concrete_arg(resolved, &stack_elem, &constraint)?;
         stack_index = stack_index + 1;
     }
     let mut rs = make_resolved_stack(resolved, sem_stack_out)?;
@@ -503,18 +402,15 @@ fn unify_stack<'a>(
     return Result::Ok(());
 }
 
-fn coerce_nested<T>(nested: &Box<MNesting<Concrete>>) -> Box<MNesting<T>> {
-    Box::new(Nested(coerce_concrete(unwrap_ctbox(nested))))
-}
-
 fn coerce_concrete<T>(c: &MType<Concrete>) -> MType<T> {
     match c {
         MInt => MInt,
         MNat => MNat,
         MString => MString,
-        MPair(l, r) => MPair(coerce_nested(l), coerce_nested(r)),
-        MLambda(l, r) => MLambda(coerce_nested(l), coerce_nested(r)),
-        MList(l) => MList(coerce_nested(l)),
+        MPair(l, r) => MPair(Box::new(coerce_concrete(l)), Box::new(coerce_concrete(r))),
+        MLambda(l, r) => MLambda(Box::new(coerce_concrete(l)), Box::new(coerce_concrete(r))),
+        MList(l) => MList(Box::new(coerce_concrete(l))),
+        MWrapped(_) => unreachable!()
     }
 }
 
@@ -622,7 +518,10 @@ mod tests {
             4
         );
         assert_eq!(typecheck_(&parse("PUSH nat 5;DUP;DROP")).unwrap().len(), 1);
-        assert_eq!(typecheck_(&parse("PUSH (list nat) {5;6}")).unwrap().len(), 1);
+        assert_eq!(
+            typecheck_(&parse("PUSH (list nat) {5;6}")).unwrap().len(),
+            1
+        );
         assert_eq!(
             typecheck_(&parse(
                 "LAMBDA nat (pair nat nat) {DUP;PAIR};PUSH nat 5;EXEC"

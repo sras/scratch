@@ -1,8 +1,7 @@
 // auto-generated: "lalrpop 0.20.0"
-// sha3: 4fc93589da2ad82e5bc63f3996c2368d90a6832e7a7003131d208a6c2a2fe6c0
+// sha3: b04825ec421d291d8e46a97884f343ce53e0468a6e56acfa316d79b0608fa305
 use std::str::FromStr;
 use crate::types::MType::*;
-use crate::types::MNesting::*;
 use crate::types::ConcreteType;
 use crate::types::Instruction;
 use crate::types::ArgValue;
@@ -26,7 +25,6 @@ mod __parse__InstructionList {
 
     use std::str::FromStr;
     use crate::types::MType::*;
-    use crate::types::MNesting::*;
     use crate::types::ConcreteType;
     use crate::types::Instruction;
     use crate::types::ArgValue;
@@ -1446,7 +1444,6 @@ mod __intern_token {
     #![allow(unused_imports)]
     use std::str::FromStr;
     use crate::types::MType::*;
-    use crate::types::MNesting::*;
     use crate::types::ConcreteType;
     use crate::types::Instruction;
     use crate::types::ArgValue;
@@ -1774,7 +1771,7 @@ fn __action22<
     (_, t1, _): (usize, ConcreteType, usize),
 ) -> ConcreteType
 {
-    MList (Box::new(Nested( t1)))
+    MList (Box::new(t1))
 }
 
 #[allow(unused_variables)]
@@ -1788,7 +1785,7 @@ fn __action23<
     (_, t2, _): (usize, ConcreteType, usize),
 ) -> ConcreteType
 {
-    MPair (Box::new(Nested( t1)), Box::new(Nested(t2)))
+    MPair (Box::new(t1), Box::new(t2))
 }
 
 #[allow(unused_variables)]
