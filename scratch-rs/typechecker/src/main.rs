@@ -11,12 +11,12 @@ use std::convert::TryFrom;
 use ArgConstraint::*;
 use ArgValue as AV;
 use AtomicValue::*;
-use MAtomic::*;
 use CompositeValue::*;
-use StackResultElem::*;
+use MAtomic::*;
 use MType::*;
 use MValue::*;
 use SomeValue::*;
+use StackResultElem::*;
 
 type ResolveCache = HashMap<char, ConcreteType>;
 
@@ -85,7 +85,10 @@ lazy_static! {
             InstructionDef {
                 args: Vec::new(),
                 input_stack: Vec::from([MWrapped(Warg('a')), MWrapped(Warg('b'))]),
-                output_stack: Vec::from([MPair(Box::new(MWrapped(TRef('a'))), Box::new(MWrapped(TRef('b'))))])
+                output_stack: Vec::from([MPair(
+                    Box::new(MWrapped(TRef('a'))),
+                    Box::new(MWrapped(TRef('b')))
+                )])
             }
         ),
         (
@@ -343,9 +346,21 @@ fn typecheck_value<'a>(
 
 fn stack_result_to_concrete_type(resolved: &mut ResolveCache, sr: &StackResult) -> ConcreteType {
     match sr {
-        MWrapped(ElemType(MInt)) => MWrapped(MInt),
-        MWrapped(ElemType(MNat)) => MWrapped(MNat),
-        MWrapped(ElemType(MString)) => MWrapped(MString),
+        MWrapped(wrp) => match wrp {
+            ElemType(et) => match et {
+                MInt => MWrapped(MInt),
+                MNat => MWrapped(MNat),
+                MString => MWrapped(MString),
+            },
+            TRef(c) => match resolved.get(&c) {
+                Some(ct) => {
+                    return (*ct).clone();
+                }
+                None => {
+                    panic!("Symbol resolution failed! {:?}", c)
+                }
+            },
+        },
         MList(l) => MList(Box::new(stack_result_to_concrete_type(
             resolved,
             l.as_ref(),
@@ -358,14 +373,6 @@ fn stack_result_to_concrete_type(resolved: &mut ResolveCache, sr: &StackResult) 
             Box::new(stack_result_to_concrete_type(resolved, &l)),
             Box::new(stack_result_to_concrete_type(resolved, &r)),
         ),
-        MWrapped(TRef(c)) => match resolved.get(&c) {
-            Some(ct) => {
-                return (*ct).clone();
-            }
-            None => {
-                panic!("Symbol resolution failed! {:?}", c)
-            }
-        },
     }
 }
 
