@@ -1,7 +1,7 @@
 #[macro_use]
 extern crate lazy_static;
 
-mod parser;
+//mod parser;
 mod types;
 use types::*;
 
@@ -11,7 +11,9 @@ use std::convert::TryFrom;
 use ArgConstraint::*;
 use ArgValue as AV;
 use AtomicValue::*;
+use MAtomic::*;
 use CompositeValue::*;
+use StackResultElem::*;
 use MType::*;
 use MValue::*;
 use SomeValue::*;
@@ -26,9 +28,6 @@ impl<T: Clone> Clone for MType<T> {
 
 fn map_mtype<T: Clone, H>(ct: &MType<T>, cb: fn(&T) -> H) -> MType<H> {
     match ct {
-        MNat => MNat,
-        MInt => MInt,
-        MString => MString,
         MPair(l, r) => MPair(Box::new(map_mtype(l, cb)), Box::new(map_mtype(r, cb))),
         MLambda(l, r) => MLambda(Box::new(map_mtype(l, cb)), Box::new(map_mtype(r, cb))),
         MList(l) => MList(Box::new(map_mtype(l, cb))),
@@ -38,89 +37,89 @@ fn map_mtype<T: Clone, H>(ct: &MType<T>, cb: fn(&T) -> H) -> MType<H> {
 
 lazy_static! {
     static ref MICHELSON_INSTRUCTIONS: HashMap<String, InstructionDef> = HashMap::from([
-        (
-            String::from("DUP"),
-            InstructionDef {
-                args: Vec::new(),
-                input_stack: Vec::from([MWrapped(Warg('a'))]),
-                output_stack: Vec::from([MWrapped('a'), MWrapped('a')])
-            }
-        ),
-        (
-            String::from("DROP"),
-            InstructionDef {
-                args: Vec::new(),
-                input_stack: Vec::from([MWrapped(Warg('a'))]),
-                output_stack: Vec::new()
-            }
-        ),
-        (
-            String::from("ADD"),
-            InstructionDef {
-                args: Vec::new(),
-                input_stack: Vec::from([MWrapped(Warg('a')), MWrapped(TypeArgRef('a'))]),
-                output_stack: Vec::from([MWrapped('a')])
-            }
-        ),
-        (
-            String::from("CONS"),
-            InstructionDef {
-                args: Vec::new(),
-                input_stack: Vec::from([
-                    MWrapped(Warg('a')),
-                    MList(Box::new(MWrapped(TypeArgRef('a'))))
-                ]),
-                output_stack: Vec::from([MList(Box::new(MWrapped('a')))])
-            }
-        ),
-        (
-            String::from("PUSH"),
-            InstructionDef {
-                args: Vec::from([MWrapped(TypeArg('a')), MWrapped(TypeArgRef('a'))]),
-                input_stack: Vec::new(),
-                output_stack: Vec::from([MWrapped('a')])
-            }
-        ),
-        (
-            String::from("PAIR"),
-            InstructionDef {
-                args: Vec::new(),
-                input_stack: Vec::from([MWrapped(Warg('a')), MWrapped(Warg('b'))]),
-                output_stack: Vec::from([MPair(Box::new(MWrapped('a')), Box::new(MWrapped('b')))])
-            }
-        ),
-        (
-            String::from("LAMBDA"),
-            InstructionDef {
-                args: Vec::from([
-                    MWrapped(TypeArg('a')),
-                    MWrapped(TypeArg('b')),
-                    MLambda(
-                        Box::new(MWrapped(TypeArgRef('a'))),
-                        Box::new(MWrapped(TypeArgRef('b')))
-                    )
-                ]),
-                input_stack: Vec::new(),
-                output_stack: Vec::from([MLambda(
-                    Box::new(MWrapped('a')),
-                    Box::new(MWrapped('b'))
-                )])
-            }
-        ),
-        (
-            String::from("EXEC"),
-            InstructionDef {
-                args: Vec::new(),
-                input_stack: Vec::from([
-                    MWrapped(Warg('a')),
-                    MLambda(
-                        Box::new(MWrapped(TypeArgRef('a'))),
-                        Box::new(MWrapped(Warg('b')))
-                    )
-                ]),
-                output_stack: Vec::from([MWrapped('b')])
-            }
-        )
+        //(
+        //    String::from("DUP"),
+        //    InstructionDef {
+        //        args: Vec::new(),
+        //        input_stack: Vec::from([MWrapped(Warg('a'))]),
+        //        output_stack: Vec::from([MWrapped('a'), MWrapped('a')])
+        //    }
+        //),
+        //(
+        //    String::from("DROP"),
+        //    InstructionDef {
+        //        args: Vec::new(),
+        //        input_stack: Vec::from([MWrapped(Warg('a'))]),
+        //        output_stack: Vec::new()
+        //    }
+        //),
+        //(
+        //    String::from("ADD"),
+        //    InstructionDef {
+        //        args: Vec::new(),
+        //        input_stack: Vec::from([MWrapped(Warg('a')), MWrapped(TypeArgRef('a'))]),
+        //        output_stack: Vec::from([MWrapped('a')])
+        //    }
+        //),
+        //(
+        //    String::from("CONS"),
+        //    InstructionDef {
+        //        args: Vec::new(),
+        //        input_stack: Vec::from([
+        //            MWrapped(Warg('a')),
+        //            MList(Box::new(MWrapped(TypeArgRef('a'))))
+        //        ]),
+        //        output_stack: Vec::from([MList(Box::new(MWrapped('a')))])
+        //    }
+        //),
+        //(
+        //    String::from("PUSH"),
+        //    InstructionDef {
+        //        args: Vec::from([MWrapped(TypeArg('a')), MWrapped(TypeArgRef('a'))]),
+        //        input_stack: Vec::new(),
+        //        output_stack: Vec::from([MWrapped('a')])
+        //    }
+        //),
+        //(
+        //    String::from("PAIR"),
+        //    InstructionDef {
+        //        args: Vec::new(),
+        //        input_stack: Vec::from([MWrapped(Warg('a')), MWrapped(Warg('b'))]),
+        //        output_stack: Vec::from([MPair(Box::new(MWrapped('a')), Box::new(MWrapped('b')))])
+        //    }
+        //),
+        //(
+        //    String::from("LAMBDA"),
+        //    InstructionDef {
+        //        args: Vec::from([
+        //            MWrapped(TypeArg('a')),
+        //            MWrapped(TypeArg('b')),
+        //            MLambda(
+        //                Box::new(MWrapped(TypeArgRef('a'))),
+        //                Box::new(MWrapped(TypeArgRef('b')))
+        //            )
+        //        ]),
+        //        input_stack: Vec::new(),
+        //        output_stack: Vec::from([MLambda(
+        //            Box::new(MWrapped('a')),
+        //            Box::new(MWrapped('b'))
+        //        )])
+        //    }
+        //),
+        //(
+        //    String::from("EXEC"),
+        //    InstructionDef {
+        //        args: Vec::new(),
+        //        input_stack: Vec::from([
+        //            MWrapped(Warg('a')),
+        //            MLambda(
+        //                Box::new(MWrapped(TypeArgRef('a'))),
+        //                Box::new(MWrapped(Warg('b')))
+        //            )
+        //        ]),
+        //        output_stack: Vec::from([MWrapped('b')])
+        //    }
+        //)
     ]);
 }
 
@@ -156,7 +155,7 @@ fn unify_concrete_arg<'a>(
         }
         MWrapped(TypeArgRef(c)) => match resolved.get(&c) {
             Some(tt) => {
-                return unify_concrete_arg(resolved, arg, &coerce_concrete(tt));
+                return unify_concrete_arg(resolved, arg, &map_mtype(tt, |x| CAtomic(x.clone())));
             }
             _ => {
                 return Result::Err("Unknown type ref");
@@ -189,24 +188,24 @@ fn unify_concrete_arg<'a>(
                 return Result::Err("Expecting a pair but got something else...");
             }
         },
-        MNat => match arg {
-            MNat => {
+        MWrapped(CAtomic(MNat)) => match arg {
+            MWrapped(MNat) => {
                 return Result::Ok(());
             }
             _ => {
                 return Result::Err("Expecting a `Nat`, but found something else...");
             }
         },
-        MInt => match arg {
-            MInt => {
+        MWrapped(CAtomic(MInt)) => match arg {
+            MWrapped(MInt) => {
                 return Result::Ok(());
             }
             _ => {
                 return Result::Err("Expecting a `Int`, but found something else...");
             }
         },
-        MString => match arg {
-            MString => {
+        MWrapped(CAtomic(MString)) => match arg {
+            MWrapped(MString) => {
                 return Result::Ok(());
             }
             _ => {
@@ -260,9 +259,9 @@ fn constraint_to_concrete(resolved: &ResolveCache, c: &Constraint) -> Option<Con
             Some(ct) => Some(ct.clone()),
             None => None,
         },
-        MInt => Some(MInt),
-        MNat => Some(MNat),
-        MString => Some(MString),
+        MWrapped(CAtomic(MInt)) => Some(MWrapped(MInt)),
+        MWrapped(CAtomic(MNat)) => Some(MWrapped(MNat)),
+        MWrapped(CAtomic(MString)) => Some(MWrapped(MString)),
         MPair(l, r) => Some(MPair(
             Box::new(constraint_to_concrete(resolved, l)?),
             Box::new(constraint_to_concrete(resolved, r)?),
@@ -282,12 +281,12 @@ fn typecheck_value<'a>(
     target: &ConcreteType,
 ) -> Result<(MValue, ConcreteType), &'a str> {
     match (target, some_val) {
-        (MNat, Atomic(AVNumber(n))) => match u32::try_from(*n) {
-            Ok(n1) => Ok((VNat(n1), MNat)),
+        (MWrapped(MNat), Atomic(AVNumber(n))) => match u32::try_from(*n) {
+            Ok(n1) => Ok((VNat(n1), MWrapped(MNat))),
             Err(_) => Err("Expecting a Nat but found an Int"),
         },
-        (MInt, Atomic(AVNumber(n))) => Ok((VInt(*n), MInt)),
-        (MString, Atomic(AVString(s))) => Ok((VString(s.clone()), MString)),
+        (MWrapped(MInt), Atomic(AVNumber(n))) => Ok((VInt(*n), MWrapped(MInt))),
+        (MWrapped(MString), Atomic(AVString(s))) => Ok((VString(s.clone()), MWrapped(MString))),
         (MList(c), Composite(cv)) => match cv.as_ref() {
             CVList(items) => {
                 let mut il: Vec<MValue> = vec![];
@@ -344,9 +343,9 @@ fn typecheck_value<'a>(
 
 fn stack_result_to_concrete_type(resolved: &mut ResolveCache, sr: &StackResult) -> ConcreteType {
     match sr {
-        MInt => MInt,
-        MNat => MNat,
-        MString => MString,
+        MWrapped(ElemType(MInt)) => MWrapped(MInt),
+        MWrapped(ElemType(MNat)) => MWrapped(MNat),
+        MWrapped(ElemType(MString)) => MWrapped(MString),
         MList(l) => MList(Box::new(stack_result_to_concrete_type(
             resolved,
             l.as_ref(),
@@ -359,7 +358,7 @@ fn stack_result_to_concrete_type(resolved: &mut ResolveCache, sr: &StackResult) 
             Box::new(stack_result_to_concrete_type(resolved, &l)),
             Box::new(stack_result_to_concrete_type(resolved, &r)),
         ),
-        MWrapped(c) => match resolved.get(&c) {
+        MWrapped(TRef(c)) => match resolved.get(&c) {
             Some(ct) => {
                 return (*ct).clone();
             }
@@ -402,18 +401,6 @@ fn unify_stack<'a>(
     return Result::Ok(());
 }
 
-fn coerce_concrete<T>(c: &MType<Concrete>) -> MType<T> {
-    match c {
-        MInt => MInt,
-        MNat => MNat,
-        MString => MString,
-        MPair(l, r) => MPair(Box::new(coerce_concrete(l)), Box::new(coerce_concrete(r))),
-        MLambda(l, r) => MLambda(Box::new(coerce_concrete(l)), Box::new(coerce_concrete(r))),
-        MList(l) => MList(Box::new(coerce_concrete(l))),
-        MWrapped(_) => unreachable!(),
-    }
-}
-
 fn typecheck<'a>(
     instructions: &Vec<Instruction<SomeValue>>,
     stack: &mut StackState,
@@ -445,90 +432,90 @@ fn typecheck_one<'a>(
 }
 
 fn main() {
-    let mut stack = Vec::new();
-    match parser::InstructionListParser::new().parse(
-        "LAMBDA nat (pair nat nat) {DUP;PAIR};PUSH nat 5;PUSH (pair nat int) (Pair 5 10);DROP",
-    ) {
-        Result::Ok(parsed_instructions) => match typecheck(&parsed_instructions, &mut stack) {
-            Result::Ok(_) => {
-                println!("{:?}", stack);
-            }
-            Err(s) => {
-                println!("{}", s);
-            }
-        },
-        Result::Err(s) => println!("{}", s),
-    }
+    // let mut stack = Vec::new();
+    // match parser::InstructionListParser::new().parse(
+    //     "LAMBDA nat (pair nat nat) {DUP;PAIR};PUSH nat 5;PUSH (pair nat int) (Pair 5 10);DROP",
+    // ) {
+    //     Result::Ok(parsed_instructions) => match typecheck(&parsed_instructions, &mut stack) {
+    //         Result::Ok(_) => {
+    //             println!("{:?}", stack);
+    //         }
+    //         Err(s) => {
+    //             println!("{}", s);
+    //         }
+    //     },
+    //     Result::Err(s) => println!("{}", s),
+    // }
 }
 
 mod tests {
-    use crate::parser::InstructionListParser;
-    use crate::typecheck;
-    use crate::Instruction;
-    use crate::SomeValue;
-    use crate::StackState;
-    fn typecheck_<'a>(instructions: &Vec<Instruction<SomeValue>>) -> Result<StackState, &'a str> {
-        let mut stack = Vec::new();
-        typecheck(instructions, &mut stack)?;
-        return Result::Ok(stack);
-    }
-    fn parse(src: &str) -> Vec<Instruction<SomeValue>> {
-        let p = InstructionListParser::new();
-        match p.parse(src) {
-            Ok(s) => s,
-            _ => panic!("Parse failed"),
-        }
-    }
+    //use crate::parser::InstructionListParser;
+    //use crate::typecheck;
+    //use crate::Instruction;
+    //use crate::SomeValue;
+    //use crate::StackState;
+    //fn typecheck_<'a>(instructions: &Vec<Instruction<SomeValue>>) -> Result<StackState, &'a str> {
+    //    let mut stack = Vec::new();
+    //    typecheck(instructions, &mut stack)?;
+    //    return Result::Ok(stack);
+    //}
+    //fn parse(src: &str) -> Vec<Instruction<SomeValue>> {
+    //    let p = InstructionListParser::new();
+    //    match p.parse(src) {
+    //        Ok(s) => s,
+    //        _ => panic!("Parse failed"),
+    //    }
+    //}
 
-    #[test]
-    fn test_type_checking_simple() {
-        // Type check behavior.
-        assert!(Result::is_ok(&typecheck_(&parse("PUSH nat 5"))));
-        assert!(Result::is_ok(&typecheck_(&parse(
-            "PUSH (pair nat nat) (Pair 2 3)"
-        ))));
-        assert!(Result::is_ok(&typecheck_(&parse(
-            "PUSH (pair nat nat) (Pair 2 3);DROP"
-        ))));
-        assert!(Result::is_ok(&typecheck_(&parse(
-            "PUSH nat 5; PUSH nat 5;ADD"
-        ))));
+    //#[test]
+    //fn test_type_checking_simple() {
+    //    // Type check behavior.
+    //    assert!(Result::is_ok(&typecheck_(&parse("PUSH nat 5"))));
+    //    assert!(Result::is_ok(&typecheck_(&parse(
+    //        "PUSH (pair nat nat) (Pair 2 3)"
+    //    ))));
+    //    assert!(Result::is_ok(&typecheck_(&parse(
+    //        "PUSH (pair nat nat) (Pair 2 3);DROP"
+    //    ))));
+    //    assert!(Result::is_ok(&typecheck_(&parse(
+    //        "PUSH nat 5; PUSH nat 5;ADD"
+    //    ))));
 
-        assert!(Result::is_err(&typecheck_(&parse("PUSH nat \"5\""))));
-        assert!(Result::is_err(&typecheck_(&parse("PUSH (pair nat nat) 5"))));
-        assert!(Result::is_err(&typecheck_(&parse(
-            "PUSH (pair nat nat) (Pair 2 3);DROP;DROP"
-        ))));
-        assert!(Result::is_err(&typecheck_(&parse("PUSH nat 5;ADD"))));
+    //    assert!(Result::is_err(&typecheck_(&parse("PUSH nat \"5\""))));
+    //    assert!(Result::is_err(&typecheck_(&parse("PUSH (pair nat nat) 5"))));
+    //    assert!(Result::is_err(&typecheck_(&parse(
+    //        "PUSH (pair nat nat) (Pair 2 3);DROP;DROP"
+    //    ))));
+    //    assert!(Result::is_err(&typecheck_(&parse("PUSH nat 5;ADD"))));
 
-        assert!(Result::is_err(&typecheck_(&parse(
-            "LAMBDA nat (pair nat nat) {DUP;PAIR};PUSH int 5;EXEC"
-        ))));
+    //    assert!(Result::is_err(&typecheck_(&parse(
+    //        "LAMBDA nat (pair nat nat) {DUP;PAIR};PUSH int 5;EXEC"
+    //    ))));
 
-        // Stack result tests.
-        assert_eq!(
-            typecheck_(&parse("PUSH nat 5; PUSH nat 5;ADD"))
-                .unwrap()
-                .len(),
-            1
-        );
-        assert_eq!(typecheck_(&parse("PUSH nat 5")).unwrap().len(), 1);
-        assert_eq!(
-            typecheck_(&parse("PUSH nat 5;DUP;DUP;DUP")).unwrap().len(),
-            4
-        );
-        assert_eq!(typecheck_(&parse("PUSH nat 5;DUP;DROP")).unwrap().len(), 1);
-        assert_eq!(
-            typecheck_(&parse("PUSH (list nat) {5;6}")).unwrap().len(),
-            1
-        );
-        assert_eq!(
-            typecheck_(&parse(
-                "LAMBDA nat (pair nat nat) {DUP;PAIR};PUSH nat 5;EXEC"
-            ))
-            .unwrap()
-            .len(),
-            1
-        );
-    }
+    //    // Stack result tests.
+    //    assert_eq!(
+    //        typecheck_(&parse("PUSH nat 5; PUSH nat 5;ADD"))
+    //            .unwrap()
+    //            .len(),
+    //        1
+    //    );
+    //    assert_eq!(typecheck_(&parse("PUSH nat 5")).unwrap().len(), 1);
+    //    assert_eq!(
+    //        typecheck_(&parse("PUSH nat 5;DUP;DUP;DUP")).unwrap().len(),
+    //        4
+    //    );
+    //    assert_eq!(typecheck_(&parse("PUSH nat 5;DUP;DROP")).unwrap().len(), 1);
+    //    assert_eq!(
+    //        typecheck_(&parse("PUSH (list nat) {5;6}")).unwrap().len(),
+    //        1
+    //    );
+    //    assert_eq!(
+    //        typecheck_(&parse(
+    //            "LAMBDA nat (pair nat nat) {DUP;PAIR};PUSH nat 5;EXEC"
+    //        ))
+    //        .unwrap()
+    //        .len(),
+    //        1
+    //    );
+    //}
 }

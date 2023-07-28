@@ -3,13 +3,17 @@ use core::fmt::Debug;
 #[derive(Debug, Clone, Eq, PartialEq)]
 pub enum Concrete {}
 
-pub type ConcreteType = MType<Concrete>;
+pub type ConcreteType = MType<MAtomic>;
 
-#[derive(Debug, Eq, PartialEq)]
-pub enum MType<T> {
+#[derive(Debug, Eq, Clone, PartialEq)]
+pub enum MAtomic {
     MNat,
     MInt,
     MString,
+}
+
+#[derive(Debug, Eq, PartialEq)]
+pub enum MType<T> {
     MPair(Box<MType<T>>, Box<MType<T>>),
     MList(Box<MType<T>>),
     MLambda(Box<MType<T>>, Box<MType<T>>),
@@ -59,6 +63,7 @@ pub struct Instruction<T> {
 
 #[derive(Debug)]
 pub enum ArgConstraint {
+    CAtomic(MAtomic),
     Warg(char),             // An type variable.
     TypeArg(char),          // A argument that accept a type name, like Nat.
     TypeArgRef(char), // A argument that accept a value of a type referred by previously encountered TypeArg.
@@ -68,7 +73,13 @@ pub type Constraint = MType<ArgConstraint>;
 
 pub type StackArg = Constraint;
 
-pub type StackResult = MType<char>;
+pub type StackResult = MType<StackResultElem>;
+
+#[derive(Debug)]
+pub enum StackResultElem {
+    TRef(char),
+    ElemType(MAtomic)
+}
 
 pub type StackState = Vec<ConcreteType>;
 
