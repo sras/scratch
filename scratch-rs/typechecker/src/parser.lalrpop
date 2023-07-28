@@ -8,6 +8,8 @@ use crate::types::SomeValue;
 use crate::types::SomeValue::*;
 use crate::types::AtomicValue;
 use crate::types::AtomicValue::*;
+use crate::types::MAtomic;
+use crate::types::MAtomic::*;
 use crate::types::CompositeValue;
 use crate::types::CompositeValue::*;
 grammar;
@@ -55,12 +57,16 @@ pub InstructionList:Vec<Instruction<SomeValue>> = {
 }
 
 ConcreteType: ConcreteType = {
-  "int" => MInt,
-  "nat" => MNat,
-  "string" => MString,
+  <t:AtomicType> => MWrapped(t),
   "list" <t1:ConcreteType> => MList (Box::new(t1)),
   "pair" <t1:ConcreteType> <t2:ConcreteType> => MPair (Box::new(t1), Box::new(t2)),
   "("<t:ConcreteType>")" => t
+};
+
+AtomicType: MAtomic = {
+  "int" => MInt,
+  "nat" => MNat,
+  "string" => MString,
 };
 
 Identifier: String = <s:r"[A-Za-z][A-Za-z0-9]+"> => String::from(s);
