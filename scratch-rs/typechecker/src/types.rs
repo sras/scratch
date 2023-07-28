@@ -89,3 +89,11 @@ pub struct InstructionDef {
     pub input_stack: Vec<StackArg>,
     pub output_stack: Vec<StackResult>,
 }
+
+// Parser helpers
+
+#[derive(Debug)]
+pub enum DynMType {
+  DMAtomic(MAtomic),
+  DMDyn(String)
+}

@@ -8,6 +8,7 @@ use types::*;
 use std::collections::HashMap;
 use std::convert::TryFrom;
 
+use parser::MDynParser;
 use ArgConstraint::*;
 use ArgValue as AV;
 use AtomicValue::*;
@@ -440,6 +441,14 @@ fn typecheck_one<'a>(
 
 fn main() {
     let mut stack = Vec::new();
+    match MDynParser::new().parse("(pair nat nat)") {
+        Result::Ok(s) => {
+            println!("{:?}", s);
+        }
+        Result::Err(_) => {
+            println!("Couldn't parse");
+        }
+    }
     match parser::InstructionListParser::new().parse(
         "LAMBDA nat (pair nat nat) {DUP;PAIR};PUSH nat 5;PUSH (pair nat int) (Pair 5 10);DROP",
     ) {

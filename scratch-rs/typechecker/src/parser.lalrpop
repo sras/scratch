@@ -1,4 +1,7 @@
 use std::str::FromStr;
+use crate::types::MType;
+use crate::types::DynMType;
+use crate::types::DynMType::*;
 use crate::types::MType::*;
 use crate::types::ConcreteType;
 use crate::types::Instruction;
@@ -12,6 +15,7 @@ use crate::types::MAtomic;
 use crate::types::MAtomic::*;
 use crate::types::CompositeValue;
 use crate::types::CompositeValue::*;
+
 grammar;
 
 Instruction: Instruction<SomeValue> = {
@@ -56,17 +60,18 @@ pub InstructionList:Vec<Instruction<SomeValue>> = {
   <i:Instruction>";"<mut is:InstructionList> => { is.insert(0, i); is }
 }
 
-ConcreteType: ConcreteType = {
-  <t:AtomicType> => MWrapped(t),
-  "list" <t1:ConcreteType> => MList (Box::new(t1)),
-  "pair" <t1:ConcreteType> <t2:ConcreteType> => MPair (Box::new(t1), Box::new(t2)),
-  "("<t:ConcreteType>")" => t
-};
-
 AtomicType: MAtomic = {
   "int" => MInt,
   "nat" => MNat,
   "string" => MString,
+};
+
+pub MDyn: MType<DynMType> = {
+  <t:AtomicType> => MWrapped(DMAtomic(t)),
+  "list" <t1:MDyn> => MList (Box::new(t1)),
+  "pair" <t1:MDyn> <t2:MDyn> => MPair (Box::new(t1), Box::new(t2)),
+  "lambda" <t1:MDyn> <t2:MDyn> => MLambda (Box::new(t1), Box::new(t2)),
+  "("<t:MDyn>")" => t
 };
 
 Identifier: String = <s:r"[A-Za-z][A-Za-z0-9]+"> => String::from(s);
