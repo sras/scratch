@@ -91,7 +91,7 @@ pub Constraint: ArgConstraint = {
 
 ArgVar: char = <c:r"[a-z]"> => c.chars().next().unwrap();
 
-Dyn: String = <s:r"<[A-Za-z][A-Za-z0-9]+>"> => s[1..s.len()-1].into();
+Dyn: String = <s:r"<[A-Za-z][A-Za-z0-9|]+>"> => s[1..s.len()-1].into();
 
 Identifier: String = <s:r"[A-Za-z][A-Za-z0-9]+"> => String::from(s);
 

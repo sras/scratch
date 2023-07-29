@@ -9,7 +9,9 @@ use std::collections::HashMap;
 use std::convert::TryFrom;
 
 use parser::MDynParser;
+use parser::ConstraintParser;
 use ArgConstraint::*;
+use DynMType::*;
 use ArgValue as AV;
 use AtomicValue::*;
 use CompositeValue::*;
@@ -430,11 +432,27 @@ fn typecheck_one<'a>(
     };
 }
 
+pub fn dynm_to_arg_constraint(d: DynMType) -> ArgConstraint {
+    match d {
+        DMDyn(s) => match ConstraintParser::new().parse(&s) {
+            Result::Ok(s) => s,
+            Result::Err(_) => panic!("Parsing of ArgConstraint failed!")
+        }
+        _ => panic!("Unexpected enum variant during constraint parsing")
+
+    }
+}
+
+pub fn mdyn_to_constraint(m: MType<DynMType>) -> Constraint {
+    return map_mtype(&m, |x| dynm_to_arg_constraint(x.clone()));
+}
+
 fn main() {
     let mut stack = Vec::new();
-    match MDynParser::new().parse("(pair nat nat)") {
+    match MDynParser::new().parse("(pair <a|nat> <a|nat>)") {
         Result::Ok(s) => {
             println!("{:?}", s);
+            println!("{:?}", mdyn_to_constraint(s));
         }
         Result::Err(_) => {
             println!("Couldn't parse");
