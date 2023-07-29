@@ -110,8 +110,8 @@ pub fn map_mtype<T: Clone, H>(ct: &MType<T>, cb: fn(&T) -> H) -> MType<H> {
     }
 }
 
-pub fn mdyn_to_concrete(m: MType<DynMType>) -> ConcreteType {
-    return map_mtype(&m, |x| dynm_to_matomic(x.clone()));
+pub fn mdyn_to_concrete(m: &MType<DynMType>) -> ConcreteType {
+    return map_mtype(m, |x| dynm_to_matomic(x.clone()));
 }
 
 fn dynm_to_matomic(d: DynMType) -> MAtomic {

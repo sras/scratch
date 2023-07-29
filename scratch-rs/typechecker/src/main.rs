@@ -30,7 +30,7 @@ impl<T: Clone> Clone for MType<T> {
     }
 }
 
-fn parse_constraints(cs: &str) -> Vec<Constraint> {
+fn parse_mdyn_to<T, F: Fn(&MType<DynMType>) -> T>(cs: &str, cb: F) -> Vec<T> {
     if cs.len() == 0 {
         return Vec::new();
     } else {
@@ -38,22 +38,21 @@ fn parse_constraints(cs: &str) -> Vec<Constraint> {
             .parse(cs)
             .unwrap()
             .iter()
-            .map(mdyn_to_constraint)
+            .map(cb)
             .collect()
     }
 }
 
+fn parse_constraints(cs: &str) -> Vec<Constraint> {
+    return parse_mdyn_to(cs, mdyn_to_constraint);
+}
+
 fn parse_stack_results(cs: &str) -> Vec<StackResult> {
-    if cs.len() == 0 {
-        return Vec::new();
-    } else {
-        MDynListParser::new()
-            .parse(cs)
-            .unwrap()
-            .iter()
-            .map(mdyn_to_stack_result)
-            .collect()
-    }
+    return parse_mdyn_to(cs, mdyn_to_stack_result);
+}
+
+fn parse_concrete(cs: &str) -> Vec<ConcreteType> {
+    return parse_mdyn_to(cs, mdyn_to_concrete);
 }
 
 macro_rules! mk_instr {
@@ -71,6 +70,7 @@ macro_rules! mk_instr {
 
 lazy_static! {
     static ref MICHELSON_INSTRUCTIONS: HashMap<String, InstructionDef> = HashMap::from([
+        //mk_instr!("SWAP", "", "<w|a>;<w|b>", "<r|b>;<r|a>"),
         mk_instr!("DUP", "", "<w|a>", "<r|a>;<r|a>"),
         mk_instr!("DROP", "", "<w|a>", ""),
         mk_instr!("ADD", "", "<w|a>;<r|a>", "<r|a>"),
@@ -444,6 +444,7 @@ fn main() {
 }
 
 mod tests {
+    use crate::parse_concrete;
     use crate::parser::InstructionListParser;
     use crate::typecheck;
     use crate::Instruction;
@@ -465,18 +466,8 @@ mod tests {
     #[test]
     fn test_type_checking_simple() {
         // Type check behavior.
-        assert!(Result::is_ok(&typecheck_(&parse("PUSH nat 5"))));
-        assert!(Result::is_ok(&typecheck_(&parse(
-            "PUSH (pair nat nat) (Pair 2 3)"
-        ))));
-        assert!(Result::is_ok(&typecheck_(&parse(
-            "PUSH (pair nat nat) (Pair 2 3);DROP"
-        ))));
-        assert!(Result::is_ok(&typecheck_(&parse(
-            "PUSH nat 5; PUSH nat 5;ADD"
-        ))));
 
-        assert!(Result::is_err(&typecheck_(&parse("PUSH nat \"5\""))));
+        assert!(Result::is_err(&typecheck_(&parse("PUSH nat \"asd\""))));
         assert!(Result::is_err(&typecheck_(&parse("PUSH (pair nat nat) 5"))));
         assert!(Result::is_err(&typecheck_(&parse(
             "PUSH (pair nat nat) (Pair 2 3);DROP;DROP"
@@ -487,30 +478,47 @@ mod tests {
             "LAMBDA nat (pair nat nat) {DUP;PAIR};PUSH int 5;EXEC"
         ))));
 
+        assert!(Result::is_err(&typecheck_(&parse(
+            "LAMBDA nat (pair nat nat) {DROP; PUSH int 1; DUP;PAIR};PUSH nat 5;EXEC"
+        ))));
+
         // Stack result tests.
+
         assert_eq!(
-            typecheck_(&parse("PUSH nat 5; PUSH nat 5;ADD"))
-                .unwrap()
-                .len(),
-            1
+            typecheck_(&parse("PUSH nat 5")).unwrap(),
+            parse_concrete("nat")
         );
-        assert_eq!(typecheck_(&parse("PUSH nat 5")).unwrap().len(), 1);
         assert_eq!(
-            typecheck_(&parse("PUSH nat 5;DUP;DUP;DUP")).unwrap().len(),
-            4
+            typecheck_(&parse("PUSH (pair nat nat) (Pair 2 3)")).unwrap(),
+            parse_concrete("pair nat nat")
         );
-        assert_eq!(typecheck_(&parse("PUSH nat 5;DUP;DROP")).unwrap().len(), 1);
         assert_eq!(
-            typecheck_(&parse("PUSH (list nat) {5;6}")).unwrap().len(),
-            1
+            typecheck_(&parse("PUSH (pair nat nat) (Pair 2 3);DROP")).unwrap(),
+            parse_concrete("")
+        );
+        assert_eq!(
+            typecheck_(&parse("PUSH nat 5; PUSH nat 5;ADD")).unwrap(),
+            parse_concrete("nat")
+        );
+
+        assert_eq!(
+            typecheck_(&parse("PUSH nat 5;DUP;DUP;DUP")).unwrap(),
+            parse_concrete("nat;nat;nat;nat")
+        );
+        assert_eq!(
+            typecheck_(&parse("PUSH nat 5;DUP;DROP")).unwrap(),
+            parse_concrete("nat")
+        );
+        assert_eq!(
+            typecheck_(&parse("PUSH (list nat) {5;6}")).unwrap(),
+            parse_concrete("list nat")
         );
         assert_eq!(
             typecheck_(&parse(
                 "LAMBDA nat (pair nat nat) {DUP;PAIR};PUSH nat 5;EXEC"
             ))
-            .unwrap()
-            .len(),
-            1
+            .unwrap(),
+            parse_concrete("pair nat nat")
         );
     }
 }

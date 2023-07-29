@@ -1,5 +1,5 @@
 // auto-generated: "lalrpop 0.20.0"
-// sha3: e7ba0f298987f4fb5a567d1018be3977645f22324da572432a6b1078a6fa0344
+// sha3: 6bf5d96b1fe8a1b169ae1e2ce678c840bbe51934222c82347a82e7c37e10abaf
 use std::str::FromStr;
 use crate::types::mdyn_to_concrete;
 use crate::types::MType;
@@ -11981,7 +11981,7 @@ fn __action27<
     (_, t, _): (usize, MType<DynMType>, usize),
 ) -> ConcreteType
 {
-    mdyn_to_concrete(t)
+    mdyn_to_concrete(&t)
 }
 
 #[allow(unused_variables)]

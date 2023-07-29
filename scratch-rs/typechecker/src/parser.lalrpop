@@ -72,7 +72,7 @@ AtomicType: MAtomic = {
 };
 
 pub ConcreteType: ConcreteType = {
-  <t:MDyn> => mdyn_to_concrete(t)
+  <t:MDyn> => mdyn_to_concrete(&t)
 };
 
 pub MDynList: Vec<MType<DynMType>> = {
