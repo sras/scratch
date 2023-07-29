@@ -223,9 +223,7 @@ fn constraint_to_concrete(resolved: &ResolveCache, c: &Constraint) -> Option<Con
             Some(ct) => Some(ct.clone()),
             None => None,
         },
-        MWrapped(CAtomic(MInt)) => Some(MWrapped(MInt)),
-        MWrapped(CAtomic(MNat)) => Some(MWrapped(MNat)),
-        MWrapped(CAtomic(MString)) => Some(MWrapped(MString)),
+        MWrapped(CAtomic(x)) => Some(MWrapped(x.clone())),
         MPair(l, r) => Some(MPair(
             Box::new(constraint_to_concrete(resolved, l)?),
             Box::new(constraint_to_concrete(resolved, r)?),
