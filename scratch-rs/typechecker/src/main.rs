@@ -48,6 +48,10 @@ fn parse_stack_results(cs: &str) -> Vec<StackResult> {
         .collect()
 }
 
+macro_rules! mk_instr {
+    ($n:expr, $arg: expr, $is: expr, $os: expr) => { (String::from($n), InstructionDef { args: parse_constraints($arg), input_stack: parse_constraints($is), output_stack: parse_stack_results($os) }) }
+}
+
 lazy_static! {
     static ref MICHELSON_INSTRUCTIONS: HashMap<String, InstructionDef> = HashMap::from([
         (
@@ -109,7 +113,7 @@ lazy_static! {
         (
             String::from("EXEC"),
             InstructionDef {
-                args: parse_constraints(""),
+                args: vec![],
                 input_stack: parse_constraints("<w|a>;(lambda <r|a> <w|b>)"),
                 output_stack: parse_stack_results("<r|b>")
             }
