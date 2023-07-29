@@ -8,13 +8,14 @@ use types::*;
 use std::collections::HashMap;
 use std::convert::TryFrom;
 
-use parser::MDynListParser;
 use parser::ConstraintParser;
+use parser::StackResultElemParser;
+use parser::MDynListParser;
 use ArgConstraint::*;
-use DynMType::*;
 use ArgValue as AV;
 use AtomicValue::*;
 use CompositeValue::*;
+use DynMType::*;
 use MAtomic::*;
 use MType::*;
 use MValue::*;
@@ -30,9 +31,22 @@ impl<T: Clone> Clone for MType<T> {
 }
 
 fn parse_constraints(cs: &str) -> Vec<Constraint> {
-    MDynListParser::new().parse(cs).unwrap().iter().map(mdyn_to_constraint).collect()
+    MDynListParser::new()
+        .parse(cs)
+        .unwrap()
+        .iter()
+        .map(mdyn_to_constraint)
+        .collect()
 }
 
+fn parse_stack_results(cs: &str) -> Vec<StackResult> {
+    MDynListParser::new()
+        .parse(cs)
+        .unwrap()
+        .iter()
+        .map(mdyn_to_stack_result)
+        .collect()
+}
 
 lazy_static! {
     static ref MICHELSON_INSTRUCTIONS: HashMap<String, InstructionDef> = HashMap::from([
@@ -40,15 +54,15 @@ lazy_static! {
             String::from("DUP"),
             InstructionDef {
                 args: Vec::new(),
-                input_stack:  parse_constraints("<w|a>"),
-                output_stack: Vec::from([MWrapped(TRef('a')), MWrapped(TRef('a'))])
+                input_stack: parse_constraints("<w|a>"),
+                output_stack: parse_stack_results("<r|a>;<r|a>")
             }
         ),
         (
             String::from("DROP"),
             InstructionDef {
                 args: Vec::new(),
-                input_stack:  parse_constraints("<w|a>"),
+                input_stack: parse_constraints("<w|a>"),
                 output_stack: Vec::new()
             }
         ),
@@ -56,54 +70,48 @@ lazy_static! {
             String::from("ADD"),
             InstructionDef {
                 args: Vec::new(),
-                input_stack:  parse_constraints("<w|a>;<r|a>"),
-                output_stack: Vec::from([MWrapped(TRef('a'))])
+                input_stack: parse_constraints("<w|a>;<r|a>"),
+                output_stack: parse_stack_results("<r|a>")
             }
         ),
         (
             String::from("CONS"),
             InstructionDef {
                 args: Vec::new(),
-                input_stack:  parse_constraints("<w|a>;(list <r|a>)"),
-                output_stack: Vec::from([MList(Box::new(MWrapped(TRef('a'))))])
+                input_stack: parse_constraints("<w|a>;(list <r|a>)"),
+                output_stack: parse_stack_results("(list <r|a>)")
             }
         ),
         (
             String::from("PUSH"),
             InstructionDef {
-                args:  parse_constraints("<t|a>;<r|a>"),
+                args: parse_constraints("<t|a>;<r|a>"),
                 input_stack: Vec::new(),
-                output_stack: Vec::from([MWrapped(TRef('a'))])
+                output_stack: parse_stack_results("<r|a>")
             }
         ),
         (
             String::from("PAIR"),
             InstructionDef {
                 args: Vec::new(),
-                input_stack:  parse_constraints("<w|a>;<w|b>"),
-                output_stack: Vec::from([MPair(
-                    Box::new(MWrapped(TRef('a'))),
-                    Box::new(MWrapped(TRef('b')))
-                )])
+                input_stack: parse_constraints("<w|a>;<w|b>"),
+                output_stack: parse_stack_results("(pair <r|a> <r|b>)")
             }
         ),
         (
             String::from("LAMBDA"),
             InstructionDef {
-                args:  parse_constraints("<t|a>;<t|b>;(lambda <r|a> <r|b>)"),
+                args: parse_constraints("<t|a>;<t|b>;(lambda <r|a> <r|b>)"),
                 input_stack: Vec::new(),
-                output_stack: Vec::from([MLambda(
-                    Box::new(MWrapped(TRef('a'))),
-                    Box::new(MWrapped(TRef('b')))
-                )])
+                output_stack: parse_stack_results("(lambda <r|a> <r|b>)")
             }
         ),
         (
             String::from("EXEC"),
             InstructionDef {
-                args: Vec::new(),
-                input_stack:  parse_constraints("<w|a>;(lambda <r|a> <w|b>)"),
-                output_stack: Vec::from([MWrapped(TRef('b'))])
+                args: parse_constraints(""),
+                input_stack: parse_constraints("<w|a>;(lambda <r|a> <w|b>)"),
+                output_stack: parse_stack_results("<r|b>")
             }
         )
     ]);
@@ -425,15 +433,28 @@ pub fn dynm_to_arg_constraint(d: DynMType) -> ArgConstraint {
     match d {
         DMDyn(s) => match ConstraintParser::new().parse(&s) {
             Result::Ok(s) => s,
-            Result::Err(_) => panic!("Parsing of ArgConstraint failed!")
-        }
-        _ => panic!("Unexpected enum variant during constraint parsing")
+            Result::Err(_) => panic!("Parsing of ArgConstraint failed!"),
+        },
+        _ => panic!("Unexpected enum variant during constraint parsing"),
+    }
+}
 
+pub fn dynm_to_stack_result(d: DynMType) -> StackResultElem {
+    match d {
+        DMDyn(s) => match StackResultElemParser::new().parse(&s) {
+            Result::Ok(s) => s,
+            Result::Err(s) => panic!("Parsing of stack result failed! {:?}", s),
+        },
+        _ => panic!("Unexpected enum variant during stack result parsing"),
     }
 }
 
 pub fn mdyn_to_constraint(m: &MType<DynMType>) -> Constraint {
     return map_mtype(m, |x| dynm_to_arg_constraint(x.clone()));
+}
+
+pub fn mdyn_to_stack_result(m: &MType<DynMType>) -> StackResult {
+    return map_mtype(m, |x| dynm_to_stack_result(x.clone()));
 }
 
 fn main() {

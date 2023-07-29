@@ -18,6 +18,8 @@ use crate::types::MAtomic;
 use crate::types::MAtomic::*;
 use crate::types::CompositeValue;
 use crate::types::CompositeValue::*;
+use crate::types::StackResultElem;
+use crate::types::StackResultElem::*;
 
 grammar;
 
@@ -92,6 +94,11 @@ pub Constraint: ArgConstraint = {
   "t|"<v:ArgVar> => CTypeArg(v),
   "r|"<v:ArgVar> => CTypeArgRef(v),
   "a|"<v:AtomicType> => CAtomic(v)
+}
+
+pub StackResultElem: StackResultElem = {
+  "r|"<v:ArgVar> => TRef(v),
+  "a|"<v:AtomicType> => ElemType(v)
 }
 
 ArgVar: char = <c:r"[a-z]"> => c.chars().next().unwrap();
