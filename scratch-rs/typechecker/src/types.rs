@@ -1,4 +1,5 @@
 use core::fmt::Debug;
+use crate::types::MType::*;
 
 #[derive(Debug, Clone, Eq, PartialEq)]
 pub enum Concrete {}
@@ -64,9 +65,9 @@ pub struct Instruction<T> {
 #[derive(Debug)]
 pub enum ArgConstraint {
     CAtomic(MAtomic),
-    Warg(char),             // An type variable.
-    TypeArg(char),          // A argument that accept a type name, like Nat.
-    TypeArgRef(char), // A argument that accept a value of a type referred by previously encountered TypeArg.
+    CWarg(char),             // An type variable.
+    CTypeArg(char),          // A argument that accept a type name, like Nat.
+    CTypeArgRef(char), // A argument that accept a value of a type referred by previously encountered TypeArg.
 }
 
 pub type Constraint = MType<ArgConstraint>;
@@ -92,8 +93,30 @@ pub struct InstructionDef {
 
 // Parser helpers
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum DynMType {
   DMAtomic(MAtomic),
   DMDyn(String)
+}
+
+use DynMType::*;
+
+pub fn map_mtype<T: Clone, H>(ct: &MType<T>, cb: fn(&T) -> H) -> MType<H> {
+    match ct {
+        MPair(l, r) => MPair(Box::new(map_mtype(l, cb)), Box::new(map_mtype(r, cb))),
+        MLambda(l, r) => MLambda(Box::new(map_mtype(l, cb)), Box::new(map_mtype(r, cb))),
+        MList(l) => MList(Box::new(map_mtype(l, cb))),
+        MWrapped(w) => MWrapped(cb(w)),
+    }
+}
+
+pub fn mdyn_to_concrete(m: MType<DynMType>) -> ConcreteType {
+    return map_mtype(&m, |x| dynm_to_matomic(x.clone()));
+}
+
+fn dynm_to_matomic(d: DynMType) -> MAtomic {
+    match d {
+        DMAtomic(a) => a,
+        DMDyn(_) => panic!("Unexpected enum variant!")
+    }
 }

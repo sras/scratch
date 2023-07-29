@@ -1,4 +1,5 @@
 use std::str::FromStr;
+use crate::types::mdyn_to_concrete;
 use crate::types::MType;
 use crate::types::DynMType;
 use crate::types::DynMType::*;
@@ -7,6 +8,8 @@ use crate::types::ConcreteType;
 use crate::types::Instruction;
 use crate::types::ArgValue;
 use crate::types::ArgValue::*;
+use crate::types::ArgConstraint;
+use crate::types::ArgConstraint::*;
 use crate::types::SomeValue;
 use crate::types::SomeValue::*;
 use crate::types::AtomicValue;
@@ -66,13 +69,29 @@ AtomicType: MAtomic = {
   "string" => MString,
 };
 
+pub ConcreteType: ConcreteType = {
+  <t:MDyn> => mdyn_to_concrete(t)
+};
+
 pub MDyn: MType<DynMType> = {
   <t:AtomicType> => MWrapped(DMAtomic(t)),
+  <t:Dyn> => MWrapped(DMDyn(t)),
   "list" <t1:MDyn> => MList (Box::new(t1)),
   "pair" <t1:MDyn> <t2:MDyn> => MPair (Box::new(t1), Box::new(t2)),
   "lambda" <t1:MDyn> <t2:MDyn> => MLambda (Box::new(t1), Box::new(t2)),
   "("<t:MDyn>")" => t
 };
+
+pub Constraint: ArgConstraint = {
+  "w|"<v:ArgVar> => CWarg(v),
+  "t|"<v:ArgVar> => CTypeArg(v),
+  "r|"<v:ArgVar> => CTypeArgRef(v),
+  "a|"<v:AtomicType> => CAtomic(v)
+}
+
+ArgVar: char = <c:r"[a-z]"> => c.chars().next().unwrap();
+
+Dyn: String = <s:r"<[A-Za-z][A-Za-z0-9]+>"> => s[1..s.len()-1].into();
 
 Identifier: String = <s:r"[A-Za-z][A-Za-z0-9]+"> => String::from(s);
 

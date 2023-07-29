@@ -27,22 +27,13 @@ impl<T: Clone> Clone for MType<T> {
     }
 }
 
-fn map_mtype<T: Clone, H>(ct: &MType<T>, cb: fn(&T) -> H) -> MType<H> {
-    match ct {
-        MPair(l, r) => MPair(Box::new(map_mtype(l, cb)), Box::new(map_mtype(r, cb))),
-        MLambda(l, r) => MLambda(Box::new(map_mtype(l, cb)), Box::new(map_mtype(r, cb))),
-        MList(l) => MList(Box::new(map_mtype(l, cb))),
-        MWrapped(w) => MWrapped(cb(w)),
-    }
-}
-
 lazy_static! {
     static ref MICHELSON_INSTRUCTIONS: HashMap<String, InstructionDef> = HashMap::from([
         (
             String::from("DUP"),
             InstructionDef {
                 args: Vec::new(),
-                input_stack: Vec::from([MWrapped(Warg('a'))]),
+                input_stack: Vec::from([MWrapped(CWarg('a'))]),
                 output_stack: Vec::from([MWrapped(TRef('a')), MWrapped(TRef('a'))])
             }
         ),
@@ -50,7 +41,7 @@ lazy_static! {
             String::from("DROP"),
             InstructionDef {
                 args: Vec::new(),
-                input_stack: Vec::from([MWrapped(Warg('a'))]),
+                input_stack: Vec::from([MWrapped(CWarg('a'))]),
                 output_stack: Vec::new()
             }
         ),
@@ -58,7 +49,7 @@ lazy_static! {
             String::from("ADD"),
             InstructionDef {
                 args: Vec::new(),
-                input_stack: Vec::from([MWrapped(Warg('a')), MWrapped(TypeArgRef('a'))]),
+                input_stack: Vec::from([MWrapped(CWarg('a')), MWrapped(CTypeArgRef('a'))]),
                 output_stack: Vec::from([MWrapped(TRef('a'))])
             }
         ),
@@ -67,8 +58,8 @@ lazy_static! {
             InstructionDef {
                 args: Vec::new(),
                 input_stack: Vec::from([
-                    MWrapped(Warg('a')),
-                    MList(Box::new(MWrapped(TypeArgRef('a'))))
+                    MWrapped(CWarg('a')),
+                    MList(Box::new(MWrapped(CTypeArgRef('a'))))
                 ]),
                 output_stack: Vec::from([MList(Box::new(MWrapped(TRef('a'))))])
             }
@@ -76,7 +67,7 @@ lazy_static! {
         (
             String::from("PUSH"),
             InstructionDef {
-                args: Vec::from([MWrapped(TypeArg('a')), MWrapped(TypeArgRef('a'))]),
+                args: Vec::from([MWrapped(CTypeArg('a')), MWrapped(CTypeArgRef('a'))]),
                 input_stack: Vec::new(),
                 output_stack: Vec::from([MWrapped(TRef('a'))])
             }
@@ -85,7 +76,7 @@ lazy_static! {
             String::from("PAIR"),
             InstructionDef {
                 args: Vec::new(),
-                input_stack: Vec::from([MWrapped(Warg('a')), MWrapped(Warg('b'))]),
+                input_stack: Vec::from([MWrapped(CWarg('a')), MWrapped(CWarg('b'))]),
                 output_stack: Vec::from([MPair(
                     Box::new(MWrapped(TRef('a'))),
                     Box::new(MWrapped(TRef('b')))
@@ -96,11 +87,11 @@ lazy_static! {
             String::from("LAMBDA"),
             InstructionDef {
                 args: Vec::from([
-                    MWrapped(TypeArg('a')),
-                    MWrapped(TypeArg('b')),
+                    MWrapped(CTypeArg('a')),
+                    MWrapped(CTypeArg('b')),
                     MLambda(
-                        Box::new(MWrapped(TypeArgRef('a'))),
-                        Box::new(MWrapped(TypeArgRef('b')))
+                        Box::new(MWrapped(CTypeArgRef('a'))),
+                        Box::new(MWrapped(CTypeArgRef('b')))
                     )
                 ]),
                 input_stack: Vec::new(),
@@ -115,10 +106,10 @@ lazy_static! {
             InstructionDef {
                 args: Vec::new(),
                 input_stack: Vec::from([
-                    MWrapped(Warg('a')),
+                    MWrapped(CWarg('a')),
                     MLambda(
-                        Box::new(MWrapped(TypeArgRef('a'))),
-                        Box::new(MWrapped(Warg('b')))
+                        Box::new(MWrapped(CTypeArgRef('a'))),
+                        Box::new(MWrapped(CWarg('b')))
                     )
                 ]),
                 output_stack: Vec::from([MWrapped(TRef('b'))])
@@ -149,15 +140,15 @@ fn unify_concrete_arg<'a>(
     arg_con: &Constraint,
 ) -> Result<(), &'a str> {
     match arg_con {
-        MWrapped(Warg(c)) => {
+        MWrapped(CWarg(c)) => {
             add_symbol(resolved, c.clone(), arg);
             return Result::Ok(());
         }
-        MWrapped(TypeArg(c)) => {
+        MWrapped(CTypeArg(c)) => {
             add_symbol(resolved, c.clone(), arg);
             return Result::Ok(());
         }
-        MWrapped(TypeArgRef(c)) => match resolved.get(&c) {
+        MWrapped(CTypeArgRef(c)) => match resolved.get(&c) {
             Some(tt) => {
                 return unify_concrete_arg(resolved, arg, &map_mtype(tt, |x| CAtomic(x.clone())));
             }
@@ -226,7 +217,7 @@ fn unify_arg<'a>(
 ) -> Result<ArgValue<MValue>, &'a str> {
     match arg {
         AV::TypeArg(ct) => match arg_con {
-            MWrapped(TypeArg(c)) => {
+            MWrapped(CTypeArg(c)) => {
                 add_symbol(resolved, *c, &ct);
                 return Result::Ok(AV::TypeArg((*ct).clone()));
             }
@@ -236,13 +227,13 @@ fn unify_arg<'a>(
         },
         AV::ValueArg(some_val) => {
             let (m, ct): (MValue, ConcreteType) = match arg_con {
-                MWrapped(TypeArg(_)) => {
+                MWrapped(CTypeArg(_)) => {
                     panic!("Unexpected value argument");
                 }
-                MWrapped(Warg(_)) => {
+                MWrapped(CWarg(_)) => {
                     panic!("Unexpected wildcard type encountered");
                 }
-                MWrapped(TypeArgRef(ref c)) => match resolved.get(&c) {
+                MWrapped(CTypeArgRef(ref c)) => match resolved.get(&c) {
                     Some(ct) => typecheck_value(resolved, &some_val, ct)?,
                     None => panic!("Symbol resolution failed! {:?}", c),
                 },
@@ -259,7 +250,7 @@ fn unify_arg<'a>(
 
 fn constraint_to_concrete(resolved: &ResolveCache, c: &Constraint) -> Option<ConcreteType> {
     match c {
-        MWrapped(TypeArgRef(c)) => match resolved.get(&c) {
+        MWrapped(CTypeArgRef(c)) => match resolved.get(&c) {
             Some(ct) => Some(ct.clone()),
             None => None,
         },

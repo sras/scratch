@@ -7,7 +7,7 @@ pub Constraint: Constraint = {
   "w|"<v:ArgVar> => Warg(v)
   "t|"<v:ArgVar> => TypeArg(v)
   "r|"<v:ArgVar> => TypeArgRef(v)
-   => TypeArgRef(v)
+  "a|"<v:> => TypeArgRef(v)
 }
 
 ArgVar: char = <c:r"[a-z]"> => c.chars().next().unwrap();
