@@ -9,8 +9,8 @@ use std::collections::HashMap;
 use std::convert::TryFrom;
 
 use parser::ConstraintParser;
-use parser::StackResultElemParser;
 use parser::MDynListParser;
+use parser::StackResultElemParser;
 use ArgConstraint::*;
 use ArgValue as AV;
 use AtomicValue::*;
@@ -31,93 +31,59 @@ impl<T: Clone> Clone for MType<T> {
 }
 
 fn parse_constraints(cs: &str) -> Vec<Constraint> {
-    MDynListParser::new()
-        .parse(cs)
-        .unwrap()
-        .iter()
-        .map(mdyn_to_constraint)
-        .collect()
+    if cs.len() == 0 {
+        return Vec::new();
+    } else {
+        MDynListParser::new()
+            .parse(cs)
+            .unwrap()
+            .iter()
+            .map(mdyn_to_constraint)
+            .collect()
+    }
 }
 
 fn parse_stack_results(cs: &str) -> Vec<StackResult> {
-    MDynListParser::new()
-        .parse(cs)
-        .unwrap()
-        .iter()
-        .map(mdyn_to_stack_result)
-        .collect()
+    if cs.len() == 0 {
+        return Vec::new();
+    } else {
+        MDynListParser::new()
+            .parse(cs)
+            .unwrap()
+            .iter()
+            .map(mdyn_to_stack_result)
+            .collect()
+    }
 }
 
 macro_rules! mk_instr {
-    ($n:expr, $arg: expr, $is: expr, $os: expr) => { (String::from($n), InstructionDef { args: parse_constraints($arg), input_stack: parse_constraints($is), output_stack: parse_stack_results($os) }) }
+    ($n:expr, $arg: expr, $is: expr, $os: expr) => {
+        (
+            String::from($n),
+            InstructionDef {
+                args: parse_constraints($arg),
+                input_stack: parse_constraints($is),
+                output_stack: parse_stack_results($os),
+            },
+        )
+    };
 }
 
 lazy_static! {
     static ref MICHELSON_INSTRUCTIONS: HashMap<String, InstructionDef> = HashMap::from([
-        (
-            String::from("DUP"),
-            InstructionDef {
-                args: Vec::new(),
-                input_stack: parse_constraints("<w|a>"),
-                output_stack: parse_stack_results("<r|a>;<r|a>")
-            }
+        mk_instr!("DUP", "", "<w|a>", "<r|a>;<r|a>"),
+        mk_instr!("DROP", "", "<w|a>", ""),
+        mk_instr!("ADD", "", "<w|a>;<r|a>", "<r|a>"),
+        mk_instr!("CONS", "", "<w|a>;list <r|a>", "list <r|a>"),
+        mk_instr!("PUSH", "<t|a>;<r|a>", "", "<r|a>"),
+        mk_instr!("PAIR", "", "<w|a>;<w|b>", "pair <r|a> <r|b>"),
+        mk_instr!(
+            "LAMBDA",
+            "<t|a>;<t|b>;lambda <r|a> <r|b>",
+            "",
+            "lambda <r|a> <r|b>"
         ),
-        (
-            String::from("DROP"),
-            InstructionDef {
-                args: Vec::new(),
-                input_stack: parse_constraints("<w|a>"),
-                output_stack: Vec::new()
-            }
-        ),
-        (
-            String::from("ADD"),
-            InstructionDef {
-                args: Vec::new(),
-                input_stack: parse_constraints("<w|a>;<r|a>"),
-                output_stack: parse_stack_results("<r|a>")
-            }
-        ),
-        (
-            String::from("CONS"),
-            InstructionDef {
-                args: Vec::new(),
-                input_stack: parse_constraints("<w|a>;(list <r|a>)"),
-                output_stack: parse_stack_results("(list <r|a>)")
-            }
-        ),
-        (
-            String::from("PUSH"),
-            InstructionDef {
-                args: parse_constraints("<t|a>;<r|a>"),
-                input_stack: Vec::new(),
-                output_stack: parse_stack_results("<r|a>")
-            }
-        ),
-        (
-            String::from("PAIR"),
-            InstructionDef {
-                args: Vec::new(),
-                input_stack: parse_constraints("<w|a>;<w|b>"),
-                output_stack: parse_stack_results("(pair <r|a> <r|b>)")
-            }
-        ),
-        (
-            String::from("LAMBDA"),
-            InstructionDef {
-                args: parse_constraints("<t|a>;<t|b>;(lambda <r|a> <r|b>)"),
-                input_stack: Vec::new(),
-                output_stack: parse_stack_results("(lambda <r|a> <r|b>)")
-            }
-        ),
-        (
-            String::from("EXEC"),
-            InstructionDef {
-                args: vec![],
-                input_stack: parse_constraints("<w|a>;(lambda <r|a> <w|b>)"),
-                output_stack: parse_stack_results("<r|b>")
-            }
-        )
+        mk_instr!("EXEC", "", "<w|a>;lambda <r|a> <w|b>", "<r|b>"),
     ]);
 }
 
