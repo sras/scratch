@@ -73,6 +73,11 @@ pub ConcreteType: ConcreteType = {
   <t:MDyn> => mdyn_to_concrete(t)
 };
 
+pub MDynList: Vec<MType<DynMType>> = {
+  <h:MDyn>";"<mut t:MDynList> => { t.insert(0, h); t },
+  <s:MDyn> => vec!(s),
+  }
+
 pub MDyn: MType<DynMType> = {
   <t:AtomicType> => MWrapped(DMAtomic(t)),
   <t:Dyn> => MWrapped(DMDyn(t)),

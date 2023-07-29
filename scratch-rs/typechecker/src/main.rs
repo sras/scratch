@@ -8,7 +8,7 @@ use types::*;
 use std::collections::HashMap;
 use std::convert::TryFrom;
 
-use parser::MDynParser;
+use parser::MDynListParser;
 use parser::ConstraintParser;
 use ArgConstraint::*;
 use DynMType::*;
@@ -29,13 +29,18 @@ impl<T: Clone> Clone for MType<T> {
     }
 }
 
+fn parse_constraints(cs: &str) -> Vec<Constraint> {
+    MDynListParser::new().parse(cs).unwrap().iter().map(mdyn_to_constraint).collect()
+}
+
+
 lazy_static! {
     static ref MICHELSON_INSTRUCTIONS: HashMap<String, InstructionDef> = HashMap::from([
         (
             String::from("DUP"),
             InstructionDef {
                 args: Vec::new(),
-                input_stack: Vec::from([MWrapped(CWarg('a'))]),
+                input_stack:  parse_constraints("<w|a>"),
                 output_stack: Vec::from([MWrapped(TRef('a')), MWrapped(TRef('a'))])
             }
         ),
@@ -43,7 +48,7 @@ lazy_static! {
             String::from("DROP"),
             InstructionDef {
                 args: Vec::new(),
-                input_stack: Vec::from([MWrapped(CWarg('a'))]),
+                input_stack:  parse_constraints("<w|a>"),
                 output_stack: Vec::new()
             }
         ),
@@ -51,7 +56,7 @@ lazy_static! {
             String::from("ADD"),
             InstructionDef {
                 args: Vec::new(),
-                input_stack: Vec::from([MWrapped(CWarg('a')), MWrapped(CTypeArgRef('a'))]),
+                input_stack:  parse_constraints("<w|a>;<r|a>"),
                 output_stack: Vec::from([MWrapped(TRef('a'))])
             }
         ),
@@ -59,17 +64,14 @@ lazy_static! {
             String::from("CONS"),
             InstructionDef {
                 args: Vec::new(),
-                input_stack: Vec::from([
-                    MWrapped(CWarg('a')),
-                    MList(Box::new(MWrapped(CTypeArgRef('a'))))
-                ]),
+                input_stack:  parse_constraints("<w|a>;(list <r|a>)"),
                 output_stack: Vec::from([MList(Box::new(MWrapped(TRef('a'))))])
             }
         ),
         (
             String::from("PUSH"),
             InstructionDef {
-                args: Vec::from([MWrapped(CTypeArg('a')), MWrapped(CTypeArgRef('a'))]),
+                args:  parse_constraints("<t|a>;<r|a>"),
                 input_stack: Vec::new(),
                 output_stack: Vec::from([MWrapped(TRef('a'))])
             }
@@ -78,7 +80,7 @@ lazy_static! {
             String::from("PAIR"),
             InstructionDef {
                 args: Vec::new(),
-                input_stack: Vec::from([MWrapped(CWarg('a')), MWrapped(CWarg('b'))]),
+                input_stack:  parse_constraints("<w|a>;<w|b>"),
                 output_stack: Vec::from([MPair(
                     Box::new(MWrapped(TRef('a'))),
                     Box::new(MWrapped(TRef('b')))
@@ -88,14 +90,7 @@ lazy_static! {
         (
             String::from("LAMBDA"),
             InstructionDef {
-                args: Vec::from([
-                    MWrapped(CTypeArg('a')),
-                    MWrapped(CTypeArg('b')),
-                    MLambda(
-                        Box::new(MWrapped(CTypeArgRef('a'))),
-                        Box::new(MWrapped(CTypeArgRef('b')))
-                    )
-                ]),
+                args:  parse_constraints("<t|a>;<t|b>;(lambda <r|a> <r|b>)"),
                 input_stack: Vec::new(),
                 output_stack: Vec::from([MLambda(
                     Box::new(MWrapped(TRef('a'))),
@@ -107,13 +102,7 @@ lazy_static! {
             String::from("EXEC"),
             InstructionDef {
                 args: Vec::new(),
-                input_stack: Vec::from([
-                    MWrapped(CWarg('a')),
-                    MLambda(
-                        Box::new(MWrapped(CTypeArgRef('a'))),
-                        Box::new(MWrapped(CWarg('b')))
-                    )
-                ]),
+                input_stack:  parse_constraints("<w|a>;(lambda <r|a> <w|b>)"),
                 output_stack: Vec::from([MWrapped(TRef('b'))])
             }
         )
@@ -443,21 +432,13 @@ pub fn dynm_to_arg_constraint(d: DynMType) -> ArgConstraint {
     }
 }
 
-pub fn mdyn_to_constraint(m: MType<DynMType>) -> Constraint {
-    return map_mtype(&m, |x| dynm_to_arg_constraint(x.clone()));
+pub fn mdyn_to_constraint(m: &MType<DynMType>) -> Constraint {
+    return map_mtype(m, |x| dynm_to_arg_constraint(x.clone()));
 }
 
 fn main() {
     let mut stack = Vec::new();
-    match MDynParser::new().parse("(pair <a|nat> <a|nat>)") {
-        Result::Ok(s) => {
-            println!("{:?}", s);
-            println!("{:?}", mdyn_to_constraint(s));
-        }
-        Result::Err(_) => {
-            println!("Couldn't parse");
-        }
-    }
+
     match parser::InstructionListParser::new().parse(
         "LAMBDA nat (pair nat nat) {DUP;PAIR};PUSH nat 5;PUSH (pair nat int) (Pair 5 10);DROP",
     ) {
