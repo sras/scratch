@@ -70,7 +70,7 @@ macro_rules! mk_instr {
 
 lazy_static! {
     static ref MICHELSON_INSTRUCTIONS: HashMap<String, InstructionDef> = HashMap::from([
-        //mk_instr!("SWAP", "", "<w|a>;<w|b>", "<r|b>;<r|a>"),
+        mk_instr!("SWAP", "", "<w|a>;<w|b>", "<r|b>;<r|a>"),
         mk_instr!("DUP", "", "<w|a>", "<r|a>;<r|a>"),
         mk_instr!("DROP", "", "<w|a>", ""),
         mk_instr!("ADD", "", "<w|a>;<r|a>", "<r|a>"),
@@ -519,6 +519,14 @@ mod tests {
             ))
             .unwrap(),
             parse_concrete("pair nat nat")
+        );
+
+        assert_eq!(
+            typecheck_(&parse(
+                "PUSH int 1;PUSH nat 1;SWAP"
+            ))
+            .unwrap(),
+            parse_concrete("int;nat")
         );
     }
 }
