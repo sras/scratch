@@ -1,27 +1,27 @@
 use std::collections::HashMap;
 use std::convert::TryFrom;
 
-use super::map_mtype;
-use super::ArgConstraint::*;
-use super::ArgValue as AV;
-use super::ArgValue;
-use super::AtomicValue::*;
-use super::CompositeValue::*;
-use super::ConcreteType;
-use super::Constraint;
-use super::Instruction;
-use super::MAtomic::*;
-use super::MType::*;
-use super::MValue;
-use super::SomeValue;
-use super::StackArg;
-use super::StackResult;
-use super::StackState;
+use crate::map_mtype;
+use crate::ArgConstraint::*;
+use crate::ArgValue as AV;
+use crate::ArgValue;
+use crate::AtomicValue::*;
+use crate::CompositeValue::*;
+use crate::ConcreteType;
+use crate::Constraint;
+use crate::Instruction;
+use crate::MAtomic::*;
+use crate::MType::*;
+use crate::MValue;
+use crate::SomeValue;
+use crate::StackArg;
+use crate::StackResult;
+use crate::StackState;
 use crate::instructions::MICHELSON_INSTRUCTIONS;
 
-use super::MValue::*;
-use super::SomeValue::*;
-use super::StackResultElem::*;
+use crate::MValue::*;
+use crate::SomeValue::*;
+use crate::StackResultElem::*;
 
 type ResolveCache = HashMap<char, ConcreteType>;
 
