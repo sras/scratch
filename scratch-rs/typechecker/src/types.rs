@@ -1,5 +1,5 @@
-use core::fmt::Debug;
 use crate::types::MType::*;
+use core::fmt::Debug;
 
 #[derive(Debug, Clone, Eq, PartialEq)]
 pub enum Concrete {}
@@ -18,7 +18,13 @@ pub enum MType<T> {
     MPair(Box<(MType<T>, MType<T>)>),
     MList(Box<MType<T>>),
     MLambda(Box<(MType<T>, MType<T>)>),
-    MWrapped(T)
+    MWrapped(T),
+}
+
+impl<T: Clone> Clone for MType<T> {
+    fn clone(&self) -> Self {
+        return map_mtype(self, &|x| x.clone());
+    }
 }
 
 #[derive(Debug, Clone)]
@@ -65,8 +71,8 @@ pub struct Instruction<T> {
 #[derive(Debug)]
 pub enum ArgConstraint {
     CAtomic(MAtomic),
-    CWarg(char),             // An type variable.
-    CTypeArg(char),          // A argument that accept a type name, like Nat.
+    CWarg(char),       // An type variable.
+    CTypeArg(char),    // A argument that accept a type name, like Nat.
     CTypeArgRef(char), // A argument that accept a value of a type referred by previously encountered TypeArg.
 }
 
@@ -79,7 +85,7 @@ pub type StackResult = MType<StackResultElem>;
 #[derive(Debug)]
 pub enum StackResultElem {
     TRef(char),
-    ElemType(MAtomic)
+    ElemType(MAtomic),
 }
 
 pub type StackState = Vec<ConcreteType>;
@@ -95,14 +101,16 @@ pub struct InstructionDef {
 
 #[derive(Debug, Clone)]
 pub enum DynMType {
-  DMAtomic(MAtomic),
-  DMDyn(String)
+    DMAtomic(MAtomic),
+    DMDyn(String),
 }
 
 use DynMType::*;
 
-
-pub fn map_mtype_boxed_pair<T, H, F: Fn(&T) -> H>(b: &Box<(MType<T>, MType<T>)>, cb: &F) -> Box<(MType<H>, MType<H>)> {
+pub fn map_mtype_boxed_pair<T, H, F: Fn(&T) -> H>(
+    b: &Box<(MType<T>, MType<T>)>,
+    cb: &F,
+) -> Box<(MType<H>, MType<H>)> {
     let (f, s) = b.as_ref();
     return Box::new((map_mtype(f, cb), map_mtype(s, cb)));
 }
@@ -115,7 +123,6 @@ pub fn map_mtype<T, H, F: Fn(&T) -> H>(ct: &MType<T>, cb: &F) -> MType<H> {
         MWrapped(w) => MWrapped(cb(w)),
     }
 }
-
 pub fn mdyn_to_concrete(m: &MType<DynMType>) -> ConcreteType {
     return map_mtype(m, &|x| dynm_to_matomic(x.clone()));
 }
@@ -123,6 +130,6 @@ pub fn mdyn_to_concrete(m: &MType<DynMType>) -> ConcreteType {
 fn dynm_to_matomic(d: DynMType) -> MAtomic {
     match d {
         DMAtomic(a) => a,
-        DMDyn(_) => panic!("Unexpected enum variant!")
+        DMDyn(_) => panic!("Unexpected enum variant!"),
     }
 }
