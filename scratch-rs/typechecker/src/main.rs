@@ -51,7 +51,7 @@ fn parse_stack_results(cs: &str) -> Vec<StackResult> {
     return parse_mdyn_to(cs, mdyn_to_stack_result);
 }
 
-fn parse_type(cs: &str) -> Vec<ConcreteType> {
+fn parse_stack(cs: &str) -> Vec<ConcreteType> {
     return parse_mdyn_to(cs, mdyn_to_concrete);
 }
 
@@ -459,7 +459,7 @@ fn main() {
 }
 
 mod tests {
-    use crate::parse_type;
+    use crate::parse_stack;
     use crate::parser::InstructionListParser;
     use crate::typecheck;
     use crate::Instruction;
@@ -499,43 +499,43 @@ mod tests {
 
         // Stack result tests.
 
-        assert_eq!(typecheck_(&parse("PUSH nat 5")).unwrap(), parse_type("nat"));
+        assert_eq!(typecheck_(&parse("PUSH nat 5")).unwrap(), parse_stack("nat"));
         assert_eq!(
             typecheck_(&parse("PUSH (pair nat nat) (Pair 2 3)")).unwrap(),
-            parse_type("pair nat nat")
+            parse_stack("pair nat nat")
         );
         assert_eq!(
             typecheck_(&parse("PUSH (pair nat nat) (Pair 2 3);DROP")).unwrap(),
-            parse_type("")
+            parse_stack("")
         );
         assert_eq!(
             typecheck_(&parse("PUSH nat 5; PUSH nat 5;ADD")).unwrap(),
-            parse_type("nat")
+            parse_stack("nat")
         );
 
         assert_eq!(
             typecheck_(&parse("PUSH nat 5;DUP;DUP;DUP")).unwrap(),
-            parse_type("nat;nat;nat;nat")
+            parse_stack("nat;nat;nat;nat")
         );
         assert_eq!(
             typecheck_(&parse("PUSH nat 5;DUP;DROP")).unwrap(),
-            parse_type("nat")
+            parse_stack("nat")
         );
         assert_eq!(
             typecheck_(&parse("PUSH (list nat) {5;6}")).unwrap(),
-            parse_type("list nat")
+            parse_stack("list nat")
         );
         assert_eq!(
             typecheck_(&parse(
                 "LAMBDA nat (pair nat nat) {DUP;PAIR};PUSH nat 5;EXEC"
             ))
             .unwrap(),
-            parse_type("pair nat nat")
+            parse_stack("pair nat nat")
         );
 
         assert_eq!(
             typecheck_(&parse("PUSH int 1;PUSH nat 1;SWAP")).unwrap(),
-            parse_type("int;nat")
+            parse_stack("int;nat")
         );
     }
 }
