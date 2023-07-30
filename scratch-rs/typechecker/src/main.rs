@@ -26,7 +26,7 @@ type ResolveCache = HashMap<char, ConcreteType>;
 
 impl<T: Clone> Clone for MType<T> {
     fn clone(&self) -> Self {
-        return map_mtype(self, |x| x.clone());
+        return map_mtype(self, &|x| x.clone());
     }
 }
 
@@ -119,7 +119,7 @@ fn unify_concrete_arg<'a>(
         }
         MWrapped(CTypeArgRef(c)) => match resolved.get(&c) {
             Some(tt) => {
-                return unify_concrete_arg(resolved, arg, &map_mtype(tt, |x| CAtomic(x.clone())));
+                return unify_concrete_arg(resolved, arg, &map_mtype(tt, &|x| CAtomic(x.clone())));
             }
             _ => {
                 return Result::Err("Unknown type ref");
@@ -433,11 +433,11 @@ pub fn dynm_to_stack_result(d: DynMType) -> StackResultElem {
 }
 
 pub fn mdyn_to_constraint(m: &MType<DynMType>) -> Constraint {
-    return map_mtype(m, |x| dynm_to_arg_constraint(x.clone()));
+    return map_mtype(m, &|x| dynm_to_arg_constraint(x.clone()));
 }
 
 pub fn mdyn_to_stack_result(m: &MType<DynMType>) -> StackResult {
-    return map_mtype(m, |x| dynm_to_stack_result(x.clone()));
+    return map_mtype(m, &|x| dynm_to_stack_result(x.clone()));
 }
 
 fn main() {

@@ -102,12 +102,12 @@ pub enum DynMType {
 use DynMType::*;
 
 
-fn map_mtype_boxed_pair<T: Clone, H>(b: &Box<(MType<T>, MType<T>)>, cb: fn(&T) -> H) -> Box<(MType<H>, MType<H>)> {
+pub fn map_mtype_boxed_pair<T, H, F: Fn(&T) -> H>(b: &Box<(MType<T>, MType<T>)>, cb: &F) -> Box<(MType<H>, MType<H>)> {
     let (f, s) = b.as_ref();
     return Box::new((map_mtype(f, cb), map_mtype(s, cb)));
 }
 
-pub fn map_mtype<T: Clone, H>(ct: &MType<T>, cb: fn(&T) -> H) -> MType<H> {
+pub fn map_mtype<T, H, F: Fn(&T) -> H>(ct: &MType<T>, cb: &F) -> MType<H> {
     match ct {
         MPair(b) => MPair(map_mtype_boxed_pair(b, cb)),
         MLambda(b) => MLambda(map_mtype_boxed_pair(b, cb)),
@@ -117,7 +117,7 @@ pub fn map_mtype<T: Clone, H>(ct: &MType<T>, cb: fn(&T) -> H) -> MType<H> {
 }
 
 pub fn mdyn_to_concrete(m: &MType<DynMType>) -> ConcreteType {
-    return map_mtype(m, |x| dynm_to_matomic(x.clone()));
+    return map_mtype(m, &|x| dynm_to_matomic(x.clone()));
 }
 
 fn dynm_to_matomic(d: DynMType) -> MAtomic {
