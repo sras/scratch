@@ -84,8 +84,8 @@ pub MDyn: MType<DynMType> = {
   <t:AtomicType> => MWrapped(DMAtomic(t)),
   <t:Dyn> => MWrapped(DMDyn(t)),
   "list" <t1:MDyn> => MList (Box::new(t1)),
-  "pair" <t1:MDyn> <t2:MDyn> => MPair (Box::new(t1), Box::new(t2)),
-  "lambda" <t1:MDyn> <t2:MDyn> => MLambda (Box::new(t1), Box::new(t2)),
+  "pair" <t1:MDyn> <t2:MDyn> => MPair (Box::new((t1, t2))),
+  "lambda" <t1:MDyn> <t2:MDyn> => MLambda (Box::new((t1, t2))),
   "("<t:MDyn>")" => t
 };
 

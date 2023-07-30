@@ -15,9 +15,9 @@ pub enum MAtomic {
 
 #[derive(Debug, Eq, PartialEq)]
 pub enum MType<T> {
-    MPair(Box<MType<T>>, Box<MType<T>>),
+    MPair(Box<(MType<T>, MType<T>)>),
     MList(Box<MType<T>>),
-    MLambda(Box<MType<T>>, Box<MType<T>>),
+    MLambda(Box<(MType<T>, MType<T>)>),
     MWrapped(T)
 }
 
@@ -38,7 +38,7 @@ pub enum MValue {
     VNat(u32),
     VInt(i32),
     VString(String),
-    VPair(Box<MValue>, Box<MValue>),
+    VPair(Box<(MValue, MValue)>),
     VList(Vec<MValue>),
     VLambda(Vec<Instruction<MValue>>),
 }
@@ -101,10 +101,16 @@ pub enum DynMType {
 
 use DynMType::*;
 
+
+fn map_mtype_boxed_pair<T: Clone, H>(b: &Box<(MType<T>, MType<T>)>, cb: fn(&T) -> H) -> Box<(MType<H>, MType<H>)> {
+    let (f, s) = b.as_ref();
+    return Box::new((map_mtype(f, cb), map_mtype(s, cb)));
+}
+
 pub fn map_mtype<T: Clone, H>(ct: &MType<T>, cb: fn(&T) -> H) -> MType<H> {
     match ct {
-        MPair(l, r) => MPair(Box::new(map_mtype(l, cb)), Box::new(map_mtype(r, cb))),
-        MLambda(l, r) => MLambda(Box::new(map_mtype(l, cb)), Box::new(map_mtype(r, cb))),
+        MPair(b) => MPair(map_mtype_boxed_pair(b, cb)),
+        MLambda(b) => MLambda(map_mtype_boxed_pair(b, cb)),
         MList(l) => MList(Box::new(map_mtype(l, cb))),
         MWrapped(w) => MWrapped(cb(w)),
     }

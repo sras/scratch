@@ -1,5 +1,5 @@
 // auto-generated: "lalrpop 0.20.0"
-// sha3: 6bf5d96b1fe8a1b169ae1e2ce678c840bbe51934222c82347a82e7c37e10abaf
+// sha3: a5a05620415fe0a328fbfd8ca0281d8cde0d293cb739ae2be4487113d9a9222f
 use std::str::FromStr;
 use crate::types::mdyn_to_concrete;
 use crate::types::MType;
@@ -12058,7 +12058,7 @@ fn __action33<
     (_, t2, _): (usize, MType<DynMType>, usize),
 ) -> MType<DynMType>
 {
-    MPair (Box::new(t1), Box::new(t2))
+    MPair (Box::new((t1, t2)))
 }
 
 #[allow(unused_variables)]
@@ -12072,7 +12072,7 @@ fn __action34<
     (_, t2, _): (usize, MType<DynMType>, usize),
 ) -> MType<DynMType>
 {
-    MLambda (Box::new(t1), Box::new(t2))
+    MLambda (Box::new((t1, t2)))
 }
 
 #[allow(unused_variables)]

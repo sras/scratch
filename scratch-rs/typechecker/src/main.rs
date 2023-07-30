@@ -134,8 +134,10 @@ fn unify_concrete_arg<'a>(
                 return Result::Err("Expecting a list but got something else...");
             }
         },
-        MLambda(vin, vout) => match arg {
-            MLambda(cin, cout) => {
+        MLambda(b) => match arg {
+            MLambda(b1) => {
+                let (vin, vout) = b.as_ref();
+                let (cin, cout) = b1.as_ref();
                 return unify_concrete_arg(resolved, cin, vin)
                     .and_then(|_| unify_concrete_arg(resolved, cout, vout));
             }
@@ -143,8 +145,10 @@ fn unify_concrete_arg<'a>(
                 return Result::Err("Expecting a lambda but got something else...");
             }
         },
-        MPair(cl, cr) => match arg {
-            MPair(vl, vr) => {
+        MPair(b) => match arg {
+            MPair(b1) => {
+                let (cl, cr) = b.as_ref();
+                let (vl, vr) = b1.as_ref();
                 return unify_concrete_arg(resolved, vl, cl)
                     .and_then(|_| unify_concrete_arg(resolved, vr, cr));
             }
@@ -224,15 +228,21 @@ fn constraint_to_concrete(resolved: &ResolveCache, c: &Constraint) -> Option<Con
             None => None,
         },
         MWrapped(CAtomic(x)) => Some(MWrapped(x.clone())),
-        MPair(l, r) => Some(MPair(
-            Box::new(constraint_to_concrete(resolved, l)?),
-            Box::new(constraint_to_concrete(resolved, r)?),
-        )),
+        MPair(b) => {
+            let (l, r) = b.as_ref();
+            Some(MPair(Box::new((
+                constraint_to_concrete(resolved, l)?,
+                constraint_to_concrete(resolved, r)?,
+            ))))
+        }
         MList(l) => Some(MList(Box::new(constraint_to_concrete(resolved, l)?))),
-        MLambda(l, r) => Some(MLambda(
-            Box::new(constraint_to_concrete(resolved, l)?),
-            Box::new(constraint_to_concrete(resolved, r)?),
-        )),
+        MLambda(b) => {
+            let (l, r) = b.as_ref();
+            Some(MLambda(Box::new((
+                constraint_to_concrete(resolved, l)?,
+                constraint_to_concrete(resolved, r)?,
+            ))))
+        }
         _ => None,
     }
 }
@@ -260,21 +270,20 @@ fn typecheck_value<'a>(
             }
             _ => Err("Expecting a List but found something else..."),
         },
-        (MPair(c1, c2), Composite(cv)) => match cv.as_ref() {
+        (MPair(b), Composite(cv)) => match cv.as_ref() {
             CVPair(sv1, sv2) => {
-                let (mv1, ct1) = typecheck_value(resolved, sv1, c1.as_ref())?;
-                let (mv2, ct2) = typecheck_value(resolved, sv2, c2.as_ref())?;
-                return Result::Ok((
-                    VPair(Box::new(mv1), Box::new(mv2)),
-                    MPair(Box::new(ct1), Box::new(ct2)),
-                ));
+                let (c1, c2) = b.as_ref();
+                let (mv1, ct1) = typecheck_value(resolved, sv1, c1)?;
+                let (mv2, ct2) = typecheck_value(resolved, sv2, c2)?;
+                return Result::Ok((VPair(Box::new((mv1, mv2))), MPair(Box::new((ct1, ct2)))));
             }
             _ => Err("Expecting a Pair but found something else..."),
         },
-        (MLambda(c1, c2), Composite(cv)) => match cv.as_ref() {
+        (MLambda(b), Composite(cv)) => match cv.as_ref() {
             CVLambda(instructions) => {
-                let lambda_input = c1.as_ref().clone();
-                let lambda_output = c2.as_ref().clone();
+                let (c1, c2) = b.as_ref();
+                let lambda_input = c1.clone();
+                let lambda_output = c2.clone();
                 let mut stack: StackState = Vec::from([lambda_input.clone()]);
                 match typecheck(instructions, &mut stack) {
                     Ok(tins) => match stack[..] {
@@ -282,7 +291,7 @@ fn typecheck_value<'a>(
                             if (*real_out) == lambda_output {
                                 return Result::Ok((
                                     VLambda(tins),
-                                    MLambda(Box::new(lambda_input), Box::new(lambda_output)),
+                                    MLambda(Box::new((lambda_input, lambda_output))),
                                 ));
                             } else {
                                 return Err("Lambda does not match the expected type");
@@ -324,14 +333,20 @@ fn stack_result_to_concrete_type(resolved: &mut ResolveCache, sr: &StackResult) 
             resolved,
             l.as_ref(),
         ))),
-        MPair(l, r) => MPair(
-            Box::new(stack_result_to_concrete_type(resolved, &l)),
-            Box::new(stack_result_to_concrete_type(resolved, &r)),
-        ),
-        MLambda(l, r) => MLambda(
-            Box::new(stack_result_to_concrete_type(resolved, &l)),
-            Box::new(stack_result_to_concrete_type(resolved, &r)),
-        ),
+        MPair(b) => {
+            let (l, r) = b.as_ref();
+            MPair(Box::new((
+                stack_result_to_concrete_type(resolved, &l),
+                stack_result_to_concrete_type(resolved, &r),
+            )))
+        }
+        MLambda(b) => {
+            let (l, r) = b.as_ref();
+            MLambda(Box::new((
+                stack_result_to_concrete_type(resolved, &l),
+                stack_result_to_concrete_type(resolved, &r),
+            )))
+        }
     }
 }
 
@@ -522,10 +537,7 @@ mod tests {
         );
 
         assert_eq!(
-            typecheck_(&parse(
-                "PUSH int 1;PUSH nat 1;SWAP"
-            ))
-            .unwrap(),
+            typecheck_(&parse("PUSH int 1;PUSH nat 1;SWAP")).unwrap(),
             parse_concrete("int;nat")
         );
     }
