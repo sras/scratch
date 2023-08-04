@@ -81,6 +81,7 @@ AtomicType: MAtomic = {
   "int" => MInt,
   "nat" => MNat,
   "string" => MString,
+  "bool" => MBool,
 };
 
 pub ConcreteType: ConcreteType = {
@@ -120,8 +121,8 @@ Dyn: String = <s:r"<[A-Za-z][A-Za-z0-9|]+>"> => s[1..s.len()-1].into();
 Identifier: String = <s:r"[A-Za-z][A-Za-z0-9]+"> => String::from(s);
 
 McLitBool: bool = {
-  "true" => true,
-  "false" => false,
+  "True" => true,
+  "False" => false,
 }
 
 McLitString: String = <s:r#""[a-z0-9]+""#> => s[1..s.len()-1].into();

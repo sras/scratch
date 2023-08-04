@@ -201,6 +201,7 @@ fn typecheck_value<'a>(
     target: &ConcreteType,
 ) -> Result<(MValue, ConcreteType), &'a str> {
     match (target, some_val) {
+        (MWrapped(MBool), Atomic(AVBool(n))) => Ok((VBool(*n), MWrapped(MBool))),
         (MWrapped(MNat), Atomic(AVNumber(n))) => match u32::try_from(*n) {
             Ok(n1) => Ok((VNat(n1), MWrapped(MNat))),
             Err(_) => Err("Expecting a Nat but found an Int"),
@@ -362,20 +363,15 @@ fn typecheck_one<'a>(
         },
         IF(tb, fb) => match stack[0] {
             MWrapped(MBool) => {
-                let mut temp_stack_t : StackState = stack.clone();
-                let mut temp_stack_f : StackState = stack.clone();
-                match typecheck(tb, &mut temp_stack_t) {
-                    Result::Ok(tbtc) => match typecheck(fb, &mut temp_stack_f) {
-                        Result::Ok(fbtc) => {
-                            if temp_stack_t == temp_stack_f {
-                                return Result::Ok(IF(tbtc, fbtc));
-                            } else {
-                                return Result::Err("Type of IF branches differ");
-                            }
-                        }
-                        Err(s) => { return Err(s) ; }
-                    }
-                    Err(s) => { return Err(s); }
+                let mut temp_stack_t : StackState = Vec::from(&stack[1..]);
+                let mut temp_stack_f : StackState = Vec::from(&stack[1..]);
+                let tbtc = typecheck(tb, &mut temp_stack_t)?;
+                let fbtc = typecheck(fb, &mut temp_stack_f)?;
+                if temp_stack_t == temp_stack_f {
+                    *stack = temp_stack_t;
+                    return Result::Ok(IF(tbtc, fbtc));
+                } else {
+                    return Result::Err("Type of IF branches differ");
                 }
             }
             _ => {

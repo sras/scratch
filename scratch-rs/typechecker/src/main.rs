@@ -111,5 +111,21 @@ mod tests {
             typecheck_(&parse("PUSH int 1;PUSH nat 1;SWAP")).unwrap(),
             parse_stack("int;nat")
         );
+
+        assert_eq!(
+            typecheck_(&parse(
+                "PUSH bool True"
+            ))
+            .unwrap(),
+            parse_stack("bool")
+        );
+
+        assert_eq!(
+            typecheck_(&parse(
+                "PUSH bool True; IF { PUSH nat 5 } { PUSH nat 10 }"
+            ))
+            .unwrap(),
+            parse_stack("nat")
+        );
     }
 }
