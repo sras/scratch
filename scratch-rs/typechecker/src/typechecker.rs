@@ -1,12 +1,15 @@
 use std::collections::HashMap;
 use std::convert::TryFrom;
 
+use crate::instructions::MICHELSON_INSTRUCTIONS;
 use crate::map_mtype;
 use crate::ArgConstraint::*;
 use crate::ArgValue as AV;
 use crate::ArgValue;
 use crate::AtomicValue::*;
 use crate::CompositeValue::*;
+use crate::CompoundInstruction;
+use crate::CompoundInstruction::*;
 use crate::ConcreteType;
 use crate::Constraint;
 use crate::Instruction;
@@ -17,7 +20,6 @@ use crate::SomeValue;
 use crate::StackArg;
 use crate::StackResult;
 use crate::StackState;
-use crate::instructions::MICHELSON_INSTRUCTIONS;
 
 use crate::MValue::*;
 use crate::SomeValue::*;
@@ -116,6 +118,14 @@ fn unify_concrete_arg<'a>(
             }
             _ => {
                 return Result::Err("Expecting a `String`, but found something else...");
+            }
+        },
+        MWrapped(CAtomic(MBool)) => match arg {
+            MWrapped(MBool) => {
+                return Result::Ok(());
+            }
+            _ => {
+                return Result::Err("Expecting a `Bool`, but found something else...");
             }
         },
     }
@@ -257,6 +267,7 @@ fn stack_result_to_concrete_type(resolved: &mut ResolveCache, sr: &StackResult) 
                 MInt => MWrapped(MInt),
                 MNat => MWrapped(MNat),
                 MString => MWrapped(MString),
+                MBool => MWrapped(MBool),
             },
             TRef(c) => match resolved.get(&c) {
                 Some(ct) => {
@@ -321,10 +332,10 @@ fn unify_stack<'a>(
 }
 
 pub fn typecheck<'a>(
-    instructions: &Vec<Instruction<SomeValue>>,
+    instructions: &Vec<CompoundInstruction<SomeValue>>,
     stack: &mut StackState,
-) -> Result<Vec<Instruction<MValue>>, &'a str> {
-    let mut resolved: Vec<Instruction<MValue>> = vec![];
+) -> Result<Vec<CompoundInstruction<MValue>>, &'a str> {
+    let mut resolved: Vec<CompoundInstruction<MValue>> = vec![];
     for instruction in instructions {
         resolved.push(typecheck_one(instruction, stack)?);
     }
@@ -332,20 +343,44 @@ pub fn typecheck<'a>(
 }
 
 fn typecheck_one<'a>(
-    instruction: &Instruction<SomeValue>,
+    cinstruction: &CompoundInstruction<SomeValue>,
     stack: &mut StackState,
-) -> Result<Instruction<MValue>, &'a str> {
-    match MICHELSON_INSTRUCTIONS.get(&instruction.name) {
-        Some(s) => {
-            let (mut resolved, args_) = unify_args(&instruction.args, &s.args)?;
-            unify_stack(&mut resolved, &s.input_stack, &s.output_stack, stack)?;
-            return Result::Ok(Instruction {
-                args: args_,
-                name: instruction.name.clone(),
-            });
-        }
-        _ => {
-            return Result::Err("Instruction not found");
-        }
+) -> Result<CompoundInstruction<MValue>, &'a str> {
+    match cinstruction {
+        Other(instruction) => match MICHELSON_INSTRUCTIONS.get(&instruction.name) {
+            Some(s) => {
+                let (mut resolved, args_) = unify_args(&instruction.args, &s.args)?;
+                unify_stack(&mut resolved, &s.input_stack, &s.output_stack, stack)?;
+                return Result::Ok(Other(Instruction {
+                    args: args_,
+                    name: instruction.name.clone(),
+                }));
+            }
+            _ => {
+                return Result::Err("Instruction not found");
+            }
+        },
+        IF(tb, fb) => match stack[0] {
+            MWrapped(MBool) => {
+                let mut temp_stack_t : StackState = stack.clone();
+                let mut temp_stack_f : StackState = stack.clone();
+                match typecheck(tb, &mut temp_stack_t) {
+                    Result::Ok(tbtc) => match typecheck(fb, &mut temp_stack_f) {
+                        Result::Ok(fbtc) => {
+                            if temp_stack_t == temp_stack_f {
+                                return Result::Ok(IF(tbtc, fbtc));
+                            } else {
+                                return Result::Err("Type of IF branches differ");
+                            }
+                        }
+                        Err(s) => { return Err(s) ; }
+                    }
+                    Err(s) => { return Err(s); }
+                }
+            }
+            _ => {
+                return Result::Err("Expecting a bool, but found something else");
+            }
+        },
     };
 }

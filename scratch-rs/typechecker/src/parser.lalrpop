@@ -20,8 +20,15 @@ use crate::CompositeValue;
 use crate::CompositeValue::*;
 use crate::StackResultElem;
 use crate::StackResultElem::*;
+use crate::CompoundInstruction;
+use crate::CompoundInstruction::*;
 
 grammar;
+
+CompoundInstruction: CompoundInstruction<SomeValue> = {
+  "IF" <ibt:InstructionBlock> <ibf:InstructionBlock> => CompoundInstruction::IF(ibt, ibf),
+  <si:Instruction> => CompoundInstruction::Other(si)
+}
 
 Instruction: Instruction<SomeValue> = {
   <s:Identifier> <a:Args> => Instruction { name : s, args: a },
@@ -46,13 +53,18 @@ SomeValue: SomeValue = {
 
 AtomicValue: AtomicValue = {
   <a:McLitNumber> => AVNumber(a),
-  <s:McLitString> => AVString(s)
+  <s:McLitString> => AVString(s),
+  <s:McLitBool> => AVBool(s)
 }
 
 CompositeValue: CompositeValue = {
   "Pair" <l: SomeValue> <r: SomeValue> => CVPair(l, r),
   "{"<sv:SomeValueList>"}" => CVList(sv),
-  "{"<ins:InstructionList>"}" => CVLambda(ins)
+  <ins:InstructionBlock> => CVLambda(ins)
+}
+
+InstructionBlock: Vec<CompoundInstruction<SomeValue>> = {
+  "{"<ins:InstructionList>"}" => ins
 }
 
 SomeValueList:Vec<SomeValue> = {
@@ -60,9 +72,9 @@ SomeValueList:Vec<SomeValue> = {
   <sv:SomeValue>";"<mut svl:SomeValueList> => { svl.insert(0, sv); svl }
 }
 
-pub InstructionList:Vec<Instruction<SomeValue>> = {
-  <i:Instruction> => vec!(i),
-  <i:Instruction>";"<mut is:InstructionList> => { is.insert(0, i); is }
+pub InstructionList:Vec<CompoundInstruction<SomeValue>> = {
+  <i:CompoundInstruction> => vec!(i),
+  <i:CompoundInstruction>";"<mut is:InstructionList> => { is.insert(0, i); is }
 }
 
 AtomicType: MAtomic = {
@@ -106,6 +118,11 @@ ArgVar: char = <c:r"[a-z]"> => c.chars().next().unwrap();
 Dyn: String = <s:r"<[A-Za-z][A-Za-z0-9|]+>"> => s[1..s.len()-1].into();
 
 Identifier: String = <s:r"[A-Za-z][A-Za-z0-9]+"> => String::from(s);
+
+McLitBool: bool = {
+  "true" => true,
+  "false" => false,
+}
 
 McLitString: String = <s:r#""[a-z0-9]+""#> => s[1..s.len()-1].into();
 McLitNumber: i32 = <s:r"([+-]?)[0-9]+"> => i32::from_str(s).unwrap();

@@ -11,6 +11,7 @@ pub enum MAtomic {
     MNat,
     MInt,
     MString,
+    MBool,
 }
 
 #[derive(Debug, Eq, PartialEq)]
@@ -37,22 +38,24 @@ pub enum SomeValue {
 pub enum AtomicValue {
     AVNumber(i32),
     AVString(String),
+    AVBool(bool),
 }
 
 #[derive(Debug, Clone)]
 pub enum MValue {
     VNat(u32),
     VInt(i32),
+    VBool(bool),
     VString(String),
     VPair(Box<(MValue, MValue)>),
     VList(Vec<MValue>),
-    VLambda(Vec<Instruction<MValue>>),
+    VLambda(Vec<CompoundInstruction<MValue>>),
 }
 
 #[derive(Debug, Clone)]
 pub enum CompositeValue {
     CVPair(SomeValue, SomeValue),
-    CVLambda(Vec<Instruction<SomeValue>>),
+    CVLambda(Vec<CompoundInstruction<SomeValue>>),
     CVList(Vec<SomeValue>),
 }
 
@@ -66,6 +69,12 @@ pub enum ArgValue<T> {
 pub struct Instruction<T> {
     pub name: String,
     pub args: Vec<ArgValue<T>>,
+}
+
+#[derive(Debug, Clone)]
+pub enum CompoundInstruction<T> {
+    IF(Vec<CompoundInstruction<T>>, Vec<CompoundInstruction<T>>),
+    Other(Instruction<T>)
 }
 
 #[derive(Debug)]

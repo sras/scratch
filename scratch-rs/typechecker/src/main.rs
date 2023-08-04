@@ -33,18 +33,19 @@ mod tests {
     use crate::parsers::parse_stack;
     use crate::typechecker::typecheck;
     use crate::Instruction;
+    use crate::CompoundInstruction;
     use crate::SomeValue;
     use crate::StackState;
-    fn typecheck_<'a>(instructions: &Vec<Instruction<SomeValue>>) -> Result<StackState, &'a str> {
+    fn typecheck_<'a>(instructions: &Vec<CompoundInstruction<SomeValue>>) -> Result<StackState, &'a str> {
         let mut stack = Vec::new();
         typecheck(instructions, &mut stack)?;
         return Result::Ok(stack);
     }
-    fn parse(src: &str) -> Vec<Instruction<SomeValue>> {
+    fn parse(src: &str) -> Vec<CompoundInstruction<SomeValue>> {
         let p = InstructionListParser::new();
         match p.parse(src) {
             Ok(s) => s,
-            _ => panic!("Parse failed"),
+            Err(e) => panic!("Parse failed {}", e),
         }
     }
 
