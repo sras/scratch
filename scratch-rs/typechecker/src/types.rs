@@ -76,7 +76,7 @@ pub enum CompoundInstruction<T> {
     IF(Vec<CompoundInstruction<T>>, Vec<CompoundInstruction<T>>),
     DIP(Vec<CompoundInstruction<T>>),
     LAMBDA_REC(ConcreteType, ConcreteType, Vec<CompoundInstruction<T>>),
-    Other(Instruction<T>)
+    Other(Instruction<T>),
 }
 
 #[derive(Debug)]
