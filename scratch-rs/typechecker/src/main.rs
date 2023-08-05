@@ -6,6 +6,7 @@ mod parser;
 mod parsers;
 mod tests;
 mod typechecker;
+mod attributes;
 mod types;
 
 use typechecker::typecheck;

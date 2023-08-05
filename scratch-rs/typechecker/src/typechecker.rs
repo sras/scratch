@@ -1,6 +1,7 @@
 use std::collections::HashMap;
 use std::convert::TryFrom;
 
+use crate::attributes;
 use crate::instructions::MICHELSON_INSTRUCTIONS;
 use crate::types::map_mtype;
 use crate::types::ArgConstraint::*;

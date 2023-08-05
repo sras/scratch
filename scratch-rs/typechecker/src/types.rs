@@ -1,12 +1,9 @@
 use crate::types::MType::*;
 use core::fmt::Debug;
 
-#[derive(Debug, Clone, Eq, PartialEq)]
-pub enum Concrete {}
-
 pub type ConcreteType = MType<MAtomic>;
 
-#[derive(Debug, Eq, Clone, PartialEq)]
+#[derive(Debug, Hash, Eq, Clone, PartialEq)]
 pub enum MAtomic {
     MNat,
     MInt,
