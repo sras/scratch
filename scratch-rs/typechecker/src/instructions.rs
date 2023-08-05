@@ -42,7 +42,7 @@ lazy_static! {
             ("", "<a|int>;<a|int>", "<a|int>")
         ),
         mk_instr!("CONS", "", "<w|a>;list <r|a>", "list <r|a>"),
-        mk_instr!("PUSH", "<t|a>;<r|a>", "", "<r|a>"),
+        mk_instr!("PUSH", "<t|a=>pushable>;<r|a>", "", "<r|a>"),
         mk_instr!("PAIR", "", "<w|a>;<w|b>", "pair <r|a> <r|b>"),
         mk_instr!(
             "LAMBDA",

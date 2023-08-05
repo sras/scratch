@@ -16,12 +16,10 @@ fn parse_mdyn_to<T, F: Fn(&MType<DynMType>) -> T>(cs: &str, cb: F) -> Vec<T> {
     if cs.len() == 0 {
         return Vec::new();
     } else {
-        MDynListParser::new()
-            .parse(cs)
-            .unwrap()
-            .iter()
-            .map(cb)
-            .collect()
+        match MDynListParser::new().parse(cs) {
+            Result::Ok(s) => return s.iter().map(cb).collect(),
+            Result::Err(s) => panic!("{}", s)
+        }
     }
 }
 
@@ -29,7 +27,7 @@ pub fn dynm_to_arg_constraint(d: DynMType) -> ArgConstraint {
     match d {
         DMDyn(s) => match ConstraintParser::new().parse(&s) {
             Result::Ok(s) => s,
-            Result::Err(_) => panic!("Parsing of ArgConstraint failed!"),
+            Result::Err(e) => panic!("Parsing of ArgConstraint failed!: {} : {}", e, s),
         },
         _ => panic!("Unexpected enum variant during constraint parsing"),
     }

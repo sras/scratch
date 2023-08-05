@@ -6,16 +6,8 @@ use crate::types::MAtomic::*;
 use crate::types::MType;
 use crate::types::MType::*;
 
-pub enum Attribute {
-    Comparable,
-    Passable,
-    Pushable,
-    Storable,
-    Packable,
-    BigmapValue,
-    Duplicable,
-}
-use Attribute::*;
+use crate::types::Attribute;
+use crate::types::Attribute::*;
 
 fn check_attribute(atr: &Attribute, ct: &ConcreteType) -> bool {
     match ct {

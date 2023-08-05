@@ -1,5 +1,5 @@
 // auto-generated: "lalrpop 0.20.0"
-// sha3: 67cda0f01abd6e6047c5cc3a0feb76d42b183e2c3ee9972f63d49a3d7f079604
+// sha3: aead014172ad4ebfdf4f87310f3a30d498feb4cdf9ceca3190406429cdbf5e80
 use std::str::FromStr;
 use crate::types::mdyn_to_concrete;
 use crate::types::MType;
@@ -23,6 +23,8 @@ use crate::types::CompositeValue::*;
 use crate::types::StackResultElem;
 use crate::types::StackResultElem::*;
 use crate::types::CompoundInstruction;
+use crate::types::Attribute;
+use crate::types::Attribute::*;
 #[allow(unused_extern_crates)]
 extern crate lalrpop_util as __lalrpop_util;
 #[allow(unused_imports)]
@@ -57,6 +59,8 @@ mod __parse__ConcreteType {
     use crate::types::StackResultElem;
     use crate::types::StackResultElem::*;
     use crate::types::CompoundInstruction;
+    use crate::types::Attribute;
+    use crate::types::Attribute::*;
     #[allow(unused_extern_crates)]
     extern crate lalrpop_util as __lalrpop_util;
     #[allow(unused_imports)]
@@ -73,67 +77,69 @@ mod __parse__ConcreteType {
         Variant3(Vec<ArgValue<SomeValue>>),
         Variant4(MAtomic),
         Variant5(AtomicValue),
-        Variant6(CompositeValue),
-        Variant7(CompoundInstruction<SomeValue>),
-        Variant8(ConcreteType),
-        Variant9(ArgConstraint),
-        Variant10(String),
-        Variant11(Instruction<SomeValue>),
-        Variant12(Vec<CompoundInstruction<SomeValue>>),
-        Variant13(MType<DynMType>),
-        Variant14(Vec<MType<DynMType>>),
-        Variant15(bool),
-        Variant16(i32),
-        Variant17(SomeValue),
-        Variant18(Vec<SomeValue>),
-        Variant19(StackResultElem),
+        Variant6(Attribute),
+        Variant7(Vec<Attribute>),
+        Variant8(CompositeValue),
+        Variant9(CompoundInstruction<SomeValue>),
+        Variant10(ConcreteType),
+        Variant11(ArgConstraint),
+        Variant12(String),
+        Variant13(Instruction<SomeValue>),
+        Variant14(Vec<CompoundInstruction<SomeValue>>),
+        Variant15(MType<DynMType>),
+        Variant16(Vec<MType<DynMType>>),
+        Variant17(bool),
+        Variant18(i32),
+        Variant19(SomeValue),
+        Variant20(Vec<SomeValue>),
+        Variant21(StackResultElem),
     }
     const __ACTION: &[i8] = &[
         // State 0
-        2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 12, 13, 3, 4, 14, 5, 0, 15, 0, 0, 0, 0, 0, 0, 16, 0, 0,
+        2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 12, 0, 0, 13, 3, 4, 14, 0, 5, 0, 0, 0, 0, 15, 0, 0, 0, 0, 0, 0, 16, 0, 0,
         // State 1
-        2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 12, 13, 3, 4, 14, 5, 0, 15, 0, 0, 0, 0, 0, 0, 16, 0, 0,
+        2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 12, 0, 0, 13, 3, 4, 14, 0, 5, 0, 0, 0, 0, 15, 0, 0, 0, 0, 0, 0, 16, 0, 0,
         // State 2
-        2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 12, 13, 3, 4, 14, 5, 0, 15, 0, 0, 0, 0, 0, 0, 16, 0, 0,
+        2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 12, 0, 0, 13, 3, 4, 14, 0, 5, 0, 0, 0, 0, 15, 0, 0, 0, 0, 0, 0, 16, 0, 0,
         // State 3
-        2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 12, 13, 3, 4, 14, 5, 0, 15, 0, 0, 0, 0, 0, 0, 16, 0, 0,
+        2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 12, 0, 0, 13, 3, 4, 14, 0, 5, 0, 0, 0, 0, 15, 0, 0, 0, 0, 0, 0, 16, 0, 0,
         // State 4
-        2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 12, 13, 3, 4, 14, 5, 0, 15, 0, 0, 0, 0, 0, 0, 16, 0, 0,
+        2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 12, 0, 0, 13, 3, 4, 14, 0, 5, 0, 0, 0, 0, 15, 0, 0, 0, 0, 0, 0, 16, 0, 0,
         // State 5
-        2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 12, 13, 3, 4, 14, 5, 0, 15, 0, 0, 0, 0, 0, 0, 16, 0, 0,
+        2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 12, 0, 0, 13, 3, 4, 14, 0, 5, 0, 0, 0, 0, 15, 0, 0, 0, 0, 0, 0, 16, 0, 0,
         // State 6
-        2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 12, 13, 3, 4, 14, 5, 0, 15, 0, 0, 0, 0, 0, 0, 16, 0, 0,
+        2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 12, 0, 0, 13, 3, 4, 14, 0, 5, 0, 0, 0, 0, 15, 0, 0, 0, 0, 0, 0, 16, 0, 0,
         // State 7
-        -33, -33, 0, 0, 0, 0, 0, 0, 0, 0, -33, -33, -33, -33, -33, -33, 0, -33, 0, 0, 0, 0, 0, 0, -33, 0, 0,
+        -44, -44, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -44, 0, 0, -44, -44, -44, -44, 0, -44, 0, 0, 0, 0, -44, 0, 0, 0, 0, 0, 0, -44, 0, 0,
         // State 8
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         // State 9
-        -34, -34, 0, 0, 0, 0, 0, 0, 0, 0, -34, -34, -34, -34, -34, -34, 0, -34, 0, 0, 0, 0, 0, 0, -34, 0, 0,
+        -45, -45, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -45, 0, 0, -45, -45, -45, -45, 0, -45, 0, 0, 0, 0, -45, 0, 0, 0, 0, 0, 0, -45, 0, 0,
         // State 10
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         // State 11
-        -9, -9, 0, 0, 0, 0, 0, 0, 0, 0, -9, -9, -9, -9, -9, -9, 0, -9, 0, 0, 0, 0, 0, 0, -9, 0, 0,
+        -9, -9, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -9, 0, 0, -9, -9, -9, -9, 0, -9, 0, 0, 0, 0, -9, 0, 0, 0, 0, 0, 0, -9, 0, 0,
         // State 12
-        -6, -6, 0, 0, 0, 0, 0, 0, 0, 0, -6, -6, -6, -6, -6, -6, 0, -6, 0, 0, 0, 0, 0, 0, -6, 0, 0,
+        -6, -6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -6, 0, 0, -6, -6, -6, -6, 0, -6, 0, 0, 0, 0, -6, 0, 0, 0, 0, 0, 0, -6, 0, 0,
         // State 13
-        -7, -7, 0, 0, 0, 0, 0, 0, 0, 0, -7, -7, -7, -7, -7, -7, 0, -7, 0, 0, 0, 0, 0, 0, -7, 0, 0,
+        -7, -7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -7, 0, 0, -7, -7, -7, -7, 0, -7, 0, 0, 0, 0, -7, 0, 0, 0, 0, 0, 0, -7, 0, 0,
         // State 14
-        -8, -8, 0, 0, 0, 0, 0, 0, 0, 0, -8, -8, -8, -8, -8, -8, 0, -8, 0, 0, 0, 0, 0, 0, -8, 0, 0,
+        -8, -8, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -8, 0, 0, -8, -8, -8, -8, 0, -8, 0, 0, 0, 0, -8, 0, 0, 0, 0, 0, 0, -8, 0, 0,
         // State 15
-        -25, -25, 0, 0, 0, 0, 0, 0, 0, 0, -25, -25, -25, -25, -25, -25, 0, -25, 0, 0, 0, 0, 0, 0, -25, 0, 0,
+        -36, -36, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -36, 0, 0, -36, -36, -36, -36, 0, -36, 0, 0, 0, 0, -36, 0, 0, 0, 0, 0, 0, -36, 0, 0,
         // State 16
-        0, 19, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 19, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         // State 17
-        -35, -35, 0, 0, 0, 0, 0, 0, 0, 0, -35, -35, -35, -35, -35, -35, 0, -35, 0, 0, 0, 0, 0, 0, -35, 0, 0,
+        -46, -46, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -46, 0, 0, -46, -46, -46, -46, 0, -46, 0, 0, 0, 0, -46, 0, 0, 0, 0, 0, 0, -46, 0, 0,
         // State 18
-        -38, -38, 0, 0, 0, 0, 0, 0, 0, 0, -38, -38, -38, -38, -38, -38, 0, -38, 0, 0, 0, 0, 0, 0, -38, 0, 0,
+        -49, -49, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -49, 0, 0, -49, -49, -49, -49, 0, -49, 0, 0, 0, 0, -49, 0, 0, 0, 0, 0, 0, -49, 0, 0,
         // State 19
-        -37, -37, 0, 0, 0, 0, 0, 0, 0, 0, -37, -37, -37, -37, -37, -37, 0, -37, 0, 0, 0, 0, 0, 0, -37, 0, 0,
+        -48, -48, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -48, 0, 0, -48, -48, -48, -48, 0, -48, 0, 0, 0, 0, -48, 0, 0, 0, 0, 0, 0, -48, 0, 0,
         // State 20
-        -36, -36, 0, 0, 0, 0, 0, 0, 0, 0, -36, -36, -36, -36, -36, -36, 0, -36, 0, 0, 0, 0, 0, 0, -36, 0, 0,
+        -47, -47, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -47, 0, 0, -47, -47, -47, -47, 0, -47, 0, 0, 0, 0, -47, 0, 0, 0, 0, 0, 0, -47, 0, 0,
     ];
     fn __action(state: i8, integer: usize) -> i8 {
-        __ACTION[(state as usize) * 27 + integer]
+        __ACTION[(state as usize) * 36 + integer]
     }
     const __EOF_ACTION: &[i8] = &[
         // State 0
@@ -151,13 +157,13 @@ mod __parse__ConcreteType {
         // State 6
         0,
         // State 7
-        -33,
+        -44,
         // State 8
-        -53,
+        -64,
         // State 9
-        -34,
+        -45,
         // State 10
-        -20,
+        -29,
         // State 11
         -9,
         // State 12
@@ -167,24 +173,24 @@ mod __parse__ConcreteType {
         // State 14
         -8,
         // State 15
-        -25,
+        -36,
         // State 16
         0,
         // State 17
-        -35,
+        -46,
         // State 18
-        -38,
+        -49,
         // State 19
-        -37,
+        -48,
         // State 20
-        -36,
+        -47,
     ];
     fn __goto(state: i8, nt: usize) -> i8 {
         match nt {
             3 => 7,
-            7 => 8,
-            9 => 9,
-            14 => match state {
+            9 => 8,
+            11 => 9,
+            16 => match state {
                 4 => 6,
                 0 => 10,
                 1 => 16,
@@ -199,7 +205,9 @@ mod __parse__ConcreteType {
     const __TERMINAL: &[&str] = &[
         r###""(""###,
         r###"")""###,
+        r###""+""###,
         r###"";""###,
+        r###""=>""###,
         r###""DIP""###,
         r###""False""###,
         r###""IF""###,
@@ -207,13 +215,20 @@ mod __parse__ConcreteType {
         r###""Pair""###,
         r###""True""###,
         r###""a|""###,
+        r###""bigmapvalue""###,
         r###""bool""###,
+        r###""comparable""###,
+        r###""duplicable""###,
         r###""int""###,
         r###""lambda""###,
         r###""list""###,
         r###""nat""###,
+        r###""packable""###,
         r###""pair""###,
+        r###""passable""###,
+        r###""pushable""###,
         r###""r|""###,
+        r###""storable""###,
         r###""string""###,
         r###""t|""###,
         r###""w|""###,
@@ -221,7 +236,7 @@ mod __parse__ConcreteType {
         r###""}""###,
         r###"r#"\"[a-z0-9]+\""#"###,
         r###"r#"([+-]?)[0-9]+"#"###,
-        r###"r#"<[A-Za-z][A-Za-z0-9|]+>"#"###,
+        r###"r#"<[A-Za-z][A-Za-z0-9|+=>]+>"#"###,
         r###"r#"[A-Za-z][A-Za-z0-9]+"#"###,
         r###"r#"[a-z]"#"###,
     ];
@@ -292,7 +307,7 @@ mod __parse__ConcreteType {
 
         #[inline]
         fn error_action(&self, state: i8) -> i8 {
-            __action(state, 27 - 1)
+            __action(state, 36 - 1)
         }
 
         #[inline]
@@ -381,11 +396,20 @@ mod __parse__ConcreteType {
             Token(24, _) if true => Some(19),
             Token(25, _) if true => Some(20),
             Token(26, _) if true => Some(21),
-            Token(0, _) if true => Some(22),
-            Token(1, _) if true => Some(23),
-            Token(2, _) if true => Some(24),
-            Token(3, _) if true => Some(25),
-            Token(4, _) if true => Some(26),
+            Token(27, _) if true => Some(22),
+            Token(28, _) if true => Some(23),
+            Token(29, _) if true => Some(24),
+            Token(30, _) if true => Some(25),
+            Token(31, _) if true => Some(26),
+            Token(32, _) if true => Some(27),
+            Token(33, _) if true => Some(28),
+            Token(34, _) if true => Some(29),
+            Token(35, _) if true => Some(30),
+            Token(0, _) if true => Some(31),
+            Token(1, _) if true => Some(32),
+            Token(2, _) if true => Some(33),
+            Token(3, _) if true => Some(34),
+            Token(4, _) if true => Some(35),
             _ => None,
         }
     }
@@ -398,8 +422,8 @@ mod __parse__ConcreteType {
     ) -> __Symbol<'input>
     {
         match __token_index {
-            0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13 | 14 | 15 | 16 | 17 | 18 | 19 | 20 | 21 | 22 | 23 | 24 | 25 | 26 => match __token {
-                Token(5, __tok0) | Token(6, __tok0) | Token(7, __tok0) | Token(8, __tok0) | Token(9, __tok0) | Token(10, __tok0) | Token(11, __tok0) | Token(12, __tok0) | Token(13, __tok0) | Token(14, __tok0) | Token(15, __tok0) | Token(16, __tok0) | Token(17, __tok0) | Token(18, __tok0) | Token(19, __tok0) | Token(20, __tok0) | Token(21, __tok0) | Token(22, __tok0) | Token(23, __tok0) | Token(24, __tok0) | Token(25, __tok0) | Token(26, __tok0) | Token(0, __tok0) | Token(1, __tok0) | Token(2, __tok0) | Token(3, __tok0) | Token(4, __tok0) if true => __Symbol::Variant0(__tok0),
+            0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13 | 14 | 15 | 16 | 17 | 18 | 19 | 20 | 21 | 22 | 23 | 24 | 25 | 26 | 27 | 28 | 29 | 30 | 31 | 32 | 33 | 34 | 35 => match __token {
+                Token(5, __tok0) | Token(6, __tok0) | Token(7, __tok0) | Token(8, __tok0) | Token(9, __tok0) | Token(10, __tok0) | Token(11, __tok0) | Token(12, __tok0) | Token(13, __tok0) | Token(14, __tok0) | Token(15, __tok0) | Token(16, __tok0) | Token(17, __tok0) | Token(18, __tok0) | Token(19, __tok0) | Token(20, __tok0) | Token(21, __tok0) | Token(22, __tok0) | Token(23, __tok0) | Token(24, __tok0) | Token(25, __tok0) | Token(26, __tok0) | Token(27, __tok0) | Token(28, __tok0) | Token(29, __tok0) | Token(30, __tok0) | Token(31, __tok0) | Token(32, __tok0) | Token(33, __tok0) | Token(34, __tok0) | Token(35, __tok0) | Token(0, __tok0) | Token(1, __tok0) | Token(2, __tok0) | Token(3, __tok0) | Token(4, __tok0) if true => __Symbol::Variant0(__tok0),
                 _ => unreachable!(),
             },
             _ => unreachable!(),
@@ -487,13 +511,13 @@ mod __parse__ConcreteType {
             }
             12 => {
                 __state_machine::SimulatedReduce::Reduce {
-                    states_to_pop: 3,
+                    states_to_pop: 1,
                     nonterminal_produced: 5,
                 }
             }
             13 => {
                 __state_machine::SimulatedReduce::Reduce {
-                    states_to_pop: 3,
+                    states_to_pop: 1,
                     nonterminal_produced: 5,
                 }
             }
@@ -505,255 +529,321 @@ mod __parse__ConcreteType {
             }
             15 => {
                 __state_machine::SimulatedReduce::Reduce {
-                    states_to_pop: 3,
-                    nonterminal_produced: 6,
+                    states_to_pop: 1,
+                    nonterminal_produced: 5,
                 }
             }
             16 => {
                 __state_machine::SimulatedReduce::Reduce {
-                    states_to_pop: 2,
-                    nonterminal_produced: 6,
+                    states_to_pop: 1,
+                    nonterminal_produced: 5,
                 }
             }
             17 => {
                 __state_machine::SimulatedReduce::Reduce {
-                    states_to_pop: 4,
-                    nonterminal_produced: 6,
+                    states_to_pop: 1,
+                    nonterminal_produced: 5,
                 }
             }
             18 => {
                 __state_machine::SimulatedReduce::Reduce {
                     states_to_pop: 1,
-                    nonterminal_produced: 6,
+                    nonterminal_produced: 5,
                 }
             }
             19 => {
+                __state_machine::SimulatedReduce::Reduce {
+                    states_to_pop: 3,
+                    nonterminal_produced: 6,
+                }
+            }
+            20 => {
+                __state_machine::SimulatedReduce::Reduce {
+                    states_to_pop: 1,
+                    nonterminal_produced: 6,
+                }
+            }
+            21 => {
+                __state_machine::SimulatedReduce::Reduce {
+                    states_to_pop: 3,
+                    nonterminal_produced: 7,
+                }
+            }
+            22 => {
+                __state_machine::SimulatedReduce::Reduce {
+                    states_to_pop: 3,
+                    nonterminal_produced: 7,
+                }
+            }
+            23 => {
                 __state_machine::SimulatedReduce::Reduce {
                     states_to_pop: 1,
                     nonterminal_produced: 7,
                 }
             }
-            20 => {
-                __state_machine::SimulatedReduce::Reduce {
-                    states_to_pop: 2,
-                    nonterminal_produced: 8,
-                }
-            }
-            21 => {
-                __state_machine::SimulatedReduce::Reduce {
-                    states_to_pop: 2,
-                    nonterminal_produced: 8,
-                }
-            }
-            22 => {
-                __state_machine::SimulatedReduce::Reduce {
-                    states_to_pop: 2,
-                    nonterminal_produced: 8,
-                }
-            }
-            23 => {
-                __state_machine::SimulatedReduce::Reduce {
-                    states_to_pop: 2,
-                    nonterminal_produced: 8,
-                }
-            }
             24 => {
                 __state_machine::SimulatedReduce::Reduce {
-                    states_to_pop: 1,
-                    nonterminal_produced: 9,
+                    states_to_pop: 3,
+                    nonterminal_produced: 8,
                 }
             }
             25 => {
                 __state_machine::SimulatedReduce::Reduce {
-                    states_to_pop: 1,
-                    nonterminal_produced: 10,
+                    states_to_pop: 2,
+                    nonterminal_produced: 8,
                 }
             }
             26 => {
                 __state_machine::SimulatedReduce::Reduce {
-                    states_to_pop: 2,
-                    nonterminal_produced: 11,
+                    states_to_pop: 4,
+                    nonterminal_produced: 8,
                 }
             }
             27 => {
                 __state_machine::SimulatedReduce::Reduce {
                     states_to_pop: 1,
-                    nonterminal_produced: 11,
+                    nonterminal_produced: 8,
                 }
             }
             28 => {
                 __state_machine::SimulatedReduce::Reduce {
-                    states_to_pop: 3,
-                    nonterminal_produced: 12,
+                    states_to_pop: 1,
+                    nonterminal_produced: 9,
                 }
             }
             29 => {
                 __state_machine::SimulatedReduce::Reduce {
-                    states_to_pop: 1,
-                    nonterminal_produced: 13,
+                    states_to_pop: 4,
+                    nonterminal_produced: 10,
                 }
             }
             30 => {
                 __state_machine::SimulatedReduce::Reduce {
-                    states_to_pop: 3,
-                    nonterminal_produced: 13,
+                    states_to_pop: 2,
+                    nonterminal_produced: 10,
                 }
             }
             31 => {
                 __state_machine::SimulatedReduce::Reduce {
-                    states_to_pop: 2,
-                    nonterminal_produced: 13,
+                    states_to_pop: 4,
+                    nonterminal_produced: 10,
                 }
             }
             32 => {
                 __state_machine::SimulatedReduce::Reduce {
-                    states_to_pop: 1,
-                    nonterminal_produced: 14,
+                    states_to_pop: 2,
+                    nonterminal_produced: 10,
                 }
             }
             33 => {
                 __state_machine::SimulatedReduce::Reduce {
-                    states_to_pop: 1,
-                    nonterminal_produced: 14,
+                    states_to_pop: 2,
+                    nonterminal_produced: 10,
                 }
             }
             34 => {
                 __state_machine::SimulatedReduce::Reduce {
                     states_to_pop: 2,
-                    nonterminal_produced: 14,
+                    nonterminal_produced: 10,
                 }
             }
             35 => {
                 __state_machine::SimulatedReduce::Reduce {
-                    states_to_pop: 3,
-                    nonterminal_produced: 14,
+                    states_to_pop: 1,
+                    nonterminal_produced: 11,
                 }
             }
             36 => {
                 __state_machine::SimulatedReduce::Reduce {
-                    states_to_pop: 3,
-                    nonterminal_produced: 14,
+                    states_to_pop: 1,
+                    nonterminal_produced: 12,
                 }
             }
             37 => {
                 __state_machine::SimulatedReduce::Reduce {
-                    states_to_pop: 3,
-                    nonterminal_produced: 14,
+                    states_to_pop: 2,
+                    nonterminal_produced: 13,
                 }
             }
             38 => {
                 __state_machine::SimulatedReduce::Reduce {
-                    states_to_pop: 3,
-                    nonterminal_produced: 15,
+                    states_to_pop: 1,
+                    nonterminal_produced: 13,
                 }
             }
             39 => {
                 __state_machine::SimulatedReduce::Reduce {
-                    states_to_pop: 1,
-                    nonterminal_produced: 15,
+                    states_to_pop: 3,
+                    nonterminal_produced: 14,
                 }
             }
             40 => {
                 __state_machine::SimulatedReduce::Reduce {
                     states_to_pop: 1,
-                    nonterminal_produced: 16,
+                    nonterminal_produced: 15,
                 }
             }
             41 => {
                 __state_machine::SimulatedReduce::Reduce {
-                    states_to_pop: 1,
-                    nonterminal_produced: 16,
+                    states_to_pop: 3,
+                    nonterminal_produced: 15,
                 }
             }
             42 => {
                 __state_machine::SimulatedReduce::Reduce {
-                    states_to_pop: 1,
-                    nonterminal_produced: 17,
+                    states_to_pop: 2,
+                    nonterminal_produced: 15,
                 }
             }
             43 => {
                 __state_machine::SimulatedReduce::Reduce {
                     states_to_pop: 1,
-                    nonterminal_produced: 18,
+                    nonterminal_produced: 16,
                 }
             }
             44 => {
                 __state_machine::SimulatedReduce::Reduce {
                     states_to_pop: 1,
-                    nonterminal_produced: 19,
+                    nonterminal_produced: 16,
                 }
             }
             45 => {
                 __state_machine::SimulatedReduce::Reduce {
-                    states_to_pop: 1,
-                    nonterminal_produced: 19,
+                    states_to_pop: 2,
+                    nonterminal_produced: 16,
                 }
             }
             46 => {
                 __state_machine::SimulatedReduce::Reduce {
                     states_to_pop: 3,
-                    nonterminal_produced: 19,
+                    nonterminal_produced: 16,
                 }
             }
             47 => {
                 __state_machine::SimulatedReduce::Reduce {
-                    states_to_pop: 1,
-                    nonterminal_produced: 20,
+                    states_to_pop: 3,
+                    nonterminal_produced: 16,
                 }
             }
             48 => {
                 __state_machine::SimulatedReduce::Reduce {
                     states_to_pop: 3,
-                    nonterminal_produced: 20,
+                    nonterminal_produced: 16,
                 }
             }
             49 => {
                 __state_machine::SimulatedReduce::Reduce {
-                    states_to_pop: 2,
-                    nonterminal_produced: 20,
+                    states_to_pop: 3,
+                    nonterminal_produced: 17,
                 }
             }
             50 => {
                 __state_machine::SimulatedReduce::Reduce {
-                    states_to_pop: 2,
-                    nonterminal_produced: 21,
+                    states_to_pop: 1,
+                    nonterminal_produced: 17,
                 }
             }
             51 => {
                 __state_machine::SimulatedReduce::Reduce {
-                    states_to_pop: 2,
-                    nonterminal_produced: 21,
+                    states_to_pop: 1,
+                    nonterminal_produced: 18,
                 }
             }
-            52 => __state_machine::SimulatedReduce::Accept,
+            52 => {
+                __state_machine::SimulatedReduce::Reduce {
+                    states_to_pop: 1,
+                    nonterminal_produced: 18,
+                }
+            }
             53 => {
                 __state_machine::SimulatedReduce::Reduce {
                     states_to_pop: 1,
-                    nonterminal_produced: 23,
+                    nonterminal_produced: 19,
                 }
             }
             54 => {
                 __state_machine::SimulatedReduce::Reduce {
                     states_to_pop: 1,
-                    nonterminal_produced: 24,
+                    nonterminal_produced: 20,
                 }
             }
             55 => {
                 __state_machine::SimulatedReduce::Reduce {
                     states_to_pop: 1,
-                    nonterminal_produced: 25,
+                    nonterminal_produced: 21,
                 }
             }
             56 => {
                 __state_machine::SimulatedReduce::Reduce {
                     states_to_pop: 1,
-                    nonterminal_produced: 26,
+                    nonterminal_produced: 21,
                 }
             }
             57 => {
                 __state_machine::SimulatedReduce::Reduce {
+                    states_to_pop: 3,
+                    nonterminal_produced: 21,
+                }
+            }
+            58 => {
+                __state_machine::SimulatedReduce::Reduce {
+                    states_to_pop: 1,
+                    nonterminal_produced: 22,
+                }
+            }
+            59 => {
+                __state_machine::SimulatedReduce::Reduce {
+                    states_to_pop: 3,
+                    nonterminal_produced: 22,
+                }
+            }
+            60 => {
+                __state_machine::SimulatedReduce::Reduce {
+                    states_to_pop: 2,
+                    nonterminal_produced: 22,
+                }
+            }
+            61 => {
+                __state_machine::SimulatedReduce::Reduce {
+                    states_to_pop: 2,
+                    nonterminal_produced: 23,
+                }
+            }
+            62 => {
+                __state_machine::SimulatedReduce::Reduce {
+                    states_to_pop: 2,
+                    nonterminal_produced: 23,
+                }
+            }
+            63 => __state_machine::SimulatedReduce::Accept,
+            64 => {
+                __state_machine::SimulatedReduce::Reduce {
+                    states_to_pop: 1,
+                    nonterminal_produced: 25,
+                }
+            }
+            65 => {
+                __state_machine::SimulatedReduce::Reduce {
+                    states_to_pop: 1,
+                    nonterminal_produced: 26,
+                }
+            }
+            66 => {
+                __state_machine::SimulatedReduce::Reduce {
                     states_to_pop: 1,
                     nonterminal_produced: 27,
+                }
+            }
+            67 => {
+                __state_machine::SimulatedReduce::Reduce {
+                    states_to_pop: 1,
+                    nonterminal_produced: 28,
+                }
+            }
+            68 => {
+                __state_machine::SimulatedReduce::Reduce {
+                    states_to_pop: 1,
+                    nonterminal_produced: 29,
                 }
             }
             _ => panic!("invalid reduction index {}", __reduce_index)
@@ -993,12 +1083,7 @@ mod __parse__ConcreteType {
                 __reduce51(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&())>)
             }
             52 => {
-                // __ConcreteType = ConcreteType => ActionFn(1);
-                let __sym0 = __pop_Variant8(__symbols);
-                let __start = __sym0.0;
-                let __end = __sym0.2;
-                let __nt = super::__action1::<>(input, __sym0);
-                return Some(Ok(__nt));
+                __reduce52(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&())>)
             }
             53 => {
                 __reduce53(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&())>)
@@ -1015,6 +1100,44 @@ mod __parse__ConcreteType {
             57 => {
                 __reduce57(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&())>)
             }
+            58 => {
+                __reduce58(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&())>)
+            }
+            59 => {
+                __reduce59(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&())>)
+            }
+            60 => {
+                __reduce60(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&())>)
+            }
+            61 => {
+                __reduce61(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&())>)
+            }
+            62 => {
+                __reduce62(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&())>)
+            }
+            63 => {
+                // __ConcreteType = ConcreteType => ActionFn(1);
+                let __sym0 = __pop_Variant10(__symbols);
+                let __start = __sym0.0;
+                let __end = __sym0.2;
+                let __nt = super::__action1::<>(input, __sym0);
+                return Some(Ok(__nt));
+            }
+            64 => {
+                __reduce64(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&())>)
+            }
+            65 => {
+                __reduce65(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&())>)
+            }
+            66 => {
+                __reduce66(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&())>)
+            }
+            67 => {
+                __reduce67(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&())>)
+            }
+            68 => {
+                __reduce68(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&())>)
+            }
             _ => panic!("invalid action code {}", __action)
         };
         let __states_len = __states.len();
@@ -1028,14 +1151,14 @@ mod __parse__ConcreteType {
     fn __symbol_type_mismatch() -> ! {
         panic!("symbol type mismatch")
     }
-    fn __pop_Variant9<
+    fn __pop_Variant11<
       'input,
     >(
         __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>
     ) -> (usize, ArgConstraint, usize)
      {
         match __symbols.pop() {
-            Some((__l, __Symbol::Variant9(__v), __r)) => (__l, __v, __r),
+            Some((__l, __Symbol::Variant11(__v), __r)) => (__l, __v, __r),
             _ => __symbol_type_mismatch()
         }
     }
@@ -1065,21 +1188,10 @@ mod __parse__ConcreteType {
       'input,
     >(
         __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>
-    ) -> (usize, CompositeValue, usize)
+    ) -> (usize, Attribute, usize)
      {
         match __symbols.pop() {
             Some((__l, __Symbol::Variant6(__v), __r)) => (__l, __v, __r),
-            _ => __symbol_type_mismatch()
-        }
-    }
-    fn __pop_Variant7<
-      'input,
-    >(
-        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>
-    ) -> (usize, CompoundInstruction<SomeValue>, usize)
-     {
-        match __symbols.pop() {
-            Some((__l, __Symbol::Variant7(__v), __r)) => (__l, __v, __r),
             _ => __symbol_type_mismatch()
         }
     }
@@ -1087,21 +1199,43 @@ mod __parse__ConcreteType {
       'input,
     >(
         __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>
-    ) -> (usize, ConcreteType, usize)
+    ) -> (usize, CompositeValue, usize)
      {
         match __symbols.pop() {
             Some((__l, __Symbol::Variant8(__v), __r)) => (__l, __v, __r),
             _ => __symbol_type_mismatch()
         }
     }
-    fn __pop_Variant11<
+    fn __pop_Variant9<
+      'input,
+    >(
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>
+    ) -> (usize, CompoundInstruction<SomeValue>, usize)
+     {
+        match __symbols.pop() {
+            Some((__l, __Symbol::Variant9(__v), __r)) => (__l, __v, __r),
+            _ => __symbol_type_mismatch()
+        }
+    }
+    fn __pop_Variant10<
+      'input,
+    >(
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>
+    ) -> (usize, ConcreteType, usize)
+     {
+        match __symbols.pop() {
+            Some((__l, __Symbol::Variant10(__v), __r)) => (__l, __v, __r),
+            _ => __symbol_type_mismatch()
+        }
+    }
+    fn __pop_Variant13<
       'input,
     >(
         __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>
     ) -> (usize, Instruction<SomeValue>, usize)
      {
         match __symbols.pop() {
-            Some((__l, __Symbol::Variant11(__v), __r)) => (__l, __v, __r),
+            Some((__l, __Symbol::Variant13(__v), __r)) => (__l, __v, __r),
             _ => __symbol_type_mismatch()
         }
     }
@@ -1116,25 +1250,14 @@ mod __parse__ConcreteType {
             _ => __symbol_type_mismatch()
         }
     }
-    fn __pop_Variant13<
+    fn __pop_Variant15<
       'input,
     >(
         __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>
     ) -> (usize, MType<DynMType>, usize)
      {
         match __symbols.pop() {
-            Some((__l, __Symbol::Variant13(__v), __r)) => (__l, __v, __r),
-            _ => __symbol_type_mismatch()
-        }
-    }
-    fn __pop_Variant17<
-      'input,
-    >(
-        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>
-    ) -> (usize, SomeValue, usize)
-     {
-        match __symbols.pop() {
-            Some((__l, __Symbol::Variant17(__v), __r)) => (__l, __v, __r),
+            Some((__l, __Symbol::Variant15(__v), __r)) => (__l, __v, __r),
             _ => __symbol_type_mismatch()
         }
     }
@@ -1142,21 +1265,32 @@ mod __parse__ConcreteType {
       'input,
     >(
         __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>
-    ) -> (usize, StackResultElem, usize)
+    ) -> (usize, SomeValue, usize)
      {
         match __symbols.pop() {
             Some((__l, __Symbol::Variant19(__v), __r)) => (__l, __v, __r),
             _ => __symbol_type_mismatch()
         }
     }
-    fn __pop_Variant10<
+    fn __pop_Variant21<
+      'input,
+    >(
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>
+    ) -> (usize, StackResultElem, usize)
+     {
+        match __symbols.pop() {
+            Some((__l, __Symbol::Variant21(__v), __r)) => (__l, __v, __r),
+            _ => __symbol_type_mismatch()
+        }
+    }
+    fn __pop_Variant12<
       'input,
     >(
         __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>
     ) -> (usize, String, usize)
      {
         match __symbols.pop() {
-            Some((__l, __Symbol::Variant10(__v), __r)) => (__l, __v, __r),
+            Some((__l, __Symbol::Variant12(__v), __r)) => (__l, __v, __r),
             _ => __symbol_type_mismatch()
         }
     }
@@ -1171,14 +1305,14 @@ mod __parse__ConcreteType {
             _ => __symbol_type_mismatch()
         }
     }
-    fn __pop_Variant12<
+    fn __pop_Variant7<
       'input,
     >(
         __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>
-    ) -> (usize, Vec<CompoundInstruction<SomeValue>>, usize)
+    ) -> (usize, Vec<Attribute>, usize)
      {
         match __symbols.pop() {
-            Some((__l, __Symbol::Variant12(__v), __r)) => (__l, __v, __r),
+            Some((__l, __Symbol::Variant7(__v), __r)) => (__l, __v, __r),
             _ => __symbol_type_mismatch()
         }
     }
@@ -1186,32 +1320,43 @@ mod __parse__ConcreteType {
       'input,
     >(
         __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>
-    ) -> (usize, Vec<MType<DynMType>>, usize)
+    ) -> (usize, Vec<CompoundInstruction<SomeValue>>, usize)
      {
         match __symbols.pop() {
             Some((__l, __Symbol::Variant14(__v), __r)) => (__l, __v, __r),
             _ => __symbol_type_mismatch()
         }
     }
-    fn __pop_Variant18<
+    fn __pop_Variant16<
+      'input,
+    >(
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>
+    ) -> (usize, Vec<MType<DynMType>>, usize)
+     {
+        match __symbols.pop() {
+            Some((__l, __Symbol::Variant16(__v), __r)) => (__l, __v, __r),
+            _ => __symbol_type_mismatch()
+        }
+    }
+    fn __pop_Variant20<
       'input,
     >(
         __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>
     ) -> (usize, Vec<SomeValue>, usize)
      {
         match __symbols.pop() {
-            Some((__l, __Symbol::Variant18(__v), __r)) => (__l, __v, __r),
+            Some((__l, __Symbol::Variant20(__v), __r)) => (__l, __v, __r),
             _ => __symbol_type_mismatch()
         }
     }
-    fn __pop_Variant15<
+    fn __pop_Variant17<
       'input,
     >(
         __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>
     ) -> (usize, bool, usize)
      {
         match __symbols.pop() {
-            Some((__l, __Symbol::Variant15(__v), __r)) => (__l, __v, __r),
+            Some((__l, __Symbol::Variant17(__v), __r)) => (__l, __v, __r),
             _ => __symbol_type_mismatch()
         }
     }
@@ -1226,14 +1371,14 @@ mod __parse__ConcreteType {
             _ => __symbol_type_mismatch()
         }
     }
-    fn __pop_Variant16<
+    fn __pop_Variant18<
       'input,
     >(
         __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>
     ) -> (usize, i32, usize)
      {
         match __symbols.pop() {
-            Some((__l, __Symbol::Variant16(__v), __r)) => (__l, __v, __r),
+            Some((__l, __Symbol::Variant18(__v), __r)) => (__l, __v, __r),
             _ => __symbol_type_mismatch()
         }
     }
@@ -1257,11 +1402,11 @@ mod __parse__ConcreteType {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // Arg = SomeValue => ActionFn(12);
-        let __sym0 = __pop_Variant17(__symbols);
+        // Arg = SomeValue => ActionFn(21);
+        let __sym0 = __pop_Variant19(__symbols);
         let __start = __sym0.0;
         let __end = __sym0.2;
-        let __nt = super::__action12::<>(input, __sym0);
+        let __nt = super::__action21::<>(input, __sym0);
         __symbols.push((__start, __Symbol::Variant1(__nt), __end));
         (1, 0)
     }
@@ -1274,11 +1419,11 @@ mod __parse__ConcreteType {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // Arg = ConcreteType => ActionFn(13);
-        let __sym0 = __pop_Variant8(__symbols);
+        // Arg = ConcreteType => ActionFn(22);
+        let __sym0 = __pop_Variant10(__symbols);
         let __start = __sym0.0;
         let __end = __sym0.2;
-        let __nt = super::__action13::<>(input, __sym0);
+        let __nt = super::__action22::<>(input, __sym0);
         __symbols.push((__start, __Symbol::Variant1(__nt), __end));
         (1, 0)
     }
@@ -1291,11 +1436,11 @@ mod __parse__ConcreteType {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // ArgVar = r#"[a-z]"# => ActionFn(51);
+        // ArgVar = r#"[a-z]"# => ActionFn(62);
         let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0;
         let __end = __sym0.2;
-        let __nt = super::__action51::<>(input, __sym0);
+        let __nt = super::__action62::<>(input, __sym0);
         __symbols.push((__start, __Symbol::Variant2(__nt), __end));
         (1, 1)
     }
@@ -1308,13 +1453,13 @@ mod __parse__ConcreteType {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // Args = Arg, Args => ActionFn(14);
+        // Args = Arg, Args => ActionFn(23);
         assert!(__symbols.len() >= 2);
         let __sym1 = __pop_Variant3(__symbols);
         let __sym0 = __pop_Variant1(__symbols);
         let __start = __sym0.0;
         let __end = __sym1.2;
-        let __nt = super::__action14::<>(input, __sym0, __sym1);
+        let __nt = super::__action23::<>(input, __sym0, __sym1);
         __symbols.push((__start, __Symbol::Variant3(__nt), __end));
         (2, 2)
     }
@@ -1327,11 +1472,11 @@ mod __parse__ConcreteType {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // Args = Arg => ActionFn(15);
+        // Args = Arg => ActionFn(24);
         let __sym0 = __pop_Variant1(__symbols);
         let __start = __sym0.0;
         let __end = __sym0.2;
-        let __nt = super::__action15::<>(input, __sym0);
+        let __nt = super::__action24::<>(input, __sym0);
         __symbols.push((__start, __Symbol::Variant3(__nt), __end));
         (1, 2)
     }
@@ -1344,11 +1489,11 @@ mod __parse__ConcreteType {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // AtomicType = "int" => ActionFn(32);
+        // AtomicType = "int" => ActionFn(41);
         let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0;
         let __end = __sym0.2;
-        let __nt = super::__action32::<>(input, __sym0);
+        let __nt = super::__action41::<>(input, __sym0);
         __symbols.push((__start, __Symbol::Variant4(__nt), __end));
         (1, 3)
     }
@@ -1361,11 +1506,11 @@ mod __parse__ConcreteType {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // AtomicType = "nat" => ActionFn(33);
+        // AtomicType = "nat" => ActionFn(42);
         let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0;
         let __end = __sym0.2;
-        let __nt = super::__action33::<>(input, __sym0);
+        let __nt = super::__action42::<>(input, __sym0);
         __symbols.push((__start, __Symbol::Variant4(__nt), __end));
         (1, 3)
     }
@@ -1378,11 +1523,11 @@ mod __parse__ConcreteType {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // AtomicType = "string" => ActionFn(34);
+        // AtomicType = "string" => ActionFn(43);
         let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0;
         let __end = __sym0.2;
-        let __nt = super::__action34::<>(input, __sym0);
+        let __nt = super::__action43::<>(input, __sym0);
         __symbols.push((__start, __Symbol::Variant4(__nt), __end));
         (1, 3)
     }
@@ -1395,11 +1540,11 @@ mod __parse__ConcreteType {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // AtomicType = "bool" => ActionFn(35);
+        // AtomicType = "bool" => ActionFn(44);
         let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0;
         let __end = __sym0.2;
-        let __nt = super::__action35::<>(input, __sym0);
+        let __nt = super::__action44::<>(input, __sym0);
         __symbols.push((__start, __Symbol::Variant4(__nt), __end));
         (1, 3)
     }
@@ -1412,11 +1557,11 @@ mod __parse__ConcreteType {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // AtomicValue = McLitNumber => ActionFn(19);
-        let __sym0 = __pop_Variant16(__symbols);
+        // AtomicValue = McLitNumber => ActionFn(28);
+        let __sym0 = __pop_Variant18(__symbols);
         let __start = __sym0.0;
         let __end = __sym0.2;
-        let __nt = super::__action19::<>(input, __sym0);
+        let __nt = super::__action28::<>(input, __sym0);
         __symbols.push((__start, __Symbol::Variant5(__nt), __end));
         (1, 4)
     }
@@ -1429,11 +1574,11 @@ mod __parse__ConcreteType {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // AtomicValue = McLitString => ActionFn(20);
-        let __sym0 = __pop_Variant10(__symbols);
+        // AtomicValue = McLitString => ActionFn(29);
+        let __sym0 = __pop_Variant12(__symbols);
         let __start = __sym0.0;
         let __end = __sym0.2;
-        let __nt = super::__action20::<>(input, __sym0);
+        let __nt = super::__action29::<>(input, __sym0);
         __symbols.push((__start, __Symbol::Variant5(__nt), __end));
         (1, 4)
     }
@@ -1446,11 +1591,11 @@ mod __parse__ConcreteType {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // AtomicValue = McLitBool => ActionFn(21);
-        let __sym0 = __pop_Variant15(__symbols);
+        // AtomicValue = McLitBool => ActionFn(30);
+        let __sym0 = __pop_Variant17(__symbols);
         let __start = __sym0.0;
         let __end = __sym0.2;
-        let __nt = super::__action21::<>(input, __sym0);
+        let __nt = super::__action30::<>(input, __sym0);
         __symbols.push((__start, __Symbol::Variant5(__nt), __end));
         (1, 4)
     }
@@ -1463,16 +1608,13 @@ mod __parse__ConcreteType {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // CompositeValue = "Pair", SomeValue, SomeValue => ActionFn(22);
-        assert!(__symbols.len() >= 3);
-        let __sym2 = __pop_Variant17(__symbols);
-        let __sym1 = __pop_Variant17(__symbols);
+        // Attribute = "comparable" => ActionFn(6);
         let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0;
-        let __end = __sym2.2;
-        let __nt = super::__action22::<>(input, __sym0, __sym1, __sym2);
+        let __end = __sym0.2;
+        let __nt = super::__action6::<>(input, __sym0);
         __symbols.push((__start, __Symbol::Variant6(__nt), __end));
-        (3, 5)
+        (1, 5)
     }
     pub(crate) fn __reduce13<
         'input,
@@ -1483,16 +1625,13 @@ mod __parse__ConcreteType {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // CompositeValue = "{", SomeValueList, "}" => ActionFn(23);
-        assert!(__symbols.len() >= 3);
-        let __sym2 = __pop_Variant0(__symbols);
-        let __sym1 = __pop_Variant18(__symbols);
+        // Attribute = "passable" => ActionFn(7);
         let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0;
-        let __end = __sym2.2;
-        let __nt = super::__action23::<>(input, __sym0, __sym1, __sym2);
+        let __end = __sym0.2;
+        let __nt = super::__action7::<>(input, __sym0);
         __symbols.push((__start, __Symbol::Variant6(__nt), __end));
-        (3, 5)
+        (1, 5)
     }
     pub(crate) fn __reduce14<
         'input,
@@ -1503,11 +1642,11 @@ mod __parse__ConcreteType {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // CompositeValue = InstructionBlock => ActionFn(24);
-        let __sym0 = __pop_Variant12(__symbols);
+        // Attribute = "pushable" => ActionFn(8);
+        let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0;
         let __end = __sym0.2;
-        let __nt = super::__action24::<>(input, __sym0);
+        let __nt = super::__action8::<>(input, __sym0);
         __symbols.push((__start, __Symbol::Variant6(__nt), __end));
         (1, 5)
     }
@@ -1520,16 +1659,13 @@ mod __parse__ConcreteType {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // CompoundInstruction = "IF", InstructionBlock, InstructionBlock => ActionFn(6);
-        assert!(__symbols.len() >= 3);
-        let __sym2 = __pop_Variant12(__symbols);
-        let __sym1 = __pop_Variant12(__symbols);
+        // Attribute = "storable" => ActionFn(9);
         let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0;
-        let __end = __sym2.2;
-        let __nt = super::__action6::<>(input, __sym0, __sym1, __sym2);
-        __symbols.push((__start, __Symbol::Variant7(__nt), __end));
-        (3, 6)
+        let __end = __sym0.2;
+        let __nt = super::__action9::<>(input, __sym0);
+        __symbols.push((__start, __Symbol::Variant6(__nt), __end));
+        (1, 5)
     }
     pub(crate) fn __reduce16<
         'input,
@@ -1540,15 +1676,13 @@ mod __parse__ConcreteType {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // CompoundInstruction = "DIP", InstructionBlock => ActionFn(7);
-        assert!(__symbols.len() >= 2);
-        let __sym1 = __pop_Variant12(__symbols);
+        // Attribute = "packable" => ActionFn(10);
         let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0;
-        let __end = __sym1.2;
-        let __nt = super::__action7::<>(input, __sym0, __sym1);
-        __symbols.push((__start, __Symbol::Variant7(__nt), __end));
-        (2, 6)
+        let __end = __sym0.2;
+        let __nt = super::__action10::<>(input, __sym0);
+        __symbols.push((__start, __Symbol::Variant6(__nt), __end));
+        (1, 5)
     }
     pub(crate) fn __reduce17<
         'input,
@@ -1559,17 +1693,13 @@ mod __parse__ConcreteType {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // CompoundInstruction = "LAMBDA_REC", ConcreteType, ConcreteType, InstructionBlock => ActionFn(8);
-        assert!(__symbols.len() >= 4);
-        let __sym3 = __pop_Variant12(__symbols);
-        let __sym2 = __pop_Variant8(__symbols);
-        let __sym1 = __pop_Variant8(__symbols);
+        // Attribute = "bigmapvalue" => ActionFn(11);
         let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0;
-        let __end = __sym3.2;
-        let __nt = super::__action8::<>(input, __sym0, __sym1, __sym2, __sym3);
-        __symbols.push((__start, __Symbol::Variant7(__nt), __end));
-        (4, 6)
+        let __end = __sym0.2;
+        let __nt = super::__action11::<>(input, __sym0);
+        __symbols.push((__start, __Symbol::Variant6(__nt), __end));
+        (1, 5)
     }
     pub(crate) fn __reduce18<
         'input,
@@ -1580,13 +1710,13 @@ mod __parse__ConcreteType {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // CompoundInstruction = Instruction => ActionFn(9);
-        let __sym0 = __pop_Variant11(__symbols);
+        // Attribute = "duplicable" => ActionFn(12);
+        let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0;
         let __end = __sym0.2;
-        let __nt = super::__action9::<>(input, __sym0);
-        __symbols.push((__start, __Symbol::Variant7(__nt), __end));
-        (1, 6)
+        let __nt = super::__action12::<>(input, __sym0);
+        __symbols.push((__start, __Symbol::Variant6(__nt), __end));
+        (1, 5)
     }
     pub(crate) fn __reduce19<
         'input,
@@ -1597,13 +1727,16 @@ mod __parse__ConcreteType {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // ConcreteType = MDyn => ActionFn(36);
-        let __sym0 = __pop_Variant13(__symbols);
+        // AttributeList = Attribute, "+", AttributeList => ActionFn(13);
+        assert!(__symbols.len() >= 3);
+        let __sym2 = __pop_Variant7(__symbols);
+        let __sym1 = __pop_Variant0(__symbols);
+        let __sym0 = __pop_Variant6(__symbols);
         let __start = __sym0.0;
-        let __end = __sym0.2;
-        let __nt = super::__action36::<>(input, __sym0);
-        __symbols.push((__start, __Symbol::Variant8(__nt), __end));
-        (1, 7)
+        let __end = __sym2.2;
+        let __nt = super::__action13::<>(input, __sym0, __sym1, __sym2);
+        __symbols.push((__start, __Symbol::Variant7(__nt), __end));
+        (3, 6)
     }
     pub(crate) fn __reduce20<
         'input,
@@ -1614,15 +1747,13 @@ mod __parse__ConcreteType {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // Constraint = "w|", ArgVar => ActionFn(45);
-        assert!(__symbols.len() >= 2);
-        let __sym1 = __pop_Variant2(__symbols);
-        let __sym0 = __pop_Variant0(__symbols);
+        // AttributeList = Attribute => ActionFn(14);
+        let __sym0 = __pop_Variant6(__symbols);
         let __start = __sym0.0;
-        let __end = __sym1.2;
-        let __nt = super::__action45::<>(input, __sym0, __sym1);
-        __symbols.push((__start, __Symbol::Variant9(__nt), __end));
-        (2, 8)
+        let __end = __sym0.2;
+        let __nt = super::__action14::<>(input, __sym0);
+        __symbols.push((__start, __Symbol::Variant7(__nt), __end));
+        (1, 6)
     }
     pub(crate) fn __reduce21<
         'input,
@@ -1633,15 +1764,16 @@ mod __parse__ConcreteType {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // Constraint = "t|", ArgVar => ActionFn(46);
-        assert!(__symbols.len() >= 2);
-        let __sym1 = __pop_Variant2(__symbols);
+        // CompositeValue = "Pair", SomeValue, SomeValue => ActionFn(31);
+        assert!(__symbols.len() >= 3);
+        let __sym2 = __pop_Variant19(__symbols);
+        let __sym1 = __pop_Variant19(__symbols);
         let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0;
-        let __end = __sym1.2;
-        let __nt = super::__action46::<>(input, __sym0, __sym1);
-        __symbols.push((__start, __Symbol::Variant9(__nt), __end));
-        (2, 8)
+        let __end = __sym2.2;
+        let __nt = super::__action31::<>(input, __sym0, __sym1, __sym2);
+        __symbols.push((__start, __Symbol::Variant8(__nt), __end));
+        (3, 7)
     }
     pub(crate) fn __reduce22<
         'input,
@@ -1652,15 +1784,16 @@ mod __parse__ConcreteType {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // Constraint = "r|", ArgVar => ActionFn(47);
-        assert!(__symbols.len() >= 2);
-        let __sym1 = __pop_Variant2(__symbols);
+        // CompositeValue = "{", SomeValueList, "}" => ActionFn(32);
+        assert!(__symbols.len() >= 3);
+        let __sym2 = __pop_Variant0(__symbols);
+        let __sym1 = __pop_Variant20(__symbols);
         let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0;
-        let __end = __sym1.2;
-        let __nt = super::__action47::<>(input, __sym0, __sym1);
-        __symbols.push((__start, __Symbol::Variant9(__nt), __end));
-        (2, 8)
+        let __end = __sym2.2;
+        let __nt = super::__action32::<>(input, __sym0, __sym1, __sym2);
+        __symbols.push((__start, __Symbol::Variant8(__nt), __end));
+        (3, 7)
     }
     pub(crate) fn __reduce23<
         'input,
@@ -1671,15 +1804,13 @@ mod __parse__ConcreteType {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // Constraint = "a|", AtomicType => ActionFn(48);
-        assert!(__symbols.len() >= 2);
-        let __sym1 = __pop_Variant4(__symbols);
-        let __sym0 = __pop_Variant0(__symbols);
+        // CompositeValue = InstructionBlock => ActionFn(33);
+        let __sym0 = __pop_Variant14(__symbols);
         let __start = __sym0.0;
-        let __end = __sym1.2;
-        let __nt = super::__action48::<>(input, __sym0, __sym1);
-        __symbols.push((__start, __Symbol::Variant9(__nt), __end));
-        (2, 8)
+        let __end = __sym0.2;
+        let __nt = super::__action33::<>(input, __sym0);
+        __symbols.push((__start, __Symbol::Variant8(__nt), __end));
+        (1, 7)
     }
     pub(crate) fn __reduce24<
         'input,
@@ -1690,13 +1821,16 @@ mod __parse__ConcreteType {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // Dyn = r#"<[A-Za-z][A-Za-z0-9|]+>"# => ActionFn(52);
+        // CompoundInstruction = "IF", InstructionBlock, InstructionBlock => ActionFn(15);
+        assert!(__symbols.len() >= 3);
+        let __sym2 = __pop_Variant14(__symbols);
+        let __sym1 = __pop_Variant14(__symbols);
         let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0;
-        let __end = __sym0.2;
-        let __nt = super::__action52::<>(input, __sym0);
-        __symbols.push((__start, __Symbol::Variant10(__nt), __end));
-        (1, 9)
+        let __end = __sym2.2;
+        let __nt = super::__action15::<>(input, __sym0, __sym1, __sym2);
+        __symbols.push((__start, __Symbol::Variant9(__nt), __end));
+        (3, 8)
     }
     pub(crate) fn __reduce25<
         'input,
@@ -1707,13 +1841,15 @@ mod __parse__ConcreteType {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // Identifier = r#"[A-Za-z][A-Za-z0-9]+"# => ActionFn(53);
+        // CompoundInstruction = "DIP", InstructionBlock => ActionFn(16);
+        assert!(__symbols.len() >= 2);
+        let __sym1 = __pop_Variant14(__symbols);
         let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0;
-        let __end = __sym0.2;
-        let __nt = super::__action53::<>(input, __sym0);
-        __symbols.push((__start, __Symbol::Variant10(__nt), __end));
-        (1, 10)
+        let __end = __sym1.2;
+        let __nt = super::__action16::<>(input, __sym0, __sym1);
+        __symbols.push((__start, __Symbol::Variant9(__nt), __end));
+        (2, 8)
     }
     pub(crate) fn __reduce26<
         'input,
@@ -1724,15 +1860,17 @@ mod __parse__ConcreteType {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // Instruction = Identifier, Args => ActionFn(10);
-        assert!(__symbols.len() >= 2);
-        let __sym1 = __pop_Variant3(__symbols);
-        let __sym0 = __pop_Variant10(__symbols);
+        // CompoundInstruction = "LAMBDA_REC", ConcreteType, ConcreteType, InstructionBlock => ActionFn(17);
+        assert!(__symbols.len() >= 4);
+        let __sym3 = __pop_Variant14(__symbols);
+        let __sym2 = __pop_Variant10(__symbols);
+        let __sym1 = __pop_Variant10(__symbols);
+        let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0;
-        let __end = __sym1.2;
-        let __nt = super::__action10::<>(input, __sym0, __sym1);
-        __symbols.push((__start, __Symbol::Variant11(__nt), __end));
-        (2, 11)
+        let __end = __sym3.2;
+        let __nt = super::__action17::<>(input, __sym0, __sym1, __sym2, __sym3);
+        __symbols.push((__start, __Symbol::Variant9(__nt), __end));
+        (4, 8)
     }
     pub(crate) fn __reduce27<
         'input,
@@ -1743,13 +1881,13 @@ mod __parse__ConcreteType {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // Instruction = Identifier => ActionFn(11);
-        let __sym0 = __pop_Variant10(__symbols);
+        // CompoundInstruction = Instruction => ActionFn(18);
+        let __sym0 = __pop_Variant13(__symbols);
         let __start = __sym0.0;
         let __end = __sym0.2;
-        let __nt = super::__action11::<>(input, __sym0);
-        __symbols.push((__start, __Symbol::Variant11(__nt), __end));
-        (1, 11)
+        let __nt = super::__action18::<>(input, __sym0);
+        __symbols.push((__start, __Symbol::Variant9(__nt), __end));
+        (1, 8)
     }
     pub(crate) fn __reduce28<
         'input,
@@ -1760,16 +1898,13 @@ mod __parse__ConcreteType {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // InstructionBlock = "{", InstructionList, "}" => ActionFn(25);
-        assert!(__symbols.len() >= 3);
-        let __sym2 = __pop_Variant0(__symbols);
-        let __sym1 = __pop_Variant12(__symbols);
-        let __sym0 = __pop_Variant0(__symbols);
+        // ConcreteType = MDyn => ActionFn(45);
+        let __sym0 = __pop_Variant15(__symbols);
         let __start = __sym0.0;
-        let __end = __sym2.2;
-        let __nt = super::__action25::<>(input, __sym0, __sym1, __sym2);
-        __symbols.push((__start, __Symbol::Variant12(__nt), __end));
-        (3, 12)
+        let __end = __sym0.2;
+        let __nt = super::__action45::<>(input, __sym0);
+        __symbols.push((__start, __Symbol::Variant10(__nt), __end));
+        (1, 9)
     }
     pub(crate) fn __reduce29<
         'input,
@@ -1780,13 +1915,17 @@ mod __parse__ConcreteType {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // InstructionList = CompoundInstruction => ActionFn(29);
-        let __sym0 = __pop_Variant7(__symbols);
+        // Constraint = "w|", ArgVar, "=>", AttributeList => ActionFn(54);
+        assert!(__symbols.len() >= 4);
+        let __sym3 = __pop_Variant7(__symbols);
+        let __sym2 = __pop_Variant0(__symbols);
+        let __sym1 = __pop_Variant2(__symbols);
+        let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0;
-        let __end = __sym0.2;
-        let __nt = super::__action29::<>(input, __sym0);
-        __symbols.push((__start, __Symbol::Variant12(__nt), __end));
-        (1, 13)
+        let __end = __sym3.2;
+        let __nt = super::__action54::<>(input, __sym0, __sym1, __sym2, __sym3);
+        __symbols.push((__start, __Symbol::Variant11(__nt), __end));
+        (4, 10)
     }
     pub(crate) fn __reduce30<
         'input,
@@ -1797,16 +1936,15 @@ mod __parse__ConcreteType {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // InstructionList = CompoundInstruction, ";", InstructionList => ActionFn(30);
-        assert!(__symbols.len() >= 3);
-        let __sym2 = __pop_Variant12(__symbols);
-        let __sym1 = __pop_Variant0(__symbols);
-        let __sym0 = __pop_Variant7(__symbols);
+        // Constraint = "w|", ArgVar => ActionFn(55);
+        assert!(__symbols.len() >= 2);
+        let __sym1 = __pop_Variant2(__symbols);
+        let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0;
-        let __end = __sym2.2;
-        let __nt = super::__action30::<>(input, __sym0, __sym1, __sym2);
-        __symbols.push((__start, __Symbol::Variant12(__nt), __end));
-        (3, 13)
+        let __end = __sym1.2;
+        let __nt = super::__action55::<>(input, __sym0, __sym1);
+        __symbols.push((__start, __Symbol::Variant11(__nt), __end));
+        (2, 10)
     }
     pub(crate) fn __reduce31<
         'input,
@@ -1817,15 +1955,17 @@ mod __parse__ConcreteType {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // InstructionList = CompoundInstruction, ";" => ActionFn(31);
-        assert!(__symbols.len() >= 2);
-        let __sym1 = __pop_Variant0(__symbols);
-        let __sym0 = __pop_Variant7(__symbols);
+        // Constraint = "t|", ArgVar, "=>", AttributeList => ActionFn(56);
+        assert!(__symbols.len() >= 4);
+        let __sym3 = __pop_Variant7(__symbols);
+        let __sym2 = __pop_Variant0(__symbols);
+        let __sym1 = __pop_Variant2(__symbols);
+        let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0;
-        let __end = __sym1.2;
-        let __nt = super::__action31::<>(input, __sym0, __sym1);
-        __symbols.push((__start, __Symbol::Variant12(__nt), __end));
-        (2, 13)
+        let __end = __sym3.2;
+        let __nt = super::__action56::<>(input, __sym0, __sym1, __sym2, __sym3);
+        __symbols.push((__start, __Symbol::Variant11(__nt), __end));
+        (4, 10)
     }
     pub(crate) fn __reduce32<
         'input,
@@ -1836,13 +1976,15 @@ mod __parse__ConcreteType {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // MDyn = AtomicType => ActionFn(39);
-        let __sym0 = __pop_Variant4(__symbols);
+        // Constraint = "t|", ArgVar => ActionFn(57);
+        assert!(__symbols.len() >= 2);
+        let __sym1 = __pop_Variant2(__symbols);
+        let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0;
-        let __end = __sym0.2;
-        let __nt = super::__action39::<>(input, __sym0);
-        __symbols.push((__start, __Symbol::Variant13(__nt), __end));
-        (1, 14)
+        let __end = __sym1.2;
+        let __nt = super::__action57::<>(input, __sym0, __sym1);
+        __symbols.push((__start, __Symbol::Variant11(__nt), __end));
+        (2, 10)
     }
     pub(crate) fn __reduce33<
         'input,
@@ -1853,13 +1995,15 @@ mod __parse__ConcreteType {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // MDyn = Dyn => ActionFn(40);
-        let __sym0 = __pop_Variant10(__symbols);
+        // Constraint = "r|", ArgVar => ActionFn(58);
+        assert!(__symbols.len() >= 2);
+        let __sym1 = __pop_Variant2(__symbols);
+        let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0;
-        let __end = __sym0.2;
-        let __nt = super::__action40::<>(input, __sym0);
-        __symbols.push((__start, __Symbol::Variant13(__nt), __end));
-        (1, 14)
+        let __end = __sym1.2;
+        let __nt = super::__action58::<>(input, __sym0, __sym1);
+        __symbols.push((__start, __Symbol::Variant11(__nt), __end));
+        (2, 10)
     }
     pub(crate) fn __reduce34<
         'input,
@@ -1870,15 +2014,15 @@ mod __parse__ConcreteType {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // MDyn = "list", MDyn => ActionFn(41);
+        // Constraint = "a|", AtomicType => ActionFn(59);
         assert!(__symbols.len() >= 2);
-        let __sym1 = __pop_Variant13(__symbols);
+        let __sym1 = __pop_Variant4(__symbols);
         let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0;
         let __end = __sym1.2;
-        let __nt = super::__action41::<>(input, __sym0, __sym1);
-        __symbols.push((__start, __Symbol::Variant13(__nt), __end));
-        (2, 14)
+        let __nt = super::__action59::<>(input, __sym0, __sym1);
+        __symbols.push((__start, __Symbol::Variant11(__nt), __end));
+        (2, 10)
     }
     pub(crate) fn __reduce35<
         'input,
@@ -1889,16 +2033,13 @@ mod __parse__ConcreteType {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // MDyn = "pair", MDyn, MDyn => ActionFn(42);
-        assert!(__symbols.len() >= 3);
-        let __sym2 = __pop_Variant13(__symbols);
-        let __sym1 = __pop_Variant13(__symbols);
+        // Dyn = r#"<[A-Za-z][A-Za-z0-9|+=>]+>"# => ActionFn(63);
         let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0;
-        let __end = __sym2.2;
-        let __nt = super::__action42::<>(input, __sym0, __sym1, __sym2);
-        __symbols.push((__start, __Symbol::Variant13(__nt), __end));
-        (3, 14)
+        let __end = __sym0.2;
+        let __nt = super::__action63::<>(input, __sym0);
+        __symbols.push((__start, __Symbol::Variant12(__nt), __end));
+        (1, 11)
     }
     pub(crate) fn __reduce36<
         'input,
@@ -1909,16 +2050,13 @@ mod __parse__ConcreteType {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // MDyn = "lambda", MDyn, MDyn => ActionFn(43);
-        assert!(__symbols.len() >= 3);
-        let __sym2 = __pop_Variant13(__symbols);
-        let __sym1 = __pop_Variant13(__symbols);
+        // Identifier = r#"[A-Za-z][A-Za-z0-9]+"# => ActionFn(64);
         let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0;
-        let __end = __sym2.2;
-        let __nt = super::__action43::<>(input, __sym0, __sym1, __sym2);
-        __symbols.push((__start, __Symbol::Variant13(__nt), __end));
-        (3, 14)
+        let __end = __sym0.2;
+        let __nt = super::__action64::<>(input, __sym0);
+        __symbols.push((__start, __Symbol::Variant12(__nt), __end));
+        (1, 12)
     }
     pub(crate) fn __reduce37<
         'input,
@@ -1929,16 +2067,15 @@ mod __parse__ConcreteType {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // MDyn = "(", MDyn, ")" => ActionFn(44);
-        assert!(__symbols.len() >= 3);
-        let __sym2 = __pop_Variant0(__symbols);
-        let __sym1 = __pop_Variant13(__symbols);
-        let __sym0 = __pop_Variant0(__symbols);
+        // Instruction = Identifier, Args => ActionFn(19);
+        assert!(__symbols.len() >= 2);
+        let __sym1 = __pop_Variant3(__symbols);
+        let __sym0 = __pop_Variant12(__symbols);
         let __start = __sym0.0;
-        let __end = __sym2.2;
-        let __nt = super::__action44::<>(input, __sym0, __sym1, __sym2);
+        let __end = __sym1.2;
+        let __nt = super::__action19::<>(input, __sym0, __sym1);
         __symbols.push((__start, __Symbol::Variant13(__nt), __end));
-        (3, 14)
+        (2, 13)
     }
     pub(crate) fn __reduce38<
         'input,
@@ -1949,16 +2086,13 @@ mod __parse__ConcreteType {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // MDynList = MDyn, ";", MDynList => ActionFn(37);
-        assert!(__symbols.len() >= 3);
-        let __sym2 = __pop_Variant14(__symbols);
-        let __sym1 = __pop_Variant0(__symbols);
-        let __sym0 = __pop_Variant13(__symbols);
+        // Instruction = Identifier => ActionFn(20);
+        let __sym0 = __pop_Variant12(__symbols);
         let __start = __sym0.0;
-        let __end = __sym2.2;
-        let __nt = super::__action37::<>(input, __sym0, __sym1, __sym2);
-        __symbols.push((__start, __Symbol::Variant14(__nt), __end));
-        (3, 15)
+        let __end = __sym0.2;
+        let __nt = super::__action20::<>(input, __sym0);
+        __symbols.push((__start, __Symbol::Variant13(__nt), __end));
+        (1, 13)
     }
     pub(crate) fn __reduce39<
         'input,
@@ -1969,13 +2103,16 @@ mod __parse__ConcreteType {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // MDynList = MDyn => ActionFn(38);
-        let __sym0 = __pop_Variant13(__symbols);
+        // InstructionBlock = "{", InstructionList, "}" => ActionFn(34);
+        assert!(__symbols.len() >= 3);
+        let __sym2 = __pop_Variant0(__symbols);
+        let __sym1 = __pop_Variant14(__symbols);
+        let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0;
-        let __end = __sym0.2;
-        let __nt = super::__action38::<>(input, __sym0);
+        let __end = __sym2.2;
+        let __nt = super::__action34::<>(input, __sym0, __sym1, __sym2);
         __symbols.push((__start, __Symbol::Variant14(__nt), __end));
-        (1, 15)
+        (3, 14)
     }
     pub(crate) fn __reduce40<
         'input,
@@ -1986,13 +2123,13 @@ mod __parse__ConcreteType {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // McLitBool = "True" => ActionFn(54);
-        let __sym0 = __pop_Variant0(__symbols);
+        // InstructionList = CompoundInstruction => ActionFn(38);
+        let __sym0 = __pop_Variant9(__symbols);
         let __start = __sym0.0;
         let __end = __sym0.2;
-        let __nt = super::__action54::<>(input, __sym0);
-        __symbols.push((__start, __Symbol::Variant15(__nt), __end));
-        (1, 16)
+        let __nt = super::__action38::<>(input, __sym0);
+        __symbols.push((__start, __Symbol::Variant14(__nt), __end));
+        (1, 15)
     }
     pub(crate) fn __reduce41<
         'input,
@@ -2003,13 +2140,16 @@ mod __parse__ConcreteType {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // McLitBool = "False" => ActionFn(55);
-        let __sym0 = __pop_Variant0(__symbols);
+        // InstructionList = CompoundInstruction, ";", InstructionList => ActionFn(39);
+        assert!(__symbols.len() >= 3);
+        let __sym2 = __pop_Variant14(__symbols);
+        let __sym1 = __pop_Variant0(__symbols);
+        let __sym0 = __pop_Variant9(__symbols);
         let __start = __sym0.0;
-        let __end = __sym0.2;
-        let __nt = super::__action55::<>(input, __sym0);
-        __symbols.push((__start, __Symbol::Variant15(__nt), __end));
-        (1, 16)
+        let __end = __sym2.2;
+        let __nt = super::__action39::<>(input, __sym0, __sym1, __sym2);
+        __symbols.push((__start, __Symbol::Variant14(__nt), __end));
+        (3, 15)
     }
     pub(crate) fn __reduce42<
         'input,
@@ -2020,13 +2160,15 @@ mod __parse__ConcreteType {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // McLitNumber = r#"([+-]?)[0-9]+"# => ActionFn(57);
-        let __sym0 = __pop_Variant0(__symbols);
+        // InstructionList = CompoundInstruction, ";" => ActionFn(40);
+        assert!(__symbols.len() >= 2);
+        let __sym1 = __pop_Variant0(__symbols);
+        let __sym0 = __pop_Variant9(__symbols);
         let __start = __sym0.0;
-        let __end = __sym0.2;
-        let __nt = super::__action57::<>(input, __sym0);
-        __symbols.push((__start, __Symbol::Variant16(__nt), __end));
-        (1, 17)
+        let __end = __sym1.2;
+        let __nt = super::__action40::<>(input, __sym0, __sym1);
+        __symbols.push((__start, __Symbol::Variant14(__nt), __end));
+        (2, 15)
     }
     pub(crate) fn __reduce43<
         'input,
@@ -2037,13 +2179,13 @@ mod __parse__ConcreteType {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // McLitString = r#"\"[a-z0-9]+\""# => ActionFn(56);
-        let __sym0 = __pop_Variant0(__symbols);
+        // MDyn = AtomicType => ActionFn(48);
+        let __sym0 = __pop_Variant4(__symbols);
         let __start = __sym0.0;
         let __end = __sym0.2;
-        let __nt = super::__action56::<>(input, __sym0);
-        __symbols.push((__start, __Symbol::Variant10(__nt), __end));
-        (1, 18)
+        let __nt = super::__action48::<>(input, __sym0);
+        __symbols.push((__start, __Symbol::Variant15(__nt), __end));
+        (1, 16)
     }
     pub(crate) fn __reduce44<
         'input,
@@ -2054,13 +2196,13 @@ mod __parse__ConcreteType {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // SomeValue = AtomicValue => ActionFn(16);
-        let __sym0 = __pop_Variant5(__symbols);
+        // MDyn = Dyn => ActionFn(49);
+        let __sym0 = __pop_Variant12(__symbols);
         let __start = __sym0.0;
         let __end = __sym0.2;
-        let __nt = super::__action16::<>(input, __sym0);
-        __symbols.push((__start, __Symbol::Variant17(__nt), __end));
-        (1, 19)
+        let __nt = super::__action49::<>(input, __sym0);
+        __symbols.push((__start, __Symbol::Variant15(__nt), __end));
+        (1, 16)
     }
     pub(crate) fn __reduce45<
         'input,
@@ -2071,13 +2213,15 @@ mod __parse__ConcreteType {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // SomeValue = CompositeValue => ActionFn(17);
-        let __sym0 = __pop_Variant6(__symbols);
+        // MDyn = "list", MDyn => ActionFn(50);
+        assert!(__symbols.len() >= 2);
+        let __sym1 = __pop_Variant15(__symbols);
+        let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0;
-        let __end = __sym0.2;
-        let __nt = super::__action17::<>(input, __sym0);
-        __symbols.push((__start, __Symbol::Variant17(__nt), __end));
-        (1, 19)
+        let __end = __sym1.2;
+        let __nt = super::__action50::<>(input, __sym0, __sym1);
+        __symbols.push((__start, __Symbol::Variant15(__nt), __end));
+        (2, 16)
     }
     pub(crate) fn __reduce46<
         'input,
@@ -2088,16 +2232,16 @@ mod __parse__ConcreteType {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // SomeValue = "(", SomeValue, ")" => ActionFn(18);
+        // MDyn = "pair", MDyn, MDyn => ActionFn(51);
         assert!(__symbols.len() >= 3);
-        let __sym2 = __pop_Variant0(__symbols);
-        let __sym1 = __pop_Variant17(__symbols);
+        let __sym2 = __pop_Variant15(__symbols);
+        let __sym1 = __pop_Variant15(__symbols);
         let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0;
         let __end = __sym2.2;
-        let __nt = super::__action18::<>(input, __sym0, __sym1, __sym2);
-        __symbols.push((__start, __Symbol::Variant17(__nt), __end));
-        (3, 19)
+        let __nt = super::__action51::<>(input, __sym0, __sym1, __sym2);
+        __symbols.push((__start, __Symbol::Variant15(__nt), __end));
+        (3, 16)
     }
     pub(crate) fn __reduce47<
         'input,
@@ -2108,13 +2252,16 @@ mod __parse__ConcreteType {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // SomeValueList = SomeValue => ActionFn(26);
-        let __sym0 = __pop_Variant17(__symbols);
+        // MDyn = "lambda", MDyn, MDyn => ActionFn(52);
+        assert!(__symbols.len() >= 3);
+        let __sym2 = __pop_Variant15(__symbols);
+        let __sym1 = __pop_Variant15(__symbols);
+        let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0;
-        let __end = __sym0.2;
-        let __nt = super::__action26::<>(input, __sym0);
-        __symbols.push((__start, __Symbol::Variant18(__nt), __end));
-        (1, 20)
+        let __end = __sym2.2;
+        let __nt = super::__action52::<>(input, __sym0, __sym1, __sym2);
+        __symbols.push((__start, __Symbol::Variant15(__nt), __end));
+        (3, 16)
     }
     pub(crate) fn __reduce48<
         'input,
@@ -2125,16 +2272,16 @@ mod __parse__ConcreteType {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // SomeValueList = SomeValue, ";", SomeValueList => ActionFn(27);
+        // MDyn = "(", MDyn, ")" => ActionFn(53);
         assert!(__symbols.len() >= 3);
-        let __sym2 = __pop_Variant18(__symbols);
-        let __sym1 = __pop_Variant0(__symbols);
-        let __sym0 = __pop_Variant17(__symbols);
+        let __sym2 = __pop_Variant0(__symbols);
+        let __sym1 = __pop_Variant15(__symbols);
+        let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0;
         let __end = __sym2.2;
-        let __nt = super::__action27::<>(input, __sym0, __sym1, __sym2);
-        __symbols.push((__start, __Symbol::Variant18(__nt), __end));
-        (3, 20)
+        let __nt = super::__action53::<>(input, __sym0, __sym1, __sym2);
+        __symbols.push((__start, __Symbol::Variant15(__nt), __end));
+        (3, 16)
     }
     pub(crate) fn __reduce49<
         'input,
@@ -2145,15 +2292,16 @@ mod __parse__ConcreteType {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // SomeValueList = SomeValue, ";" => ActionFn(28);
-        assert!(__symbols.len() >= 2);
+        // MDynList = MDyn, ";", MDynList => ActionFn(46);
+        assert!(__symbols.len() >= 3);
+        let __sym2 = __pop_Variant16(__symbols);
         let __sym1 = __pop_Variant0(__symbols);
-        let __sym0 = __pop_Variant17(__symbols);
+        let __sym0 = __pop_Variant15(__symbols);
         let __start = __sym0.0;
-        let __end = __sym1.2;
-        let __nt = super::__action28::<>(input, __sym0, __sym1);
-        __symbols.push((__start, __Symbol::Variant18(__nt), __end));
-        (2, 20)
+        let __end = __sym2.2;
+        let __nt = super::__action46::<>(input, __sym0, __sym1, __sym2);
+        __symbols.push((__start, __Symbol::Variant16(__nt), __end));
+        (3, 17)
     }
     pub(crate) fn __reduce50<
         'input,
@@ -2164,15 +2312,13 @@ mod __parse__ConcreteType {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // StackResultElem = "r|", ArgVar => ActionFn(49);
-        assert!(__symbols.len() >= 2);
-        let __sym1 = __pop_Variant2(__symbols);
-        let __sym0 = __pop_Variant0(__symbols);
+        // MDynList = MDyn => ActionFn(47);
+        let __sym0 = __pop_Variant15(__symbols);
         let __start = __sym0.0;
-        let __end = __sym1.2;
-        let __nt = super::__action49::<>(input, __sym0, __sym1);
-        __symbols.push((__start, __Symbol::Variant19(__nt), __end));
-        (2, 21)
+        let __end = __sym0.2;
+        let __nt = super::__action47::<>(input, __sym0);
+        __symbols.push((__start, __Symbol::Variant16(__nt), __end));
+        (1, 17)
     }
     pub(crate) fn __reduce51<
         'input,
@@ -2183,15 +2329,30 @@ mod __parse__ConcreteType {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // StackResultElem = "a|", AtomicType => ActionFn(50);
-        assert!(__symbols.len() >= 2);
-        let __sym1 = __pop_Variant4(__symbols);
+        // McLitBool = "True" => ActionFn(65);
         let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0;
-        let __end = __sym1.2;
-        let __nt = super::__action50::<>(input, __sym0, __sym1);
-        __symbols.push((__start, __Symbol::Variant19(__nt), __end));
-        (2, 21)
+        let __end = __sym0.2;
+        let __nt = super::__action65::<>(input, __sym0);
+        __symbols.push((__start, __Symbol::Variant17(__nt), __end));
+        (1, 18)
+    }
+    pub(crate) fn __reduce52<
+        'input,
+    >(
+        input: &'input str,
+        __lookahead_start: Option<&usize>,
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
+        _: core::marker::PhantomData<(&'input ())>,
+    ) -> (usize, usize)
+    {
+        // McLitBool = "False" => ActionFn(66);
+        let __sym0 = __pop_Variant0(__symbols);
+        let __start = __sym0.0;
+        let __end = __sym0.2;
+        let __nt = super::__action66::<>(input, __sym0);
+        __symbols.push((__start, __Symbol::Variant17(__nt), __end));
+        (1, 18)
     }
     pub(crate) fn __reduce53<
         'input,
@@ -2202,13 +2363,13 @@ mod __parse__ConcreteType {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // __Constraint = Constraint => ActionFn(4);
-        let __sym0 = __pop_Variant9(__symbols);
+        // McLitNumber = r#"([+-]?)[0-9]+"# => ActionFn(68);
+        let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0;
         let __end = __sym0.2;
-        let __nt = super::__action4::<>(input, __sym0);
-        __symbols.push((__start, __Symbol::Variant9(__nt), __end));
-        (1, 23)
+        let __nt = super::__action68::<>(input, __sym0);
+        __symbols.push((__start, __Symbol::Variant18(__nt), __end));
+        (1, 19)
     }
     pub(crate) fn __reduce54<
         'input,
@@ -2219,13 +2380,13 @@ mod __parse__ConcreteType {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // __InstructionList = InstructionList => ActionFn(0);
-        let __sym0 = __pop_Variant12(__symbols);
+        // McLitString = r#"\"[a-z0-9]+\""# => ActionFn(67);
+        let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0;
         let __end = __sym0.2;
-        let __nt = super::__action0::<>(input, __sym0);
+        let __nt = super::__action67::<>(input, __sym0);
         __symbols.push((__start, __Symbol::Variant12(__nt), __end));
-        (1, 24)
+        (1, 20)
     }
     pub(crate) fn __reduce55<
         'input,
@@ -2236,13 +2397,13 @@ mod __parse__ConcreteType {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // __MDyn = MDyn => ActionFn(3);
-        let __sym0 = __pop_Variant13(__symbols);
+        // SomeValue = AtomicValue => ActionFn(25);
+        let __sym0 = __pop_Variant5(__symbols);
         let __start = __sym0.0;
         let __end = __sym0.2;
-        let __nt = super::__action3::<>(input, __sym0);
-        __symbols.push((__start, __Symbol::Variant13(__nt), __end));
-        (1, 25)
+        let __nt = super::__action25::<>(input, __sym0);
+        __symbols.push((__start, __Symbol::Variant19(__nt), __end));
+        (1, 21)
     }
     pub(crate) fn __reduce56<
         'input,
@@ -2253,13 +2414,13 @@ mod __parse__ConcreteType {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // __MDynList = MDynList => ActionFn(2);
-        let __sym0 = __pop_Variant14(__symbols);
+        // SomeValue = CompositeValue => ActionFn(26);
+        let __sym0 = __pop_Variant8(__symbols);
         let __start = __sym0.0;
         let __end = __sym0.2;
-        let __nt = super::__action2::<>(input, __sym0);
-        __symbols.push((__start, __Symbol::Variant14(__nt), __end));
-        (1, 26)
+        let __nt = super::__action26::<>(input, __sym0);
+        __symbols.push((__start, __Symbol::Variant19(__nt), __end));
+        (1, 21)
     }
     pub(crate) fn __reduce57<
         'input,
@@ -2270,13 +2431,195 @@ mod __parse__ConcreteType {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // __StackResultElem = StackResultElem => ActionFn(5);
+        // SomeValue = "(", SomeValue, ")" => ActionFn(27);
+        assert!(__symbols.len() >= 3);
+        let __sym2 = __pop_Variant0(__symbols);
+        let __sym1 = __pop_Variant19(__symbols);
+        let __sym0 = __pop_Variant0(__symbols);
+        let __start = __sym0.0;
+        let __end = __sym2.2;
+        let __nt = super::__action27::<>(input, __sym0, __sym1, __sym2);
+        __symbols.push((__start, __Symbol::Variant19(__nt), __end));
+        (3, 21)
+    }
+    pub(crate) fn __reduce58<
+        'input,
+    >(
+        input: &'input str,
+        __lookahead_start: Option<&usize>,
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
+        _: core::marker::PhantomData<(&'input ())>,
+    ) -> (usize, usize)
+    {
+        // SomeValueList = SomeValue => ActionFn(35);
         let __sym0 = __pop_Variant19(__symbols);
         let __start = __sym0.0;
         let __end = __sym0.2;
-        let __nt = super::__action5::<>(input, __sym0);
-        __symbols.push((__start, __Symbol::Variant19(__nt), __end));
+        let __nt = super::__action35::<>(input, __sym0);
+        __symbols.push((__start, __Symbol::Variant20(__nt), __end));
+        (1, 22)
+    }
+    pub(crate) fn __reduce59<
+        'input,
+    >(
+        input: &'input str,
+        __lookahead_start: Option<&usize>,
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
+        _: core::marker::PhantomData<(&'input ())>,
+    ) -> (usize, usize)
+    {
+        // SomeValueList = SomeValue, ";", SomeValueList => ActionFn(36);
+        assert!(__symbols.len() >= 3);
+        let __sym2 = __pop_Variant20(__symbols);
+        let __sym1 = __pop_Variant0(__symbols);
+        let __sym0 = __pop_Variant19(__symbols);
+        let __start = __sym0.0;
+        let __end = __sym2.2;
+        let __nt = super::__action36::<>(input, __sym0, __sym1, __sym2);
+        __symbols.push((__start, __Symbol::Variant20(__nt), __end));
+        (3, 22)
+    }
+    pub(crate) fn __reduce60<
+        'input,
+    >(
+        input: &'input str,
+        __lookahead_start: Option<&usize>,
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
+        _: core::marker::PhantomData<(&'input ())>,
+    ) -> (usize, usize)
+    {
+        // SomeValueList = SomeValue, ";" => ActionFn(37);
+        assert!(__symbols.len() >= 2);
+        let __sym1 = __pop_Variant0(__symbols);
+        let __sym0 = __pop_Variant19(__symbols);
+        let __start = __sym0.0;
+        let __end = __sym1.2;
+        let __nt = super::__action37::<>(input, __sym0, __sym1);
+        __symbols.push((__start, __Symbol::Variant20(__nt), __end));
+        (2, 22)
+    }
+    pub(crate) fn __reduce61<
+        'input,
+    >(
+        input: &'input str,
+        __lookahead_start: Option<&usize>,
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
+        _: core::marker::PhantomData<(&'input ())>,
+    ) -> (usize, usize)
+    {
+        // StackResultElem = "r|", ArgVar => ActionFn(60);
+        assert!(__symbols.len() >= 2);
+        let __sym1 = __pop_Variant2(__symbols);
+        let __sym0 = __pop_Variant0(__symbols);
+        let __start = __sym0.0;
+        let __end = __sym1.2;
+        let __nt = super::__action60::<>(input, __sym0, __sym1);
+        __symbols.push((__start, __Symbol::Variant21(__nt), __end));
+        (2, 23)
+    }
+    pub(crate) fn __reduce62<
+        'input,
+    >(
+        input: &'input str,
+        __lookahead_start: Option<&usize>,
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
+        _: core::marker::PhantomData<(&'input ())>,
+    ) -> (usize, usize)
+    {
+        // StackResultElem = "a|", AtomicType => ActionFn(61);
+        assert!(__symbols.len() >= 2);
+        let __sym1 = __pop_Variant4(__symbols);
+        let __sym0 = __pop_Variant0(__symbols);
+        let __start = __sym0.0;
+        let __end = __sym1.2;
+        let __nt = super::__action61::<>(input, __sym0, __sym1);
+        __symbols.push((__start, __Symbol::Variant21(__nt), __end));
+        (2, 23)
+    }
+    pub(crate) fn __reduce64<
+        'input,
+    >(
+        input: &'input str,
+        __lookahead_start: Option<&usize>,
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
+        _: core::marker::PhantomData<(&'input ())>,
+    ) -> (usize, usize)
+    {
+        // __Constraint = Constraint => ActionFn(4);
+        let __sym0 = __pop_Variant11(__symbols);
+        let __start = __sym0.0;
+        let __end = __sym0.2;
+        let __nt = super::__action4::<>(input, __sym0);
+        __symbols.push((__start, __Symbol::Variant11(__nt), __end));
+        (1, 25)
+    }
+    pub(crate) fn __reduce65<
+        'input,
+    >(
+        input: &'input str,
+        __lookahead_start: Option<&usize>,
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
+        _: core::marker::PhantomData<(&'input ())>,
+    ) -> (usize, usize)
+    {
+        // __InstructionList = InstructionList => ActionFn(0);
+        let __sym0 = __pop_Variant14(__symbols);
+        let __start = __sym0.0;
+        let __end = __sym0.2;
+        let __nt = super::__action0::<>(input, __sym0);
+        __symbols.push((__start, __Symbol::Variant14(__nt), __end));
+        (1, 26)
+    }
+    pub(crate) fn __reduce66<
+        'input,
+    >(
+        input: &'input str,
+        __lookahead_start: Option<&usize>,
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
+        _: core::marker::PhantomData<(&'input ())>,
+    ) -> (usize, usize)
+    {
+        // __MDyn = MDyn => ActionFn(3);
+        let __sym0 = __pop_Variant15(__symbols);
+        let __start = __sym0.0;
+        let __end = __sym0.2;
+        let __nt = super::__action3::<>(input, __sym0);
+        __symbols.push((__start, __Symbol::Variant15(__nt), __end));
         (1, 27)
+    }
+    pub(crate) fn __reduce67<
+        'input,
+    >(
+        input: &'input str,
+        __lookahead_start: Option<&usize>,
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
+        _: core::marker::PhantomData<(&'input ())>,
+    ) -> (usize, usize)
+    {
+        // __MDynList = MDynList => ActionFn(2);
+        let __sym0 = __pop_Variant16(__symbols);
+        let __start = __sym0.0;
+        let __end = __sym0.2;
+        let __nt = super::__action2::<>(input, __sym0);
+        __symbols.push((__start, __Symbol::Variant16(__nt), __end));
+        (1, 28)
+    }
+    pub(crate) fn __reduce68<
+        'input,
+    >(
+        input: &'input str,
+        __lookahead_start: Option<&usize>,
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
+        _: core::marker::PhantomData<(&'input ())>,
+    ) -> (usize, usize)
+    {
+        // __StackResultElem = StackResultElem => ActionFn(5);
+        let __sym0 = __pop_Variant21(__symbols);
+        let __start = __sym0.0;
+        let __end = __sym0.2;
+        let __nt = super::__action5::<>(input, __sym0);
+        __symbols.push((__start, __Symbol::Variant21(__nt), __end));
+        (1, 29)
     }
 }
 pub use self::__parse__ConcreteType::ConcreteTypeParser;
@@ -2308,6 +2651,8 @@ mod __parse__Constraint {
     use crate::types::StackResultElem;
     use crate::types::StackResultElem::*;
     use crate::types::CompoundInstruction;
+    use crate::types::Attribute;
+    use crate::types::Attribute::*;
     #[allow(unused_extern_crates)]
     extern crate lalrpop_util as __lalrpop_util;
     #[allow(unused_imports)]
@@ -2324,55 +2669,85 @@ mod __parse__Constraint {
         Variant3(Vec<ArgValue<SomeValue>>),
         Variant4(MAtomic),
         Variant5(AtomicValue),
-        Variant6(CompositeValue),
-        Variant7(CompoundInstruction<SomeValue>),
-        Variant8(ConcreteType),
-        Variant9(ArgConstraint),
-        Variant10(String),
-        Variant11(Instruction<SomeValue>),
-        Variant12(Vec<CompoundInstruction<SomeValue>>),
-        Variant13(MType<DynMType>),
-        Variant14(Vec<MType<DynMType>>),
-        Variant15(bool),
-        Variant16(i32),
-        Variant17(SomeValue),
-        Variant18(Vec<SomeValue>),
-        Variant19(StackResultElem),
+        Variant6(Attribute),
+        Variant7(Vec<Attribute>),
+        Variant8(CompositeValue),
+        Variant9(CompoundInstruction<SomeValue>),
+        Variant10(ConcreteType),
+        Variant11(ArgConstraint),
+        Variant12(String),
+        Variant13(Instruction<SomeValue>),
+        Variant14(Vec<CompoundInstruction<SomeValue>>),
+        Variant15(MType<DynMType>),
+        Variant16(Vec<MType<DynMType>>),
+        Variant17(bool),
+        Variant18(i32),
+        Variant19(SomeValue),
+        Variant20(Vec<SomeValue>),
+        Variant21(StackResultElem),
     }
     const __ACTION: &[i8] = &[
         // State 0
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 3, 0, 4, 5, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 0, 0, 4, 5, 0, 0, 0, 0, 0, 0, 0,
         // State 1
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 8, 9, 0, 0, 10, 0, 0, 11, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 11, 0, 0, 12, 0, 0, 13, 0, 0, 0, 0, 0, 0, 14, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         // State 2
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 13,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 16,
         // State 3
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 13,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 16,
         // State 4
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 13,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 16,
         // State 5
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 21, 0, 22, 23, 0, 0, 0, 0, 24, 0, 25, 26, 0, 27, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         // State 6
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 21, 0, 22, 23, 0, 0, 0, 0, 24, 0, 25, 26, 0, 27, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         // State 7
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 21, 0, 22, 23, 0, 0, 0, 0, 24, 0, 25, 26, 0, 27, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         // State 8
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         // State 9
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         // State 10
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         // State 11
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         // State 12
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         // State 13
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         // State 14
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        // State 15
+        0, 0, 0, 0, -3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        // State 16
+        0, 0, 0, 0, 6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        // State 17
+        0, 0, 0, 0, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        // State 18
+        0, 0, 8, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        // State 19
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        // State 20
+        0, 0, -18, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        // State 21
+        0, 0, -13, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        // State 22
+        0, 0, -19, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        // State 23
+        0, 0, -17, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        // State 24
+        0, 0, -14, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        // State 25
+        0, 0, -15, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        // State 26
+        0, 0, -16, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        // State 27
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        // State 28
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
     ];
     fn __action(state: i8, integer: usize) -> i8 {
-        __ACTION[(state as usize) * 27 + integer]
+        __ACTION[(state as usize) * 36 + integer]
     }
     const __EOF_ACTION: &[i8] = &[
         // State 0
@@ -2386,42 +2761,78 @@ mod __parse__Constraint {
         // State 4
         0,
         // State 5
-        -54,
+        0,
         // State 6
-        -24,
+        0,
         // State 7
-        -9,
+        0,
         // State 8
-        -6,
+        -65,
         // State 9
-        -7,
+        -35,
         // State 10
-        -8,
+        -9,
         // State 11
-        -23,
+        -6,
         // State 12
-        -3,
+        -7,
         // State 13
-        -22,
+        -8,
         // State 14
+        -34,
+        // State 15
+        -3,
+        // State 16
+        -33,
+        // State 17
+        -31,
+        // State 18
         -21,
+        // State 19
+        -32,
+        // State 20
+        -18,
+        // State 21
+        -13,
+        // State 22
+        -19,
+        // State 23
+        -17,
+        // State 24
+        -14,
+        // State 25
+        -15,
+        // State 26
+        -16,
+        // State 27
+        -30,
+        // State 28
+        -20,
     ];
     fn __goto(state: i8, nt: usize) -> i8 {
         match nt {
             1 => match state {
-                3 => 13,
-                4 => 14,
-                _ => 11,
+                3 => 16,
+                4 => 17,
+                _ => 14,
             },
-            3 => 6,
-            8 => 5,
+            3 => 9,
+            5 => 18,
+            6 => match state {
+                6 => 27,
+                7 => 28,
+                _ => 19,
+            },
+            10 => 8,
             _ => 0,
         }
     }
     const __TERMINAL: &[&str] = &[
         r###""(""###,
         r###"")""###,
+        r###""+""###,
         r###"";""###,
+        r###""=>""###,
         r###""DIP""###,
         r###""False""###,
         r###""IF""###,
@@ -2429,13 +2840,20 @@ mod __parse__Constraint {
         r###""Pair""###,
         r###""True""###,
         r###""a|""###,
+        r###""bigmapvalue""###,
         r###""bool""###,
+        r###""comparable""###,
+        r###""duplicable""###,
         r###""int""###,
         r###""lambda""###,
         r###""list""###,
         r###""nat""###,
+        r###""packable""###,
         r###""pair""###,
+        r###""passable""###,
+        r###""pushable""###,
         r###""r|""###,
+        r###""storable""###,
         r###""string""###,
         r###""t|""###,
         r###""w|""###,
@@ -2443,7 +2861,7 @@ mod __parse__Constraint {
         r###""}""###,
         r###"r#"\"[a-z0-9]+\""#"###,
         r###"r#"([+-]?)[0-9]+"#"###,
-        r###"r#"<[A-Za-z][A-Za-z0-9|]+>"#"###,
+        r###"r#"<[A-Za-z][A-Za-z0-9|+=>]+>"#"###,
         r###"r#"[A-Za-z][A-Za-z0-9]+"#"###,
         r###"r#"[a-z]"#"###,
     ];
@@ -2514,7 +2932,7 @@ mod __parse__Constraint {
 
         #[inline]
         fn error_action(&self, state: i8) -> i8 {
-            __action(state, 27 - 1)
+            __action(state, 36 - 1)
         }
 
         #[inline]
@@ -2603,11 +3021,20 @@ mod __parse__Constraint {
             Token(24, _) if true => Some(19),
             Token(25, _) if true => Some(20),
             Token(26, _) if true => Some(21),
-            Token(0, _) if true => Some(22),
-            Token(1, _) if true => Some(23),
-            Token(2, _) if true => Some(24),
-            Token(3, _) if true => Some(25),
-            Token(4, _) if true => Some(26),
+            Token(27, _) if true => Some(22),
+            Token(28, _) if true => Some(23),
+            Token(29, _) if true => Some(24),
+            Token(30, _) if true => Some(25),
+            Token(31, _) if true => Some(26),
+            Token(32, _) if true => Some(27),
+            Token(33, _) if true => Some(28),
+            Token(34, _) if true => Some(29),
+            Token(35, _) if true => Some(30),
+            Token(0, _) if true => Some(31),
+            Token(1, _) if true => Some(32),
+            Token(2, _) if true => Some(33),
+            Token(3, _) if true => Some(34),
+            Token(4, _) if true => Some(35),
             _ => None,
         }
     }
@@ -2620,8 +3047,8 @@ mod __parse__Constraint {
     ) -> __Symbol<'input>
     {
         match __token_index {
-            0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13 | 14 | 15 | 16 | 17 | 18 | 19 | 20 | 21 | 22 | 23 | 24 | 25 | 26 => match __token {
-                Token(5, __tok0) | Token(6, __tok0) | Token(7, __tok0) | Token(8, __tok0) | Token(9, __tok0) | Token(10, __tok0) | Token(11, __tok0) | Token(12, __tok0) | Token(13, __tok0) | Token(14, __tok0) | Token(15, __tok0) | Token(16, __tok0) | Token(17, __tok0) | Token(18, __tok0) | Token(19, __tok0) | Token(20, __tok0) | Token(21, __tok0) | Token(22, __tok0) | Token(23, __tok0) | Token(24, __tok0) | Token(25, __tok0) | Token(26, __tok0) | Token(0, __tok0) | Token(1, __tok0) | Token(2, __tok0) | Token(3, __tok0) | Token(4, __tok0) if true => __Symbol::Variant0(__tok0),
+            0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13 | 14 | 15 | 16 | 17 | 18 | 19 | 20 | 21 | 22 | 23 | 24 | 25 | 26 | 27 | 28 | 29 | 30 | 31 | 32 | 33 | 34 | 35 => match __token {
+                Token(5, __tok0) | Token(6, __tok0) | Token(7, __tok0) | Token(8, __tok0) | Token(9, __tok0) | Token(10, __tok0) | Token(11, __tok0) | Token(12, __tok0) | Token(13, __tok0) | Token(14, __tok0) | Token(15, __tok0) | Token(16, __tok0) | Token(17, __tok0) | Token(18, __tok0) | Token(19, __tok0) | Token(20, __tok0) | Token(21, __tok0) | Token(22, __tok0) | Token(23, __tok0) | Token(24, __tok0) | Token(25, __tok0) | Token(26, __tok0) | Token(27, __tok0) | Token(28, __tok0) | Token(29, __tok0) | Token(30, __tok0) | Token(31, __tok0) | Token(32, __tok0) | Token(33, __tok0) | Token(34, __tok0) | Token(35, __tok0) | Token(0, __tok0) | Token(1, __tok0) | Token(2, __tok0) | Token(3, __tok0) | Token(4, __tok0) if true => __Symbol::Variant0(__tok0),
                 _ => unreachable!(),
             },
             _ => unreachable!(),
@@ -2709,13 +3136,13 @@ mod __parse__Constraint {
             }
             12 => {
                 __state_machine::SimulatedReduce::Reduce {
-                    states_to_pop: 3,
+                    states_to_pop: 1,
                     nonterminal_produced: 5,
                 }
             }
             13 => {
                 __state_machine::SimulatedReduce::Reduce {
-                    states_to_pop: 3,
+                    states_to_pop: 1,
                     nonterminal_produced: 5,
                 }
             }
@@ -2727,255 +3154,321 @@ mod __parse__Constraint {
             }
             15 => {
                 __state_machine::SimulatedReduce::Reduce {
-                    states_to_pop: 3,
-                    nonterminal_produced: 6,
+                    states_to_pop: 1,
+                    nonterminal_produced: 5,
                 }
             }
             16 => {
                 __state_machine::SimulatedReduce::Reduce {
-                    states_to_pop: 2,
-                    nonterminal_produced: 6,
+                    states_to_pop: 1,
+                    nonterminal_produced: 5,
                 }
             }
             17 => {
                 __state_machine::SimulatedReduce::Reduce {
-                    states_to_pop: 4,
-                    nonterminal_produced: 6,
+                    states_to_pop: 1,
+                    nonterminal_produced: 5,
                 }
             }
             18 => {
                 __state_machine::SimulatedReduce::Reduce {
                     states_to_pop: 1,
-                    nonterminal_produced: 6,
+                    nonterminal_produced: 5,
                 }
             }
             19 => {
+                __state_machine::SimulatedReduce::Reduce {
+                    states_to_pop: 3,
+                    nonterminal_produced: 6,
+                }
+            }
+            20 => {
+                __state_machine::SimulatedReduce::Reduce {
+                    states_to_pop: 1,
+                    nonterminal_produced: 6,
+                }
+            }
+            21 => {
+                __state_machine::SimulatedReduce::Reduce {
+                    states_to_pop: 3,
+                    nonterminal_produced: 7,
+                }
+            }
+            22 => {
+                __state_machine::SimulatedReduce::Reduce {
+                    states_to_pop: 3,
+                    nonterminal_produced: 7,
+                }
+            }
+            23 => {
                 __state_machine::SimulatedReduce::Reduce {
                     states_to_pop: 1,
                     nonterminal_produced: 7,
                 }
             }
-            20 => {
-                __state_machine::SimulatedReduce::Reduce {
-                    states_to_pop: 2,
-                    nonterminal_produced: 8,
-                }
-            }
-            21 => {
-                __state_machine::SimulatedReduce::Reduce {
-                    states_to_pop: 2,
-                    nonterminal_produced: 8,
-                }
-            }
-            22 => {
-                __state_machine::SimulatedReduce::Reduce {
-                    states_to_pop: 2,
-                    nonterminal_produced: 8,
-                }
-            }
-            23 => {
-                __state_machine::SimulatedReduce::Reduce {
-                    states_to_pop: 2,
-                    nonterminal_produced: 8,
-                }
-            }
             24 => {
                 __state_machine::SimulatedReduce::Reduce {
-                    states_to_pop: 1,
-                    nonterminal_produced: 9,
+                    states_to_pop: 3,
+                    nonterminal_produced: 8,
                 }
             }
             25 => {
                 __state_machine::SimulatedReduce::Reduce {
-                    states_to_pop: 1,
-                    nonterminal_produced: 10,
+                    states_to_pop: 2,
+                    nonterminal_produced: 8,
                 }
             }
             26 => {
                 __state_machine::SimulatedReduce::Reduce {
-                    states_to_pop: 2,
-                    nonterminal_produced: 11,
+                    states_to_pop: 4,
+                    nonterminal_produced: 8,
                 }
             }
             27 => {
                 __state_machine::SimulatedReduce::Reduce {
                     states_to_pop: 1,
-                    nonterminal_produced: 11,
+                    nonterminal_produced: 8,
                 }
             }
             28 => {
                 __state_machine::SimulatedReduce::Reduce {
-                    states_to_pop: 3,
-                    nonterminal_produced: 12,
+                    states_to_pop: 1,
+                    nonterminal_produced: 9,
                 }
             }
             29 => {
                 __state_machine::SimulatedReduce::Reduce {
-                    states_to_pop: 1,
-                    nonterminal_produced: 13,
+                    states_to_pop: 4,
+                    nonterminal_produced: 10,
                 }
             }
             30 => {
                 __state_machine::SimulatedReduce::Reduce {
-                    states_to_pop: 3,
-                    nonterminal_produced: 13,
+                    states_to_pop: 2,
+                    nonterminal_produced: 10,
                 }
             }
             31 => {
                 __state_machine::SimulatedReduce::Reduce {
-                    states_to_pop: 2,
-                    nonterminal_produced: 13,
+                    states_to_pop: 4,
+                    nonterminal_produced: 10,
                 }
             }
             32 => {
                 __state_machine::SimulatedReduce::Reduce {
-                    states_to_pop: 1,
-                    nonterminal_produced: 14,
+                    states_to_pop: 2,
+                    nonterminal_produced: 10,
                 }
             }
             33 => {
                 __state_machine::SimulatedReduce::Reduce {
-                    states_to_pop: 1,
-                    nonterminal_produced: 14,
+                    states_to_pop: 2,
+                    nonterminal_produced: 10,
                 }
             }
             34 => {
                 __state_machine::SimulatedReduce::Reduce {
                     states_to_pop: 2,
-                    nonterminal_produced: 14,
+                    nonterminal_produced: 10,
                 }
             }
             35 => {
                 __state_machine::SimulatedReduce::Reduce {
-                    states_to_pop: 3,
-                    nonterminal_produced: 14,
+                    states_to_pop: 1,
+                    nonterminal_produced: 11,
                 }
             }
             36 => {
                 __state_machine::SimulatedReduce::Reduce {
-                    states_to_pop: 3,
-                    nonterminal_produced: 14,
+                    states_to_pop: 1,
+                    nonterminal_produced: 12,
                 }
             }
             37 => {
                 __state_machine::SimulatedReduce::Reduce {
-                    states_to_pop: 3,
-                    nonterminal_produced: 14,
+                    states_to_pop: 2,
+                    nonterminal_produced: 13,
                 }
             }
             38 => {
                 __state_machine::SimulatedReduce::Reduce {
-                    states_to_pop: 3,
-                    nonterminal_produced: 15,
+                    states_to_pop: 1,
+                    nonterminal_produced: 13,
                 }
             }
             39 => {
                 __state_machine::SimulatedReduce::Reduce {
-                    states_to_pop: 1,
-                    nonterminal_produced: 15,
+                    states_to_pop: 3,
+                    nonterminal_produced: 14,
                 }
             }
             40 => {
                 __state_machine::SimulatedReduce::Reduce {
                     states_to_pop: 1,
-                    nonterminal_produced: 16,
+                    nonterminal_produced: 15,
                 }
             }
             41 => {
                 __state_machine::SimulatedReduce::Reduce {
-                    states_to_pop: 1,
-                    nonterminal_produced: 16,
+                    states_to_pop: 3,
+                    nonterminal_produced: 15,
                 }
             }
             42 => {
                 __state_machine::SimulatedReduce::Reduce {
-                    states_to_pop: 1,
-                    nonterminal_produced: 17,
+                    states_to_pop: 2,
+                    nonterminal_produced: 15,
                 }
             }
             43 => {
                 __state_machine::SimulatedReduce::Reduce {
                     states_to_pop: 1,
-                    nonterminal_produced: 18,
+                    nonterminal_produced: 16,
                 }
             }
             44 => {
                 __state_machine::SimulatedReduce::Reduce {
                     states_to_pop: 1,
-                    nonterminal_produced: 19,
+                    nonterminal_produced: 16,
                 }
             }
             45 => {
                 __state_machine::SimulatedReduce::Reduce {
-                    states_to_pop: 1,
-                    nonterminal_produced: 19,
+                    states_to_pop: 2,
+                    nonterminal_produced: 16,
                 }
             }
             46 => {
                 __state_machine::SimulatedReduce::Reduce {
                     states_to_pop: 3,
-                    nonterminal_produced: 19,
+                    nonterminal_produced: 16,
                 }
             }
             47 => {
                 __state_machine::SimulatedReduce::Reduce {
-                    states_to_pop: 1,
-                    nonterminal_produced: 20,
+                    states_to_pop: 3,
+                    nonterminal_produced: 16,
                 }
             }
             48 => {
                 __state_machine::SimulatedReduce::Reduce {
                     states_to_pop: 3,
-                    nonterminal_produced: 20,
+                    nonterminal_produced: 16,
                 }
             }
             49 => {
                 __state_machine::SimulatedReduce::Reduce {
-                    states_to_pop: 2,
-                    nonterminal_produced: 20,
+                    states_to_pop: 3,
+                    nonterminal_produced: 17,
                 }
             }
             50 => {
                 __state_machine::SimulatedReduce::Reduce {
-                    states_to_pop: 2,
-                    nonterminal_produced: 21,
+                    states_to_pop: 1,
+                    nonterminal_produced: 17,
                 }
             }
             51 => {
                 __state_machine::SimulatedReduce::Reduce {
-                    states_to_pop: 2,
-                    nonterminal_produced: 21,
+                    states_to_pop: 1,
+                    nonterminal_produced: 18,
                 }
             }
             52 => {
                 __state_machine::SimulatedReduce::Reduce {
                     states_to_pop: 1,
-                    nonterminal_produced: 22,
+                    nonterminal_produced: 18,
                 }
             }
-            53 => __state_machine::SimulatedReduce::Accept,
+            53 => {
+                __state_machine::SimulatedReduce::Reduce {
+                    states_to_pop: 1,
+                    nonterminal_produced: 19,
+                }
+            }
             54 => {
                 __state_machine::SimulatedReduce::Reduce {
                     states_to_pop: 1,
-                    nonterminal_produced: 24,
+                    nonterminal_produced: 20,
                 }
             }
             55 => {
                 __state_machine::SimulatedReduce::Reduce {
                     states_to_pop: 1,
-                    nonterminal_produced: 25,
+                    nonterminal_produced: 21,
                 }
             }
             56 => {
                 __state_machine::SimulatedReduce::Reduce {
                     states_to_pop: 1,
-                    nonterminal_produced: 26,
+                    nonterminal_produced: 21,
                 }
             }
             57 => {
                 __state_machine::SimulatedReduce::Reduce {
+                    states_to_pop: 3,
+                    nonterminal_produced: 21,
+                }
+            }
+            58 => {
+                __state_machine::SimulatedReduce::Reduce {
+                    states_to_pop: 1,
+                    nonterminal_produced: 22,
+                }
+            }
+            59 => {
+                __state_machine::SimulatedReduce::Reduce {
+                    states_to_pop: 3,
+                    nonterminal_produced: 22,
+                }
+            }
+            60 => {
+                __state_machine::SimulatedReduce::Reduce {
+                    states_to_pop: 2,
+                    nonterminal_produced: 22,
+                }
+            }
+            61 => {
+                __state_machine::SimulatedReduce::Reduce {
+                    states_to_pop: 2,
+                    nonterminal_produced: 23,
+                }
+            }
+            62 => {
+                __state_machine::SimulatedReduce::Reduce {
+                    states_to_pop: 2,
+                    nonterminal_produced: 23,
+                }
+            }
+            63 => {
+                __state_machine::SimulatedReduce::Reduce {
+                    states_to_pop: 1,
+                    nonterminal_produced: 24,
+                }
+            }
+            64 => __state_machine::SimulatedReduce::Accept,
+            65 => {
+                __state_machine::SimulatedReduce::Reduce {
+                    states_to_pop: 1,
+                    nonterminal_produced: 26,
+                }
+            }
+            66 => {
+                __state_machine::SimulatedReduce::Reduce {
                     states_to_pop: 1,
                     nonterminal_produced: 27,
+                }
+            }
+            67 => {
+                __state_machine::SimulatedReduce::Reduce {
+                    states_to_pop: 1,
+                    nonterminal_produced: 28,
+                }
+            }
+            68 => {
+                __state_machine::SimulatedReduce::Reduce {
+                    states_to_pop: 1,
+                    nonterminal_produced: 29,
                 }
             }
             _ => panic!("invalid reduction index {}", __reduce_index)
@@ -3218,12 +3711,7 @@ mod __parse__Constraint {
                 __reduce52(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&())>)
             }
             53 => {
-                // __Constraint = Constraint => ActionFn(4);
-                let __sym0 = __pop_Variant9(__symbols);
-                let __start = __sym0.0;
-                let __end = __sym0.2;
-                let __nt = super::__action4::<>(input, __sym0);
-                return Some(Ok(__nt));
+                __reduce53(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&())>)
             }
             54 => {
                 __reduce54(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&())>)
@@ -3236,6 +3724,44 @@ mod __parse__Constraint {
             }
             57 => {
                 __reduce57(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&())>)
+            }
+            58 => {
+                __reduce58(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&())>)
+            }
+            59 => {
+                __reduce59(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&())>)
+            }
+            60 => {
+                __reduce60(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&())>)
+            }
+            61 => {
+                __reduce61(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&())>)
+            }
+            62 => {
+                __reduce62(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&())>)
+            }
+            63 => {
+                __reduce63(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&())>)
+            }
+            64 => {
+                // __Constraint = Constraint => ActionFn(4);
+                let __sym0 = __pop_Variant11(__symbols);
+                let __start = __sym0.0;
+                let __end = __sym0.2;
+                let __nt = super::__action4::<>(input, __sym0);
+                return Some(Ok(__nt));
+            }
+            65 => {
+                __reduce65(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&())>)
+            }
+            66 => {
+                __reduce66(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&())>)
+            }
+            67 => {
+                __reduce67(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&())>)
+            }
+            68 => {
+                __reduce68(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&())>)
             }
             _ => panic!("invalid action code {}", __action)
         };
@@ -3250,14 +3776,14 @@ mod __parse__Constraint {
     fn __symbol_type_mismatch() -> ! {
         panic!("symbol type mismatch")
     }
-    fn __pop_Variant9<
+    fn __pop_Variant11<
       'input,
     >(
         __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>
     ) -> (usize, ArgConstraint, usize)
      {
         match __symbols.pop() {
-            Some((__l, __Symbol::Variant9(__v), __r)) => (__l, __v, __r),
+            Some((__l, __Symbol::Variant11(__v), __r)) => (__l, __v, __r),
             _ => __symbol_type_mismatch()
         }
     }
@@ -3287,21 +3813,10 @@ mod __parse__Constraint {
       'input,
     >(
         __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>
-    ) -> (usize, CompositeValue, usize)
+    ) -> (usize, Attribute, usize)
      {
         match __symbols.pop() {
             Some((__l, __Symbol::Variant6(__v), __r)) => (__l, __v, __r),
-            _ => __symbol_type_mismatch()
-        }
-    }
-    fn __pop_Variant7<
-      'input,
-    >(
-        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>
-    ) -> (usize, CompoundInstruction<SomeValue>, usize)
-     {
-        match __symbols.pop() {
-            Some((__l, __Symbol::Variant7(__v), __r)) => (__l, __v, __r),
             _ => __symbol_type_mismatch()
         }
     }
@@ -3309,21 +3824,43 @@ mod __parse__Constraint {
       'input,
     >(
         __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>
-    ) -> (usize, ConcreteType, usize)
+    ) -> (usize, CompositeValue, usize)
      {
         match __symbols.pop() {
             Some((__l, __Symbol::Variant8(__v), __r)) => (__l, __v, __r),
             _ => __symbol_type_mismatch()
         }
     }
-    fn __pop_Variant11<
+    fn __pop_Variant9<
+      'input,
+    >(
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>
+    ) -> (usize, CompoundInstruction<SomeValue>, usize)
+     {
+        match __symbols.pop() {
+            Some((__l, __Symbol::Variant9(__v), __r)) => (__l, __v, __r),
+            _ => __symbol_type_mismatch()
+        }
+    }
+    fn __pop_Variant10<
+      'input,
+    >(
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>
+    ) -> (usize, ConcreteType, usize)
+     {
+        match __symbols.pop() {
+            Some((__l, __Symbol::Variant10(__v), __r)) => (__l, __v, __r),
+            _ => __symbol_type_mismatch()
+        }
+    }
+    fn __pop_Variant13<
       'input,
     >(
         __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>
     ) -> (usize, Instruction<SomeValue>, usize)
      {
         match __symbols.pop() {
-            Some((__l, __Symbol::Variant11(__v), __r)) => (__l, __v, __r),
+            Some((__l, __Symbol::Variant13(__v), __r)) => (__l, __v, __r),
             _ => __symbol_type_mismatch()
         }
     }
@@ -3338,25 +3875,14 @@ mod __parse__Constraint {
             _ => __symbol_type_mismatch()
         }
     }
-    fn __pop_Variant13<
+    fn __pop_Variant15<
       'input,
     >(
         __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>
     ) -> (usize, MType<DynMType>, usize)
      {
         match __symbols.pop() {
-            Some((__l, __Symbol::Variant13(__v), __r)) => (__l, __v, __r),
-            _ => __symbol_type_mismatch()
-        }
-    }
-    fn __pop_Variant17<
-      'input,
-    >(
-        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>
-    ) -> (usize, SomeValue, usize)
-     {
-        match __symbols.pop() {
-            Some((__l, __Symbol::Variant17(__v), __r)) => (__l, __v, __r),
+            Some((__l, __Symbol::Variant15(__v), __r)) => (__l, __v, __r),
             _ => __symbol_type_mismatch()
         }
     }
@@ -3364,21 +3890,32 @@ mod __parse__Constraint {
       'input,
     >(
         __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>
-    ) -> (usize, StackResultElem, usize)
+    ) -> (usize, SomeValue, usize)
      {
         match __symbols.pop() {
             Some((__l, __Symbol::Variant19(__v), __r)) => (__l, __v, __r),
             _ => __symbol_type_mismatch()
         }
     }
-    fn __pop_Variant10<
+    fn __pop_Variant21<
+      'input,
+    >(
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>
+    ) -> (usize, StackResultElem, usize)
+     {
+        match __symbols.pop() {
+            Some((__l, __Symbol::Variant21(__v), __r)) => (__l, __v, __r),
+            _ => __symbol_type_mismatch()
+        }
+    }
+    fn __pop_Variant12<
       'input,
     >(
         __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>
     ) -> (usize, String, usize)
      {
         match __symbols.pop() {
-            Some((__l, __Symbol::Variant10(__v), __r)) => (__l, __v, __r),
+            Some((__l, __Symbol::Variant12(__v), __r)) => (__l, __v, __r),
             _ => __symbol_type_mismatch()
         }
     }
@@ -3393,14 +3930,14 @@ mod __parse__Constraint {
             _ => __symbol_type_mismatch()
         }
     }
-    fn __pop_Variant12<
+    fn __pop_Variant7<
       'input,
     >(
         __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>
-    ) -> (usize, Vec<CompoundInstruction<SomeValue>>, usize)
+    ) -> (usize, Vec<Attribute>, usize)
      {
         match __symbols.pop() {
-            Some((__l, __Symbol::Variant12(__v), __r)) => (__l, __v, __r),
+            Some((__l, __Symbol::Variant7(__v), __r)) => (__l, __v, __r),
             _ => __symbol_type_mismatch()
         }
     }
@@ -3408,32 +3945,43 @@ mod __parse__Constraint {
       'input,
     >(
         __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>
-    ) -> (usize, Vec<MType<DynMType>>, usize)
+    ) -> (usize, Vec<CompoundInstruction<SomeValue>>, usize)
      {
         match __symbols.pop() {
             Some((__l, __Symbol::Variant14(__v), __r)) => (__l, __v, __r),
             _ => __symbol_type_mismatch()
         }
     }
-    fn __pop_Variant18<
+    fn __pop_Variant16<
+      'input,
+    >(
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>
+    ) -> (usize, Vec<MType<DynMType>>, usize)
+     {
+        match __symbols.pop() {
+            Some((__l, __Symbol::Variant16(__v), __r)) => (__l, __v, __r),
+            _ => __symbol_type_mismatch()
+        }
+    }
+    fn __pop_Variant20<
       'input,
     >(
         __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>
     ) -> (usize, Vec<SomeValue>, usize)
      {
         match __symbols.pop() {
-            Some((__l, __Symbol::Variant18(__v), __r)) => (__l, __v, __r),
+            Some((__l, __Symbol::Variant20(__v), __r)) => (__l, __v, __r),
             _ => __symbol_type_mismatch()
         }
     }
-    fn __pop_Variant15<
+    fn __pop_Variant17<
       'input,
     >(
         __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>
     ) -> (usize, bool, usize)
      {
         match __symbols.pop() {
-            Some((__l, __Symbol::Variant15(__v), __r)) => (__l, __v, __r),
+            Some((__l, __Symbol::Variant17(__v), __r)) => (__l, __v, __r),
             _ => __symbol_type_mismatch()
         }
     }
@@ -3448,14 +3996,14 @@ mod __parse__Constraint {
             _ => __symbol_type_mismatch()
         }
     }
-    fn __pop_Variant16<
+    fn __pop_Variant18<
       'input,
     >(
         __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>
     ) -> (usize, i32, usize)
      {
         match __symbols.pop() {
-            Some((__l, __Symbol::Variant16(__v), __r)) => (__l, __v, __r),
+            Some((__l, __Symbol::Variant18(__v), __r)) => (__l, __v, __r),
             _ => __symbol_type_mismatch()
         }
     }
@@ -3479,11 +4027,11 @@ mod __parse__Constraint {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // Arg = SomeValue => ActionFn(12);
-        let __sym0 = __pop_Variant17(__symbols);
+        // Arg = SomeValue => ActionFn(21);
+        let __sym0 = __pop_Variant19(__symbols);
         let __start = __sym0.0;
         let __end = __sym0.2;
-        let __nt = super::__action12::<>(input, __sym0);
+        let __nt = super::__action21::<>(input, __sym0);
         __symbols.push((__start, __Symbol::Variant1(__nt), __end));
         (1, 0)
     }
@@ -3496,11 +4044,11 @@ mod __parse__Constraint {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // Arg = ConcreteType => ActionFn(13);
-        let __sym0 = __pop_Variant8(__symbols);
+        // Arg = ConcreteType => ActionFn(22);
+        let __sym0 = __pop_Variant10(__symbols);
         let __start = __sym0.0;
         let __end = __sym0.2;
-        let __nt = super::__action13::<>(input, __sym0);
+        let __nt = super::__action22::<>(input, __sym0);
         __symbols.push((__start, __Symbol::Variant1(__nt), __end));
         (1, 0)
     }
@@ -3513,11 +4061,11 @@ mod __parse__Constraint {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // ArgVar = r#"[a-z]"# => ActionFn(51);
+        // ArgVar = r#"[a-z]"# => ActionFn(62);
         let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0;
         let __end = __sym0.2;
-        let __nt = super::__action51::<>(input, __sym0);
+        let __nt = super::__action62::<>(input, __sym0);
         __symbols.push((__start, __Symbol::Variant2(__nt), __end));
         (1, 1)
     }
@@ -3530,13 +4078,13 @@ mod __parse__Constraint {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // Args = Arg, Args => ActionFn(14);
+        // Args = Arg, Args => ActionFn(23);
         assert!(__symbols.len() >= 2);
         let __sym1 = __pop_Variant3(__symbols);
         let __sym0 = __pop_Variant1(__symbols);
         let __start = __sym0.0;
         let __end = __sym1.2;
-        let __nt = super::__action14::<>(input, __sym0, __sym1);
+        let __nt = super::__action23::<>(input, __sym0, __sym1);
         __symbols.push((__start, __Symbol::Variant3(__nt), __end));
         (2, 2)
     }
@@ -3549,11 +4097,11 @@ mod __parse__Constraint {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // Args = Arg => ActionFn(15);
+        // Args = Arg => ActionFn(24);
         let __sym0 = __pop_Variant1(__symbols);
         let __start = __sym0.0;
         let __end = __sym0.2;
-        let __nt = super::__action15::<>(input, __sym0);
+        let __nt = super::__action24::<>(input, __sym0);
         __symbols.push((__start, __Symbol::Variant3(__nt), __end));
         (1, 2)
     }
@@ -3566,11 +4114,11 @@ mod __parse__Constraint {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // AtomicType = "int" => ActionFn(32);
+        // AtomicType = "int" => ActionFn(41);
         let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0;
         let __end = __sym0.2;
-        let __nt = super::__action32::<>(input, __sym0);
+        let __nt = super::__action41::<>(input, __sym0);
         __symbols.push((__start, __Symbol::Variant4(__nt), __end));
         (1, 3)
     }
@@ -3583,11 +4131,11 @@ mod __parse__Constraint {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // AtomicType = "nat" => ActionFn(33);
+        // AtomicType = "nat" => ActionFn(42);
         let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0;
         let __end = __sym0.2;
-        let __nt = super::__action33::<>(input, __sym0);
+        let __nt = super::__action42::<>(input, __sym0);
         __symbols.push((__start, __Symbol::Variant4(__nt), __end));
         (1, 3)
     }
@@ -3600,11 +4148,11 @@ mod __parse__Constraint {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // AtomicType = "string" => ActionFn(34);
+        // AtomicType = "string" => ActionFn(43);
         let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0;
         let __end = __sym0.2;
-        let __nt = super::__action34::<>(input, __sym0);
+        let __nt = super::__action43::<>(input, __sym0);
         __symbols.push((__start, __Symbol::Variant4(__nt), __end));
         (1, 3)
     }
@@ -3617,11 +4165,11 @@ mod __parse__Constraint {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // AtomicType = "bool" => ActionFn(35);
+        // AtomicType = "bool" => ActionFn(44);
         let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0;
         let __end = __sym0.2;
-        let __nt = super::__action35::<>(input, __sym0);
+        let __nt = super::__action44::<>(input, __sym0);
         __symbols.push((__start, __Symbol::Variant4(__nt), __end));
         (1, 3)
     }
@@ -3634,11 +4182,11 @@ mod __parse__Constraint {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // AtomicValue = McLitNumber => ActionFn(19);
-        let __sym0 = __pop_Variant16(__symbols);
+        // AtomicValue = McLitNumber => ActionFn(28);
+        let __sym0 = __pop_Variant18(__symbols);
         let __start = __sym0.0;
         let __end = __sym0.2;
-        let __nt = super::__action19::<>(input, __sym0);
+        let __nt = super::__action28::<>(input, __sym0);
         __symbols.push((__start, __Symbol::Variant5(__nt), __end));
         (1, 4)
     }
@@ -3651,11 +4199,11 @@ mod __parse__Constraint {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // AtomicValue = McLitString => ActionFn(20);
-        let __sym0 = __pop_Variant10(__symbols);
+        // AtomicValue = McLitString => ActionFn(29);
+        let __sym0 = __pop_Variant12(__symbols);
         let __start = __sym0.0;
         let __end = __sym0.2;
-        let __nt = super::__action20::<>(input, __sym0);
+        let __nt = super::__action29::<>(input, __sym0);
         __symbols.push((__start, __Symbol::Variant5(__nt), __end));
         (1, 4)
     }
@@ -3668,11 +4216,11 @@ mod __parse__Constraint {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // AtomicValue = McLitBool => ActionFn(21);
-        let __sym0 = __pop_Variant15(__symbols);
+        // AtomicValue = McLitBool => ActionFn(30);
+        let __sym0 = __pop_Variant17(__symbols);
         let __start = __sym0.0;
         let __end = __sym0.2;
-        let __nt = super::__action21::<>(input, __sym0);
+        let __nt = super::__action30::<>(input, __sym0);
         __symbols.push((__start, __Symbol::Variant5(__nt), __end));
         (1, 4)
     }
@@ -3685,16 +4233,13 @@ mod __parse__Constraint {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // CompositeValue = "Pair", SomeValue, SomeValue => ActionFn(22);
-        assert!(__symbols.len() >= 3);
-        let __sym2 = __pop_Variant17(__symbols);
-        let __sym1 = __pop_Variant17(__symbols);
+        // Attribute = "comparable" => ActionFn(6);
         let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0;
-        let __end = __sym2.2;
-        let __nt = super::__action22::<>(input, __sym0, __sym1, __sym2);
+        let __end = __sym0.2;
+        let __nt = super::__action6::<>(input, __sym0);
         __symbols.push((__start, __Symbol::Variant6(__nt), __end));
-        (3, 5)
+        (1, 5)
     }
     pub(crate) fn __reduce13<
         'input,
@@ -3705,16 +4250,13 @@ mod __parse__Constraint {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // CompositeValue = "{", SomeValueList, "}" => ActionFn(23);
-        assert!(__symbols.len() >= 3);
-        let __sym2 = __pop_Variant0(__symbols);
-        let __sym1 = __pop_Variant18(__symbols);
+        // Attribute = "passable" => ActionFn(7);
         let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0;
-        let __end = __sym2.2;
-        let __nt = super::__action23::<>(input, __sym0, __sym1, __sym2);
+        let __end = __sym0.2;
+        let __nt = super::__action7::<>(input, __sym0);
         __symbols.push((__start, __Symbol::Variant6(__nt), __end));
-        (3, 5)
+        (1, 5)
     }
     pub(crate) fn __reduce14<
         'input,
@@ -3725,11 +4267,11 @@ mod __parse__Constraint {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // CompositeValue = InstructionBlock => ActionFn(24);
-        let __sym0 = __pop_Variant12(__symbols);
+        // Attribute = "pushable" => ActionFn(8);
+        let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0;
         let __end = __sym0.2;
-        let __nt = super::__action24::<>(input, __sym0);
+        let __nt = super::__action8::<>(input, __sym0);
         __symbols.push((__start, __Symbol::Variant6(__nt), __end));
         (1, 5)
     }
@@ -3742,16 +4284,13 @@ mod __parse__Constraint {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // CompoundInstruction = "IF", InstructionBlock, InstructionBlock => ActionFn(6);
-        assert!(__symbols.len() >= 3);
-        let __sym2 = __pop_Variant12(__symbols);
-        let __sym1 = __pop_Variant12(__symbols);
+        // Attribute = "storable" => ActionFn(9);
         let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0;
-        let __end = __sym2.2;
-        let __nt = super::__action6::<>(input, __sym0, __sym1, __sym2);
-        __symbols.push((__start, __Symbol::Variant7(__nt), __end));
-        (3, 6)
+        let __end = __sym0.2;
+        let __nt = super::__action9::<>(input, __sym0);
+        __symbols.push((__start, __Symbol::Variant6(__nt), __end));
+        (1, 5)
     }
     pub(crate) fn __reduce16<
         'input,
@@ -3762,15 +4301,13 @@ mod __parse__Constraint {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // CompoundInstruction = "DIP", InstructionBlock => ActionFn(7);
-        assert!(__symbols.len() >= 2);
-        let __sym1 = __pop_Variant12(__symbols);
+        // Attribute = "packable" => ActionFn(10);
         let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0;
-        let __end = __sym1.2;
-        let __nt = super::__action7::<>(input, __sym0, __sym1);
-        __symbols.push((__start, __Symbol::Variant7(__nt), __end));
-        (2, 6)
+        let __end = __sym0.2;
+        let __nt = super::__action10::<>(input, __sym0);
+        __symbols.push((__start, __Symbol::Variant6(__nt), __end));
+        (1, 5)
     }
     pub(crate) fn __reduce17<
         'input,
@@ -3781,17 +4318,13 @@ mod __parse__Constraint {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // CompoundInstruction = "LAMBDA_REC", ConcreteType, ConcreteType, InstructionBlock => ActionFn(8);
-        assert!(__symbols.len() >= 4);
-        let __sym3 = __pop_Variant12(__symbols);
-        let __sym2 = __pop_Variant8(__symbols);
-        let __sym1 = __pop_Variant8(__symbols);
+        // Attribute = "bigmapvalue" => ActionFn(11);
         let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0;
-        let __end = __sym3.2;
-        let __nt = super::__action8::<>(input, __sym0, __sym1, __sym2, __sym3);
-        __symbols.push((__start, __Symbol::Variant7(__nt), __end));
-        (4, 6)
+        let __end = __sym0.2;
+        let __nt = super::__action11::<>(input, __sym0);
+        __symbols.push((__start, __Symbol::Variant6(__nt), __end));
+        (1, 5)
     }
     pub(crate) fn __reduce18<
         'input,
@@ -3802,13 +4335,13 @@ mod __parse__Constraint {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // CompoundInstruction = Instruction => ActionFn(9);
-        let __sym0 = __pop_Variant11(__symbols);
+        // Attribute = "duplicable" => ActionFn(12);
+        let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0;
         let __end = __sym0.2;
-        let __nt = super::__action9::<>(input, __sym0);
-        __symbols.push((__start, __Symbol::Variant7(__nt), __end));
-        (1, 6)
+        let __nt = super::__action12::<>(input, __sym0);
+        __symbols.push((__start, __Symbol::Variant6(__nt), __end));
+        (1, 5)
     }
     pub(crate) fn __reduce19<
         'input,
@@ -3819,13 +4352,16 @@ mod __parse__Constraint {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // ConcreteType = MDyn => ActionFn(36);
-        let __sym0 = __pop_Variant13(__symbols);
+        // AttributeList = Attribute, "+", AttributeList => ActionFn(13);
+        assert!(__symbols.len() >= 3);
+        let __sym2 = __pop_Variant7(__symbols);
+        let __sym1 = __pop_Variant0(__symbols);
+        let __sym0 = __pop_Variant6(__symbols);
         let __start = __sym0.0;
-        let __end = __sym0.2;
-        let __nt = super::__action36::<>(input, __sym0);
-        __symbols.push((__start, __Symbol::Variant8(__nt), __end));
-        (1, 7)
+        let __end = __sym2.2;
+        let __nt = super::__action13::<>(input, __sym0, __sym1, __sym2);
+        __symbols.push((__start, __Symbol::Variant7(__nt), __end));
+        (3, 6)
     }
     pub(crate) fn __reduce20<
         'input,
@@ -3836,15 +4372,13 @@ mod __parse__Constraint {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // Constraint = "w|", ArgVar => ActionFn(45);
-        assert!(__symbols.len() >= 2);
-        let __sym1 = __pop_Variant2(__symbols);
-        let __sym0 = __pop_Variant0(__symbols);
+        // AttributeList = Attribute => ActionFn(14);
+        let __sym0 = __pop_Variant6(__symbols);
         let __start = __sym0.0;
-        let __end = __sym1.2;
-        let __nt = super::__action45::<>(input, __sym0, __sym1);
-        __symbols.push((__start, __Symbol::Variant9(__nt), __end));
-        (2, 8)
+        let __end = __sym0.2;
+        let __nt = super::__action14::<>(input, __sym0);
+        __symbols.push((__start, __Symbol::Variant7(__nt), __end));
+        (1, 6)
     }
     pub(crate) fn __reduce21<
         'input,
@@ -3855,15 +4389,16 @@ mod __parse__Constraint {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // Constraint = "t|", ArgVar => ActionFn(46);
-        assert!(__symbols.len() >= 2);
-        let __sym1 = __pop_Variant2(__symbols);
+        // CompositeValue = "Pair", SomeValue, SomeValue => ActionFn(31);
+        assert!(__symbols.len() >= 3);
+        let __sym2 = __pop_Variant19(__symbols);
+        let __sym1 = __pop_Variant19(__symbols);
         let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0;
-        let __end = __sym1.2;
-        let __nt = super::__action46::<>(input, __sym0, __sym1);
-        __symbols.push((__start, __Symbol::Variant9(__nt), __end));
-        (2, 8)
+        let __end = __sym2.2;
+        let __nt = super::__action31::<>(input, __sym0, __sym1, __sym2);
+        __symbols.push((__start, __Symbol::Variant8(__nt), __end));
+        (3, 7)
     }
     pub(crate) fn __reduce22<
         'input,
@@ -3874,15 +4409,16 @@ mod __parse__Constraint {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // Constraint = "r|", ArgVar => ActionFn(47);
-        assert!(__symbols.len() >= 2);
-        let __sym1 = __pop_Variant2(__symbols);
+        // CompositeValue = "{", SomeValueList, "}" => ActionFn(32);
+        assert!(__symbols.len() >= 3);
+        let __sym2 = __pop_Variant0(__symbols);
+        let __sym1 = __pop_Variant20(__symbols);
         let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0;
-        let __end = __sym1.2;
-        let __nt = super::__action47::<>(input, __sym0, __sym1);
-        __symbols.push((__start, __Symbol::Variant9(__nt), __end));
-        (2, 8)
+        let __end = __sym2.2;
+        let __nt = super::__action32::<>(input, __sym0, __sym1, __sym2);
+        __symbols.push((__start, __Symbol::Variant8(__nt), __end));
+        (3, 7)
     }
     pub(crate) fn __reduce23<
         'input,
@@ -3893,15 +4429,13 @@ mod __parse__Constraint {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // Constraint = "a|", AtomicType => ActionFn(48);
-        assert!(__symbols.len() >= 2);
-        let __sym1 = __pop_Variant4(__symbols);
-        let __sym0 = __pop_Variant0(__symbols);
+        // CompositeValue = InstructionBlock => ActionFn(33);
+        let __sym0 = __pop_Variant14(__symbols);
         let __start = __sym0.0;
-        let __end = __sym1.2;
-        let __nt = super::__action48::<>(input, __sym0, __sym1);
-        __symbols.push((__start, __Symbol::Variant9(__nt), __end));
-        (2, 8)
+        let __end = __sym0.2;
+        let __nt = super::__action33::<>(input, __sym0);
+        __symbols.push((__start, __Symbol::Variant8(__nt), __end));
+        (1, 7)
     }
     pub(crate) fn __reduce24<
         'input,
@@ -3912,13 +4446,16 @@ mod __parse__Constraint {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // Dyn = r#"<[A-Za-z][A-Za-z0-9|]+>"# => ActionFn(52);
+        // CompoundInstruction = "IF", InstructionBlock, InstructionBlock => ActionFn(15);
+        assert!(__symbols.len() >= 3);
+        let __sym2 = __pop_Variant14(__symbols);
+        let __sym1 = __pop_Variant14(__symbols);
         let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0;
-        let __end = __sym0.2;
-        let __nt = super::__action52::<>(input, __sym0);
-        __symbols.push((__start, __Symbol::Variant10(__nt), __end));
-        (1, 9)
+        let __end = __sym2.2;
+        let __nt = super::__action15::<>(input, __sym0, __sym1, __sym2);
+        __symbols.push((__start, __Symbol::Variant9(__nt), __end));
+        (3, 8)
     }
     pub(crate) fn __reduce25<
         'input,
@@ -3929,13 +4466,15 @@ mod __parse__Constraint {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // Identifier = r#"[A-Za-z][A-Za-z0-9]+"# => ActionFn(53);
+        // CompoundInstruction = "DIP", InstructionBlock => ActionFn(16);
+        assert!(__symbols.len() >= 2);
+        let __sym1 = __pop_Variant14(__symbols);
         let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0;
-        let __end = __sym0.2;
-        let __nt = super::__action53::<>(input, __sym0);
-        __symbols.push((__start, __Symbol::Variant10(__nt), __end));
-        (1, 10)
+        let __end = __sym1.2;
+        let __nt = super::__action16::<>(input, __sym0, __sym1);
+        __symbols.push((__start, __Symbol::Variant9(__nt), __end));
+        (2, 8)
     }
     pub(crate) fn __reduce26<
         'input,
@@ -3946,15 +4485,17 @@ mod __parse__Constraint {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // Instruction = Identifier, Args => ActionFn(10);
-        assert!(__symbols.len() >= 2);
-        let __sym1 = __pop_Variant3(__symbols);
-        let __sym0 = __pop_Variant10(__symbols);
+        // CompoundInstruction = "LAMBDA_REC", ConcreteType, ConcreteType, InstructionBlock => ActionFn(17);
+        assert!(__symbols.len() >= 4);
+        let __sym3 = __pop_Variant14(__symbols);
+        let __sym2 = __pop_Variant10(__symbols);
+        let __sym1 = __pop_Variant10(__symbols);
+        let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0;
-        let __end = __sym1.2;
-        let __nt = super::__action10::<>(input, __sym0, __sym1);
-        __symbols.push((__start, __Symbol::Variant11(__nt), __end));
-        (2, 11)
+        let __end = __sym3.2;
+        let __nt = super::__action17::<>(input, __sym0, __sym1, __sym2, __sym3);
+        __symbols.push((__start, __Symbol::Variant9(__nt), __end));
+        (4, 8)
     }
     pub(crate) fn __reduce27<
         'input,
@@ -3965,13 +4506,13 @@ mod __parse__Constraint {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // Instruction = Identifier => ActionFn(11);
-        let __sym0 = __pop_Variant10(__symbols);
+        // CompoundInstruction = Instruction => ActionFn(18);
+        let __sym0 = __pop_Variant13(__symbols);
         let __start = __sym0.0;
         let __end = __sym0.2;
-        let __nt = super::__action11::<>(input, __sym0);
-        __symbols.push((__start, __Symbol::Variant11(__nt), __end));
-        (1, 11)
+        let __nt = super::__action18::<>(input, __sym0);
+        __symbols.push((__start, __Symbol::Variant9(__nt), __end));
+        (1, 8)
     }
     pub(crate) fn __reduce28<
         'input,
@@ -3982,16 +4523,13 @@ mod __parse__Constraint {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // InstructionBlock = "{", InstructionList, "}" => ActionFn(25);
-        assert!(__symbols.len() >= 3);
-        let __sym2 = __pop_Variant0(__symbols);
-        let __sym1 = __pop_Variant12(__symbols);
-        let __sym0 = __pop_Variant0(__symbols);
+        // ConcreteType = MDyn => ActionFn(45);
+        let __sym0 = __pop_Variant15(__symbols);
         let __start = __sym0.0;
-        let __end = __sym2.2;
-        let __nt = super::__action25::<>(input, __sym0, __sym1, __sym2);
-        __symbols.push((__start, __Symbol::Variant12(__nt), __end));
-        (3, 12)
+        let __end = __sym0.2;
+        let __nt = super::__action45::<>(input, __sym0);
+        __symbols.push((__start, __Symbol::Variant10(__nt), __end));
+        (1, 9)
     }
     pub(crate) fn __reduce29<
         'input,
@@ -4002,13 +4540,17 @@ mod __parse__Constraint {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // InstructionList = CompoundInstruction => ActionFn(29);
-        let __sym0 = __pop_Variant7(__symbols);
+        // Constraint = "w|", ArgVar, "=>", AttributeList => ActionFn(54);
+        assert!(__symbols.len() >= 4);
+        let __sym3 = __pop_Variant7(__symbols);
+        let __sym2 = __pop_Variant0(__symbols);
+        let __sym1 = __pop_Variant2(__symbols);
+        let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0;
-        let __end = __sym0.2;
-        let __nt = super::__action29::<>(input, __sym0);
-        __symbols.push((__start, __Symbol::Variant12(__nt), __end));
-        (1, 13)
+        let __end = __sym3.2;
+        let __nt = super::__action54::<>(input, __sym0, __sym1, __sym2, __sym3);
+        __symbols.push((__start, __Symbol::Variant11(__nt), __end));
+        (4, 10)
     }
     pub(crate) fn __reduce30<
         'input,
@@ -4019,16 +4561,15 @@ mod __parse__Constraint {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // InstructionList = CompoundInstruction, ";", InstructionList => ActionFn(30);
-        assert!(__symbols.len() >= 3);
-        let __sym2 = __pop_Variant12(__symbols);
-        let __sym1 = __pop_Variant0(__symbols);
-        let __sym0 = __pop_Variant7(__symbols);
+        // Constraint = "w|", ArgVar => ActionFn(55);
+        assert!(__symbols.len() >= 2);
+        let __sym1 = __pop_Variant2(__symbols);
+        let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0;
-        let __end = __sym2.2;
-        let __nt = super::__action30::<>(input, __sym0, __sym1, __sym2);
-        __symbols.push((__start, __Symbol::Variant12(__nt), __end));
-        (3, 13)
+        let __end = __sym1.2;
+        let __nt = super::__action55::<>(input, __sym0, __sym1);
+        __symbols.push((__start, __Symbol::Variant11(__nt), __end));
+        (2, 10)
     }
     pub(crate) fn __reduce31<
         'input,
@@ -4039,15 +4580,17 @@ mod __parse__Constraint {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // InstructionList = CompoundInstruction, ";" => ActionFn(31);
-        assert!(__symbols.len() >= 2);
-        let __sym1 = __pop_Variant0(__symbols);
-        let __sym0 = __pop_Variant7(__symbols);
+        // Constraint = "t|", ArgVar, "=>", AttributeList => ActionFn(56);
+        assert!(__symbols.len() >= 4);
+        let __sym3 = __pop_Variant7(__symbols);
+        let __sym2 = __pop_Variant0(__symbols);
+        let __sym1 = __pop_Variant2(__symbols);
+        let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0;
-        let __end = __sym1.2;
-        let __nt = super::__action31::<>(input, __sym0, __sym1);
-        __symbols.push((__start, __Symbol::Variant12(__nt), __end));
-        (2, 13)
+        let __end = __sym3.2;
+        let __nt = super::__action56::<>(input, __sym0, __sym1, __sym2, __sym3);
+        __symbols.push((__start, __Symbol::Variant11(__nt), __end));
+        (4, 10)
     }
     pub(crate) fn __reduce32<
         'input,
@@ -4058,13 +4601,15 @@ mod __parse__Constraint {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // MDyn = AtomicType => ActionFn(39);
-        let __sym0 = __pop_Variant4(__symbols);
+        // Constraint = "t|", ArgVar => ActionFn(57);
+        assert!(__symbols.len() >= 2);
+        let __sym1 = __pop_Variant2(__symbols);
+        let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0;
-        let __end = __sym0.2;
-        let __nt = super::__action39::<>(input, __sym0);
-        __symbols.push((__start, __Symbol::Variant13(__nt), __end));
-        (1, 14)
+        let __end = __sym1.2;
+        let __nt = super::__action57::<>(input, __sym0, __sym1);
+        __symbols.push((__start, __Symbol::Variant11(__nt), __end));
+        (2, 10)
     }
     pub(crate) fn __reduce33<
         'input,
@@ -4075,13 +4620,15 @@ mod __parse__Constraint {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // MDyn = Dyn => ActionFn(40);
-        let __sym0 = __pop_Variant10(__symbols);
+        // Constraint = "r|", ArgVar => ActionFn(58);
+        assert!(__symbols.len() >= 2);
+        let __sym1 = __pop_Variant2(__symbols);
+        let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0;
-        let __end = __sym0.2;
-        let __nt = super::__action40::<>(input, __sym0);
-        __symbols.push((__start, __Symbol::Variant13(__nt), __end));
-        (1, 14)
+        let __end = __sym1.2;
+        let __nt = super::__action58::<>(input, __sym0, __sym1);
+        __symbols.push((__start, __Symbol::Variant11(__nt), __end));
+        (2, 10)
     }
     pub(crate) fn __reduce34<
         'input,
@@ -4092,15 +4639,15 @@ mod __parse__Constraint {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // MDyn = "list", MDyn => ActionFn(41);
+        // Constraint = "a|", AtomicType => ActionFn(59);
         assert!(__symbols.len() >= 2);
-        let __sym1 = __pop_Variant13(__symbols);
+        let __sym1 = __pop_Variant4(__symbols);
         let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0;
         let __end = __sym1.2;
-        let __nt = super::__action41::<>(input, __sym0, __sym1);
-        __symbols.push((__start, __Symbol::Variant13(__nt), __end));
-        (2, 14)
+        let __nt = super::__action59::<>(input, __sym0, __sym1);
+        __symbols.push((__start, __Symbol::Variant11(__nt), __end));
+        (2, 10)
     }
     pub(crate) fn __reduce35<
         'input,
@@ -4111,16 +4658,13 @@ mod __parse__Constraint {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // MDyn = "pair", MDyn, MDyn => ActionFn(42);
-        assert!(__symbols.len() >= 3);
-        let __sym2 = __pop_Variant13(__symbols);
-        let __sym1 = __pop_Variant13(__symbols);
+        // Dyn = r#"<[A-Za-z][A-Za-z0-9|+=>]+>"# => ActionFn(63);
         let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0;
-        let __end = __sym2.2;
-        let __nt = super::__action42::<>(input, __sym0, __sym1, __sym2);
-        __symbols.push((__start, __Symbol::Variant13(__nt), __end));
-        (3, 14)
+        let __end = __sym0.2;
+        let __nt = super::__action63::<>(input, __sym0);
+        __symbols.push((__start, __Symbol::Variant12(__nt), __end));
+        (1, 11)
     }
     pub(crate) fn __reduce36<
         'input,
@@ -4131,16 +4675,13 @@ mod __parse__Constraint {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // MDyn = "lambda", MDyn, MDyn => ActionFn(43);
-        assert!(__symbols.len() >= 3);
-        let __sym2 = __pop_Variant13(__symbols);
-        let __sym1 = __pop_Variant13(__symbols);
+        // Identifier = r#"[A-Za-z][A-Za-z0-9]+"# => ActionFn(64);
         let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0;
-        let __end = __sym2.2;
-        let __nt = super::__action43::<>(input, __sym0, __sym1, __sym2);
-        __symbols.push((__start, __Symbol::Variant13(__nt), __end));
-        (3, 14)
+        let __end = __sym0.2;
+        let __nt = super::__action64::<>(input, __sym0);
+        __symbols.push((__start, __Symbol::Variant12(__nt), __end));
+        (1, 12)
     }
     pub(crate) fn __reduce37<
         'input,
@@ -4151,16 +4692,15 @@ mod __parse__Constraint {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // MDyn = "(", MDyn, ")" => ActionFn(44);
-        assert!(__symbols.len() >= 3);
-        let __sym2 = __pop_Variant0(__symbols);
-        let __sym1 = __pop_Variant13(__symbols);
-        let __sym0 = __pop_Variant0(__symbols);
+        // Instruction = Identifier, Args => ActionFn(19);
+        assert!(__symbols.len() >= 2);
+        let __sym1 = __pop_Variant3(__symbols);
+        let __sym0 = __pop_Variant12(__symbols);
         let __start = __sym0.0;
-        let __end = __sym2.2;
-        let __nt = super::__action44::<>(input, __sym0, __sym1, __sym2);
+        let __end = __sym1.2;
+        let __nt = super::__action19::<>(input, __sym0, __sym1);
         __symbols.push((__start, __Symbol::Variant13(__nt), __end));
-        (3, 14)
+        (2, 13)
     }
     pub(crate) fn __reduce38<
         'input,
@@ -4171,16 +4711,13 @@ mod __parse__Constraint {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // MDynList = MDyn, ";", MDynList => ActionFn(37);
-        assert!(__symbols.len() >= 3);
-        let __sym2 = __pop_Variant14(__symbols);
-        let __sym1 = __pop_Variant0(__symbols);
-        let __sym0 = __pop_Variant13(__symbols);
+        // Instruction = Identifier => ActionFn(20);
+        let __sym0 = __pop_Variant12(__symbols);
         let __start = __sym0.0;
-        let __end = __sym2.2;
-        let __nt = super::__action37::<>(input, __sym0, __sym1, __sym2);
-        __symbols.push((__start, __Symbol::Variant14(__nt), __end));
-        (3, 15)
+        let __end = __sym0.2;
+        let __nt = super::__action20::<>(input, __sym0);
+        __symbols.push((__start, __Symbol::Variant13(__nt), __end));
+        (1, 13)
     }
     pub(crate) fn __reduce39<
         'input,
@@ -4191,13 +4728,16 @@ mod __parse__Constraint {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // MDynList = MDyn => ActionFn(38);
-        let __sym0 = __pop_Variant13(__symbols);
+        // InstructionBlock = "{", InstructionList, "}" => ActionFn(34);
+        assert!(__symbols.len() >= 3);
+        let __sym2 = __pop_Variant0(__symbols);
+        let __sym1 = __pop_Variant14(__symbols);
+        let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0;
-        let __end = __sym0.2;
-        let __nt = super::__action38::<>(input, __sym0);
+        let __end = __sym2.2;
+        let __nt = super::__action34::<>(input, __sym0, __sym1, __sym2);
         __symbols.push((__start, __Symbol::Variant14(__nt), __end));
-        (1, 15)
+        (3, 14)
     }
     pub(crate) fn __reduce40<
         'input,
@@ -4208,13 +4748,13 @@ mod __parse__Constraint {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // McLitBool = "True" => ActionFn(54);
-        let __sym0 = __pop_Variant0(__symbols);
+        // InstructionList = CompoundInstruction => ActionFn(38);
+        let __sym0 = __pop_Variant9(__symbols);
         let __start = __sym0.0;
         let __end = __sym0.2;
-        let __nt = super::__action54::<>(input, __sym0);
-        __symbols.push((__start, __Symbol::Variant15(__nt), __end));
-        (1, 16)
+        let __nt = super::__action38::<>(input, __sym0);
+        __symbols.push((__start, __Symbol::Variant14(__nt), __end));
+        (1, 15)
     }
     pub(crate) fn __reduce41<
         'input,
@@ -4225,13 +4765,16 @@ mod __parse__Constraint {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // McLitBool = "False" => ActionFn(55);
-        let __sym0 = __pop_Variant0(__symbols);
+        // InstructionList = CompoundInstruction, ";", InstructionList => ActionFn(39);
+        assert!(__symbols.len() >= 3);
+        let __sym2 = __pop_Variant14(__symbols);
+        let __sym1 = __pop_Variant0(__symbols);
+        let __sym0 = __pop_Variant9(__symbols);
         let __start = __sym0.0;
-        let __end = __sym0.2;
-        let __nt = super::__action55::<>(input, __sym0);
-        __symbols.push((__start, __Symbol::Variant15(__nt), __end));
-        (1, 16)
+        let __end = __sym2.2;
+        let __nt = super::__action39::<>(input, __sym0, __sym1, __sym2);
+        __symbols.push((__start, __Symbol::Variant14(__nt), __end));
+        (3, 15)
     }
     pub(crate) fn __reduce42<
         'input,
@@ -4242,13 +4785,15 @@ mod __parse__Constraint {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // McLitNumber = r#"([+-]?)[0-9]+"# => ActionFn(57);
-        let __sym0 = __pop_Variant0(__symbols);
+        // InstructionList = CompoundInstruction, ";" => ActionFn(40);
+        assert!(__symbols.len() >= 2);
+        let __sym1 = __pop_Variant0(__symbols);
+        let __sym0 = __pop_Variant9(__symbols);
         let __start = __sym0.0;
-        let __end = __sym0.2;
-        let __nt = super::__action57::<>(input, __sym0);
-        __symbols.push((__start, __Symbol::Variant16(__nt), __end));
-        (1, 17)
+        let __end = __sym1.2;
+        let __nt = super::__action40::<>(input, __sym0, __sym1);
+        __symbols.push((__start, __Symbol::Variant14(__nt), __end));
+        (2, 15)
     }
     pub(crate) fn __reduce43<
         'input,
@@ -4259,13 +4804,13 @@ mod __parse__Constraint {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // McLitString = r#"\"[a-z0-9]+\""# => ActionFn(56);
-        let __sym0 = __pop_Variant0(__symbols);
+        // MDyn = AtomicType => ActionFn(48);
+        let __sym0 = __pop_Variant4(__symbols);
         let __start = __sym0.0;
         let __end = __sym0.2;
-        let __nt = super::__action56::<>(input, __sym0);
-        __symbols.push((__start, __Symbol::Variant10(__nt), __end));
-        (1, 18)
+        let __nt = super::__action48::<>(input, __sym0);
+        __symbols.push((__start, __Symbol::Variant15(__nt), __end));
+        (1, 16)
     }
     pub(crate) fn __reduce44<
         'input,
@@ -4276,13 +4821,13 @@ mod __parse__Constraint {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // SomeValue = AtomicValue => ActionFn(16);
-        let __sym0 = __pop_Variant5(__symbols);
+        // MDyn = Dyn => ActionFn(49);
+        let __sym0 = __pop_Variant12(__symbols);
         let __start = __sym0.0;
         let __end = __sym0.2;
-        let __nt = super::__action16::<>(input, __sym0);
-        __symbols.push((__start, __Symbol::Variant17(__nt), __end));
-        (1, 19)
+        let __nt = super::__action49::<>(input, __sym0);
+        __symbols.push((__start, __Symbol::Variant15(__nt), __end));
+        (1, 16)
     }
     pub(crate) fn __reduce45<
         'input,
@@ -4293,13 +4838,15 @@ mod __parse__Constraint {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // SomeValue = CompositeValue => ActionFn(17);
-        let __sym0 = __pop_Variant6(__symbols);
+        // MDyn = "list", MDyn => ActionFn(50);
+        assert!(__symbols.len() >= 2);
+        let __sym1 = __pop_Variant15(__symbols);
+        let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0;
-        let __end = __sym0.2;
-        let __nt = super::__action17::<>(input, __sym0);
-        __symbols.push((__start, __Symbol::Variant17(__nt), __end));
-        (1, 19)
+        let __end = __sym1.2;
+        let __nt = super::__action50::<>(input, __sym0, __sym1);
+        __symbols.push((__start, __Symbol::Variant15(__nt), __end));
+        (2, 16)
     }
     pub(crate) fn __reduce46<
         'input,
@@ -4310,16 +4857,16 @@ mod __parse__Constraint {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // SomeValue = "(", SomeValue, ")" => ActionFn(18);
+        // MDyn = "pair", MDyn, MDyn => ActionFn(51);
         assert!(__symbols.len() >= 3);
-        let __sym2 = __pop_Variant0(__symbols);
-        let __sym1 = __pop_Variant17(__symbols);
+        let __sym2 = __pop_Variant15(__symbols);
+        let __sym1 = __pop_Variant15(__symbols);
         let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0;
         let __end = __sym2.2;
-        let __nt = super::__action18::<>(input, __sym0, __sym1, __sym2);
-        __symbols.push((__start, __Symbol::Variant17(__nt), __end));
-        (3, 19)
+        let __nt = super::__action51::<>(input, __sym0, __sym1, __sym2);
+        __symbols.push((__start, __Symbol::Variant15(__nt), __end));
+        (3, 16)
     }
     pub(crate) fn __reduce47<
         'input,
@@ -4330,13 +4877,16 @@ mod __parse__Constraint {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // SomeValueList = SomeValue => ActionFn(26);
-        let __sym0 = __pop_Variant17(__symbols);
+        // MDyn = "lambda", MDyn, MDyn => ActionFn(52);
+        assert!(__symbols.len() >= 3);
+        let __sym2 = __pop_Variant15(__symbols);
+        let __sym1 = __pop_Variant15(__symbols);
+        let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0;
-        let __end = __sym0.2;
-        let __nt = super::__action26::<>(input, __sym0);
-        __symbols.push((__start, __Symbol::Variant18(__nt), __end));
-        (1, 20)
+        let __end = __sym2.2;
+        let __nt = super::__action52::<>(input, __sym0, __sym1, __sym2);
+        __symbols.push((__start, __Symbol::Variant15(__nt), __end));
+        (3, 16)
     }
     pub(crate) fn __reduce48<
         'input,
@@ -4347,16 +4897,16 @@ mod __parse__Constraint {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // SomeValueList = SomeValue, ";", SomeValueList => ActionFn(27);
+        // MDyn = "(", MDyn, ")" => ActionFn(53);
         assert!(__symbols.len() >= 3);
-        let __sym2 = __pop_Variant18(__symbols);
-        let __sym1 = __pop_Variant0(__symbols);
-        let __sym0 = __pop_Variant17(__symbols);
+        let __sym2 = __pop_Variant0(__symbols);
+        let __sym1 = __pop_Variant15(__symbols);
+        let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0;
         let __end = __sym2.2;
-        let __nt = super::__action27::<>(input, __sym0, __sym1, __sym2);
-        __symbols.push((__start, __Symbol::Variant18(__nt), __end));
-        (3, 20)
+        let __nt = super::__action53::<>(input, __sym0, __sym1, __sym2);
+        __symbols.push((__start, __Symbol::Variant15(__nt), __end));
+        (3, 16)
     }
     pub(crate) fn __reduce49<
         'input,
@@ -4367,15 +4917,16 @@ mod __parse__Constraint {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // SomeValueList = SomeValue, ";" => ActionFn(28);
-        assert!(__symbols.len() >= 2);
+        // MDynList = MDyn, ";", MDynList => ActionFn(46);
+        assert!(__symbols.len() >= 3);
+        let __sym2 = __pop_Variant16(__symbols);
         let __sym1 = __pop_Variant0(__symbols);
-        let __sym0 = __pop_Variant17(__symbols);
+        let __sym0 = __pop_Variant15(__symbols);
         let __start = __sym0.0;
-        let __end = __sym1.2;
-        let __nt = super::__action28::<>(input, __sym0, __sym1);
-        __symbols.push((__start, __Symbol::Variant18(__nt), __end));
-        (2, 20)
+        let __end = __sym2.2;
+        let __nt = super::__action46::<>(input, __sym0, __sym1, __sym2);
+        __symbols.push((__start, __Symbol::Variant16(__nt), __end));
+        (3, 17)
     }
     pub(crate) fn __reduce50<
         'input,
@@ -4386,15 +4937,13 @@ mod __parse__Constraint {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // StackResultElem = "r|", ArgVar => ActionFn(49);
-        assert!(__symbols.len() >= 2);
-        let __sym1 = __pop_Variant2(__symbols);
-        let __sym0 = __pop_Variant0(__symbols);
+        // MDynList = MDyn => ActionFn(47);
+        let __sym0 = __pop_Variant15(__symbols);
         let __start = __sym0.0;
-        let __end = __sym1.2;
-        let __nt = super::__action49::<>(input, __sym0, __sym1);
-        __symbols.push((__start, __Symbol::Variant19(__nt), __end));
-        (2, 21)
+        let __end = __sym0.2;
+        let __nt = super::__action47::<>(input, __sym0);
+        __symbols.push((__start, __Symbol::Variant16(__nt), __end));
+        (1, 17)
     }
     pub(crate) fn __reduce51<
         'input,
@@ -4405,15 +4954,13 @@ mod __parse__Constraint {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // StackResultElem = "a|", AtomicType => ActionFn(50);
-        assert!(__symbols.len() >= 2);
-        let __sym1 = __pop_Variant4(__symbols);
+        // McLitBool = "True" => ActionFn(65);
         let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0;
-        let __end = __sym1.2;
-        let __nt = super::__action50::<>(input, __sym0, __sym1);
-        __symbols.push((__start, __Symbol::Variant19(__nt), __end));
-        (2, 21)
+        let __end = __sym0.2;
+        let __nt = super::__action65::<>(input, __sym0);
+        __symbols.push((__start, __Symbol::Variant17(__nt), __end));
+        (1, 18)
     }
     pub(crate) fn __reduce52<
         'input,
@@ -4424,13 +4971,30 @@ mod __parse__Constraint {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // __ConcreteType = ConcreteType => ActionFn(1);
-        let __sym0 = __pop_Variant8(__symbols);
+        // McLitBool = "False" => ActionFn(66);
+        let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0;
         let __end = __sym0.2;
-        let __nt = super::__action1::<>(input, __sym0);
-        __symbols.push((__start, __Symbol::Variant8(__nt), __end));
-        (1, 22)
+        let __nt = super::__action66::<>(input, __sym0);
+        __symbols.push((__start, __Symbol::Variant17(__nt), __end));
+        (1, 18)
+    }
+    pub(crate) fn __reduce53<
+        'input,
+    >(
+        input: &'input str,
+        __lookahead_start: Option<&usize>,
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
+        _: core::marker::PhantomData<(&'input ())>,
+    ) -> (usize, usize)
+    {
+        // McLitNumber = r#"([+-]?)[0-9]+"# => ActionFn(68);
+        let __sym0 = __pop_Variant0(__symbols);
+        let __start = __sym0.0;
+        let __end = __sym0.2;
+        let __nt = super::__action68::<>(input, __sym0);
+        __symbols.push((__start, __Symbol::Variant18(__nt), __end));
+        (1, 19)
     }
     pub(crate) fn __reduce54<
         'input,
@@ -4441,13 +5005,13 @@ mod __parse__Constraint {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // __InstructionList = InstructionList => ActionFn(0);
-        let __sym0 = __pop_Variant12(__symbols);
+        // McLitString = r#"\"[a-z0-9]+\""# => ActionFn(67);
+        let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0;
         let __end = __sym0.2;
-        let __nt = super::__action0::<>(input, __sym0);
+        let __nt = super::__action67::<>(input, __sym0);
         __symbols.push((__start, __Symbol::Variant12(__nt), __end));
-        (1, 24)
+        (1, 20)
     }
     pub(crate) fn __reduce55<
         'input,
@@ -4458,13 +5022,13 @@ mod __parse__Constraint {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // __MDyn = MDyn => ActionFn(3);
-        let __sym0 = __pop_Variant13(__symbols);
+        // SomeValue = AtomicValue => ActionFn(25);
+        let __sym0 = __pop_Variant5(__symbols);
         let __start = __sym0.0;
         let __end = __sym0.2;
-        let __nt = super::__action3::<>(input, __sym0);
-        __symbols.push((__start, __Symbol::Variant13(__nt), __end));
-        (1, 25)
+        let __nt = super::__action25::<>(input, __sym0);
+        __symbols.push((__start, __Symbol::Variant19(__nt), __end));
+        (1, 21)
     }
     pub(crate) fn __reduce56<
         'input,
@@ -4475,13 +5039,13 @@ mod __parse__Constraint {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // __MDynList = MDynList => ActionFn(2);
-        let __sym0 = __pop_Variant14(__symbols);
+        // SomeValue = CompositeValue => ActionFn(26);
+        let __sym0 = __pop_Variant8(__symbols);
         let __start = __sym0.0;
         let __end = __sym0.2;
-        let __nt = super::__action2::<>(input, __sym0);
-        __symbols.push((__start, __Symbol::Variant14(__nt), __end));
-        (1, 26)
+        let __nt = super::__action26::<>(input, __sym0);
+        __symbols.push((__start, __Symbol::Variant19(__nt), __end));
+        (1, 21)
     }
     pub(crate) fn __reduce57<
         'input,
@@ -4492,13 +5056,195 @@ mod __parse__Constraint {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // __StackResultElem = StackResultElem => ActionFn(5);
+        // SomeValue = "(", SomeValue, ")" => ActionFn(27);
+        assert!(__symbols.len() >= 3);
+        let __sym2 = __pop_Variant0(__symbols);
+        let __sym1 = __pop_Variant19(__symbols);
+        let __sym0 = __pop_Variant0(__symbols);
+        let __start = __sym0.0;
+        let __end = __sym2.2;
+        let __nt = super::__action27::<>(input, __sym0, __sym1, __sym2);
+        __symbols.push((__start, __Symbol::Variant19(__nt), __end));
+        (3, 21)
+    }
+    pub(crate) fn __reduce58<
+        'input,
+    >(
+        input: &'input str,
+        __lookahead_start: Option<&usize>,
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
+        _: core::marker::PhantomData<(&'input ())>,
+    ) -> (usize, usize)
+    {
+        // SomeValueList = SomeValue => ActionFn(35);
         let __sym0 = __pop_Variant19(__symbols);
         let __start = __sym0.0;
         let __end = __sym0.2;
-        let __nt = super::__action5::<>(input, __sym0);
-        __symbols.push((__start, __Symbol::Variant19(__nt), __end));
+        let __nt = super::__action35::<>(input, __sym0);
+        __symbols.push((__start, __Symbol::Variant20(__nt), __end));
+        (1, 22)
+    }
+    pub(crate) fn __reduce59<
+        'input,
+    >(
+        input: &'input str,
+        __lookahead_start: Option<&usize>,
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
+        _: core::marker::PhantomData<(&'input ())>,
+    ) -> (usize, usize)
+    {
+        // SomeValueList = SomeValue, ";", SomeValueList => ActionFn(36);
+        assert!(__symbols.len() >= 3);
+        let __sym2 = __pop_Variant20(__symbols);
+        let __sym1 = __pop_Variant0(__symbols);
+        let __sym0 = __pop_Variant19(__symbols);
+        let __start = __sym0.0;
+        let __end = __sym2.2;
+        let __nt = super::__action36::<>(input, __sym0, __sym1, __sym2);
+        __symbols.push((__start, __Symbol::Variant20(__nt), __end));
+        (3, 22)
+    }
+    pub(crate) fn __reduce60<
+        'input,
+    >(
+        input: &'input str,
+        __lookahead_start: Option<&usize>,
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
+        _: core::marker::PhantomData<(&'input ())>,
+    ) -> (usize, usize)
+    {
+        // SomeValueList = SomeValue, ";" => ActionFn(37);
+        assert!(__symbols.len() >= 2);
+        let __sym1 = __pop_Variant0(__symbols);
+        let __sym0 = __pop_Variant19(__symbols);
+        let __start = __sym0.0;
+        let __end = __sym1.2;
+        let __nt = super::__action37::<>(input, __sym0, __sym1);
+        __symbols.push((__start, __Symbol::Variant20(__nt), __end));
+        (2, 22)
+    }
+    pub(crate) fn __reduce61<
+        'input,
+    >(
+        input: &'input str,
+        __lookahead_start: Option<&usize>,
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
+        _: core::marker::PhantomData<(&'input ())>,
+    ) -> (usize, usize)
+    {
+        // StackResultElem = "r|", ArgVar => ActionFn(60);
+        assert!(__symbols.len() >= 2);
+        let __sym1 = __pop_Variant2(__symbols);
+        let __sym0 = __pop_Variant0(__symbols);
+        let __start = __sym0.0;
+        let __end = __sym1.2;
+        let __nt = super::__action60::<>(input, __sym0, __sym1);
+        __symbols.push((__start, __Symbol::Variant21(__nt), __end));
+        (2, 23)
+    }
+    pub(crate) fn __reduce62<
+        'input,
+    >(
+        input: &'input str,
+        __lookahead_start: Option<&usize>,
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
+        _: core::marker::PhantomData<(&'input ())>,
+    ) -> (usize, usize)
+    {
+        // StackResultElem = "a|", AtomicType => ActionFn(61);
+        assert!(__symbols.len() >= 2);
+        let __sym1 = __pop_Variant4(__symbols);
+        let __sym0 = __pop_Variant0(__symbols);
+        let __start = __sym0.0;
+        let __end = __sym1.2;
+        let __nt = super::__action61::<>(input, __sym0, __sym1);
+        __symbols.push((__start, __Symbol::Variant21(__nt), __end));
+        (2, 23)
+    }
+    pub(crate) fn __reduce63<
+        'input,
+    >(
+        input: &'input str,
+        __lookahead_start: Option<&usize>,
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
+        _: core::marker::PhantomData<(&'input ())>,
+    ) -> (usize, usize)
+    {
+        // __ConcreteType = ConcreteType => ActionFn(1);
+        let __sym0 = __pop_Variant10(__symbols);
+        let __start = __sym0.0;
+        let __end = __sym0.2;
+        let __nt = super::__action1::<>(input, __sym0);
+        __symbols.push((__start, __Symbol::Variant10(__nt), __end));
+        (1, 24)
+    }
+    pub(crate) fn __reduce65<
+        'input,
+    >(
+        input: &'input str,
+        __lookahead_start: Option<&usize>,
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
+        _: core::marker::PhantomData<(&'input ())>,
+    ) -> (usize, usize)
+    {
+        // __InstructionList = InstructionList => ActionFn(0);
+        let __sym0 = __pop_Variant14(__symbols);
+        let __start = __sym0.0;
+        let __end = __sym0.2;
+        let __nt = super::__action0::<>(input, __sym0);
+        __symbols.push((__start, __Symbol::Variant14(__nt), __end));
+        (1, 26)
+    }
+    pub(crate) fn __reduce66<
+        'input,
+    >(
+        input: &'input str,
+        __lookahead_start: Option<&usize>,
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
+        _: core::marker::PhantomData<(&'input ())>,
+    ) -> (usize, usize)
+    {
+        // __MDyn = MDyn => ActionFn(3);
+        let __sym0 = __pop_Variant15(__symbols);
+        let __start = __sym0.0;
+        let __end = __sym0.2;
+        let __nt = super::__action3::<>(input, __sym0);
+        __symbols.push((__start, __Symbol::Variant15(__nt), __end));
         (1, 27)
+    }
+    pub(crate) fn __reduce67<
+        'input,
+    >(
+        input: &'input str,
+        __lookahead_start: Option<&usize>,
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
+        _: core::marker::PhantomData<(&'input ())>,
+    ) -> (usize, usize)
+    {
+        // __MDynList = MDynList => ActionFn(2);
+        let __sym0 = __pop_Variant16(__symbols);
+        let __start = __sym0.0;
+        let __end = __sym0.2;
+        let __nt = super::__action2::<>(input, __sym0);
+        __symbols.push((__start, __Symbol::Variant16(__nt), __end));
+        (1, 28)
+    }
+    pub(crate) fn __reduce68<
+        'input,
+    >(
+        input: &'input str,
+        __lookahead_start: Option<&usize>,
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
+        _: core::marker::PhantomData<(&'input ())>,
+    ) -> (usize, usize)
+    {
+        // __StackResultElem = StackResultElem => ActionFn(5);
+        let __sym0 = __pop_Variant21(__symbols);
+        let __start = __sym0.0;
+        let __end = __sym0.2;
+        let __nt = super::__action5::<>(input, __sym0);
+        __symbols.push((__start, __Symbol::Variant21(__nt), __end));
+        (1, 29)
     }
 }
 pub use self::__parse__Constraint::ConstraintParser;
@@ -4530,6 +5276,8 @@ mod __parse__InstructionList {
     use crate::types::StackResultElem;
     use crate::types::StackResultElem::*;
     use crate::types::CompoundInstruction;
+    use crate::types::Attribute;
+    use crate::types::Attribute::*;
     #[allow(unused_extern_crates)]
     extern crate lalrpop_util as __lalrpop_util;
     #[allow(unused_imports)]
@@ -4546,165 +5294,167 @@ mod __parse__InstructionList {
         Variant3(Vec<ArgValue<SomeValue>>),
         Variant4(MAtomic),
         Variant5(AtomicValue),
-        Variant6(CompositeValue),
-        Variant7(CompoundInstruction<SomeValue>),
-        Variant8(ConcreteType),
-        Variant9(ArgConstraint),
-        Variant10(String),
-        Variant11(Instruction<SomeValue>),
-        Variant12(Vec<CompoundInstruction<SomeValue>>),
-        Variant13(MType<DynMType>),
-        Variant14(Vec<MType<DynMType>>),
-        Variant15(bool),
-        Variant16(i32),
-        Variant17(SomeValue),
-        Variant18(Vec<SomeValue>),
-        Variant19(StackResultElem),
+        Variant6(Attribute),
+        Variant7(Vec<Attribute>),
+        Variant8(CompositeValue),
+        Variant9(CompoundInstruction<SomeValue>),
+        Variant10(ConcreteType),
+        Variant11(ArgConstraint),
+        Variant12(String),
+        Variant13(Instruction<SomeValue>),
+        Variant14(Vec<CompoundInstruction<SomeValue>>),
+        Variant15(MType<DynMType>),
+        Variant16(Vec<MType<DynMType>>),
+        Variant17(bool),
+        Variant18(i32),
+        Variant19(SomeValue),
+        Variant20(Vec<SomeValue>),
+        Variant21(StackResultElem),
     }
     const __ACTION: &[i8] = &[
         // State 0
-        0, 0, 0, 3, 0, 4, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 27, 0,
+        0, 0, 0, 0, 0, 3, 0, 4, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 27, 0,
         // State 1
-        8, 0, -28, 0, 40, 0, 0, 9, 41, 0, 42, 43, 10, 11, 44, 12, 0, 45, 0, 0, 13, -28, 46, 47, 48, 0, 0,
+        8, 0, 0, -39, 0, 0, 40, 0, 0, 9, 41, 0, 0, 42, 0, 0, 43, 10, 11, 44, 0, 12, 0, 0, 0, 0, 45, 0, 0, 13, -39, 46, 47, 48, 0, 0,
         // State 2
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 14, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 14, 0, 0, 0, 0, 0, 0,
         // State 3
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 14, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 14, 0, 0, 0, 0, 0, 0,
         // State 4
-        17, 0, 0, 0, 0, 0, 0, 0, 0, 0, 42, 43, 10, 11, 44, 12, 0, 45, 0, 0, 0, 0, 0, 0, 48, 0, 0,
+        17, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 42, 0, 0, 43, 10, 11, 44, 0, 12, 0, 0, 0, 0, 45, 0, 0, 0, 0, 0, 0, 48, 0, 0,
         // State 5
-        0, 0, 0, 3, 0, 4, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -32, 0, 0, 0, 27, 0,
+        0, 0, 0, 0, 0, 3, 0, 4, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -43, 0, 0, 0, 27, 0,
         // State 6
-        8, 0, -5, 0, 40, 0, 0, 9, 41, 0, 42, 43, 10, 11, 44, 12, 0, 45, 0, 0, 13, -5, 46, 47, 48, 0, 0,
+        8, 0, 0, -5, 0, 0, 40, 0, 0, 9, 41, 0, 0, 42, 0, 0, 43, 10, 11, 44, 0, 12, 0, 0, 0, 0, 45, 0, 0, 13, -5, 46, 47, 48, 0, 0,
         // State 7
-        8, 0, 0, 0, 40, 0, 0, 9, 41, 0, 42, 43, 10, 11, 44, 12, 0, 45, 0, 0, 13, 0, 46, 47, 48, 0, 0,
+        8, 0, 0, 0, 0, 0, 40, 0, 0, 9, 41, 0, 0, 42, 0, 0, 43, 10, 11, 44, 0, 12, 0, 0, 0, 0, 45, 0, 0, 13, 0, 46, 47, 48, 0, 0,
         // State 8
-        19, 0, 0, 0, 40, 0, 0, 9, 41, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 13, 0, 46, 47, 0, 0, 0,
+        19, 0, 0, 0, 0, 0, 40, 0, 0, 9, 41, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 13, 0, 46, 47, 0, 0, 0,
         // State 9
-        17, 0, 0, 0, 0, 0, 0, 0, 0, 0, 42, 43, 10, 11, 44, 12, 0, 45, 0, 0, 0, 0, 0, 0, 48, 0, 0,
+        17, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 42, 0, 0, 43, 10, 11, 44, 0, 12, 0, 0, 0, 0, 45, 0, 0, 0, 0, 0, 0, 48, 0, 0,
         // State 10
-        17, 0, 0, 0, 0, 0, 0, 0, 0, 0, 42, 43, 10, 11, 44, 12, 0, 45, 0, 0, 0, 0, 0, 0, 48, 0, 0,
+        17, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 42, 0, 0, 43, 10, 11, 44, 0, 12, 0, 0, 0, 0, 45, 0, 0, 0, 0, 0, 0, 48, 0, 0,
         // State 11
-        17, 0, 0, 0, 0, 0, 0, 0, 0, 0, 42, 43, 10, 11, 44, 12, 0, 45, 0, 0, 0, 0, 0, 0, 48, 0, 0,
+        17, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 42, 0, 0, 43, 10, 11, 44, 0, 12, 0, 0, 0, 0, 45, 0, 0, 0, 0, 0, 0, 48, 0, 0,
         // State 12
-        19, 0, 0, 3, 40, 4, 5, 9, 41, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 13, 0, 46, 47, 0, 27, 0,
+        19, 0, 0, 0, 0, 3, 40, 4, 5, 9, 41, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 13, 0, 46, 47, 0, 27, 0,
         // State 13
-        0, 0, 0, 3, 0, 4, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 27, 0,
+        0, 0, 0, 0, 0, 3, 0, 4, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 27, 0,
         // State 14
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 14, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 14, 0, 0, 0, 0, 0, 0,
         // State 15
-        17, 0, 0, 0, 0, 0, 0, 0, 0, 0, 42, 43, 10, 11, 44, 12, 0, 45, 0, 0, 0, 0, 0, 0, 48, 0, 0,
+        17, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 42, 0, 0, 43, 10, 11, 44, 0, 12, 0, 0, 0, 0, 45, 0, 0, 0, 0, 0, 0, 48, 0, 0,
         // State 16
-        17, 0, 0, 0, 0, 0, 0, 0, 0, 0, 42, 43, 10, 11, 44, 12, 0, 45, 0, 0, 0, 0, 0, 0, 48, 0, 0,
+        17, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 42, 0, 0, 43, 10, 11, 44, 0, 12, 0, 0, 0, 0, 45, 0, 0, 0, 0, 0, 0, 48, 0, 0,
         // State 17
-        19, 0, 0, 0, 40, 0, 0, 9, 41, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 13, 0, 46, 47, 0, 0, 0,
+        19, 0, 0, 0, 0, 0, 40, 0, 0, 9, 41, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 13, 0, 46, 47, 0, 0, 0,
         // State 18
-        19, 0, 0, 0, 40, 0, 0, 9, 41, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 13, 0, 46, 47, 0, 0, 0,
+        19, 0, 0, 0, 0, 0, 40, 0, 0, 9, 41, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 13, 0, 46, 47, 0, 0, 0,
         // State 19
-        17, 0, 0, 0, 0, 0, 0, 0, 0, 0, 42, 43, 10, 11, 44, 12, 0, 45, 0, 0, 0, 0, 0, 0, 48, 0, 0,
+        17, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 42, 0, 0, 43, 10, 11, 44, 0, 12, 0, 0, 0, 0, 45, 0, 0, 0, 0, 0, 0, 48, 0, 0,
         // State 20
-        17, 0, 0, 0, 0, 0, 0, 0, 0, 0, 42, 43, 10, 11, 44, 12, 0, 45, 0, 0, 0, 0, 0, 0, 48, 0, 0,
+        17, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 42, 0, 0, 43, 10, 11, 44, 0, 12, 0, 0, 0, 0, 45, 0, 0, 0, 0, 0, 0, 48, 0, 0,
         // State 21
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 14, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 14, 0, 0, 0, 0, 0, 0,
         // State 22
-        19, 0, 0, 0, 40, 0, 0, 9, 41, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 13, -50, 46, 47, 0, 0, 0,
+        19, 0, 0, 0, 0, 0, 40, 0, 0, 9, 41, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 13, -61, 46, 47, 0, 0, 0,
         // State 23
-        0, 0, 6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -30, 0, 0, 0, 0, 0,
+        0, 0, 0, 6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -41, 0, 0, 0, 0, 0,
         // State 24
-        0, 0, -19, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -19, 0, 0, 0, 0, 0,
+        0, 0, 0, -28, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -28, 0, 0, 0, 0, 0,
         // State 25
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         // State 26
-        -26, 0, -26, 0, -26, 0, 0, -26, -26, 0, -26, -26, -26, -26, -26, -26, 0, -26, 0, 0, -26, -26, -26, -26, -26, 0, 0,
+        -37, 0, 0, -37, 0, 0, -37, 0, 0, -37, -37, 0, 0, -37, 0, 0, -37, -37, -37, -37, 0, -37, 0, 0, 0, 0, -37, 0, 0, -37, -37, -37, -37, -37, 0, 0,
         // State 27
-        0, 0, -27, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -27, 0, 0, 0, 0, 0,
+        0, 0, 0, -38, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -38, 0, 0, 0, 0, 0,
         // State 28
-        -33, -33, -33, 0, -33, 0, 0, -33, -33, 0, -33, -33, -33, -33, -33, -33, 0, -33, 0, 0, -33, -33, -33, -33, -33, 0, 0,
+        -44, -44, 0, -44, 0, 0, -44, 0, 0, -44, -44, 0, 0, -44, 0, 0, -44, -44, -44, -44, 0, -44, 0, 0, 0, 0, -44, 0, 0, -44, -44, -44, -44, -44, 0, 0,
         // State 29
-        -45, -45, -45, 0, -45, 0, 0, -45, -45, 0, -45, -45, -45, -45, -45, -45, 0, -45, 0, 0, -45, -45, -45, -45, -45, 0, 0,
+        -56, -56, 0, -56, 0, 0, -56, 0, 0, -56, -56, 0, 0, -56, 0, 0, -56, -56, -56, -56, 0, -56, 0, 0, 0, 0, -56, 0, 0, -56, -56, -56, -56, -56, 0, 0,
         // State 30
-        -46, -46, -46, 0, -46, 0, 0, -46, -46, 0, -46, -46, -46, -46, -46, -46, 0, -46, 0, 0, -46, -46, -46, -46, -46, 0, 0,
+        -57, -57, 0, -57, 0, 0, -57, 0, 0, -57, -57, 0, 0, -57, 0, 0, -57, -57, -57, -57, 0, -57, 0, 0, 0, 0, -57, 0, 0, -57, -57, -57, -57, -57, 0, 0,
         // State 31
-        -2, 0, -2, 0, -2, 0, 0, -2, -2, 0, -2, -2, -2, -2, -2, -2, 0, -2, 0, 0, -2, -2, -2, -2, -2, 0, 0,
+        -2, 0, 0, -2, 0, 0, -2, 0, 0, -2, -2, 0, 0, -2, 0, 0, -2, -2, -2, -2, 0, -2, 0, 0, 0, 0, -2, 0, 0, -2, -2, -2, -2, -2, 0, 0,
         // State 32
-        -34, -34, -34, 0, -34, 0, 0, -34, -34, 0, -34, -34, -34, -34, -34, -34, 0, -34, 0, 0, -34, -34, -34, -34, -34, 0, 0,
+        -45, -45, 0, -45, 0, 0, -45, 0, 0, -45, -45, 0, 0, -45, 0, 0, -45, -45, -45, -45, 0, -45, 0, 0, 0, 0, -45, 0, 0, -45, -45, -45, -45, -45, 0, 0,
         // State 33
-        -15, -15, -15, 0, -15, 0, 0, -15, -15, 0, -15, -15, -15, -15, -15, -15, 0, -15, 0, 0, -15, -15, -15, -15, -15, 0, 0,
+        -24, -24, 0, -24, 0, 0, -24, 0, 0, -24, -24, 0, 0, -24, 0, 0, -24, -24, -24, -24, 0, -24, 0, 0, 0, 0, -24, 0, 0, -24, -24, -24, -24, -24, 0, 0,
         // State 34
-        -20, 0, -20, 0, -20, 0, 0, -20, -20, 0, -20, -20, -20, -20, -20, -20, 0, -20, 0, 0, -20, -20, -20, -20, -20, 0, 0,
+        -29, 0, 0, -29, 0, 0, -29, 0, 0, -29, -29, 0, 0, -29, 0, 0, -29, -29, -29, -29, 0, -29, 0, 0, 0, 0, -29, 0, 0, -29, -29, -29, -29, -29, 0, 0,
         // State 35
-        -12, -12, -12, 0, -12, 0, 0, -12, -12, 0, -12, -12, -12, -12, -12, -12, 0, -12, 0, 0, -12, -12, -12, -12, -12, 0, 0,
+        -12, -12, 0, -12, 0, 0, -12, 0, 0, -12, -12, 0, 0, -12, 0, 0, -12, -12, -12, -12, 0, -12, 0, 0, 0, 0, -12, 0, 0, -12, -12, -12, -12, -12, 0, 0,
         // State 36
-        -10, -10, -10, 0, -10, 0, 0, -10, -10, 0, -10, -10, -10, -10, -10, -10, 0, -10, 0, 0, -10, -10, -10, -10, -10, 0, 0,
+        -10, -10, 0, -10, 0, 0, -10, 0, 0, -10, -10, 0, 0, -10, 0, 0, -10, -10, -10, -10, 0, -10, 0, 0, 0, 0, -10, 0, 0, -10, -10, -10, -10, -10, 0, 0,
         // State 37
-        -11, -11, -11, 0, -11, 0, 0, -11, -11, 0, -11, -11, -11, -11, -11, -11, 0, -11, 0, 0, -11, -11, -11, -11, -11, 0, 0,
+        -11, -11, 0, -11, 0, 0, -11, 0, 0, -11, -11, 0, 0, -11, 0, 0, -11, -11, -11, -11, 0, -11, 0, 0, 0, 0, -11, 0, 0, -11, -11, -11, -11, -11, 0, 0,
         // State 38
-        -1, 0, -1, 0, -1, 0, 0, -1, -1, 0, -1, -1, -1, -1, -1, -1, 0, -1, 0, 0, -1, -1, -1, -1, -1, 0, 0,
+        -1, 0, 0, -1, 0, 0, -1, 0, 0, -1, -1, 0, 0, -1, 0, 0, -1, -1, -1, -1, 0, -1, 0, 0, 0, 0, -1, 0, 0, -1, -1, -1, -1, -1, 0, 0,
         // State 39
-        -42, -42, -42, 0, -42, 0, 0, -42, -42, 0, -42, -42, -42, -42, -42, -42, 0, -42, 0, 0, -42, -42, -42, -42, -42, 0, 0,
+        -53, -53, 0, -53, 0, 0, -53, 0, 0, -53, -53, 0, 0, -53, 0, 0, -53, -53, -53, -53, 0, -53, 0, 0, 0, 0, -53, 0, 0, -53, -53, -53, -53, -53, 0, 0,
         // State 40
-        -41, -41, -41, 0, -41, 0, 0, -41, -41, 0, -41, -41, -41, -41, -41, -41, 0, -41, 0, 0, -41, -41, -41, -41, -41, 0, 0,
+        -52, -52, 0, -52, 0, 0, -52, 0, 0, -52, -52, 0, 0, -52, 0, 0, -52, -52, -52, -52, 0, -52, 0, 0, 0, 0, -52, 0, 0, -52, -52, -52, -52, -52, 0, 0,
         // State 41
-        -9, -9, -9, 0, -9, 0, 0, -9, -9, 0, -9, -9, -9, -9, -9, -9, 0, -9, 0, 0, -9, -9, -9, -9, -9, 0, 0,
+        -9, -9, 0, -9, 0, 0, -9, 0, 0, -9, -9, 0, 0, -9, 0, 0, -9, -9, -9, -9, 0, -9, 0, 0, 0, 0, -9, 0, 0, -9, -9, -9, -9, -9, 0, 0,
         // State 42
-        -6, -6, -6, 0, -6, 0, 0, -6, -6, 0, -6, -6, -6, -6, -6, -6, 0, -6, 0, 0, -6, -6, -6, -6, -6, 0, 0,
+        -6, -6, 0, -6, 0, 0, -6, 0, 0, -6, -6, 0, 0, -6, 0, 0, -6, -6, -6, -6, 0, -6, 0, 0, 0, 0, -6, 0, 0, -6, -6, -6, -6, -6, 0, 0,
         // State 43
-        -7, -7, -7, 0, -7, 0, 0, -7, -7, 0, -7, -7, -7, -7, -7, -7, 0, -7, 0, 0, -7, -7, -7, -7, -7, 0, 0,
+        -7, -7, 0, -7, 0, 0, -7, 0, 0, -7, -7, 0, 0, -7, 0, 0, -7, -7, -7, -7, 0, -7, 0, 0, 0, 0, -7, 0, 0, -7, -7, -7, -7, -7, 0, 0,
         // State 44
-        -8, -8, -8, 0, -8, 0, 0, -8, -8, 0, -8, -8, -8, -8, -8, -8, 0, -8, 0, 0, -8, -8, -8, -8, -8, 0, 0,
+        -8, -8, 0, -8, 0, 0, -8, 0, 0, -8, -8, 0, 0, -8, 0, 0, -8, -8, -8, -8, 0, -8, 0, 0, 0, 0, -8, 0, 0, -8, -8, -8, -8, -8, 0, 0,
         // State 45
-        -44, -44, -44, 0, -44, 0, 0, -44, -44, 0, -44, -44, -44, -44, -44, -44, 0, -44, 0, 0, -44, -44, -44, -44, -44, 0, 0,
+        -55, -55, 0, -55, 0, 0, -55, 0, 0, -55, -55, 0, 0, -55, 0, 0, -55, -55, -55, -55, 0, -55, 0, 0, 0, 0, -55, 0, 0, -55, -55, -55, -55, -55, 0, 0,
         // State 46
-        -43, -43, -43, 0, -43, 0, 0, -43, -43, 0, -43, -43, -43, -43, -43, -43, 0, -43, 0, 0, -43, -43, -43, -43, -43, 0, 0,
+        -54, -54, 0, -54, 0, 0, -54, 0, 0, -54, -54, 0, 0, -54, 0, 0, -54, -54, -54, -54, 0, -54, 0, 0, 0, 0, -54, 0, 0, -54, -54, -54, -54, -54, 0, 0,
         // State 47
-        -25, -25, -25, 0, -25, 0, 0, -25, -25, 0, -25, -25, -25, -25, -25, -25, 0, -25, 0, 0, -25, -25, -25, -25, -25, 0, 0,
+        -36, -36, 0, -36, 0, 0, -36, 0, 0, -36, -36, 0, 0, -36, 0, 0, -36, -36, -36, -36, 0, -36, 0, 0, 0, 0, -36, 0, 0, -36, -36, -36, -36, -36, 0, 0,
         // State 48
-        0, 0, -17, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -17, 0, 0, 0, 0, 0,
+        0, 0, 0, -26, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -26, 0, 0, 0, 0, 0,
         // State 49
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -31, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -42, 0, 0, 0, 0, 0,
         // State 50
-        0, 0, -4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -4, 0, 0, 0, 0, 0,
+        0, 0, 0, -4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -4, 0, 0, 0, 0, 0,
         // State 51
-        0, 59, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 59, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         // State 52
-        0, 60, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 60, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         // State 53
-        -35, -35, -35, 0, -35, 0, 0, -35, -35, 0, -35, -35, -35, -35, -35, -35, 0, -35, 0, 0, -35, -35, -35, -35, -35, 0, 0,
+        -46, -46, 0, -46, 0, 0, -46, 0, 0, -46, -46, 0, 0, -46, 0, 0, -46, -46, -46, -46, 0, -46, 0, 0, 0, 0, -46, 0, 0, -46, -46, -46, -46, -46, 0, 0,
         // State 54
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 64, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 64, 0, 0, 0, 0, 0,
         // State 55
-        0, 0, 23, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -48, 0, 0, 0, 0, 0,
+        0, 0, 0, 23, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -59, 0, 0, 0, 0, 0,
         // State 56
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 65, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 65, 0, 0, 0, 0, 0,
         // State 57
-        0, 0, -16, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -16, 0, 0, 0, 0, 0,
+        0, 0, 0, -25, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -25, 0, 0, 0, 0, 0,
         // State 58
-        -38, -38, -38, 0, -38, 0, 0, -38, -38, 0, -38, -38, -38, -38, -38, -38, 0, -38, 0, 0, -38, -38, -38, -38, -38, 0, 0,
+        -49, -49, 0, -49, 0, 0, -49, 0, 0, -49, -49, 0, 0, -49, 0, 0, -49, -49, -49, -49, 0, -49, 0, 0, 0, 0, -49, 0, 0, -49, -49, -49, -49, -49, 0, 0,
         // State 59
-        -47, -47, -47, 0, -47, 0, 0, -47, -47, 0, -47, -47, -47, -47, -47, -47, 0, -47, 0, 0, -47, -47, -47, -47, -47, 0, 0,
+        -58, -58, 0, -58, 0, 0, -58, 0, 0, -58, -58, 0, 0, -58, 0, 0, -58, -58, -58, -58, 0, -58, 0, 0, 0, 0, -58, 0, 0, -58, -58, -58, -58, -58, 0, 0,
         // State 60
-        -13, -13, -13, 0, -13, 0, 0, -13, -13, 0, -13, -13, -13, -13, -13, -13, 0, -13, 0, 0, -13, -13, -13, -13, -13, 0, 0,
+        -22, -22, 0, -22, 0, 0, -22, 0, 0, -22, -22, 0, 0, -22, 0, 0, -22, -22, -22, -22, 0, -22, 0, 0, 0, 0, -22, 0, 0, -22, -22, -22, -22, -22, 0, 0,
         // State 61
-        -37, -37, -37, 0, -37, 0, 0, -37, -37, 0, -37, -37, -37, -37, -37, -37, 0, -37, 0, 0, -37, -37, -37, -37, -37, 0, 0,
+        -48, -48, 0, -48, 0, 0, -48, 0, 0, -48, -48, 0, 0, -48, 0, 0, -48, -48, -48, -48, 0, -48, 0, 0, 0, 0, -48, 0, 0, -48, -48, -48, -48, -48, 0, 0,
         // State 62
-        -36, -36, -36, 0, -36, 0, 0, -36, -36, 0, -36, -36, -36, -36, -36, -36, 0, -36, 0, 0, -36, -36, -36, -36, -36, 0, 0,
+        -47, -47, 0, -47, 0, 0, -47, 0, 0, -47, -47, 0, 0, -47, 0, 0, -47, -47, -47, -47, 0, -47, 0, 0, 0, 0, -47, 0, 0, -47, -47, -47, -47, -47, 0, 0,
         // State 63
-        -29, -29, -29, 0, -29, 0, 0, -29, -29, 0, -29, -29, -29, -29, -29, -29, 0, -29, 0, 0, -29, -29, -29, -29, -29, 0, 0,
+        -40, -40, 0, -40, 0, 0, -40, 0, 0, -40, -40, 0, 0, -40, 0, 0, -40, -40, -40, -40, 0, -40, 0, 0, 0, 0, -40, 0, 0, -40, -40, -40, -40, -40, 0, 0,
         // State 64
-        -14, -14, -14, 0, -14, 0, 0, -14, -14, 0, -14, -14, -14, -14, -14, -14, 0, -14, 0, 0, -14, -14, -14, -14, -14, 0, 0,
+        -23, -23, 0, -23, 0, 0, -23, 0, 0, -23, -23, 0, 0, -23, 0, 0, -23, -23, -23, -23, 0, -23, 0, 0, 0, 0, -23, 0, 0, -23, -23, -23, -23, -23, 0, 0,
         // State 65
-        0, 0, -18, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -18, 0, 0, 0, 0, 0,
+        0, 0, 0, -27, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -27, 0, 0, 0, 0, 0,
         // State 66
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -49, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -60, 0, 0, 0, 0, 0,
     ];
     fn __action(state: i8, integer: usize) -> i8 {
-        __ACTION[(state as usize) * 27 + integer]
+        __ACTION[(state as usize) * 36 + integer]
     }
     const __EOF_ACTION: &[i8] = &[
         // State 0
         0,
         // State 1
-        -28,
+        -39,
         // State 2
         0,
         // State 3
@@ -4712,7 +5462,7 @@ mod __parse__InstructionList {
         // State 4
         0,
         // State 5
-        -32,
+        -43,
         // State 6
         -5,
         // State 7
@@ -4748,29 +5498,29 @@ mod __parse__InstructionList {
         // State 22
         0,
         // State 23
-        -30,
+        -41,
         // State 24
-        -19,
+        -28,
         // State 25
-        -55,
+        -66,
         // State 26
-        -26,
+        -37,
         // State 27
-        -27,
+        -38,
         // State 28
-        -33,
+        -44,
         // State 29
-        -45,
+        -56,
         // State 30
-        -46,
+        -57,
         // State 31
         -2,
         // State 32
-        -34,
+        -45,
         // State 33
-        -15,
+        -24,
         // State 34
-        -20,
+        -29,
         // State 35
         -12,
         // State 36
@@ -4780,9 +5530,9 @@ mod __parse__InstructionList {
         // State 38
         -1,
         // State 39
-        -42,
+        -53,
         // State 40
-        -41,
+        -52,
         // State 41
         -9,
         // State 42
@@ -4792,15 +5542,15 @@ mod __parse__InstructionList {
         // State 44
         -8,
         // State 45
-        -44,
+        -55,
         // State 46
-        -43,
+        -54,
         // State 47
-        -25,
+        -36,
         // State 48
-        -17,
+        -26,
         // State 49
-        -31,
+        -42,
         // State 50
         -4,
         // State 51
@@ -4808,7 +5558,7 @@ mod __parse__InstructionList {
         // State 52
         0,
         // State 53
-        -35,
+        -46,
         // State 54
         0,
         // State 55
@@ -4816,23 +5566,23 @@ mod __parse__InstructionList {
         // State 56
         0,
         // State 57
-        -16,
+        -25,
         // State 58
-        -38,
+        -49,
         // State 59
-        -47,
+        -58,
         // State 60
-        -13,
+        -22,
         // State 61
-        -37,
+        -48,
         // State 62
-        -36,
+        -47,
         // State 63
-        -29,
+        -40,
         // State 64
-        -14,
+        -23,
         // State 65
-        -18,
+        -27,
         // State 66
         0,
     ];
@@ -4845,29 +5595,29 @@ mod __parse__InstructionList {
             },
             3 => 28,
             4 => 29,
-            5 => 30,
-            6 => 23,
-            7 => match state {
+            7 => 30,
+            8 => 23,
+            9 => match state {
                 4 => 15,
                 15 => 21,
                 _ => 31,
             },
-            9 => 32,
-            10 => 1,
-            11 => 24,
-            12 => match state {
+            11 => 32,
+            12 => 1,
+            13 => 24,
+            14 => match state {
                 3 => 14,
                 2 => 48,
                 14 => 57,
                 21 => 65,
                 _ => 33,
             },
-            13 => match state {
+            15 => match state {
                 5 => 49,
                 12..=13 => 54,
                 _ => 25,
             },
-            14 => match state {
+            16 => match state {
                 9 => 19,
                 11 => 20,
                 7 | 16 => 51,
@@ -4876,17 +5626,17 @@ mod __parse__InstructionList {
                 20 => 62,
                 _ => 34,
             },
-            16 => 35,
-            17 => 36,
-            18 => 37,
-            19 => match state {
+            18 => 35,
+            19 => 36,
+            20 => 37,
+            21 => match state {
                 8 => 17,
                 7 | 18 => 52,
                 12 | 22 => 55,
                 17 => 60,
                 _ => 38,
             },
-            20 => match state {
+            22 => match state {
                 22 => 66,
                 _ => 56,
             },
@@ -4896,7 +5646,9 @@ mod __parse__InstructionList {
     const __TERMINAL: &[&str] = &[
         r###""(""###,
         r###"")""###,
+        r###""+""###,
         r###"";""###,
+        r###""=>""###,
         r###""DIP""###,
         r###""False""###,
         r###""IF""###,
@@ -4904,13 +5656,20 @@ mod __parse__InstructionList {
         r###""Pair""###,
         r###""True""###,
         r###""a|""###,
+        r###""bigmapvalue""###,
         r###""bool""###,
+        r###""comparable""###,
+        r###""duplicable""###,
         r###""int""###,
         r###""lambda""###,
         r###""list""###,
         r###""nat""###,
+        r###""packable""###,
         r###""pair""###,
+        r###""passable""###,
+        r###""pushable""###,
         r###""r|""###,
+        r###""storable""###,
         r###""string""###,
         r###""t|""###,
         r###""w|""###,
@@ -4918,7 +5677,7 @@ mod __parse__InstructionList {
         r###""}""###,
         r###"r#"\"[a-z0-9]+\""#"###,
         r###"r#"([+-]?)[0-9]+"#"###,
-        r###"r#"<[A-Za-z][A-Za-z0-9|]+>"#"###,
+        r###"r#"<[A-Za-z][A-Za-z0-9|+=>]+>"#"###,
         r###"r#"[A-Za-z][A-Za-z0-9]+"#"###,
         r###"r#"[a-z]"#"###,
     ];
@@ -4989,7 +5748,7 @@ mod __parse__InstructionList {
 
         #[inline]
         fn error_action(&self, state: i8) -> i8 {
-            __action(state, 27 - 1)
+            __action(state, 36 - 1)
         }
 
         #[inline]
@@ -5078,11 +5837,20 @@ mod __parse__InstructionList {
             Token(24, _) if true => Some(19),
             Token(25, _) if true => Some(20),
             Token(26, _) if true => Some(21),
-            Token(0, _) if true => Some(22),
-            Token(1, _) if true => Some(23),
-            Token(2, _) if true => Some(24),
-            Token(3, _) if true => Some(25),
-            Token(4, _) if true => Some(26),
+            Token(27, _) if true => Some(22),
+            Token(28, _) if true => Some(23),
+            Token(29, _) if true => Some(24),
+            Token(30, _) if true => Some(25),
+            Token(31, _) if true => Some(26),
+            Token(32, _) if true => Some(27),
+            Token(33, _) if true => Some(28),
+            Token(34, _) if true => Some(29),
+            Token(35, _) if true => Some(30),
+            Token(0, _) if true => Some(31),
+            Token(1, _) if true => Some(32),
+            Token(2, _) if true => Some(33),
+            Token(3, _) if true => Some(34),
+            Token(4, _) if true => Some(35),
             _ => None,
         }
     }
@@ -5095,8 +5863,8 @@ mod __parse__InstructionList {
     ) -> __Symbol<'input>
     {
         match __token_index {
-            0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13 | 14 | 15 | 16 | 17 | 18 | 19 | 20 | 21 | 22 | 23 | 24 | 25 | 26 => match __token {
-                Token(5, __tok0) | Token(6, __tok0) | Token(7, __tok0) | Token(8, __tok0) | Token(9, __tok0) | Token(10, __tok0) | Token(11, __tok0) | Token(12, __tok0) | Token(13, __tok0) | Token(14, __tok0) | Token(15, __tok0) | Token(16, __tok0) | Token(17, __tok0) | Token(18, __tok0) | Token(19, __tok0) | Token(20, __tok0) | Token(21, __tok0) | Token(22, __tok0) | Token(23, __tok0) | Token(24, __tok0) | Token(25, __tok0) | Token(26, __tok0) | Token(0, __tok0) | Token(1, __tok0) | Token(2, __tok0) | Token(3, __tok0) | Token(4, __tok0) if true => __Symbol::Variant0(__tok0),
+            0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13 | 14 | 15 | 16 | 17 | 18 | 19 | 20 | 21 | 22 | 23 | 24 | 25 | 26 | 27 | 28 | 29 | 30 | 31 | 32 | 33 | 34 | 35 => match __token {
+                Token(5, __tok0) | Token(6, __tok0) | Token(7, __tok0) | Token(8, __tok0) | Token(9, __tok0) | Token(10, __tok0) | Token(11, __tok0) | Token(12, __tok0) | Token(13, __tok0) | Token(14, __tok0) | Token(15, __tok0) | Token(16, __tok0) | Token(17, __tok0) | Token(18, __tok0) | Token(19, __tok0) | Token(20, __tok0) | Token(21, __tok0) | Token(22, __tok0) | Token(23, __tok0) | Token(24, __tok0) | Token(25, __tok0) | Token(26, __tok0) | Token(27, __tok0) | Token(28, __tok0) | Token(29, __tok0) | Token(30, __tok0) | Token(31, __tok0) | Token(32, __tok0) | Token(33, __tok0) | Token(34, __tok0) | Token(35, __tok0) | Token(0, __tok0) | Token(1, __tok0) | Token(2, __tok0) | Token(3, __tok0) | Token(4, __tok0) if true => __Symbol::Variant0(__tok0),
                 _ => unreachable!(),
             },
             _ => unreachable!(),
@@ -5184,13 +5952,13 @@ mod __parse__InstructionList {
             }
             12 => {
                 __state_machine::SimulatedReduce::Reduce {
-                    states_to_pop: 3,
+                    states_to_pop: 1,
                     nonterminal_produced: 5,
                 }
             }
             13 => {
                 __state_machine::SimulatedReduce::Reduce {
-                    states_to_pop: 3,
+                    states_to_pop: 1,
                     nonterminal_produced: 5,
                 }
             }
@@ -5202,255 +5970,321 @@ mod __parse__InstructionList {
             }
             15 => {
                 __state_machine::SimulatedReduce::Reduce {
-                    states_to_pop: 3,
-                    nonterminal_produced: 6,
+                    states_to_pop: 1,
+                    nonterminal_produced: 5,
                 }
             }
             16 => {
                 __state_machine::SimulatedReduce::Reduce {
-                    states_to_pop: 2,
-                    nonterminal_produced: 6,
+                    states_to_pop: 1,
+                    nonterminal_produced: 5,
                 }
             }
             17 => {
                 __state_machine::SimulatedReduce::Reduce {
-                    states_to_pop: 4,
-                    nonterminal_produced: 6,
+                    states_to_pop: 1,
+                    nonterminal_produced: 5,
                 }
             }
             18 => {
                 __state_machine::SimulatedReduce::Reduce {
                     states_to_pop: 1,
-                    nonterminal_produced: 6,
+                    nonterminal_produced: 5,
                 }
             }
             19 => {
+                __state_machine::SimulatedReduce::Reduce {
+                    states_to_pop: 3,
+                    nonterminal_produced: 6,
+                }
+            }
+            20 => {
+                __state_machine::SimulatedReduce::Reduce {
+                    states_to_pop: 1,
+                    nonterminal_produced: 6,
+                }
+            }
+            21 => {
+                __state_machine::SimulatedReduce::Reduce {
+                    states_to_pop: 3,
+                    nonterminal_produced: 7,
+                }
+            }
+            22 => {
+                __state_machine::SimulatedReduce::Reduce {
+                    states_to_pop: 3,
+                    nonterminal_produced: 7,
+                }
+            }
+            23 => {
                 __state_machine::SimulatedReduce::Reduce {
                     states_to_pop: 1,
                     nonterminal_produced: 7,
                 }
             }
-            20 => {
-                __state_machine::SimulatedReduce::Reduce {
-                    states_to_pop: 2,
-                    nonterminal_produced: 8,
-                }
-            }
-            21 => {
-                __state_machine::SimulatedReduce::Reduce {
-                    states_to_pop: 2,
-                    nonterminal_produced: 8,
-                }
-            }
-            22 => {
-                __state_machine::SimulatedReduce::Reduce {
-                    states_to_pop: 2,
-                    nonterminal_produced: 8,
-                }
-            }
-            23 => {
-                __state_machine::SimulatedReduce::Reduce {
-                    states_to_pop: 2,
-                    nonterminal_produced: 8,
-                }
-            }
             24 => {
                 __state_machine::SimulatedReduce::Reduce {
-                    states_to_pop: 1,
-                    nonterminal_produced: 9,
+                    states_to_pop: 3,
+                    nonterminal_produced: 8,
                 }
             }
             25 => {
                 __state_machine::SimulatedReduce::Reduce {
-                    states_to_pop: 1,
-                    nonterminal_produced: 10,
+                    states_to_pop: 2,
+                    nonterminal_produced: 8,
                 }
             }
             26 => {
                 __state_machine::SimulatedReduce::Reduce {
-                    states_to_pop: 2,
-                    nonterminal_produced: 11,
+                    states_to_pop: 4,
+                    nonterminal_produced: 8,
                 }
             }
             27 => {
                 __state_machine::SimulatedReduce::Reduce {
                     states_to_pop: 1,
-                    nonterminal_produced: 11,
+                    nonterminal_produced: 8,
                 }
             }
             28 => {
                 __state_machine::SimulatedReduce::Reduce {
-                    states_to_pop: 3,
-                    nonterminal_produced: 12,
+                    states_to_pop: 1,
+                    nonterminal_produced: 9,
                 }
             }
             29 => {
                 __state_machine::SimulatedReduce::Reduce {
-                    states_to_pop: 1,
-                    nonterminal_produced: 13,
+                    states_to_pop: 4,
+                    nonterminal_produced: 10,
                 }
             }
             30 => {
                 __state_machine::SimulatedReduce::Reduce {
-                    states_to_pop: 3,
-                    nonterminal_produced: 13,
+                    states_to_pop: 2,
+                    nonterminal_produced: 10,
                 }
             }
             31 => {
                 __state_machine::SimulatedReduce::Reduce {
-                    states_to_pop: 2,
-                    nonterminal_produced: 13,
+                    states_to_pop: 4,
+                    nonterminal_produced: 10,
                 }
             }
             32 => {
                 __state_machine::SimulatedReduce::Reduce {
-                    states_to_pop: 1,
-                    nonterminal_produced: 14,
+                    states_to_pop: 2,
+                    nonterminal_produced: 10,
                 }
             }
             33 => {
                 __state_machine::SimulatedReduce::Reduce {
-                    states_to_pop: 1,
-                    nonterminal_produced: 14,
+                    states_to_pop: 2,
+                    nonterminal_produced: 10,
                 }
             }
             34 => {
                 __state_machine::SimulatedReduce::Reduce {
                     states_to_pop: 2,
-                    nonterminal_produced: 14,
+                    nonterminal_produced: 10,
                 }
             }
             35 => {
                 __state_machine::SimulatedReduce::Reduce {
-                    states_to_pop: 3,
-                    nonterminal_produced: 14,
+                    states_to_pop: 1,
+                    nonterminal_produced: 11,
                 }
             }
             36 => {
                 __state_machine::SimulatedReduce::Reduce {
-                    states_to_pop: 3,
-                    nonterminal_produced: 14,
+                    states_to_pop: 1,
+                    nonterminal_produced: 12,
                 }
             }
             37 => {
                 __state_machine::SimulatedReduce::Reduce {
-                    states_to_pop: 3,
-                    nonterminal_produced: 14,
+                    states_to_pop: 2,
+                    nonterminal_produced: 13,
                 }
             }
             38 => {
                 __state_machine::SimulatedReduce::Reduce {
-                    states_to_pop: 3,
-                    nonterminal_produced: 15,
+                    states_to_pop: 1,
+                    nonterminal_produced: 13,
                 }
             }
             39 => {
                 __state_machine::SimulatedReduce::Reduce {
-                    states_to_pop: 1,
-                    nonterminal_produced: 15,
+                    states_to_pop: 3,
+                    nonterminal_produced: 14,
                 }
             }
             40 => {
                 __state_machine::SimulatedReduce::Reduce {
                     states_to_pop: 1,
-                    nonterminal_produced: 16,
+                    nonterminal_produced: 15,
                 }
             }
             41 => {
                 __state_machine::SimulatedReduce::Reduce {
-                    states_to_pop: 1,
-                    nonterminal_produced: 16,
+                    states_to_pop: 3,
+                    nonterminal_produced: 15,
                 }
             }
             42 => {
                 __state_machine::SimulatedReduce::Reduce {
-                    states_to_pop: 1,
-                    nonterminal_produced: 17,
+                    states_to_pop: 2,
+                    nonterminal_produced: 15,
                 }
             }
             43 => {
                 __state_machine::SimulatedReduce::Reduce {
                     states_to_pop: 1,
-                    nonterminal_produced: 18,
+                    nonterminal_produced: 16,
                 }
             }
             44 => {
                 __state_machine::SimulatedReduce::Reduce {
                     states_to_pop: 1,
-                    nonterminal_produced: 19,
+                    nonterminal_produced: 16,
                 }
             }
             45 => {
                 __state_machine::SimulatedReduce::Reduce {
-                    states_to_pop: 1,
-                    nonterminal_produced: 19,
+                    states_to_pop: 2,
+                    nonterminal_produced: 16,
                 }
             }
             46 => {
                 __state_machine::SimulatedReduce::Reduce {
                     states_to_pop: 3,
-                    nonterminal_produced: 19,
+                    nonterminal_produced: 16,
                 }
             }
             47 => {
                 __state_machine::SimulatedReduce::Reduce {
-                    states_to_pop: 1,
-                    nonterminal_produced: 20,
+                    states_to_pop: 3,
+                    nonterminal_produced: 16,
                 }
             }
             48 => {
                 __state_machine::SimulatedReduce::Reduce {
                     states_to_pop: 3,
-                    nonterminal_produced: 20,
+                    nonterminal_produced: 16,
                 }
             }
             49 => {
                 __state_machine::SimulatedReduce::Reduce {
-                    states_to_pop: 2,
-                    nonterminal_produced: 20,
+                    states_to_pop: 3,
+                    nonterminal_produced: 17,
                 }
             }
             50 => {
                 __state_machine::SimulatedReduce::Reduce {
-                    states_to_pop: 2,
-                    nonterminal_produced: 21,
+                    states_to_pop: 1,
+                    nonterminal_produced: 17,
                 }
             }
             51 => {
                 __state_machine::SimulatedReduce::Reduce {
-                    states_to_pop: 2,
-                    nonterminal_produced: 21,
+                    states_to_pop: 1,
+                    nonterminal_produced: 18,
                 }
             }
             52 => {
                 __state_machine::SimulatedReduce::Reduce {
                     states_to_pop: 1,
-                    nonterminal_produced: 22,
+                    nonterminal_produced: 18,
                 }
             }
             53 => {
                 __state_machine::SimulatedReduce::Reduce {
                     states_to_pop: 1,
-                    nonterminal_produced: 23,
+                    nonterminal_produced: 19,
                 }
             }
-            54 => __state_machine::SimulatedReduce::Accept,
+            54 => {
+                __state_machine::SimulatedReduce::Reduce {
+                    states_to_pop: 1,
+                    nonterminal_produced: 20,
+                }
+            }
             55 => {
                 __state_machine::SimulatedReduce::Reduce {
                     states_to_pop: 1,
-                    nonterminal_produced: 25,
+                    nonterminal_produced: 21,
                 }
             }
             56 => {
                 __state_machine::SimulatedReduce::Reduce {
                     states_to_pop: 1,
-                    nonterminal_produced: 26,
+                    nonterminal_produced: 21,
                 }
             }
             57 => {
                 __state_machine::SimulatedReduce::Reduce {
+                    states_to_pop: 3,
+                    nonterminal_produced: 21,
+                }
+            }
+            58 => {
+                __state_machine::SimulatedReduce::Reduce {
+                    states_to_pop: 1,
+                    nonterminal_produced: 22,
+                }
+            }
+            59 => {
+                __state_machine::SimulatedReduce::Reduce {
+                    states_to_pop: 3,
+                    nonterminal_produced: 22,
+                }
+            }
+            60 => {
+                __state_machine::SimulatedReduce::Reduce {
+                    states_to_pop: 2,
+                    nonterminal_produced: 22,
+                }
+            }
+            61 => {
+                __state_machine::SimulatedReduce::Reduce {
+                    states_to_pop: 2,
+                    nonterminal_produced: 23,
+                }
+            }
+            62 => {
+                __state_machine::SimulatedReduce::Reduce {
+                    states_to_pop: 2,
+                    nonterminal_produced: 23,
+                }
+            }
+            63 => {
+                __state_machine::SimulatedReduce::Reduce {
+                    states_to_pop: 1,
+                    nonterminal_produced: 24,
+                }
+            }
+            64 => {
+                __state_machine::SimulatedReduce::Reduce {
+                    states_to_pop: 1,
+                    nonterminal_produced: 25,
+                }
+            }
+            65 => __state_machine::SimulatedReduce::Accept,
+            66 => {
+                __state_machine::SimulatedReduce::Reduce {
                     states_to_pop: 1,
                     nonterminal_produced: 27,
+                }
+            }
+            67 => {
+                __state_machine::SimulatedReduce::Reduce {
+                    states_to_pop: 1,
+                    nonterminal_produced: 28,
+                }
+            }
+            68 => {
+                __state_machine::SimulatedReduce::Reduce {
+                    states_to_pop: 1,
+                    nonterminal_produced: 29,
                 }
             }
             _ => panic!("invalid reduction index {}", __reduce_index)
@@ -5696,12 +6530,7 @@ mod __parse__InstructionList {
                 __reduce53(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&())>)
             }
             54 => {
-                // __InstructionList = InstructionList => ActionFn(0);
-                let __sym0 = __pop_Variant12(__symbols);
-                let __start = __sym0.0;
-                let __end = __sym0.2;
-                let __nt = super::__action0::<>(input, __sym0);
-                return Some(Ok(__nt));
+                __reduce54(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&())>)
             }
             55 => {
                 __reduce55(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&())>)
@@ -5711,6 +6540,44 @@ mod __parse__InstructionList {
             }
             57 => {
                 __reduce57(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&())>)
+            }
+            58 => {
+                __reduce58(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&())>)
+            }
+            59 => {
+                __reduce59(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&())>)
+            }
+            60 => {
+                __reduce60(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&())>)
+            }
+            61 => {
+                __reduce61(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&())>)
+            }
+            62 => {
+                __reduce62(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&())>)
+            }
+            63 => {
+                __reduce63(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&())>)
+            }
+            64 => {
+                __reduce64(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&())>)
+            }
+            65 => {
+                // __InstructionList = InstructionList => ActionFn(0);
+                let __sym0 = __pop_Variant14(__symbols);
+                let __start = __sym0.0;
+                let __end = __sym0.2;
+                let __nt = super::__action0::<>(input, __sym0);
+                return Some(Ok(__nt));
+            }
+            66 => {
+                __reduce66(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&())>)
+            }
+            67 => {
+                __reduce67(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&())>)
+            }
+            68 => {
+                __reduce68(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&())>)
             }
             _ => panic!("invalid action code {}", __action)
         };
@@ -5725,14 +6592,14 @@ mod __parse__InstructionList {
     fn __symbol_type_mismatch() -> ! {
         panic!("symbol type mismatch")
     }
-    fn __pop_Variant9<
+    fn __pop_Variant11<
       'input,
     >(
         __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>
     ) -> (usize, ArgConstraint, usize)
      {
         match __symbols.pop() {
-            Some((__l, __Symbol::Variant9(__v), __r)) => (__l, __v, __r),
+            Some((__l, __Symbol::Variant11(__v), __r)) => (__l, __v, __r),
             _ => __symbol_type_mismatch()
         }
     }
@@ -5762,21 +6629,10 @@ mod __parse__InstructionList {
       'input,
     >(
         __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>
-    ) -> (usize, CompositeValue, usize)
+    ) -> (usize, Attribute, usize)
      {
         match __symbols.pop() {
             Some((__l, __Symbol::Variant6(__v), __r)) => (__l, __v, __r),
-            _ => __symbol_type_mismatch()
-        }
-    }
-    fn __pop_Variant7<
-      'input,
-    >(
-        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>
-    ) -> (usize, CompoundInstruction<SomeValue>, usize)
-     {
-        match __symbols.pop() {
-            Some((__l, __Symbol::Variant7(__v), __r)) => (__l, __v, __r),
             _ => __symbol_type_mismatch()
         }
     }
@@ -5784,21 +6640,43 @@ mod __parse__InstructionList {
       'input,
     >(
         __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>
-    ) -> (usize, ConcreteType, usize)
+    ) -> (usize, CompositeValue, usize)
      {
         match __symbols.pop() {
             Some((__l, __Symbol::Variant8(__v), __r)) => (__l, __v, __r),
             _ => __symbol_type_mismatch()
         }
     }
-    fn __pop_Variant11<
+    fn __pop_Variant9<
+      'input,
+    >(
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>
+    ) -> (usize, CompoundInstruction<SomeValue>, usize)
+     {
+        match __symbols.pop() {
+            Some((__l, __Symbol::Variant9(__v), __r)) => (__l, __v, __r),
+            _ => __symbol_type_mismatch()
+        }
+    }
+    fn __pop_Variant10<
+      'input,
+    >(
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>
+    ) -> (usize, ConcreteType, usize)
+     {
+        match __symbols.pop() {
+            Some((__l, __Symbol::Variant10(__v), __r)) => (__l, __v, __r),
+            _ => __symbol_type_mismatch()
+        }
+    }
+    fn __pop_Variant13<
       'input,
     >(
         __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>
     ) -> (usize, Instruction<SomeValue>, usize)
      {
         match __symbols.pop() {
-            Some((__l, __Symbol::Variant11(__v), __r)) => (__l, __v, __r),
+            Some((__l, __Symbol::Variant13(__v), __r)) => (__l, __v, __r),
             _ => __symbol_type_mismatch()
         }
     }
@@ -5813,25 +6691,14 @@ mod __parse__InstructionList {
             _ => __symbol_type_mismatch()
         }
     }
-    fn __pop_Variant13<
+    fn __pop_Variant15<
       'input,
     >(
         __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>
     ) -> (usize, MType<DynMType>, usize)
      {
         match __symbols.pop() {
-            Some((__l, __Symbol::Variant13(__v), __r)) => (__l, __v, __r),
-            _ => __symbol_type_mismatch()
-        }
-    }
-    fn __pop_Variant17<
-      'input,
-    >(
-        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>
-    ) -> (usize, SomeValue, usize)
-     {
-        match __symbols.pop() {
-            Some((__l, __Symbol::Variant17(__v), __r)) => (__l, __v, __r),
+            Some((__l, __Symbol::Variant15(__v), __r)) => (__l, __v, __r),
             _ => __symbol_type_mismatch()
         }
     }
@@ -5839,21 +6706,32 @@ mod __parse__InstructionList {
       'input,
     >(
         __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>
-    ) -> (usize, StackResultElem, usize)
+    ) -> (usize, SomeValue, usize)
      {
         match __symbols.pop() {
             Some((__l, __Symbol::Variant19(__v), __r)) => (__l, __v, __r),
             _ => __symbol_type_mismatch()
         }
     }
-    fn __pop_Variant10<
+    fn __pop_Variant21<
+      'input,
+    >(
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>
+    ) -> (usize, StackResultElem, usize)
+     {
+        match __symbols.pop() {
+            Some((__l, __Symbol::Variant21(__v), __r)) => (__l, __v, __r),
+            _ => __symbol_type_mismatch()
+        }
+    }
+    fn __pop_Variant12<
       'input,
     >(
         __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>
     ) -> (usize, String, usize)
      {
         match __symbols.pop() {
-            Some((__l, __Symbol::Variant10(__v), __r)) => (__l, __v, __r),
+            Some((__l, __Symbol::Variant12(__v), __r)) => (__l, __v, __r),
             _ => __symbol_type_mismatch()
         }
     }
@@ -5868,14 +6746,14 @@ mod __parse__InstructionList {
             _ => __symbol_type_mismatch()
         }
     }
-    fn __pop_Variant12<
+    fn __pop_Variant7<
       'input,
     >(
         __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>
-    ) -> (usize, Vec<CompoundInstruction<SomeValue>>, usize)
+    ) -> (usize, Vec<Attribute>, usize)
      {
         match __symbols.pop() {
-            Some((__l, __Symbol::Variant12(__v), __r)) => (__l, __v, __r),
+            Some((__l, __Symbol::Variant7(__v), __r)) => (__l, __v, __r),
             _ => __symbol_type_mismatch()
         }
     }
@@ -5883,32 +6761,43 @@ mod __parse__InstructionList {
       'input,
     >(
         __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>
-    ) -> (usize, Vec<MType<DynMType>>, usize)
+    ) -> (usize, Vec<CompoundInstruction<SomeValue>>, usize)
      {
         match __symbols.pop() {
             Some((__l, __Symbol::Variant14(__v), __r)) => (__l, __v, __r),
             _ => __symbol_type_mismatch()
         }
     }
-    fn __pop_Variant18<
+    fn __pop_Variant16<
+      'input,
+    >(
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>
+    ) -> (usize, Vec<MType<DynMType>>, usize)
+     {
+        match __symbols.pop() {
+            Some((__l, __Symbol::Variant16(__v), __r)) => (__l, __v, __r),
+            _ => __symbol_type_mismatch()
+        }
+    }
+    fn __pop_Variant20<
       'input,
     >(
         __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>
     ) -> (usize, Vec<SomeValue>, usize)
      {
         match __symbols.pop() {
-            Some((__l, __Symbol::Variant18(__v), __r)) => (__l, __v, __r),
+            Some((__l, __Symbol::Variant20(__v), __r)) => (__l, __v, __r),
             _ => __symbol_type_mismatch()
         }
     }
-    fn __pop_Variant15<
+    fn __pop_Variant17<
       'input,
     >(
         __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>
     ) -> (usize, bool, usize)
      {
         match __symbols.pop() {
-            Some((__l, __Symbol::Variant15(__v), __r)) => (__l, __v, __r),
+            Some((__l, __Symbol::Variant17(__v), __r)) => (__l, __v, __r),
             _ => __symbol_type_mismatch()
         }
     }
@@ -5923,14 +6812,14 @@ mod __parse__InstructionList {
             _ => __symbol_type_mismatch()
         }
     }
-    fn __pop_Variant16<
+    fn __pop_Variant18<
       'input,
     >(
         __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>
     ) -> (usize, i32, usize)
      {
         match __symbols.pop() {
-            Some((__l, __Symbol::Variant16(__v), __r)) => (__l, __v, __r),
+            Some((__l, __Symbol::Variant18(__v), __r)) => (__l, __v, __r),
             _ => __symbol_type_mismatch()
         }
     }
@@ -5954,11 +6843,11 @@ mod __parse__InstructionList {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // Arg = SomeValue => ActionFn(12);
-        let __sym0 = __pop_Variant17(__symbols);
+        // Arg = SomeValue => ActionFn(21);
+        let __sym0 = __pop_Variant19(__symbols);
         let __start = __sym0.0;
         let __end = __sym0.2;
-        let __nt = super::__action12::<>(input, __sym0);
+        let __nt = super::__action21::<>(input, __sym0);
         __symbols.push((__start, __Symbol::Variant1(__nt), __end));
         (1, 0)
     }
@@ -5971,11 +6860,11 @@ mod __parse__InstructionList {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // Arg = ConcreteType => ActionFn(13);
-        let __sym0 = __pop_Variant8(__symbols);
+        // Arg = ConcreteType => ActionFn(22);
+        let __sym0 = __pop_Variant10(__symbols);
         let __start = __sym0.0;
         let __end = __sym0.2;
-        let __nt = super::__action13::<>(input, __sym0);
+        let __nt = super::__action22::<>(input, __sym0);
         __symbols.push((__start, __Symbol::Variant1(__nt), __end));
         (1, 0)
     }
@@ -5988,11 +6877,11 @@ mod __parse__InstructionList {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // ArgVar = r#"[a-z]"# => ActionFn(51);
+        // ArgVar = r#"[a-z]"# => ActionFn(62);
         let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0;
         let __end = __sym0.2;
-        let __nt = super::__action51::<>(input, __sym0);
+        let __nt = super::__action62::<>(input, __sym0);
         __symbols.push((__start, __Symbol::Variant2(__nt), __end));
         (1, 1)
     }
@@ -6005,13 +6894,13 @@ mod __parse__InstructionList {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // Args = Arg, Args => ActionFn(14);
+        // Args = Arg, Args => ActionFn(23);
         assert!(__symbols.len() >= 2);
         let __sym1 = __pop_Variant3(__symbols);
         let __sym0 = __pop_Variant1(__symbols);
         let __start = __sym0.0;
         let __end = __sym1.2;
-        let __nt = super::__action14::<>(input, __sym0, __sym1);
+        let __nt = super::__action23::<>(input, __sym0, __sym1);
         __symbols.push((__start, __Symbol::Variant3(__nt), __end));
         (2, 2)
     }
@@ -6024,11 +6913,11 @@ mod __parse__InstructionList {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // Args = Arg => ActionFn(15);
+        // Args = Arg => ActionFn(24);
         let __sym0 = __pop_Variant1(__symbols);
         let __start = __sym0.0;
         let __end = __sym0.2;
-        let __nt = super::__action15::<>(input, __sym0);
+        let __nt = super::__action24::<>(input, __sym0);
         __symbols.push((__start, __Symbol::Variant3(__nt), __end));
         (1, 2)
     }
@@ -6041,11 +6930,11 @@ mod __parse__InstructionList {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // AtomicType = "int" => ActionFn(32);
+        // AtomicType = "int" => ActionFn(41);
         let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0;
         let __end = __sym0.2;
-        let __nt = super::__action32::<>(input, __sym0);
+        let __nt = super::__action41::<>(input, __sym0);
         __symbols.push((__start, __Symbol::Variant4(__nt), __end));
         (1, 3)
     }
@@ -6058,11 +6947,11 @@ mod __parse__InstructionList {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // AtomicType = "nat" => ActionFn(33);
+        // AtomicType = "nat" => ActionFn(42);
         let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0;
         let __end = __sym0.2;
-        let __nt = super::__action33::<>(input, __sym0);
+        let __nt = super::__action42::<>(input, __sym0);
         __symbols.push((__start, __Symbol::Variant4(__nt), __end));
         (1, 3)
     }
@@ -6075,11 +6964,11 @@ mod __parse__InstructionList {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // AtomicType = "string" => ActionFn(34);
+        // AtomicType = "string" => ActionFn(43);
         let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0;
         let __end = __sym0.2;
-        let __nt = super::__action34::<>(input, __sym0);
+        let __nt = super::__action43::<>(input, __sym0);
         __symbols.push((__start, __Symbol::Variant4(__nt), __end));
         (1, 3)
     }
@@ -6092,11 +6981,11 @@ mod __parse__InstructionList {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // AtomicType = "bool" => ActionFn(35);
+        // AtomicType = "bool" => ActionFn(44);
         let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0;
         let __end = __sym0.2;
-        let __nt = super::__action35::<>(input, __sym0);
+        let __nt = super::__action44::<>(input, __sym0);
         __symbols.push((__start, __Symbol::Variant4(__nt), __end));
         (1, 3)
     }
@@ -6109,11 +6998,11 @@ mod __parse__InstructionList {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // AtomicValue = McLitNumber => ActionFn(19);
-        let __sym0 = __pop_Variant16(__symbols);
+        // AtomicValue = McLitNumber => ActionFn(28);
+        let __sym0 = __pop_Variant18(__symbols);
         let __start = __sym0.0;
         let __end = __sym0.2;
-        let __nt = super::__action19::<>(input, __sym0);
+        let __nt = super::__action28::<>(input, __sym0);
         __symbols.push((__start, __Symbol::Variant5(__nt), __end));
         (1, 4)
     }
@@ -6126,11 +7015,11 @@ mod __parse__InstructionList {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // AtomicValue = McLitString => ActionFn(20);
-        let __sym0 = __pop_Variant10(__symbols);
+        // AtomicValue = McLitString => ActionFn(29);
+        let __sym0 = __pop_Variant12(__symbols);
         let __start = __sym0.0;
         let __end = __sym0.2;
-        let __nt = super::__action20::<>(input, __sym0);
+        let __nt = super::__action29::<>(input, __sym0);
         __symbols.push((__start, __Symbol::Variant5(__nt), __end));
         (1, 4)
     }
@@ -6143,11 +7032,11 @@ mod __parse__InstructionList {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // AtomicValue = McLitBool => ActionFn(21);
-        let __sym0 = __pop_Variant15(__symbols);
+        // AtomicValue = McLitBool => ActionFn(30);
+        let __sym0 = __pop_Variant17(__symbols);
         let __start = __sym0.0;
         let __end = __sym0.2;
-        let __nt = super::__action21::<>(input, __sym0);
+        let __nt = super::__action30::<>(input, __sym0);
         __symbols.push((__start, __Symbol::Variant5(__nt), __end));
         (1, 4)
     }
@@ -6160,16 +7049,13 @@ mod __parse__InstructionList {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // CompositeValue = "Pair", SomeValue, SomeValue => ActionFn(22);
-        assert!(__symbols.len() >= 3);
-        let __sym2 = __pop_Variant17(__symbols);
-        let __sym1 = __pop_Variant17(__symbols);
+        // Attribute = "comparable" => ActionFn(6);
         let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0;
-        let __end = __sym2.2;
-        let __nt = super::__action22::<>(input, __sym0, __sym1, __sym2);
+        let __end = __sym0.2;
+        let __nt = super::__action6::<>(input, __sym0);
         __symbols.push((__start, __Symbol::Variant6(__nt), __end));
-        (3, 5)
+        (1, 5)
     }
     pub(crate) fn __reduce13<
         'input,
@@ -6180,16 +7066,13 @@ mod __parse__InstructionList {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // CompositeValue = "{", SomeValueList, "}" => ActionFn(23);
-        assert!(__symbols.len() >= 3);
-        let __sym2 = __pop_Variant0(__symbols);
-        let __sym1 = __pop_Variant18(__symbols);
+        // Attribute = "passable" => ActionFn(7);
         let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0;
-        let __end = __sym2.2;
-        let __nt = super::__action23::<>(input, __sym0, __sym1, __sym2);
+        let __end = __sym0.2;
+        let __nt = super::__action7::<>(input, __sym0);
         __symbols.push((__start, __Symbol::Variant6(__nt), __end));
-        (3, 5)
+        (1, 5)
     }
     pub(crate) fn __reduce14<
         'input,
@@ -6200,11 +7083,11 @@ mod __parse__InstructionList {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // CompositeValue = InstructionBlock => ActionFn(24);
-        let __sym0 = __pop_Variant12(__symbols);
+        // Attribute = "pushable" => ActionFn(8);
+        let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0;
         let __end = __sym0.2;
-        let __nt = super::__action24::<>(input, __sym0);
+        let __nt = super::__action8::<>(input, __sym0);
         __symbols.push((__start, __Symbol::Variant6(__nt), __end));
         (1, 5)
     }
@@ -6217,16 +7100,13 @@ mod __parse__InstructionList {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // CompoundInstruction = "IF", InstructionBlock, InstructionBlock => ActionFn(6);
-        assert!(__symbols.len() >= 3);
-        let __sym2 = __pop_Variant12(__symbols);
-        let __sym1 = __pop_Variant12(__symbols);
+        // Attribute = "storable" => ActionFn(9);
         let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0;
-        let __end = __sym2.2;
-        let __nt = super::__action6::<>(input, __sym0, __sym1, __sym2);
-        __symbols.push((__start, __Symbol::Variant7(__nt), __end));
-        (3, 6)
+        let __end = __sym0.2;
+        let __nt = super::__action9::<>(input, __sym0);
+        __symbols.push((__start, __Symbol::Variant6(__nt), __end));
+        (1, 5)
     }
     pub(crate) fn __reduce16<
         'input,
@@ -6237,15 +7117,13 @@ mod __parse__InstructionList {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // CompoundInstruction = "DIP", InstructionBlock => ActionFn(7);
-        assert!(__symbols.len() >= 2);
-        let __sym1 = __pop_Variant12(__symbols);
+        // Attribute = "packable" => ActionFn(10);
         let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0;
-        let __end = __sym1.2;
-        let __nt = super::__action7::<>(input, __sym0, __sym1);
-        __symbols.push((__start, __Symbol::Variant7(__nt), __end));
-        (2, 6)
+        let __end = __sym0.2;
+        let __nt = super::__action10::<>(input, __sym0);
+        __symbols.push((__start, __Symbol::Variant6(__nt), __end));
+        (1, 5)
     }
     pub(crate) fn __reduce17<
         'input,
@@ -6256,17 +7134,13 @@ mod __parse__InstructionList {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // CompoundInstruction = "LAMBDA_REC", ConcreteType, ConcreteType, InstructionBlock => ActionFn(8);
-        assert!(__symbols.len() >= 4);
-        let __sym3 = __pop_Variant12(__symbols);
-        let __sym2 = __pop_Variant8(__symbols);
-        let __sym1 = __pop_Variant8(__symbols);
+        // Attribute = "bigmapvalue" => ActionFn(11);
         let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0;
-        let __end = __sym3.2;
-        let __nt = super::__action8::<>(input, __sym0, __sym1, __sym2, __sym3);
-        __symbols.push((__start, __Symbol::Variant7(__nt), __end));
-        (4, 6)
+        let __end = __sym0.2;
+        let __nt = super::__action11::<>(input, __sym0);
+        __symbols.push((__start, __Symbol::Variant6(__nt), __end));
+        (1, 5)
     }
     pub(crate) fn __reduce18<
         'input,
@@ -6277,13 +7151,13 @@ mod __parse__InstructionList {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // CompoundInstruction = Instruction => ActionFn(9);
-        let __sym0 = __pop_Variant11(__symbols);
+        // Attribute = "duplicable" => ActionFn(12);
+        let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0;
         let __end = __sym0.2;
-        let __nt = super::__action9::<>(input, __sym0);
-        __symbols.push((__start, __Symbol::Variant7(__nt), __end));
-        (1, 6)
+        let __nt = super::__action12::<>(input, __sym0);
+        __symbols.push((__start, __Symbol::Variant6(__nt), __end));
+        (1, 5)
     }
     pub(crate) fn __reduce19<
         'input,
@@ -6294,13 +7168,16 @@ mod __parse__InstructionList {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // ConcreteType = MDyn => ActionFn(36);
-        let __sym0 = __pop_Variant13(__symbols);
+        // AttributeList = Attribute, "+", AttributeList => ActionFn(13);
+        assert!(__symbols.len() >= 3);
+        let __sym2 = __pop_Variant7(__symbols);
+        let __sym1 = __pop_Variant0(__symbols);
+        let __sym0 = __pop_Variant6(__symbols);
         let __start = __sym0.0;
-        let __end = __sym0.2;
-        let __nt = super::__action36::<>(input, __sym0);
-        __symbols.push((__start, __Symbol::Variant8(__nt), __end));
-        (1, 7)
+        let __end = __sym2.2;
+        let __nt = super::__action13::<>(input, __sym0, __sym1, __sym2);
+        __symbols.push((__start, __Symbol::Variant7(__nt), __end));
+        (3, 6)
     }
     pub(crate) fn __reduce20<
         'input,
@@ -6311,15 +7188,13 @@ mod __parse__InstructionList {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // Constraint = "w|", ArgVar => ActionFn(45);
-        assert!(__symbols.len() >= 2);
-        let __sym1 = __pop_Variant2(__symbols);
-        let __sym0 = __pop_Variant0(__symbols);
+        // AttributeList = Attribute => ActionFn(14);
+        let __sym0 = __pop_Variant6(__symbols);
         let __start = __sym0.0;
-        let __end = __sym1.2;
-        let __nt = super::__action45::<>(input, __sym0, __sym1);
-        __symbols.push((__start, __Symbol::Variant9(__nt), __end));
-        (2, 8)
+        let __end = __sym0.2;
+        let __nt = super::__action14::<>(input, __sym0);
+        __symbols.push((__start, __Symbol::Variant7(__nt), __end));
+        (1, 6)
     }
     pub(crate) fn __reduce21<
         'input,
@@ -6330,15 +7205,16 @@ mod __parse__InstructionList {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // Constraint = "t|", ArgVar => ActionFn(46);
-        assert!(__symbols.len() >= 2);
-        let __sym1 = __pop_Variant2(__symbols);
+        // CompositeValue = "Pair", SomeValue, SomeValue => ActionFn(31);
+        assert!(__symbols.len() >= 3);
+        let __sym2 = __pop_Variant19(__symbols);
+        let __sym1 = __pop_Variant19(__symbols);
         let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0;
-        let __end = __sym1.2;
-        let __nt = super::__action46::<>(input, __sym0, __sym1);
-        __symbols.push((__start, __Symbol::Variant9(__nt), __end));
-        (2, 8)
+        let __end = __sym2.2;
+        let __nt = super::__action31::<>(input, __sym0, __sym1, __sym2);
+        __symbols.push((__start, __Symbol::Variant8(__nt), __end));
+        (3, 7)
     }
     pub(crate) fn __reduce22<
         'input,
@@ -6349,15 +7225,16 @@ mod __parse__InstructionList {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // Constraint = "r|", ArgVar => ActionFn(47);
-        assert!(__symbols.len() >= 2);
-        let __sym1 = __pop_Variant2(__symbols);
+        // CompositeValue = "{", SomeValueList, "}" => ActionFn(32);
+        assert!(__symbols.len() >= 3);
+        let __sym2 = __pop_Variant0(__symbols);
+        let __sym1 = __pop_Variant20(__symbols);
         let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0;
-        let __end = __sym1.2;
-        let __nt = super::__action47::<>(input, __sym0, __sym1);
-        __symbols.push((__start, __Symbol::Variant9(__nt), __end));
-        (2, 8)
+        let __end = __sym2.2;
+        let __nt = super::__action32::<>(input, __sym0, __sym1, __sym2);
+        __symbols.push((__start, __Symbol::Variant8(__nt), __end));
+        (3, 7)
     }
     pub(crate) fn __reduce23<
         'input,
@@ -6368,15 +7245,13 @@ mod __parse__InstructionList {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // Constraint = "a|", AtomicType => ActionFn(48);
-        assert!(__symbols.len() >= 2);
-        let __sym1 = __pop_Variant4(__symbols);
-        let __sym0 = __pop_Variant0(__symbols);
+        // CompositeValue = InstructionBlock => ActionFn(33);
+        let __sym0 = __pop_Variant14(__symbols);
         let __start = __sym0.0;
-        let __end = __sym1.2;
-        let __nt = super::__action48::<>(input, __sym0, __sym1);
-        __symbols.push((__start, __Symbol::Variant9(__nt), __end));
-        (2, 8)
+        let __end = __sym0.2;
+        let __nt = super::__action33::<>(input, __sym0);
+        __symbols.push((__start, __Symbol::Variant8(__nt), __end));
+        (1, 7)
     }
     pub(crate) fn __reduce24<
         'input,
@@ -6387,13 +7262,16 @@ mod __parse__InstructionList {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // Dyn = r#"<[A-Za-z][A-Za-z0-9|]+>"# => ActionFn(52);
+        // CompoundInstruction = "IF", InstructionBlock, InstructionBlock => ActionFn(15);
+        assert!(__symbols.len() >= 3);
+        let __sym2 = __pop_Variant14(__symbols);
+        let __sym1 = __pop_Variant14(__symbols);
         let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0;
-        let __end = __sym0.2;
-        let __nt = super::__action52::<>(input, __sym0);
-        __symbols.push((__start, __Symbol::Variant10(__nt), __end));
-        (1, 9)
+        let __end = __sym2.2;
+        let __nt = super::__action15::<>(input, __sym0, __sym1, __sym2);
+        __symbols.push((__start, __Symbol::Variant9(__nt), __end));
+        (3, 8)
     }
     pub(crate) fn __reduce25<
         'input,
@@ -6404,13 +7282,15 @@ mod __parse__InstructionList {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // Identifier = r#"[A-Za-z][A-Za-z0-9]+"# => ActionFn(53);
+        // CompoundInstruction = "DIP", InstructionBlock => ActionFn(16);
+        assert!(__symbols.len() >= 2);
+        let __sym1 = __pop_Variant14(__symbols);
         let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0;
-        let __end = __sym0.2;
-        let __nt = super::__action53::<>(input, __sym0);
-        __symbols.push((__start, __Symbol::Variant10(__nt), __end));
-        (1, 10)
+        let __end = __sym1.2;
+        let __nt = super::__action16::<>(input, __sym0, __sym1);
+        __symbols.push((__start, __Symbol::Variant9(__nt), __end));
+        (2, 8)
     }
     pub(crate) fn __reduce26<
         'input,
@@ -6421,15 +7301,17 @@ mod __parse__InstructionList {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // Instruction = Identifier, Args => ActionFn(10);
-        assert!(__symbols.len() >= 2);
-        let __sym1 = __pop_Variant3(__symbols);
-        let __sym0 = __pop_Variant10(__symbols);
+        // CompoundInstruction = "LAMBDA_REC", ConcreteType, ConcreteType, InstructionBlock => ActionFn(17);
+        assert!(__symbols.len() >= 4);
+        let __sym3 = __pop_Variant14(__symbols);
+        let __sym2 = __pop_Variant10(__symbols);
+        let __sym1 = __pop_Variant10(__symbols);
+        let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0;
-        let __end = __sym1.2;
-        let __nt = super::__action10::<>(input, __sym0, __sym1);
-        __symbols.push((__start, __Symbol::Variant11(__nt), __end));
-        (2, 11)
+        let __end = __sym3.2;
+        let __nt = super::__action17::<>(input, __sym0, __sym1, __sym2, __sym3);
+        __symbols.push((__start, __Symbol::Variant9(__nt), __end));
+        (4, 8)
     }
     pub(crate) fn __reduce27<
         'input,
@@ -6440,13 +7322,13 @@ mod __parse__InstructionList {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // Instruction = Identifier => ActionFn(11);
-        let __sym0 = __pop_Variant10(__symbols);
+        // CompoundInstruction = Instruction => ActionFn(18);
+        let __sym0 = __pop_Variant13(__symbols);
         let __start = __sym0.0;
         let __end = __sym0.2;
-        let __nt = super::__action11::<>(input, __sym0);
-        __symbols.push((__start, __Symbol::Variant11(__nt), __end));
-        (1, 11)
+        let __nt = super::__action18::<>(input, __sym0);
+        __symbols.push((__start, __Symbol::Variant9(__nt), __end));
+        (1, 8)
     }
     pub(crate) fn __reduce28<
         'input,
@@ -6457,16 +7339,13 @@ mod __parse__InstructionList {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // InstructionBlock = "{", InstructionList, "}" => ActionFn(25);
-        assert!(__symbols.len() >= 3);
-        let __sym2 = __pop_Variant0(__symbols);
-        let __sym1 = __pop_Variant12(__symbols);
-        let __sym0 = __pop_Variant0(__symbols);
+        // ConcreteType = MDyn => ActionFn(45);
+        let __sym0 = __pop_Variant15(__symbols);
         let __start = __sym0.0;
-        let __end = __sym2.2;
-        let __nt = super::__action25::<>(input, __sym0, __sym1, __sym2);
-        __symbols.push((__start, __Symbol::Variant12(__nt), __end));
-        (3, 12)
+        let __end = __sym0.2;
+        let __nt = super::__action45::<>(input, __sym0);
+        __symbols.push((__start, __Symbol::Variant10(__nt), __end));
+        (1, 9)
     }
     pub(crate) fn __reduce29<
         'input,
@@ -6477,13 +7356,17 @@ mod __parse__InstructionList {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // InstructionList = CompoundInstruction => ActionFn(29);
-        let __sym0 = __pop_Variant7(__symbols);
+        // Constraint = "w|", ArgVar, "=>", AttributeList => ActionFn(54);
+        assert!(__symbols.len() >= 4);
+        let __sym3 = __pop_Variant7(__symbols);
+        let __sym2 = __pop_Variant0(__symbols);
+        let __sym1 = __pop_Variant2(__symbols);
+        let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0;
-        let __end = __sym0.2;
-        let __nt = super::__action29::<>(input, __sym0);
-        __symbols.push((__start, __Symbol::Variant12(__nt), __end));
-        (1, 13)
+        let __end = __sym3.2;
+        let __nt = super::__action54::<>(input, __sym0, __sym1, __sym2, __sym3);
+        __symbols.push((__start, __Symbol::Variant11(__nt), __end));
+        (4, 10)
     }
     pub(crate) fn __reduce30<
         'input,
@@ -6494,16 +7377,15 @@ mod __parse__InstructionList {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // InstructionList = CompoundInstruction, ";", InstructionList => ActionFn(30);
-        assert!(__symbols.len() >= 3);
-        let __sym2 = __pop_Variant12(__symbols);
-        let __sym1 = __pop_Variant0(__symbols);
-        let __sym0 = __pop_Variant7(__symbols);
+        // Constraint = "w|", ArgVar => ActionFn(55);
+        assert!(__symbols.len() >= 2);
+        let __sym1 = __pop_Variant2(__symbols);
+        let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0;
-        let __end = __sym2.2;
-        let __nt = super::__action30::<>(input, __sym0, __sym1, __sym2);
-        __symbols.push((__start, __Symbol::Variant12(__nt), __end));
-        (3, 13)
+        let __end = __sym1.2;
+        let __nt = super::__action55::<>(input, __sym0, __sym1);
+        __symbols.push((__start, __Symbol::Variant11(__nt), __end));
+        (2, 10)
     }
     pub(crate) fn __reduce31<
         'input,
@@ -6514,15 +7396,17 @@ mod __parse__InstructionList {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // InstructionList = CompoundInstruction, ";" => ActionFn(31);
-        assert!(__symbols.len() >= 2);
-        let __sym1 = __pop_Variant0(__symbols);
-        let __sym0 = __pop_Variant7(__symbols);
+        // Constraint = "t|", ArgVar, "=>", AttributeList => ActionFn(56);
+        assert!(__symbols.len() >= 4);
+        let __sym3 = __pop_Variant7(__symbols);
+        let __sym2 = __pop_Variant0(__symbols);
+        let __sym1 = __pop_Variant2(__symbols);
+        let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0;
-        let __end = __sym1.2;
-        let __nt = super::__action31::<>(input, __sym0, __sym1);
-        __symbols.push((__start, __Symbol::Variant12(__nt), __end));
-        (2, 13)
+        let __end = __sym3.2;
+        let __nt = super::__action56::<>(input, __sym0, __sym1, __sym2, __sym3);
+        __symbols.push((__start, __Symbol::Variant11(__nt), __end));
+        (4, 10)
     }
     pub(crate) fn __reduce32<
         'input,
@@ -6533,13 +7417,15 @@ mod __parse__InstructionList {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // MDyn = AtomicType => ActionFn(39);
-        let __sym0 = __pop_Variant4(__symbols);
+        // Constraint = "t|", ArgVar => ActionFn(57);
+        assert!(__symbols.len() >= 2);
+        let __sym1 = __pop_Variant2(__symbols);
+        let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0;
-        let __end = __sym0.2;
-        let __nt = super::__action39::<>(input, __sym0);
-        __symbols.push((__start, __Symbol::Variant13(__nt), __end));
-        (1, 14)
+        let __end = __sym1.2;
+        let __nt = super::__action57::<>(input, __sym0, __sym1);
+        __symbols.push((__start, __Symbol::Variant11(__nt), __end));
+        (2, 10)
     }
     pub(crate) fn __reduce33<
         'input,
@@ -6550,13 +7436,15 @@ mod __parse__InstructionList {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // MDyn = Dyn => ActionFn(40);
-        let __sym0 = __pop_Variant10(__symbols);
+        // Constraint = "r|", ArgVar => ActionFn(58);
+        assert!(__symbols.len() >= 2);
+        let __sym1 = __pop_Variant2(__symbols);
+        let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0;
-        let __end = __sym0.2;
-        let __nt = super::__action40::<>(input, __sym0);
-        __symbols.push((__start, __Symbol::Variant13(__nt), __end));
-        (1, 14)
+        let __end = __sym1.2;
+        let __nt = super::__action58::<>(input, __sym0, __sym1);
+        __symbols.push((__start, __Symbol::Variant11(__nt), __end));
+        (2, 10)
     }
     pub(crate) fn __reduce34<
         'input,
@@ -6567,15 +7455,15 @@ mod __parse__InstructionList {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // MDyn = "list", MDyn => ActionFn(41);
+        // Constraint = "a|", AtomicType => ActionFn(59);
         assert!(__symbols.len() >= 2);
-        let __sym1 = __pop_Variant13(__symbols);
+        let __sym1 = __pop_Variant4(__symbols);
         let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0;
         let __end = __sym1.2;
-        let __nt = super::__action41::<>(input, __sym0, __sym1);
-        __symbols.push((__start, __Symbol::Variant13(__nt), __end));
-        (2, 14)
+        let __nt = super::__action59::<>(input, __sym0, __sym1);
+        __symbols.push((__start, __Symbol::Variant11(__nt), __end));
+        (2, 10)
     }
     pub(crate) fn __reduce35<
         'input,
@@ -6586,16 +7474,13 @@ mod __parse__InstructionList {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // MDyn = "pair", MDyn, MDyn => ActionFn(42);
-        assert!(__symbols.len() >= 3);
-        let __sym2 = __pop_Variant13(__symbols);
-        let __sym1 = __pop_Variant13(__symbols);
+        // Dyn = r#"<[A-Za-z][A-Za-z0-9|+=>]+>"# => ActionFn(63);
         let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0;
-        let __end = __sym2.2;
-        let __nt = super::__action42::<>(input, __sym0, __sym1, __sym2);
-        __symbols.push((__start, __Symbol::Variant13(__nt), __end));
-        (3, 14)
+        let __end = __sym0.2;
+        let __nt = super::__action63::<>(input, __sym0);
+        __symbols.push((__start, __Symbol::Variant12(__nt), __end));
+        (1, 11)
     }
     pub(crate) fn __reduce36<
         'input,
@@ -6606,16 +7491,13 @@ mod __parse__InstructionList {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // MDyn = "lambda", MDyn, MDyn => ActionFn(43);
-        assert!(__symbols.len() >= 3);
-        let __sym2 = __pop_Variant13(__symbols);
-        let __sym1 = __pop_Variant13(__symbols);
+        // Identifier = r#"[A-Za-z][A-Za-z0-9]+"# => ActionFn(64);
         let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0;
-        let __end = __sym2.2;
-        let __nt = super::__action43::<>(input, __sym0, __sym1, __sym2);
-        __symbols.push((__start, __Symbol::Variant13(__nt), __end));
-        (3, 14)
+        let __end = __sym0.2;
+        let __nt = super::__action64::<>(input, __sym0);
+        __symbols.push((__start, __Symbol::Variant12(__nt), __end));
+        (1, 12)
     }
     pub(crate) fn __reduce37<
         'input,
@@ -6626,16 +7508,15 @@ mod __parse__InstructionList {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // MDyn = "(", MDyn, ")" => ActionFn(44);
-        assert!(__symbols.len() >= 3);
-        let __sym2 = __pop_Variant0(__symbols);
-        let __sym1 = __pop_Variant13(__symbols);
-        let __sym0 = __pop_Variant0(__symbols);
+        // Instruction = Identifier, Args => ActionFn(19);
+        assert!(__symbols.len() >= 2);
+        let __sym1 = __pop_Variant3(__symbols);
+        let __sym0 = __pop_Variant12(__symbols);
         let __start = __sym0.0;
-        let __end = __sym2.2;
-        let __nt = super::__action44::<>(input, __sym0, __sym1, __sym2);
+        let __end = __sym1.2;
+        let __nt = super::__action19::<>(input, __sym0, __sym1);
         __symbols.push((__start, __Symbol::Variant13(__nt), __end));
-        (3, 14)
+        (2, 13)
     }
     pub(crate) fn __reduce38<
         'input,
@@ -6646,16 +7527,13 @@ mod __parse__InstructionList {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // MDynList = MDyn, ";", MDynList => ActionFn(37);
-        assert!(__symbols.len() >= 3);
-        let __sym2 = __pop_Variant14(__symbols);
-        let __sym1 = __pop_Variant0(__symbols);
-        let __sym0 = __pop_Variant13(__symbols);
+        // Instruction = Identifier => ActionFn(20);
+        let __sym0 = __pop_Variant12(__symbols);
         let __start = __sym0.0;
-        let __end = __sym2.2;
-        let __nt = super::__action37::<>(input, __sym0, __sym1, __sym2);
-        __symbols.push((__start, __Symbol::Variant14(__nt), __end));
-        (3, 15)
+        let __end = __sym0.2;
+        let __nt = super::__action20::<>(input, __sym0);
+        __symbols.push((__start, __Symbol::Variant13(__nt), __end));
+        (1, 13)
     }
     pub(crate) fn __reduce39<
         'input,
@@ -6666,13 +7544,16 @@ mod __parse__InstructionList {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // MDynList = MDyn => ActionFn(38);
-        let __sym0 = __pop_Variant13(__symbols);
+        // InstructionBlock = "{", InstructionList, "}" => ActionFn(34);
+        assert!(__symbols.len() >= 3);
+        let __sym2 = __pop_Variant0(__symbols);
+        let __sym1 = __pop_Variant14(__symbols);
+        let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0;
-        let __end = __sym0.2;
-        let __nt = super::__action38::<>(input, __sym0);
+        let __end = __sym2.2;
+        let __nt = super::__action34::<>(input, __sym0, __sym1, __sym2);
         __symbols.push((__start, __Symbol::Variant14(__nt), __end));
-        (1, 15)
+        (3, 14)
     }
     pub(crate) fn __reduce40<
         'input,
@@ -6683,13 +7564,13 @@ mod __parse__InstructionList {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // McLitBool = "True" => ActionFn(54);
-        let __sym0 = __pop_Variant0(__symbols);
+        // InstructionList = CompoundInstruction => ActionFn(38);
+        let __sym0 = __pop_Variant9(__symbols);
         let __start = __sym0.0;
         let __end = __sym0.2;
-        let __nt = super::__action54::<>(input, __sym0);
-        __symbols.push((__start, __Symbol::Variant15(__nt), __end));
-        (1, 16)
+        let __nt = super::__action38::<>(input, __sym0);
+        __symbols.push((__start, __Symbol::Variant14(__nt), __end));
+        (1, 15)
     }
     pub(crate) fn __reduce41<
         'input,
@@ -6700,13 +7581,16 @@ mod __parse__InstructionList {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // McLitBool = "False" => ActionFn(55);
-        let __sym0 = __pop_Variant0(__symbols);
+        // InstructionList = CompoundInstruction, ";", InstructionList => ActionFn(39);
+        assert!(__symbols.len() >= 3);
+        let __sym2 = __pop_Variant14(__symbols);
+        let __sym1 = __pop_Variant0(__symbols);
+        let __sym0 = __pop_Variant9(__symbols);
         let __start = __sym0.0;
-        let __end = __sym0.2;
-        let __nt = super::__action55::<>(input, __sym0);
-        __symbols.push((__start, __Symbol::Variant15(__nt), __end));
-        (1, 16)
+        let __end = __sym2.2;
+        let __nt = super::__action39::<>(input, __sym0, __sym1, __sym2);
+        __symbols.push((__start, __Symbol::Variant14(__nt), __end));
+        (3, 15)
     }
     pub(crate) fn __reduce42<
         'input,
@@ -6717,13 +7601,15 @@ mod __parse__InstructionList {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // McLitNumber = r#"([+-]?)[0-9]+"# => ActionFn(57);
-        let __sym0 = __pop_Variant0(__symbols);
+        // InstructionList = CompoundInstruction, ";" => ActionFn(40);
+        assert!(__symbols.len() >= 2);
+        let __sym1 = __pop_Variant0(__symbols);
+        let __sym0 = __pop_Variant9(__symbols);
         let __start = __sym0.0;
-        let __end = __sym0.2;
-        let __nt = super::__action57::<>(input, __sym0);
-        __symbols.push((__start, __Symbol::Variant16(__nt), __end));
-        (1, 17)
+        let __end = __sym1.2;
+        let __nt = super::__action40::<>(input, __sym0, __sym1);
+        __symbols.push((__start, __Symbol::Variant14(__nt), __end));
+        (2, 15)
     }
     pub(crate) fn __reduce43<
         'input,
@@ -6734,13 +7620,13 @@ mod __parse__InstructionList {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // McLitString = r#"\"[a-z0-9]+\""# => ActionFn(56);
-        let __sym0 = __pop_Variant0(__symbols);
+        // MDyn = AtomicType => ActionFn(48);
+        let __sym0 = __pop_Variant4(__symbols);
         let __start = __sym0.0;
         let __end = __sym0.2;
-        let __nt = super::__action56::<>(input, __sym0);
-        __symbols.push((__start, __Symbol::Variant10(__nt), __end));
-        (1, 18)
+        let __nt = super::__action48::<>(input, __sym0);
+        __symbols.push((__start, __Symbol::Variant15(__nt), __end));
+        (1, 16)
     }
     pub(crate) fn __reduce44<
         'input,
@@ -6751,13 +7637,13 @@ mod __parse__InstructionList {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // SomeValue = AtomicValue => ActionFn(16);
-        let __sym0 = __pop_Variant5(__symbols);
+        // MDyn = Dyn => ActionFn(49);
+        let __sym0 = __pop_Variant12(__symbols);
         let __start = __sym0.0;
         let __end = __sym0.2;
-        let __nt = super::__action16::<>(input, __sym0);
-        __symbols.push((__start, __Symbol::Variant17(__nt), __end));
-        (1, 19)
+        let __nt = super::__action49::<>(input, __sym0);
+        __symbols.push((__start, __Symbol::Variant15(__nt), __end));
+        (1, 16)
     }
     pub(crate) fn __reduce45<
         'input,
@@ -6768,13 +7654,15 @@ mod __parse__InstructionList {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // SomeValue = CompositeValue => ActionFn(17);
-        let __sym0 = __pop_Variant6(__symbols);
+        // MDyn = "list", MDyn => ActionFn(50);
+        assert!(__symbols.len() >= 2);
+        let __sym1 = __pop_Variant15(__symbols);
+        let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0;
-        let __end = __sym0.2;
-        let __nt = super::__action17::<>(input, __sym0);
-        __symbols.push((__start, __Symbol::Variant17(__nt), __end));
-        (1, 19)
+        let __end = __sym1.2;
+        let __nt = super::__action50::<>(input, __sym0, __sym1);
+        __symbols.push((__start, __Symbol::Variant15(__nt), __end));
+        (2, 16)
     }
     pub(crate) fn __reduce46<
         'input,
@@ -6785,16 +7673,16 @@ mod __parse__InstructionList {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // SomeValue = "(", SomeValue, ")" => ActionFn(18);
+        // MDyn = "pair", MDyn, MDyn => ActionFn(51);
         assert!(__symbols.len() >= 3);
-        let __sym2 = __pop_Variant0(__symbols);
-        let __sym1 = __pop_Variant17(__symbols);
+        let __sym2 = __pop_Variant15(__symbols);
+        let __sym1 = __pop_Variant15(__symbols);
         let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0;
         let __end = __sym2.2;
-        let __nt = super::__action18::<>(input, __sym0, __sym1, __sym2);
-        __symbols.push((__start, __Symbol::Variant17(__nt), __end));
-        (3, 19)
+        let __nt = super::__action51::<>(input, __sym0, __sym1, __sym2);
+        __symbols.push((__start, __Symbol::Variant15(__nt), __end));
+        (3, 16)
     }
     pub(crate) fn __reduce47<
         'input,
@@ -6805,13 +7693,16 @@ mod __parse__InstructionList {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // SomeValueList = SomeValue => ActionFn(26);
-        let __sym0 = __pop_Variant17(__symbols);
+        // MDyn = "lambda", MDyn, MDyn => ActionFn(52);
+        assert!(__symbols.len() >= 3);
+        let __sym2 = __pop_Variant15(__symbols);
+        let __sym1 = __pop_Variant15(__symbols);
+        let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0;
-        let __end = __sym0.2;
-        let __nt = super::__action26::<>(input, __sym0);
-        __symbols.push((__start, __Symbol::Variant18(__nt), __end));
-        (1, 20)
+        let __end = __sym2.2;
+        let __nt = super::__action52::<>(input, __sym0, __sym1, __sym2);
+        __symbols.push((__start, __Symbol::Variant15(__nt), __end));
+        (3, 16)
     }
     pub(crate) fn __reduce48<
         'input,
@@ -6822,16 +7713,16 @@ mod __parse__InstructionList {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // SomeValueList = SomeValue, ";", SomeValueList => ActionFn(27);
+        // MDyn = "(", MDyn, ")" => ActionFn(53);
         assert!(__symbols.len() >= 3);
-        let __sym2 = __pop_Variant18(__symbols);
-        let __sym1 = __pop_Variant0(__symbols);
-        let __sym0 = __pop_Variant17(__symbols);
+        let __sym2 = __pop_Variant0(__symbols);
+        let __sym1 = __pop_Variant15(__symbols);
+        let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0;
         let __end = __sym2.2;
-        let __nt = super::__action27::<>(input, __sym0, __sym1, __sym2);
-        __symbols.push((__start, __Symbol::Variant18(__nt), __end));
-        (3, 20)
+        let __nt = super::__action53::<>(input, __sym0, __sym1, __sym2);
+        __symbols.push((__start, __Symbol::Variant15(__nt), __end));
+        (3, 16)
     }
     pub(crate) fn __reduce49<
         'input,
@@ -6842,15 +7733,16 @@ mod __parse__InstructionList {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // SomeValueList = SomeValue, ";" => ActionFn(28);
-        assert!(__symbols.len() >= 2);
+        // MDynList = MDyn, ";", MDynList => ActionFn(46);
+        assert!(__symbols.len() >= 3);
+        let __sym2 = __pop_Variant16(__symbols);
         let __sym1 = __pop_Variant0(__symbols);
-        let __sym0 = __pop_Variant17(__symbols);
+        let __sym0 = __pop_Variant15(__symbols);
         let __start = __sym0.0;
-        let __end = __sym1.2;
-        let __nt = super::__action28::<>(input, __sym0, __sym1);
-        __symbols.push((__start, __Symbol::Variant18(__nt), __end));
-        (2, 20)
+        let __end = __sym2.2;
+        let __nt = super::__action46::<>(input, __sym0, __sym1, __sym2);
+        __symbols.push((__start, __Symbol::Variant16(__nt), __end));
+        (3, 17)
     }
     pub(crate) fn __reduce50<
         'input,
@@ -6861,15 +7753,13 @@ mod __parse__InstructionList {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // StackResultElem = "r|", ArgVar => ActionFn(49);
-        assert!(__symbols.len() >= 2);
-        let __sym1 = __pop_Variant2(__symbols);
-        let __sym0 = __pop_Variant0(__symbols);
+        // MDynList = MDyn => ActionFn(47);
+        let __sym0 = __pop_Variant15(__symbols);
         let __start = __sym0.0;
-        let __end = __sym1.2;
-        let __nt = super::__action49::<>(input, __sym0, __sym1);
-        __symbols.push((__start, __Symbol::Variant19(__nt), __end));
-        (2, 21)
+        let __end = __sym0.2;
+        let __nt = super::__action47::<>(input, __sym0);
+        __symbols.push((__start, __Symbol::Variant16(__nt), __end));
+        (1, 17)
     }
     pub(crate) fn __reduce51<
         'input,
@@ -6880,15 +7770,13 @@ mod __parse__InstructionList {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // StackResultElem = "a|", AtomicType => ActionFn(50);
-        assert!(__symbols.len() >= 2);
-        let __sym1 = __pop_Variant4(__symbols);
+        // McLitBool = "True" => ActionFn(65);
         let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0;
-        let __end = __sym1.2;
-        let __nt = super::__action50::<>(input, __sym0, __sym1);
-        __symbols.push((__start, __Symbol::Variant19(__nt), __end));
-        (2, 21)
+        let __end = __sym0.2;
+        let __nt = super::__action65::<>(input, __sym0);
+        __symbols.push((__start, __Symbol::Variant17(__nt), __end));
+        (1, 18)
     }
     pub(crate) fn __reduce52<
         'input,
@@ -6899,13 +7787,13 @@ mod __parse__InstructionList {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // __ConcreteType = ConcreteType => ActionFn(1);
-        let __sym0 = __pop_Variant8(__symbols);
+        // McLitBool = "False" => ActionFn(66);
+        let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0;
         let __end = __sym0.2;
-        let __nt = super::__action1::<>(input, __sym0);
-        __symbols.push((__start, __Symbol::Variant8(__nt), __end));
-        (1, 22)
+        let __nt = super::__action66::<>(input, __sym0);
+        __symbols.push((__start, __Symbol::Variant17(__nt), __end));
+        (1, 18)
     }
     pub(crate) fn __reduce53<
         'input,
@@ -6916,13 +7804,30 @@ mod __parse__InstructionList {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // __Constraint = Constraint => ActionFn(4);
-        let __sym0 = __pop_Variant9(__symbols);
+        // McLitNumber = r#"([+-]?)[0-9]+"# => ActionFn(68);
+        let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0;
         let __end = __sym0.2;
-        let __nt = super::__action4::<>(input, __sym0);
-        __symbols.push((__start, __Symbol::Variant9(__nt), __end));
-        (1, 23)
+        let __nt = super::__action68::<>(input, __sym0);
+        __symbols.push((__start, __Symbol::Variant18(__nt), __end));
+        (1, 19)
+    }
+    pub(crate) fn __reduce54<
+        'input,
+    >(
+        input: &'input str,
+        __lookahead_start: Option<&usize>,
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
+        _: core::marker::PhantomData<(&'input ())>,
+    ) -> (usize, usize)
+    {
+        // McLitString = r#"\"[a-z0-9]+\""# => ActionFn(67);
+        let __sym0 = __pop_Variant0(__symbols);
+        let __start = __sym0.0;
+        let __end = __sym0.2;
+        let __nt = super::__action67::<>(input, __sym0);
+        __symbols.push((__start, __Symbol::Variant12(__nt), __end));
+        (1, 20)
     }
     pub(crate) fn __reduce55<
         'input,
@@ -6933,13 +7838,13 @@ mod __parse__InstructionList {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // __MDyn = MDyn => ActionFn(3);
-        let __sym0 = __pop_Variant13(__symbols);
+        // SomeValue = AtomicValue => ActionFn(25);
+        let __sym0 = __pop_Variant5(__symbols);
         let __start = __sym0.0;
         let __end = __sym0.2;
-        let __nt = super::__action3::<>(input, __sym0);
-        __symbols.push((__start, __Symbol::Variant13(__nt), __end));
-        (1, 25)
+        let __nt = super::__action25::<>(input, __sym0);
+        __symbols.push((__start, __Symbol::Variant19(__nt), __end));
+        (1, 21)
     }
     pub(crate) fn __reduce56<
         'input,
@@ -6950,13 +7855,13 @@ mod __parse__InstructionList {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // __MDynList = MDynList => ActionFn(2);
-        let __sym0 = __pop_Variant14(__symbols);
+        // SomeValue = CompositeValue => ActionFn(26);
+        let __sym0 = __pop_Variant8(__symbols);
         let __start = __sym0.0;
         let __end = __sym0.2;
-        let __nt = super::__action2::<>(input, __sym0);
-        __symbols.push((__start, __Symbol::Variant14(__nt), __end));
-        (1, 26)
+        let __nt = super::__action26::<>(input, __sym0);
+        __symbols.push((__start, __Symbol::Variant19(__nt), __end));
+        (1, 21)
     }
     pub(crate) fn __reduce57<
         'input,
@@ -6967,13 +7872,195 @@ mod __parse__InstructionList {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // __StackResultElem = StackResultElem => ActionFn(5);
+        // SomeValue = "(", SomeValue, ")" => ActionFn(27);
+        assert!(__symbols.len() >= 3);
+        let __sym2 = __pop_Variant0(__symbols);
+        let __sym1 = __pop_Variant19(__symbols);
+        let __sym0 = __pop_Variant0(__symbols);
+        let __start = __sym0.0;
+        let __end = __sym2.2;
+        let __nt = super::__action27::<>(input, __sym0, __sym1, __sym2);
+        __symbols.push((__start, __Symbol::Variant19(__nt), __end));
+        (3, 21)
+    }
+    pub(crate) fn __reduce58<
+        'input,
+    >(
+        input: &'input str,
+        __lookahead_start: Option<&usize>,
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
+        _: core::marker::PhantomData<(&'input ())>,
+    ) -> (usize, usize)
+    {
+        // SomeValueList = SomeValue => ActionFn(35);
         let __sym0 = __pop_Variant19(__symbols);
         let __start = __sym0.0;
         let __end = __sym0.2;
-        let __nt = super::__action5::<>(input, __sym0);
-        __symbols.push((__start, __Symbol::Variant19(__nt), __end));
+        let __nt = super::__action35::<>(input, __sym0);
+        __symbols.push((__start, __Symbol::Variant20(__nt), __end));
+        (1, 22)
+    }
+    pub(crate) fn __reduce59<
+        'input,
+    >(
+        input: &'input str,
+        __lookahead_start: Option<&usize>,
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
+        _: core::marker::PhantomData<(&'input ())>,
+    ) -> (usize, usize)
+    {
+        // SomeValueList = SomeValue, ";", SomeValueList => ActionFn(36);
+        assert!(__symbols.len() >= 3);
+        let __sym2 = __pop_Variant20(__symbols);
+        let __sym1 = __pop_Variant0(__symbols);
+        let __sym0 = __pop_Variant19(__symbols);
+        let __start = __sym0.0;
+        let __end = __sym2.2;
+        let __nt = super::__action36::<>(input, __sym0, __sym1, __sym2);
+        __symbols.push((__start, __Symbol::Variant20(__nt), __end));
+        (3, 22)
+    }
+    pub(crate) fn __reduce60<
+        'input,
+    >(
+        input: &'input str,
+        __lookahead_start: Option<&usize>,
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
+        _: core::marker::PhantomData<(&'input ())>,
+    ) -> (usize, usize)
+    {
+        // SomeValueList = SomeValue, ";" => ActionFn(37);
+        assert!(__symbols.len() >= 2);
+        let __sym1 = __pop_Variant0(__symbols);
+        let __sym0 = __pop_Variant19(__symbols);
+        let __start = __sym0.0;
+        let __end = __sym1.2;
+        let __nt = super::__action37::<>(input, __sym0, __sym1);
+        __symbols.push((__start, __Symbol::Variant20(__nt), __end));
+        (2, 22)
+    }
+    pub(crate) fn __reduce61<
+        'input,
+    >(
+        input: &'input str,
+        __lookahead_start: Option<&usize>,
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
+        _: core::marker::PhantomData<(&'input ())>,
+    ) -> (usize, usize)
+    {
+        // StackResultElem = "r|", ArgVar => ActionFn(60);
+        assert!(__symbols.len() >= 2);
+        let __sym1 = __pop_Variant2(__symbols);
+        let __sym0 = __pop_Variant0(__symbols);
+        let __start = __sym0.0;
+        let __end = __sym1.2;
+        let __nt = super::__action60::<>(input, __sym0, __sym1);
+        __symbols.push((__start, __Symbol::Variant21(__nt), __end));
+        (2, 23)
+    }
+    pub(crate) fn __reduce62<
+        'input,
+    >(
+        input: &'input str,
+        __lookahead_start: Option<&usize>,
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
+        _: core::marker::PhantomData<(&'input ())>,
+    ) -> (usize, usize)
+    {
+        // StackResultElem = "a|", AtomicType => ActionFn(61);
+        assert!(__symbols.len() >= 2);
+        let __sym1 = __pop_Variant4(__symbols);
+        let __sym0 = __pop_Variant0(__symbols);
+        let __start = __sym0.0;
+        let __end = __sym1.2;
+        let __nt = super::__action61::<>(input, __sym0, __sym1);
+        __symbols.push((__start, __Symbol::Variant21(__nt), __end));
+        (2, 23)
+    }
+    pub(crate) fn __reduce63<
+        'input,
+    >(
+        input: &'input str,
+        __lookahead_start: Option<&usize>,
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
+        _: core::marker::PhantomData<(&'input ())>,
+    ) -> (usize, usize)
+    {
+        // __ConcreteType = ConcreteType => ActionFn(1);
+        let __sym0 = __pop_Variant10(__symbols);
+        let __start = __sym0.0;
+        let __end = __sym0.2;
+        let __nt = super::__action1::<>(input, __sym0);
+        __symbols.push((__start, __Symbol::Variant10(__nt), __end));
+        (1, 24)
+    }
+    pub(crate) fn __reduce64<
+        'input,
+    >(
+        input: &'input str,
+        __lookahead_start: Option<&usize>,
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
+        _: core::marker::PhantomData<(&'input ())>,
+    ) -> (usize, usize)
+    {
+        // __Constraint = Constraint => ActionFn(4);
+        let __sym0 = __pop_Variant11(__symbols);
+        let __start = __sym0.0;
+        let __end = __sym0.2;
+        let __nt = super::__action4::<>(input, __sym0);
+        __symbols.push((__start, __Symbol::Variant11(__nt), __end));
+        (1, 25)
+    }
+    pub(crate) fn __reduce66<
+        'input,
+    >(
+        input: &'input str,
+        __lookahead_start: Option<&usize>,
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
+        _: core::marker::PhantomData<(&'input ())>,
+    ) -> (usize, usize)
+    {
+        // __MDyn = MDyn => ActionFn(3);
+        let __sym0 = __pop_Variant15(__symbols);
+        let __start = __sym0.0;
+        let __end = __sym0.2;
+        let __nt = super::__action3::<>(input, __sym0);
+        __symbols.push((__start, __Symbol::Variant15(__nt), __end));
         (1, 27)
+    }
+    pub(crate) fn __reduce67<
+        'input,
+    >(
+        input: &'input str,
+        __lookahead_start: Option<&usize>,
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
+        _: core::marker::PhantomData<(&'input ())>,
+    ) -> (usize, usize)
+    {
+        // __MDynList = MDynList => ActionFn(2);
+        let __sym0 = __pop_Variant16(__symbols);
+        let __start = __sym0.0;
+        let __end = __sym0.2;
+        let __nt = super::__action2::<>(input, __sym0);
+        __symbols.push((__start, __Symbol::Variant16(__nt), __end));
+        (1, 28)
+    }
+    pub(crate) fn __reduce68<
+        'input,
+    >(
+        input: &'input str,
+        __lookahead_start: Option<&usize>,
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
+        _: core::marker::PhantomData<(&'input ())>,
+    ) -> (usize, usize)
+    {
+        // __StackResultElem = StackResultElem => ActionFn(5);
+        let __sym0 = __pop_Variant21(__symbols);
+        let __start = __sym0.0;
+        let __end = __sym0.2;
+        let __nt = super::__action5::<>(input, __sym0);
+        __symbols.push((__start, __Symbol::Variant21(__nt), __end));
+        (1, 29)
     }
 }
 pub use self::__parse__InstructionList::InstructionListParser;
@@ -7005,6 +8092,8 @@ mod __parse__MDyn {
     use crate::types::StackResultElem;
     use crate::types::StackResultElem::*;
     use crate::types::CompoundInstruction;
+    use crate::types::Attribute;
+    use crate::types::Attribute::*;
     #[allow(unused_extern_crates)]
     extern crate lalrpop_util as __lalrpop_util;
     #[allow(unused_imports)]
@@ -7021,65 +8110,67 @@ mod __parse__MDyn {
         Variant3(Vec<ArgValue<SomeValue>>),
         Variant4(MAtomic),
         Variant5(AtomicValue),
-        Variant6(CompositeValue),
-        Variant7(CompoundInstruction<SomeValue>),
-        Variant8(ConcreteType),
-        Variant9(ArgConstraint),
-        Variant10(String),
-        Variant11(Instruction<SomeValue>),
-        Variant12(Vec<CompoundInstruction<SomeValue>>),
-        Variant13(MType<DynMType>),
-        Variant14(Vec<MType<DynMType>>),
-        Variant15(bool),
-        Variant16(i32),
-        Variant17(SomeValue),
-        Variant18(Vec<SomeValue>),
-        Variant19(StackResultElem),
+        Variant6(Attribute),
+        Variant7(Vec<Attribute>),
+        Variant8(CompositeValue),
+        Variant9(CompoundInstruction<SomeValue>),
+        Variant10(ConcreteType),
+        Variant11(ArgConstraint),
+        Variant12(String),
+        Variant13(Instruction<SomeValue>),
+        Variant14(Vec<CompoundInstruction<SomeValue>>),
+        Variant15(MType<DynMType>),
+        Variant16(Vec<MType<DynMType>>),
+        Variant17(bool),
+        Variant18(i32),
+        Variant19(SomeValue),
+        Variant20(Vec<SomeValue>),
+        Variant21(StackResultElem),
     }
     const __ACTION: &[i8] = &[
         // State 0
-        2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 11, 12, 3, 4, 13, 5, 0, 14, 0, 0, 0, 0, 0, 0, 15, 0, 0,
+        2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 11, 0, 0, 12, 3, 4, 13, 0, 5, 0, 0, 0, 0, 14, 0, 0, 0, 0, 0, 0, 15, 0, 0,
         // State 1
-        2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 11, 12, 3, 4, 13, 5, 0, 14, 0, 0, 0, 0, 0, 0, 15, 0, 0,
+        2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 11, 0, 0, 12, 3, 4, 13, 0, 5, 0, 0, 0, 0, 14, 0, 0, 0, 0, 0, 0, 15, 0, 0,
         // State 2
-        2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 11, 12, 3, 4, 13, 5, 0, 14, 0, 0, 0, 0, 0, 0, 15, 0, 0,
+        2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 11, 0, 0, 12, 3, 4, 13, 0, 5, 0, 0, 0, 0, 14, 0, 0, 0, 0, 0, 0, 15, 0, 0,
         // State 3
-        2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 11, 12, 3, 4, 13, 5, 0, 14, 0, 0, 0, 0, 0, 0, 15, 0, 0,
+        2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 11, 0, 0, 12, 3, 4, 13, 0, 5, 0, 0, 0, 0, 14, 0, 0, 0, 0, 0, 0, 15, 0, 0,
         // State 4
-        2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 11, 12, 3, 4, 13, 5, 0, 14, 0, 0, 0, 0, 0, 0, 15, 0, 0,
+        2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 11, 0, 0, 12, 3, 4, 13, 0, 5, 0, 0, 0, 0, 14, 0, 0, 0, 0, 0, 0, 15, 0, 0,
         // State 5
-        2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 11, 12, 3, 4, 13, 5, 0, 14, 0, 0, 0, 0, 0, 0, 15, 0, 0,
+        2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 11, 0, 0, 12, 3, 4, 13, 0, 5, 0, 0, 0, 0, 14, 0, 0, 0, 0, 0, 0, 15, 0, 0,
         // State 6
-        2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 11, 12, 3, 4, 13, 5, 0, 14, 0, 0, 0, 0, 0, 0, 15, 0, 0,
+        2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 11, 0, 0, 12, 3, 4, 13, 0, 5, 0, 0, 0, 0, 14, 0, 0, 0, 0, 0, 0, 15, 0, 0,
         // State 7
-        -33, -33, 0, 0, 0, 0, 0, 0, 0, 0, -33, -33, -33, -33, -33, -33, 0, -33, 0, 0, 0, 0, 0, 0, -33, 0, 0,
+        -44, -44, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -44, 0, 0, -44, -44, -44, -44, 0, -44, 0, 0, 0, 0, -44, 0, 0, 0, 0, 0, 0, -44, 0, 0,
         // State 8
-        -34, -34, 0, 0, 0, 0, 0, 0, 0, 0, -34, -34, -34, -34, -34, -34, 0, -34, 0, 0, 0, 0, 0, 0, -34, 0, 0,
+        -45, -45, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -45, 0, 0, -45, -45, -45, -45, 0, -45, 0, 0, 0, 0, -45, 0, 0, 0, 0, 0, 0, -45, 0, 0,
         // State 9
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         // State 10
-        -9, -9, 0, 0, 0, 0, 0, 0, 0, 0, -9, -9, -9, -9, -9, -9, 0, -9, 0, 0, 0, 0, 0, 0, -9, 0, 0,
+        -9, -9, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -9, 0, 0, -9, -9, -9, -9, 0, -9, 0, 0, 0, 0, -9, 0, 0, 0, 0, 0, 0, -9, 0, 0,
         // State 11
-        -6, -6, 0, 0, 0, 0, 0, 0, 0, 0, -6, -6, -6, -6, -6, -6, 0, -6, 0, 0, 0, 0, 0, 0, -6, 0, 0,
+        -6, -6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -6, 0, 0, -6, -6, -6, -6, 0, -6, 0, 0, 0, 0, -6, 0, 0, 0, 0, 0, 0, -6, 0, 0,
         // State 12
-        -7, -7, 0, 0, 0, 0, 0, 0, 0, 0, -7, -7, -7, -7, -7, -7, 0, -7, 0, 0, 0, 0, 0, 0, -7, 0, 0,
+        -7, -7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -7, 0, 0, -7, -7, -7, -7, 0, -7, 0, 0, 0, 0, -7, 0, 0, 0, 0, 0, 0, -7, 0, 0,
         // State 13
-        -8, -8, 0, 0, 0, 0, 0, 0, 0, 0, -8, -8, -8, -8, -8, -8, 0, -8, 0, 0, 0, 0, 0, 0, -8, 0, 0,
+        -8, -8, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -8, 0, 0, -8, -8, -8, -8, 0, -8, 0, 0, 0, 0, -8, 0, 0, 0, 0, 0, 0, -8, 0, 0,
         // State 14
-        -25, -25, 0, 0, 0, 0, 0, 0, 0, 0, -25, -25, -25, -25, -25, -25, 0, -25, 0, 0, 0, 0, 0, 0, -25, 0, 0,
+        -36, -36, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -36, 0, 0, -36, -36, -36, -36, 0, -36, 0, 0, 0, 0, -36, 0, 0, 0, 0, 0, 0, -36, 0, 0,
         // State 15
-        0, 18, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 18, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         // State 16
-        -35, -35, 0, 0, 0, 0, 0, 0, 0, 0, -35, -35, -35, -35, -35, -35, 0, -35, 0, 0, 0, 0, 0, 0, -35, 0, 0,
+        -46, -46, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -46, 0, 0, -46, -46, -46, -46, 0, -46, 0, 0, 0, 0, -46, 0, 0, 0, 0, 0, 0, -46, 0, 0,
         // State 17
-        -38, -38, 0, 0, 0, 0, 0, 0, 0, 0, -38, -38, -38, -38, -38, -38, 0, -38, 0, 0, 0, 0, 0, 0, -38, 0, 0,
+        -49, -49, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -49, 0, 0, -49, -49, -49, -49, 0, -49, 0, 0, 0, 0, -49, 0, 0, 0, 0, 0, 0, -49, 0, 0,
         // State 18
-        -37, -37, 0, 0, 0, 0, 0, 0, 0, 0, -37, -37, -37, -37, -37, -37, 0, -37, 0, 0, 0, 0, 0, 0, -37, 0, 0,
+        -48, -48, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -48, 0, 0, -48, -48, -48, -48, 0, -48, 0, 0, 0, 0, -48, 0, 0, 0, 0, 0, 0, -48, 0, 0,
         // State 19
-        -36, -36, 0, 0, 0, 0, 0, 0, 0, 0, -36, -36, -36, -36, -36, -36, 0, -36, 0, 0, 0, 0, 0, 0, -36, 0, 0,
+        -47, -47, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -47, 0, 0, -47, -47, -47, -47, 0, -47, 0, 0, 0, 0, -47, 0, 0, 0, 0, 0, 0, -47, 0, 0,
     ];
     fn __action(state: i8, integer: usize) -> i8 {
-        __ACTION[(state as usize) * 27 + integer]
+        __ACTION[(state as usize) * 36 + integer]
     }
     const __EOF_ACTION: &[i8] = &[
         // State 0
@@ -7097,11 +8188,11 @@ mod __parse__MDyn {
         // State 6
         0,
         // State 7
-        -33,
+        -44,
         // State 8
-        -34,
+        -45,
         // State 9
-        -56,
+        -67,
         // State 10
         -9,
         // State 11
@@ -7111,23 +8202,23 @@ mod __parse__MDyn {
         // State 13
         -8,
         // State 14
-        -25,
+        -36,
         // State 15
         0,
         // State 16
-        -35,
+        -46,
         // State 17
-        -38,
+        -49,
         // State 18
-        -37,
+        -48,
         // State 19
-        -36,
+        -47,
     ];
     fn __goto(state: i8, nt: usize) -> i8 {
         match nt {
             3 => 7,
-            9 => 8,
-            14 => match state {
+            11 => 8,
+            16 => match state {
                 4 => 6,
                 0 => 9,
                 1 => 15,
@@ -7142,7 +8233,9 @@ mod __parse__MDyn {
     const __TERMINAL: &[&str] = &[
         r###""(""###,
         r###"")""###,
+        r###""+""###,
         r###"";""###,
+        r###""=>""###,
         r###""DIP""###,
         r###""False""###,
         r###""IF""###,
@@ -7150,13 +8243,20 @@ mod __parse__MDyn {
         r###""Pair""###,
         r###""True""###,
         r###""a|""###,
+        r###""bigmapvalue""###,
         r###""bool""###,
+        r###""comparable""###,
+        r###""duplicable""###,
         r###""int""###,
         r###""lambda""###,
         r###""list""###,
         r###""nat""###,
+        r###""packable""###,
         r###""pair""###,
+        r###""passable""###,
+        r###""pushable""###,
         r###""r|""###,
+        r###""storable""###,
         r###""string""###,
         r###""t|""###,
         r###""w|""###,
@@ -7164,7 +8264,7 @@ mod __parse__MDyn {
         r###""}""###,
         r###"r#"\"[a-z0-9]+\""#"###,
         r###"r#"([+-]?)[0-9]+"#"###,
-        r###"r#"<[A-Za-z][A-Za-z0-9|]+>"#"###,
+        r###"r#"<[A-Za-z][A-Za-z0-9|+=>]+>"#"###,
         r###"r#"[A-Za-z][A-Za-z0-9]+"#"###,
         r###"r#"[a-z]"#"###,
     ];
@@ -7235,7 +8335,7 @@ mod __parse__MDyn {
 
         #[inline]
         fn error_action(&self, state: i8) -> i8 {
-            __action(state, 27 - 1)
+            __action(state, 36 - 1)
         }
 
         #[inline]
@@ -7324,11 +8424,20 @@ mod __parse__MDyn {
             Token(24, _) if true => Some(19),
             Token(25, _) if true => Some(20),
             Token(26, _) if true => Some(21),
-            Token(0, _) if true => Some(22),
-            Token(1, _) if true => Some(23),
-            Token(2, _) if true => Some(24),
-            Token(3, _) if true => Some(25),
-            Token(4, _) if true => Some(26),
+            Token(27, _) if true => Some(22),
+            Token(28, _) if true => Some(23),
+            Token(29, _) if true => Some(24),
+            Token(30, _) if true => Some(25),
+            Token(31, _) if true => Some(26),
+            Token(32, _) if true => Some(27),
+            Token(33, _) if true => Some(28),
+            Token(34, _) if true => Some(29),
+            Token(35, _) if true => Some(30),
+            Token(0, _) if true => Some(31),
+            Token(1, _) if true => Some(32),
+            Token(2, _) if true => Some(33),
+            Token(3, _) if true => Some(34),
+            Token(4, _) if true => Some(35),
             _ => None,
         }
     }
@@ -7341,8 +8450,8 @@ mod __parse__MDyn {
     ) -> __Symbol<'input>
     {
         match __token_index {
-            0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13 | 14 | 15 | 16 | 17 | 18 | 19 | 20 | 21 | 22 | 23 | 24 | 25 | 26 => match __token {
-                Token(5, __tok0) | Token(6, __tok0) | Token(7, __tok0) | Token(8, __tok0) | Token(9, __tok0) | Token(10, __tok0) | Token(11, __tok0) | Token(12, __tok0) | Token(13, __tok0) | Token(14, __tok0) | Token(15, __tok0) | Token(16, __tok0) | Token(17, __tok0) | Token(18, __tok0) | Token(19, __tok0) | Token(20, __tok0) | Token(21, __tok0) | Token(22, __tok0) | Token(23, __tok0) | Token(24, __tok0) | Token(25, __tok0) | Token(26, __tok0) | Token(0, __tok0) | Token(1, __tok0) | Token(2, __tok0) | Token(3, __tok0) | Token(4, __tok0) if true => __Symbol::Variant0(__tok0),
+            0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13 | 14 | 15 | 16 | 17 | 18 | 19 | 20 | 21 | 22 | 23 | 24 | 25 | 26 | 27 | 28 | 29 | 30 | 31 | 32 | 33 | 34 | 35 => match __token {
+                Token(5, __tok0) | Token(6, __tok0) | Token(7, __tok0) | Token(8, __tok0) | Token(9, __tok0) | Token(10, __tok0) | Token(11, __tok0) | Token(12, __tok0) | Token(13, __tok0) | Token(14, __tok0) | Token(15, __tok0) | Token(16, __tok0) | Token(17, __tok0) | Token(18, __tok0) | Token(19, __tok0) | Token(20, __tok0) | Token(21, __tok0) | Token(22, __tok0) | Token(23, __tok0) | Token(24, __tok0) | Token(25, __tok0) | Token(26, __tok0) | Token(27, __tok0) | Token(28, __tok0) | Token(29, __tok0) | Token(30, __tok0) | Token(31, __tok0) | Token(32, __tok0) | Token(33, __tok0) | Token(34, __tok0) | Token(35, __tok0) | Token(0, __tok0) | Token(1, __tok0) | Token(2, __tok0) | Token(3, __tok0) | Token(4, __tok0) if true => __Symbol::Variant0(__tok0),
                 _ => unreachable!(),
             },
             _ => unreachable!(),
@@ -7430,13 +8539,13 @@ mod __parse__MDyn {
             }
             12 => {
                 __state_machine::SimulatedReduce::Reduce {
-                    states_to_pop: 3,
+                    states_to_pop: 1,
                     nonterminal_produced: 5,
                 }
             }
             13 => {
                 __state_machine::SimulatedReduce::Reduce {
-                    states_to_pop: 3,
+                    states_to_pop: 1,
                     nonterminal_produced: 5,
                 }
             }
@@ -7448,255 +8557,321 @@ mod __parse__MDyn {
             }
             15 => {
                 __state_machine::SimulatedReduce::Reduce {
-                    states_to_pop: 3,
-                    nonterminal_produced: 6,
+                    states_to_pop: 1,
+                    nonterminal_produced: 5,
                 }
             }
             16 => {
                 __state_machine::SimulatedReduce::Reduce {
-                    states_to_pop: 2,
-                    nonterminal_produced: 6,
+                    states_to_pop: 1,
+                    nonterminal_produced: 5,
                 }
             }
             17 => {
                 __state_machine::SimulatedReduce::Reduce {
-                    states_to_pop: 4,
-                    nonterminal_produced: 6,
+                    states_to_pop: 1,
+                    nonterminal_produced: 5,
                 }
             }
             18 => {
                 __state_machine::SimulatedReduce::Reduce {
                     states_to_pop: 1,
-                    nonterminal_produced: 6,
+                    nonterminal_produced: 5,
                 }
             }
             19 => {
+                __state_machine::SimulatedReduce::Reduce {
+                    states_to_pop: 3,
+                    nonterminal_produced: 6,
+                }
+            }
+            20 => {
+                __state_machine::SimulatedReduce::Reduce {
+                    states_to_pop: 1,
+                    nonterminal_produced: 6,
+                }
+            }
+            21 => {
+                __state_machine::SimulatedReduce::Reduce {
+                    states_to_pop: 3,
+                    nonterminal_produced: 7,
+                }
+            }
+            22 => {
+                __state_machine::SimulatedReduce::Reduce {
+                    states_to_pop: 3,
+                    nonterminal_produced: 7,
+                }
+            }
+            23 => {
                 __state_machine::SimulatedReduce::Reduce {
                     states_to_pop: 1,
                     nonterminal_produced: 7,
                 }
             }
-            20 => {
-                __state_machine::SimulatedReduce::Reduce {
-                    states_to_pop: 2,
-                    nonterminal_produced: 8,
-                }
-            }
-            21 => {
-                __state_machine::SimulatedReduce::Reduce {
-                    states_to_pop: 2,
-                    nonterminal_produced: 8,
-                }
-            }
-            22 => {
-                __state_machine::SimulatedReduce::Reduce {
-                    states_to_pop: 2,
-                    nonterminal_produced: 8,
-                }
-            }
-            23 => {
-                __state_machine::SimulatedReduce::Reduce {
-                    states_to_pop: 2,
-                    nonterminal_produced: 8,
-                }
-            }
             24 => {
                 __state_machine::SimulatedReduce::Reduce {
-                    states_to_pop: 1,
-                    nonterminal_produced: 9,
+                    states_to_pop: 3,
+                    nonterminal_produced: 8,
                 }
             }
             25 => {
                 __state_machine::SimulatedReduce::Reduce {
-                    states_to_pop: 1,
-                    nonterminal_produced: 10,
+                    states_to_pop: 2,
+                    nonterminal_produced: 8,
                 }
             }
             26 => {
                 __state_machine::SimulatedReduce::Reduce {
-                    states_to_pop: 2,
-                    nonterminal_produced: 11,
+                    states_to_pop: 4,
+                    nonterminal_produced: 8,
                 }
             }
             27 => {
                 __state_machine::SimulatedReduce::Reduce {
                     states_to_pop: 1,
-                    nonterminal_produced: 11,
+                    nonterminal_produced: 8,
                 }
             }
             28 => {
                 __state_machine::SimulatedReduce::Reduce {
-                    states_to_pop: 3,
-                    nonterminal_produced: 12,
+                    states_to_pop: 1,
+                    nonterminal_produced: 9,
                 }
             }
             29 => {
                 __state_machine::SimulatedReduce::Reduce {
-                    states_to_pop: 1,
-                    nonterminal_produced: 13,
+                    states_to_pop: 4,
+                    nonterminal_produced: 10,
                 }
             }
             30 => {
                 __state_machine::SimulatedReduce::Reduce {
-                    states_to_pop: 3,
-                    nonterminal_produced: 13,
+                    states_to_pop: 2,
+                    nonterminal_produced: 10,
                 }
             }
             31 => {
                 __state_machine::SimulatedReduce::Reduce {
-                    states_to_pop: 2,
-                    nonterminal_produced: 13,
+                    states_to_pop: 4,
+                    nonterminal_produced: 10,
                 }
             }
             32 => {
                 __state_machine::SimulatedReduce::Reduce {
-                    states_to_pop: 1,
-                    nonterminal_produced: 14,
+                    states_to_pop: 2,
+                    nonterminal_produced: 10,
                 }
             }
             33 => {
                 __state_machine::SimulatedReduce::Reduce {
-                    states_to_pop: 1,
-                    nonterminal_produced: 14,
+                    states_to_pop: 2,
+                    nonterminal_produced: 10,
                 }
             }
             34 => {
                 __state_machine::SimulatedReduce::Reduce {
                     states_to_pop: 2,
-                    nonterminal_produced: 14,
+                    nonterminal_produced: 10,
                 }
             }
             35 => {
                 __state_machine::SimulatedReduce::Reduce {
-                    states_to_pop: 3,
-                    nonterminal_produced: 14,
+                    states_to_pop: 1,
+                    nonterminal_produced: 11,
                 }
             }
             36 => {
                 __state_machine::SimulatedReduce::Reduce {
-                    states_to_pop: 3,
-                    nonterminal_produced: 14,
+                    states_to_pop: 1,
+                    nonterminal_produced: 12,
                 }
             }
             37 => {
                 __state_machine::SimulatedReduce::Reduce {
-                    states_to_pop: 3,
-                    nonterminal_produced: 14,
+                    states_to_pop: 2,
+                    nonterminal_produced: 13,
                 }
             }
             38 => {
                 __state_machine::SimulatedReduce::Reduce {
-                    states_to_pop: 3,
-                    nonterminal_produced: 15,
+                    states_to_pop: 1,
+                    nonterminal_produced: 13,
                 }
             }
             39 => {
                 __state_machine::SimulatedReduce::Reduce {
-                    states_to_pop: 1,
-                    nonterminal_produced: 15,
+                    states_to_pop: 3,
+                    nonterminal_produced: 14,
                 }
             }
             40 => {
                 __state_machine::SimulatedReduce::Reduce {
                     states_to_pop: 1,
-                    nonterminal_produced: 16,
+                    nonterminal_produced: 15,
                 }
             }
             41 => {
                 __state_machine::SimulatedReduce::Reduce {
-                    states_to_pop: 1,
-                    nonterminal_produced: 16,
+                    states_to_pop: 3,
+                    nonterminal_produced: 15,
                 }
             }
             42 => {
                 __state_machine::SimulatedReduce::Reduce {
-                    states_to_pop: 1,
-                    nonterminal_produced: 17,
+                    states_to_pop: 2,
+                    nonterminal_produced: 15,
                 }
             }
             43 => {
                 __state_machine::SimulatedReduce::Reduce {
                     states_to_pop: 1,
-                    nonterminal_produced: 18,
+                    nonterminal_produced: 16,
                 }
             }
             44 => {
                 __state_machine::SimulatedReduce::Reduce {
                     states_to_pop: 1,
-                    nonterminal_produced: 19,
+                    nonterminal_produced: 16,
                 }
             }
             45 => {
                 __state_machine::SimulatedReduce::Reduce {
-                    states_to_pop: 1,
-                    nonterminal_produced: 19,
+                    states_to_pop: 2,
+                    nonterminal_produced: 16,
                 }
             }
             46 => {
                 __state_machine::SimulatedReduce::Reduce {
                     states_to_pop: 3,
-                    nonterminal_produced: 19,
+                    nonterminal_produced: 16,
                 }
             }
             47 => {
                 __state_machine::SimulatedReduce::Reduce {
-                    states_to_pop: 1,
-                    nonterminal_produced: 20,
+                    states_to_pop: 3,
+                    nonterminal_produced: 16,
                 }
             }
             48 => {
                 __state_machine::SimulatedReduce::Reduce {
                     states_to_pop: 3,
-                    nonterminal_produced: 20,
+                    nonterminal_produced: 16,
                 }
             }
             49 => {
                 __state_machine::SimulatedReduce::Reduce {
-                    states_to_pop: 2,
-                    nonterminal_produced: 20,
+                    states_to_pop: 3,
+                    nonterminal_produced: 17,
                 }
             }
             50 => {
                 __state_machine::SimulatedReduce::Reduce {
-                    states_to_pop: 2,
-                    nonterminal_produced: 21,
+                    states_to_pop: 1,
+                    nonterminal_produced: 17,
                 }
             }
             51 => {
                 __state_machine::SimulatedReduce::Reduce {
-                    states_to_pop: 2,
-                    nonterminal_produced: 21,
+                    states_to_pop: 1,
+                    nonterminal_produced: 18,
                 }
             }
             52 => {
                 __state_machine::SimulatedReduce::Reduce {
                     states_to_pop: 1,
-                    nonterminal_produced: 22,
+                    nonterminal_produced: 18,
                 }
             }
             53 => {
                 __state_machine::SimulatedReduce::Reduce {
                     states_to_pop: 1,
-                    nonterminal_produced: 23,
+                    nonterminal_produced: 19,
                 }
             }
             54 => {
                 __state_machine::SimulatedReduce::Reduce {
                     states_to_pop: 1,
+                    nonterminal_produced: 20,
+                }
+            }
+            55 => {
+                __state_machine::SimulatedReduce::Reduce {
+                    states_to_pop: 1,
+                    nonterminal_produced: 21,
+                }
+            }
+            56 => {
+                __state_machine::SimulatedReduce::Reduce {
+                    states_to_pop: 1,
+                    nonterminal_produced: 21,
+                }
+            }
+            57 => {
+                __state_machine::SimulatedReduce::Reduce {
+                    states_to_pop: 3,
+                    nonterminal_produced: 21,
+                }
+            }
+            58 => {
+                __state_machine::SimulatedReduce::Reduce {
+                    states_to_pop: 1,
+                    nonterminal_produced: 22,
+                }
+            }
+            59 => {
+                __state_machine::SimulatedReduce::Reduce {
+                    states_to_pop: 3,
+                    nonterminal_produced: 22,
+                }
+            }
+            60 => {
+                __state_machine::SimulatedReduce::Reduce {
+                    states_to_pop: 2,
+                    nonterminal_produced: 22,
+                }
+            }
+            61 => {
+                __state_machine::SimulatedReduce::Reduce {
+                    states_to_pop: 2,
+                    nonterminal_produced: 23,
+                }
+            }
+            62 => {
+                __state_machine::SimulatedReduce::Reduce {
+                    states_to_pop: 2,
+                    nonterminal_produced: 23,
+                }
+            }
+            63 => {
+                __state_machine::SimulatedReduce::Reduce {
+                    states_to_pop: 1,
                     nonterminal_produced: 24,
                 }
             }
-            55 => __state_machine::SimulatedReduce::Accept,
-            56 => {
+            64 => {
+                __state_machine::SimulatedReduce::Reduce {
+                    states_to_pop: 1,
+                    nonterminal_produced: 25,
+                }
+            }
+            65 => {
                 __state_machine::SimulatedReduce::Reduce {
                     states_to_pop: 1,
                     nonterminal_produced: 26,
                 }
             }
-            57 => {
+            66 => __state_machine::SimulatedReduce::Accept,
+            67 => {
                 __state_machine::SimulatedReduce::Reduce {
                     states_to_pop: 1,
-                    nonterminal_produced: 27,
+                    nonterminal_produced: 28,
+                }
+            }
+            68 => {
+                __state_machine::SimulatedReduce::Reduce {
+                    states_to_pop: 1,
+                    nonterminal_produced: 29,
                 }
             }
             _ => panic!("invalid reduction index {}", __reduce_index)
@@ -7945,18 +9120,51 @@ mod __parse__MDyn {
                 __reduce54(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&())>)
             }
             55 => {
-                // __MDyn = MDyn => ActionFn(3);
-                let __sym0 = __pop_Variant13(__symbols);
-                let __start = __sym0.0;
-                let __end = __sym0.2;
-                let __nt = super::__action3::<>(input, __sym0);
-                return Some(Ok(__nt));
+                __reduce55(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&())>)
             }
             56 => {
                 __reduce56(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&())>)
             }
             57 => {
                 __reduce57(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&())>)
+            }
+            58 => {
+                __reduce58(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&())>)
+            }
+            59 => {
+                __reduce59(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&())>)
+            }
+            60 => {
+                __reduce60(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&())>)
+            }
+            61 => {
+                __reduce61(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&())>)
+            }
+            62 => {
+                __reduce62(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&())>)
+            }
+            63 => {
+                __reduce63(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&())>)
+            }
+            64 => {
+                __reduce64(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&())>)
+            }
+            65 => {
+                __reduce65(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&())>)
+            }
+            66 => {
+                // __MDyn = MDyn => ActionFn(3);
+                let __sym0 = __pop_Variant15(__symbols);
+                let __start = __sym0.0;
+                let __end = __sym0.2;
+                let __nt = super::__action3::<>(input, __sym0);
+                return Some(Ok(__nt));
+            }
+            67 => {
+                __reduce67(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&())>)
+            }
+            68 => {
+                __reduce68(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&())>)
             }
             _ => panic!("invalid action code {}", __action)
         };
@@ -7971,14 +9179,14 @@ mod __parse__MDyn {
     fn __symbol_type_mismatch() -> ! {
         panic!("symbol type mismatch")
     }
-    fn __pop_Variant9<
+    fn __pop_Variant11<
       'input,
     >(
         __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>
     ) -> (usize, ArgConstraint, usize)
      {
         match __symbols.pop() {
-            Some((__l, __Symbol::Variant9(__v), __r)) => (__l, __v, __r),
+            Some((__l, __Symbol::Variant11(__v), __r)) => (__l, __v, __r),
             _ => __symbol_type_mismatch()
         }
     }
@@ -8008,21 +9216,10 @@ mod __parse__MDyn {
       'input,
     >(
         __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>
-    ) -> (usize, CompositeValue, usize)
+    ) -> (usize, Attribute, usize)
      {
         match __symbols.pop() {
             Some((__l, __Symbol::Variant6(__v), __r)) => (__l, __v, __r),
-            _ => __symbol_type_mismatch()
-        }
-    }
-    fn __pop_Variant7<
-      'input,
-    >(
-        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>
-    ) -> (usize, CompoundInstruction<SomeValue>, usize)
-     {
-        match __symbols.pop() {
-            Some((__l, __Symbol::Variant7(__v), __r)) => (__l, __v, __r),
             _ => __symbol_type_mismatch()
         }
     }
@@ -8030,21 +9227,43 @@ mod __parse__MDyn {
       'input,
     >(
         __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>
-    ) -> (usize, ConcreteType, usize)
+    ) -> (usize, CompositeValue, usize)
      {
         match __symbols.pop() {
             Some((__l, __Symbol::Variant8(__v), __r)) => (__l, __v, __r),
             _ => __symbol_type_mismatch()
         }
     }
-    fn __pop_Variant11<
+    fn __pop_Variant9<
+      'input,
+    >(
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>
+    ) -> (usize, CompoundInstruction<SomeValue>, usize)
+     {
+        match __symbols.pop() {
+            Some((__l, __Symbol::Variant9(__v), __r)) => (__l, __v, __r),
+            _ => __symbol_type_mismatch()
+        }
+    }
+    fn __pop_Variant10<
+      'input,
+    >(
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>
+    ) -> (usize, ConcreteType, usize)
+     {
+        match __symbols.pop() {
+            Some((__l, __Symbol::Variant10(__v), __r)) => (__l, __v, __r),
+            _ => __symbol_type_mismatch()
+        }
+    }
+    fn __pop_Variant13<
       'input,
     >(
         __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>
     ) -> (usize, Instruction<SomeValue>, usize)
      {
         match __symbols.pop() {
-            Some((__l, __Symbol::Variant11(__v), __r)) => (__l, __v, __r),
+            Some((__l, __Symbol::Variant13(__v), __r)) => (__l, __v, __r),
             _ => __symbol_type_mismatch()
         }
     }
@@ -8059,25 +9278,14 @@ mod __parse__MDyn {
             _ => __symbol_type_mismatch()
         }
     }
-    fn __pop_Variant13<
+    fn __pop_Variant15<
       'input,
     >(
         __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>
     ) -> (usize, MType<DynMType>, usize)
      {
         match __symbols.pop() {
-            Some((__l, __Symbol::Variant13(__v), __r)) => (__l, __v, __r),
-            _ => __symbol_type_mismatch()
-        }
-    }
-    fn __pop_Variant17<
-      'input,
-    >(
-        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>
-    ) -> (usize, SomeValue, usize)
-     {
-        match __symbols.pop() {
-            Some((__l, __Symbol::Variant17(__v), __r)) => (__l, __v, __r),
+            Some((__l, __Symbol::Variant15(__v), __r)) => (__l, __v, __r),
             _ => __symbol_type_mismatch()
         }
     }
@@ -8085,21 +9293,32 @@ mod __parse__MDyn {
       'input,
     >(
         __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>
-    ) -> (usize, StackResultElem, usize)
+    ) -> (usize, SomeValue, usize)
      {
         match __symbols.pop() {
             Some((__l, __Symbol::Variant19(__v), __r)) => (__l, __v, __r),
             _ => __symbol_type_mismatch()
         }
     }
-    fn __pop_Variant10<
+    fn __pop_Variant21<
+      'input,
+    >(
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>
+    ) -> (usize, StackResultElem, usize)
+     {
+        match __symbols.pop() {
+            Some((__l, __Symbol::Variant21(__v), __r)) => (__l, __v, __r),
+            _ => __symbol_type_mismatch()
+        }
+    }
+    fn __pop_Variant12<
       'input,
     >(
         __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>
     ) -> (usize, String, usize)
      {
         match __symbols.pop() {
-            Some((__l, __Symbol::Variant10(__v), __r)) => (__l, __v, __r),
+            Some((__l, __Symbol::Variant12(__v), __r)) => (__l, __v, __r),
             _ => __symbol_type_mismatch()
         }
     }
@@ -8114,14 +9333,14 @@ mod __parse__MDyn {
             _ => __symbol_type_mismatch()
         }
     }
-    fn __pop_Variant12<
+    fn __pop_Variant7<
       'input,
     >(
         __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>
-    ) -> (usize, Vec<CompoundInstruction<SomeValue>>, usize)
+    ) -> (usize, Vec<Attribute>, usize)
      {
         match __symbols.pop() {
-            Some((__l, __Symbol::Variant12(__v), __r)) => (__l, __v, __r),
+            Some((__l, __Symbol::Variant7(__v), __r)) => (__l, __v, __r),
             _ => __symbol_type_mismatch()
         }
     }
@@ -8129,32 +9348,43 @@ mod __parse__MDyn {
       'input,
     >(
         __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>
-    ) -> (usize, Vec<MType<DynMType>>, usize)
+    ) -> (usize, Vec<CompoundInstruction<SomeValue>>, usize)
      {
         match __symbols.pop() {
             Some((__l, __Symbol::Variant14(__v), __r)) => (__l, __v, __r),
             _ => __symbol_type_mismatch()
         }
     }
-    fn __pop_Variant18<
+    fn __pop_Variant16<
+      'input,
+    >(
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>
+    ) -> (usize, Vec<MType<DynMType>>, usize)
+     {
+        match __symbols.pop() {
+            Some((__l, __Symbol::Variant16(__v), __r)) => (__l, __v, __r),
+            _ => __symbol_type_mismatch()
+        }
+    }
+    fn __pop_Variant20<
       'input,
     >(
         __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>
     ) -> (usize, Vec<SomeValue>, usize)
      {
         match __symbols.pop() {
-            Some((__l, __Symbol::Variant18(__v), __r)) => (__l, __v, __r),
+            Some((__l, __Symbol::Variant20(__v), __r)) => (__l, __v, __r),
             _ => __symbol_type_mismatch()
         }
     }
-    fn __pop_Variant15<
+    fn __pop_Variant17<
       'input,
     >(
         __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>
     ) -> (usize, bool, usize)
      {
         match __symbols.pop() {
-            Some((__l, __Symbol::Variant15(__v), __r)) => (__l, __v, __r),
+            Some((__l, __Symbol::Variant17(__v), __r)) => (__l, __v, __r),
             _ => __symbol_type_mismatch()
         }
     }
@@ -8169,14 +9399,14 @@ mod __parse__MDyn {
             _ => __symbol_type_mismatch()
         }
     }
-    fn __pop_Variant16<
+    fn __pop_Variant18<
       'input,
     >(
         __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>
     ) -> (usize, i32, usize)
      {
         match __symbols.pop() {
-            Some((__l, __Symbol::Variant16(__v), __r)) => (__l, __v, __r),
+            Some((__l, __Symbol::Variant18(__v), __r)) => (__l, __v, __r),
             _ => __symbol_type_mismatch()
         }
     }
@@ -8200,11 +9430,11 @@ mod __parse__MDyn {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // Arg = SomeValue => ActionFn(12);
-        let __sym0 = __pop_Variant17(__symbols);
+        // Arg = SomeValue => ActionFn(21);
+        let __sym0 = __pop_Variant19(__symbols);
         let __start = __sym0.0;
         let __end = __sym0.2;
-        let __nt = super::__action12::<>(input, __sym0);
+        let __nt = super::__action21::<>(input, __sym0);
         __symbols.push((__start, __Symbol::Variant1(__nt), __end));
         (1, 0)
     }
@@ -8217,11 +9447,11 @@ mod __parse__MDyn {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // Arg = ConcreteType => ActionFn(13);
-        let __sym0 = __pop_Variant8(__symbols);
+        // Arg = ConcreteType => ActionFn(22);
+        let __sym0 = __pop_Variant10(__symbols);
         let __start = __sym0.0;
         let __end = __sym0.2;
-        let __nt = super::__action13::<>(input, __sym0);
+        let __nt = super::__action22::<>(input, __sym0);
         __symbols.push((__start, __Symbol::Variant1(__nt), __end));
         (1, 0)
     }
@@ -8234,11 +9464,11 @@ mod __parse__MDyn {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // ArgVar = r#"[a-z]"# => ActionFn(51);
+        // ArgVar = r#"[a-z]"# => ActionFn(62);
         let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0;
         let __end = __sym0.2;
-        let __nt = super::__action51::<>(input, __sym0);
+        let __nt = super::__action62::<>(input, __sym0);
         __symbols.push((__start, __Symbol::Variant2(__nt), __end));
         (1, 1)
     }
@@ -8251,13 +9481,13 @@ mod __parse__MDyn {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // Args = Arg, Args => ActionFn(14);
+        // Args = Arg, Args => ActionFn(23);
         assert!(__symbols.len() >= 2);
         let __sym1 = __pop_Variant3(__symbols);
         let __sym0 = __pop_Variant1(__symbols);
         let __start = __sym0.0;
         let __end = __sym1.2;
-        let __nt = super::__action14::<>(input, __sym0, __sym1);
+        let __nt = super::__action23::<>(input, __sym0, __sym1);
         __symbols.push((__start, __Symbol::Variant3(__nt), __end));
         (2, 2)
     }
@@ -8270,11 +9500,11 @@ mod __parse__MDyn {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // Args = Arg => ActionFn(15);
+        // Args = Arg => ActionFn(24);
         let __sym0 = __pop_Variant1(__symbols);
         let __start = __sym0.0;
         let __end = __sym0.2;
-        let __nt = super::__action15::<>(input, __sym0);
+        let __nt = super::__action24::<>(input, __sym0);
         __symbols.push((__start, __Symbol::Variant3(__nt), __end));
         (1, 2)
     }
@@ -8287,11 +9517,11 @@ mod __parse__MDyn {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // AtomicType = "int" => ActionFn(32);
+        // AtomicType = "int" => ActionFn(41);
         let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0;
         let __end = __sym0.2;
-        let __nt = super::__action32::<>(input, __sym0);
+        let __nt = super::__action41::<>(input, __sym0);
         __symbols.push((__start, __Symbol::Variant4(__nt), __end));
         (1, 3)
     }
@@ -8304,11 +9534,11 @@ mod __parse__MDyn {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // AtomicType = "nat" => ActionFn(33);
+        // AtomicType = "nat" => ActionFn(42);
         let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0;
         let __end = __sym0.2;
-        let __nt = super::__action33::<>(input, __sym0);
+        let __nt = super::__action42::<>(input, __sym0);
         __symbols.push((__start, __Symbol::Variant4(__nt), __end));
         (1, 3)
     }
@@ -8321,11 +9551,11 @@ mod __parse__MDyn {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // AtomicType = "string" => ActionFn(34);
+        // AtomicType = "string" => ActionFn(43);
         let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0;
         let __end = __sym0.2;
-        let __nt = super::__action34::<>(input, __sym0);
+        let __nt = super::__action43::<>(input, __sym0);
         __symbols.push((__start, __Symbol::Variant4(__nt), __end));
         (1, 3)
     }
@@ -8338,11 +9568,11 @@ mod __parse__MDyn {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // AtomicType = "bool" => ActionFn(35);
+        // AtomicType = "bool" => ActionFn(44);
         let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0;
         let __end = __sym0.2;
-        let __nt = super::__action35::<>(input, __sym0);
+        let __nt = super::__action44::<>(input, __sym0);
         __symbols.push((__start, __Symbol::Variant4(__nt), __end));
         (1, 3)
     }
@@ -8355,11 +9585,11 @@ mod __parse__MDyn {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // AtomicValue = McLitNumber => ActionFn(19);
-        let __sym0 = __pop_Variant16(__symbols);
+        // AtomicValue = McLitNumber => ActionFn(28);
+        let __sym0 = __pop_Variant18(__symbols);
         let __start = __sym0.0;
         let __end = __sym0.2;
-        let __nt = super::__action19::<>(input, __sym0);
+        let __nt = super::__action28::<>(input, __sym0);
         __symbols.push((__start, __Symbol::Variant5(__nt), __end));
         (1, 4)
     }
@@ -8372,11 +9602,11 @@ mod __parse__MDyn {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // AtomicValue = McLitString => ActionFn(20);
-        let __sym0 = __pop_Variant10(__symbols);
+        // AtomicValue = McLitString => ActionFn(29);
+        let __sym0 = __pop_Variant12(__symbols);
         let __start = __sym0.0;
         let __end = __sym0.2;
-        let __nt = super::__action20::<>(input, __sym0);
+        let __nt = super::__action29::<>(input, __sym0);
         __symbols.push((__start, __Symbol::Variant5(__nt), __end));
         (1, 4)
     }
@@ -8389,11 +9619,11 @@ mod __parse__MDyn {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // AtomicValue = McLitBool => ActionFn(21);
-        let __sym0 = __pop_Variant15(__symbols);
+        // AtomicValue = McLitBool => ActionFn(30);
+        let __sym0 = __pop_Variant17(__symbols);
         let __start = __sym0.0;
         let __end = __sym0.2;
-        let __nt = super::__action21::<>(input, __sym0);
+        let __nt = super::__action30::<>(input, __sym0);
         __symbols.push((__start, __Symbol::Variant5(__nt), __end));
         (1, 4)
     }
@@ -8406,16 +9636,13 @@ mod __parse__MDyn {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // CompositeValue = "Pair", SomeValue, SomeValue => ActionFn(22);
-        assert!(__symbols.len() >= 3);
-        let __sym2 = __pop_Variant17(__symbols);
-        let __sym1 = __pop_Variant17(__symbols);
+        // Attribute = "comparable" => ActionFn(6);
         let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0;
-        let __end = __sym2.2;
-        let __nt = super::__action22::<>(input, __sym0, __sym1, __sym2);
+        let __end = __sym0.2;
+        let __nt = super::__action6::<>(input, __sym0);
         __symbols.push((__start, __Symbol::Variant6(__nt), __end));
-        (3, 5)
+        (1, 5)
     }
     pub(crate) fn __reduce13<
         'input,
@@ -8426,16 +9653,13 @@ mod __parse__MDyn {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // CompositeValue = "{", SomeValueList, "}" => ActionFn(23);
-        assert!(__symbols.len() >= 3);
-        let __sym2 = __pop_Variant0(__symbols);
-        let __sym1 = __pop_Variant18(__symbols);
+        // Attribute = "passable" => ActionFn(7);
         let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0;
-        let __end = __sym2.2;
-        let __nt = super::__action23::<>(input, __sym0, __sym1, __sym2);
+        let __end = __sym0.2;
+        let __nt = super::__action7::<>(input, __sym0);
         __symbols.push((__start, __Symbol::Variant6(__nt), __end));
-        (3, 5)
+        (1, 5)
     }
     pub(crate) fn __reduce14<
         'input,
@@ -8446,11 +9670,11 @@ mod __parse__MDyn {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // CompositeValue = InstructionBlock => ActionFn(24);
-        let __sym0 = __pop_Variant12(__symbols);
+        // Attribute = "pushable" => ActionFn(8);
+        let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0;
         let __end = __sym0.2;
-        let __nt = super::__action24::<>(input, __sym0);
+        let __nt = super::__action8::<>(input, __sym0);
         __symbols.push((__start, __Symbol::Variant6(__nt), __end));
         (1, 5)
     }
@@ -8463,16 +9687,13 @@ mod __parse__MDyn {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // CompoundInstruction = "IF", InstructionBlock, InstructionBlock => ActionFn(6);
-        assert!(__symbols.len() >= 3);
-        let __sym2 = __pop_Variant12(__symbols);
-        let __sym1 = __pop_Variant12(__symbols);
+        // Attribute = "storable" => ActionFn(9);
         let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0;
-        let __end = __sym2.2;
-        let __nt = super::__action6::<>(input, __sym0, __sym1, __sym2);
-        __symbols.push((__start, __Symbol::Variant7(__nt), __end));
-        (3, 6)
+        let __end = __sym0.2;
+        let __nt = super::__action9::<>(input, __sym0);
+        __symbols.push((__start, __Symbol::Variant6(__nt), __end));
+        (1, 5)
     }
     pub(crate) fn __reduce16<
         'input,
@@ -8483,15 +9704,13 @@ mod __parse__MDyn {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // CompoundInstruction = "DIP", InstructionBlock => ActionFn(7);
-        assert!(__symbols.len() >= 2);
-        let __sym1 = __pop_Variant12(__symbols);
+        // Attribute = "packable" => ActionFn(10);
         let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0;
-        let __end = __sym1.2;
-        let __nt = super::__action7::<>(input, __sym0, __sym1);
-        __symbols.push((__start, __Symbol::Variant7(__nt), __end));
-        (2, 6)
+        let __end = __sym0.2;
+        let __nt = super::__action10::<>(input, __sym0);
+        __symbols.push((__start, __Symbol::Variant6(__nt), __end));
+        (1, 5)
     }
     pub(crate) fn __reduce17<
         'input,
@@ -8502,17 +9721,13 @@ mod __parse__MDyn {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // CompoundInstruction = "LAMBDA_REC", ConcreteType, ConcreteType, InstructionBlock => ActionFn(8);
-        assert!(__symbols.len() >= 4);
-        let __sym3 = __pop_Variant12(__symbols);
-        let __sym2 = __pop_Variant8(__symbols);
-        let __sym1 = __pop_Variant8(__symbols);
+        // Attribute = "bigmapvalue" => ActionFn(11);
         let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0;
-        let __end = __sym3.2;
-        let __nt = super::__action8::<>(input, __sym0, __sym1, __sym2, __sym3);
-        __symbols.push((__start, __Symbol::Variant7(__nt), __end));
-        (4, 6)
+        let __end = __sym0.2;
+        let __nt = super::__action11::<>(input, __sym0);
+        __symbols.push((__start, __Symbol::Variant6(__nt), __end));
+        (1, 5)
     }
     pub(crate) fn __reduce18<
         'input,
@@ -8523,13 +9738,13 @@ mod __parse__MDyn {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // CompoundInstruction = Instruction => ActionFn(9);
-        let __sym0 = __pop_Variant11(__symbols);
+        // Attribute = "duplicable" => ActionFn(12);
+        let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0;
         let __end = __sym0.2;
-        let __nt = super::__action9::<>(input, __sym0);
-        __symbols.push((__start, __Symbol::Variant7(__nt), __end));
-        (1, 6)
+        let __nt = super::__action12::<>(input, __sym0);
+        __symbols.push((__start, __Symbol::Variant6(__nt), __end));
+        (1, 5)
     }
     pub(crate) fn __reduce19<
         'input,
@@ -8540,13 +9755,16 @@ mod __parse__MDyn {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // ConcreteType = MDyn => ActionFn(36);
-        let __sym0 = __pop_Variant13(__symbols);
+        // AttributeList = Attribute, "+", AttributeList => ActionFn(13);
+        assert!(__symbols.len() >= 3);
+        let __sym2 = __pop_Variant7(__symbols);
+        let __sym1 = __pop_Variant0(__symbols);
+        let __sym0 = __pop_Variant6(__symbols);
         let __start = __sym0.0;
-        let __end = __sym0.2;
-        let __nt = super::__action36::<>(input, __sym0);
-        __symbols.push((__start, __Symbol::Variant8(__nt), __end));
-        (1, 7)
+        let __end = __sym2.2;
+        let __nt = super::__action13::<>(input, __sym0, __sym1, __sym2);
+        __symbols.push((__start, __Symbol::Variant7(__nt), __end));
+        (3, 6)
     }
     pub(crate) fn __reduce20<
         'input,
@@ -8557,15 +9775,13 @@ mod __parse__MDyn {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // Constraint = "w|", ArgVar => ActionFn(45);
-        assert!(__symbols.len() >= 2);
-        let __sym1 = __pop_Variant2(__symbols);
-        let __sym0 = __pop_Variant0(__symbols);
+        // AttributeList = Attribute => ActionFn(14);
+        let __sym0 = __pop_Variant6(__symbols);
         let __start = __sym0.0;
-        let __end = __sym1.2;
-        let __nt = super::__action45::<>(input, __sym0, __sym1);
-        __symbols.push((__start, __Symbol::Variant9(__nt), __end));
-        (2, 8)
+        let __end = __sym0.2;
+        let __nt = super::__action14::<>(input, __sym0);
+        __symbols.push((__start, __Symbol::Variant7(__nt), __end));
+        (1, 6)
     }
     pub(crate) fn __reduce21<
         'input,
@@ -8576,15 +9792,16 @@ mod __parse__MDyn {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // Constraint = "t|", ArgVar => ActionFn(46);
-        assert!(__symbols.len() >= 2);
-        let __sym1 = __pop_Variant2(__symbols);
+        // CompositeValue = "Pair", SomeValue, SomeValue => ActionFn(31);
+        assert!(__symbols.len() >= 3);
+        let __sym2 = __pop_Variant19(__symbols);
+        let __sym1 = __pop_Variant19(__symbols);
         let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0;
-        let __end = __sym1.2;
-        let __nt = super::__action46::<>(input, __sym0, __sym1);
-        __symbols.push((__start, __Symbol::Variant9(__nt), __end));
-        (2, 8)
+        let __end = __sym2.2;
+        let __nt = super::__action31::<>(input, __sym0, __sym1, __sym2);
+        __symbols.push((__start, __Symbol::Variant8(__nt), __end));
+        (3, 7)
     }
     pub(crate) fn __reduce22<
         'input,
@@ -8595,15 +9812,16 @@ mod __parse__MDyn {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // Constraint = "r|", ArgVar => ActionFn(47);
-        assert!(__symbols.len() >= 2);
-        let __sym1 = __pop_Variant2(__symbols);
+        // CompositeValue = "{", SomeValueList, "}" => ActionFn(32);
+        assert!(__symbols.len() >= 3);
+        let __sym2 = __pop_Variant0(__symbols);
+        let __sym1 = __pop_Variant20(__symbols);
         let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0;
-        let __end = __sym1.2;
-        let __nt = super::__action47::<>(input, __sym0, __sym1);
-        __symbols.push((__start, __Symbol::Variant9(__nt), __end));
-        (2, 8)
+        let __end = __sym2.2;
+        let __nt = super::__action32::<>(input, __sym0, __sym1, __sym2);
+        __symbols.push((__start, __Symbol::Variant8(__nt), __end));
+        (3, 7)
     }
     pub(crate) fn __reduce23<
         'input,
@@ -8614,15 +9832,13 @@ mod __parse__MDyn {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // Constraint = "a|", AtomicType => ActionFn(48);
-        assert!(__symbols.len() >= 2);
-        let __sym1 = __pop_Variant4(__symbols);
-        let __sym0 = __pop_Variant0(__symbols);
+        // CompositeValue = InstructionBlock => ActionFn(33);
+        let __sym0 = __pop_Variant14(__symbols);
         let __start = __sym0.0;
-        let __end = __sym1.2;
-        let __nt = super::__action48::<>(input, __sym0, __sym1);
-        __symbols.push((__start, __Symbol::Variant9(__nt), __end));
-        (2, 8)
+        let __end = __sym0.2;
+        let __nt = super::__action33::<>(input, __sym0);
+        __symbols.push((__start, __Symbol::Variant8(__nt), __end));
+        (1, 7)
     }
     pub(crate) fn __reduce24<
         'input,
@@ -8633,13 +9849,16 @@ mod __parse__MDyn {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // Dyn = r#"<[A-Za-z][A-Za-z0-9|]+>"# => ActionFn(52);
+        // CompoundInstruction = "IF", InstructionBlock, InstructionBlock => ActionFn(15);
+        assert!(__symbols.len() >= 3);
+        let __sym2 = __pop_Variant14(__symbols);
+        let __sym1 = __pop_Variant14(__symbols);
         let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0;
-        let __end = __sym0.2;
-        let __nt = super::__action52::<>(input, __sym0);
-        __symbols.push((__start, __Symbol::Variant10(__nt), __end));
-        (1, 9)
+        let __end = __sym2.2;
+        let __nt = super::__action15::<>(input, __sym0, __sym1, __sym2);
+        __symbols.push((__start, __Symbol::Variant9(__nt), __end));
+        (3, 8)
     }
     pub(crate) fn __reduce25<
         'input,
@@ -8650,13 +9869,15 @@ mod __parse__MDyn {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // Identifier = r#"[A-Za-z][A-Za-z0-9]+"# => ActionFn(53);
+        // CompoundInstruction = "DIP", InstructionBlock => ActionFn(16);
+        assert!(__symbols.len() >= 2);
+        let __sym1 = __pop_Variant14(__symbols);
         let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0;
-        let __end = __sym0.2;
-        let __nt = super::__action53::<>(input, __sym0);
-        __symbols.push((__start, __Symbol::Variant10(__nt), __end));
-        (1, 10)
+        let __end = __sym1.2;
+        let __nt = super::__action16::<>(input, __sym0, __sym1);
+        __symbols.push((__start, __Symbol::Variant9(__nt), __end));
+        (2, 8)
     }
     pub(crate) fn __reduce26<
         'input,
@@ -8667,15 +9888,17 @@ mod __parse__MDyn {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // Instruction = Identifier, Args => ActionFn(10);
-        assert!(__symbols.len() >= 2);
-        let __sym1 = __pop_Variant3(__symbols);
-        let __sym0 = __pop_Variant10(__symbols);
+        // CompoundInstruction = "LAMBDA_REC", ConcreteType, ConcreteType, InstructionBlock => ActionFn(17);
+        assert!(__symbols.len() >= 4);
+        let __sym3 = __pop_Variant14(__symbols);
+        let __sym2 = __pop_Variant10(__symbols);
+        let __sym1 = __pop_Variant10(__symbols);
+        let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0;
-        let __end = __sym1.2;
-        let __nt = super::__action10::<>(input, __sym0, __sym1);
-        __symbols.push((__start, __Symbol::Variant11(__nt), __end));
-        (2, 11)
+        let __end = __sym3.2;
+        let __nt = super::__action17::<>(input, __sym0, __sym1, __sym2, __sym3);
+        __symbols.push((__start, __Symbol::Variant9(__nt), __end));
+        (4, 8)
     }
     pub(crate) fn __reduce27<
         'input,
@@ -8686,13 +9909,13 @@ mod __parse__MDyn {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // Instruction = Identifier => ActionFn(11);
-        let __sym0 = __pop_Variant10(__symbols);
+        // CompoundInstruction = Instruction => ActionFn(18);
+        let __sym0 = __pop_Variant13(__symbols);
         let __start = __sym0.0;
         let __end = __sym0.2;
-        let __nt = super::__action11::<>(input, __sym0);
-        __symbols.push((__start, __Symbol::Variant11(__nt), __end));
-        (1, 11)
+        let __nt = super::__action18::<>(input, __sym0);
+        __symbols.push((__start, __Symbol::Variant9(__nt), __end));
+        (1, 8)
     }
     pub(crate) fn __reduce28<
         'input,
@@ -8703,16 +9926,13 @@ mod __parse__MDyn {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // InstructionBlock = "{", InstructionList, "}" => ActionFn(25);
-        assert!(__symbols.len() >= 3);
-        let __sym2 = __pop_Variant0(__symbols);
-        let __sym1 = __pop_Variant12(__symbols);
-        let __sym0 = __pop_Variant0(__symbols);
+        // ConcreteType = MDyn => ActionFn(45);
+        let __sym0 = __pop_Variant15(__symbols);
         let __start = __sym0.0;
-        let __end = __sym2.2;
-        let __nt = super::__action25::<>(input, __sym0, __sym1, __sym2);
-        __symbols.push((__start, __Symbol::Variant12(__nt), __end));
-        (3, 12)
+        let __end = __sym0.2;
+        let __nt = super::__action45::<>(input, __sym0);
+        __symbols.push((__start, __Symbol::Variant10(__nt), __end));
+        (1, 9)
     }
     pub(crate) fn __reduce29<
         'input,
@@ -8723,13 +9943,17 @@ mod __parse__MDyn {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // InstructionList = CompoundInstruction => ActionFn(29);
-        let __sym0 = __pop_Variant7(__symbols);
+        // Constraint = "w|", ArgVar, "=>", AttributeList => ActionFn(54);
+        assert!(__symbols.len() >= 4);
+        let __sym3 = __pop_Variant7(__symbols);
+        let __sym2 = __pop_Variant0(__symbols);
+        let __sym1 = __pop_Variant2(__symbols);
+        let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0;
-        let __end = __sym0.2;
-        let __nt = super::__action29::<>(input, __sym0);
-        __symbols.push((__start, __Symbol::Variant12(__nt), __end));
-        (1, 13)
+        let __end = __sym3.2;
+        let __nt = super::__action54::<>(input, __sym0, __sym1, __sym2, __sym3);
+        __symbols.push((__start, __Symbol::Variant11(__nt), __end));
+        (4, 10)
     }
     pub(crate) fn __reduce30<
         'input,
@@ -8740,16 +9964,15 @@ mod __parse__MDyn {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // InstructionList = CompoundInstruction, ";", InstructionList => ActionFn(30);
-        assert!(__symbols.len() >= 3);
-        let __sym2 = __pop_Variant12(__symbols);
-        let __sym1 = __pop_Variant0(__symbols);
-        let __sym0 = __pop_Variant7(__symbols);
+        // Constraint = "w|", ArgVar => ActionFn(55);
+        assert!(__symbols.len() >= 2);
+        let __sym1 = __pop_Variant2(__symbols);
+        let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0;
-        let __end = __sym2.2;
-        let __nt = super::__action30::<>(input, __sym0, __sym1, __sym2);
-        __symbols.push((__start, __Symbol::Variant12(__nt), __end));
-        (3, 13)
+        let __end = __sym1.2;
+        let __nt = super::__action55::<>(input, __sym0, __sym1);
+        __symbols.push((__start, __Symbol::Variant11(__nt), __end));
+        (2, 10)
     }
     pub(crate) fn __reduce31<
         'input,
@@ -8760,15 +9983,17 @@ mod __parse__MDyn {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // InstructionList = CompoundInstruction, ";" => ActionFn(31);
-        assert!(__symbols.len() >= 2);
-        let __sym1 = __pop_Variant0(__symbols);
-        let __sym0 = __pop_Variant7(__symbols);
+        // Constraint = "t|", ArgVar, "=>", AttributeList => ActionFn(56);
+        assert!(__symbols.len() >= 4);
+        let __sym3 = __pop_Variant7(__symbols);
+        let __sym2 = __pop_Variant0(__symbols);
+        let __sym1 = __pop_Variant2(__symbols);
+        let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0;
-        let __end = __sym1.2;
-        let __nt = super::__action31::<>(input, __sym0, __sym1);
-        __symbols.push((__start, __Symbol::Variant12(__nt), __end));
-        (2, 13)
+        let __end = __sym3.2;
+        let __nt = super::__action56::<>(input, __sym0, __sym1, __sym2, __sym3);
+        __symbols.push((__start, __Symbol::Variant11(__nt), __end));
+        (4, 10)
     }
     pub(crate) fn __reduce32<
         'input,
@@ -8779,13 +10004,15 @@ mod __parse__MDyn {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // MDyn = AtomicType => ActionFn(39);
-        let __sym0 = __pop_Variant4(__symbols);
+        // Constraint = "t|", ArgVar => ActionFn(57);
+        assert!(__symbols.len() >= 2);
+        let __sym1 = __pop_Variant2(__symbols);
+        let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0;
-        let __end = __sym0.2;
-        let __nt = super::__action39::<>(input, __sym0);
-        __symbols.push((__start, __Symbol::Variant13(__nt), __end));
-        (1, 14)
+        let __end = __sym1.2;
+        let __nt = super::__action57::<>(input, __sym0, __sym1);
+        __symbols.push((__start, __Symbol::Variant11(__nt), __end));
+        (2, 10)
     }
     pub(crate) fn __reduce33<
         'input,
@@ -8796,13 +10023,15 @@ mod __parse__MDyn {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // MDyn = Dyn => ActionFn(40);
-        let __sym0 = __pop_Variant10(__symbols);
+        // Constraint = "r|", ArgVar => ActionFn(58);
+        assert!(__symbols.len() >= 2);
+        let __sym1 = __pop_Variant2(__symbols);
+        let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0;
-        let __end = __sym0.2;
-        let __nt = super::__action40::<>(input, __sym0);
-        __symbols.push((__start, __Symbol::Variant13(__nt), __end));
-        (1, 14)
+        let __end = __sym1.2;
+        let __nt = super::__action58::<>(input, __sym0, __sym1);
+        __symbols.push((__start, __Symbol::Variant11(__nt), __end));
+        (2, 10)
     }
     pub(crate) fn __reduce34<
         'input,
@@ -8813,15 +10042,15 @@ mod __parse__MDyn {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // MDyn = "list", MDyn => ActionFn(41);
+        // Constraint = "a|", AtomicType => ActionFn(59);
         assert!(__symbols.len() >= 2);
-        let __sym1 = __pop_Variant13(__symbols);
+        let __sym1 = __pop_Variant4(__symbols);
         let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0;
         let __end = __sym1.2;
-        let __nt = super::__action41::<>(input, __sym0, __sym1);
-        __symbols.push((__start, __Symbol::Variant13(__nt), __end));
-        (2, 14)
+        let __nt = super::__action59::<>(input, __sym0, __sym1);
+        __symbols.push((__start, __Symbol::Variant11(__nt), __end));
+        (2, 10)
     }
     pub(crate) fn __reduce35<
         'input,
@@ -8832,16 +10061,13 @@ mod __parse__MDyn {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // MDyn = "pair", MDyn, MDyn => ActionFn(42);
-        assert!(__symbols.len() >= 3);
-        let __sym2 = __pop_Variant13(__symbols);
-        let __sym1 = __pop_Variant13(__symbols);
+        // Dyn = r#"<[A-Za-z][A-Za-z0-9|+=>]+>"# => ActionFn(63);
         let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0;
-        let __end = __sym2.2;
-        let __nt = super::__action42::<>(input, __sym0, __sym1, __sym2);
-        __symbols.push((__start, __Symbol::Variant13(__nt), __end));
-        (3, 14)
+        let __end = __sym0.2;
+        let __nt = super::__action63::<>(input, __sym0);
+        __symbols.push((__start, __Symbol::Variant12(__nt), __end));
+        (1, 11)
     }
     pub(crate) fn __reduce36<
         'input,
@@ -8852,16 +10078,13 @@ mod __parse__MDyn {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // MDyn = "lambda", MDyn, MDyn => ActionFn(43);
-        assert!(__symbols.len() >= 3);
-        let __sym2 = __pop_Variant13(__symbols);
-        let __sym1 = __pop_Variant13(__symbols);
+        // Identifier = r#"[A-Za-z][A-Za-z0-9]+"# => ActionFn(64);
         let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0;
-        let __end = __sym2.2;
-        let __nt = super::__action43::<>(input, __sym0, __sym1, __sym2);
-        __symbols.push((__start, __Symbol::Variant13(__nt), __end));
-        (3, 14)
+        let __end = __sym0.2;
+        let __nt = super::__action64::<>(input, __sym0);
+        __symbols.push((__start, __Symbol::Variant12(__nt), __end));
+        (1, 12)
     }
     pub(crate) fn __reduce37<
         'input,
@@ -8872,16 +10095,15 @@ mod __parse__MDyn {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // MDyn = "(", MDyn, ")" => ActionFn(44);
-        assert!(__symbols.len() >= 3);
-        let __sym2 = __pop_Variant0(__symbols);
-        let __sym1 = __pop_Variant13(__symbols);
-        let __sym0 = __pop_Variant0(__symbols);
+        // Instruction = Identifier, Args => ActionFn(19);
+        assert!(__symbols.len() >= 2);
+        let __sym1 = __pop_Variant3(__symbols);
+        let __sym0 = __pop_Variant12(__symbols);
         let __start = __sym0.0;
-        let __end = __sym2.2;
-        let __nt = super::__action44::<>(input, __sym0, __sym1, __sym2);
+        let __end = __sym1.2;
+        let __nt = super::__action19::<>(input, __sym0, __sym1);
         __symbols.push((__start, __Symbol::Variant13(__nt), __end));
-        (3, 14)
+        (2, 13)
     }
     pub(crate) fn __reduce38<
         'input,
@@ -8892,16 +10114,13 @@ mod __parse__MDyn {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // MDynList = MDyn, ";", MDynList => ActionFn(37);
-        assert!(__symbols.len() >= 3);
-        let __sym2 = __pop_Variant14(__symbols);
-        let __sym1 = __pop_Variant0(__symbols);
-        let __sym0 = __pop_Variant13(__symbols);
+        // Instruction = Identifier => ActionFn(20);
+        let __sym0 = __pop_Variant12(__symbols);
         let __start = __sym0.0;
-        let __end = __sym2.2;
-        let __nt = super::__action37::<>(input, __sym0, __sym1, __sym2);
-        __symbols.push((__start, __Symbol::Variant14(__nt), __end));
-        (3, 15)
+        let __end = __sym0.2;
+        let __nt = super::__action20::<>(input, __sym0);
+        __symbols.push((__start, __Symbol::Variant13(__nt), __end));
+        (1, 13)
     }
     pub(crate) fn __reduce39<
         'input,
@@ -8912,13 +10131,16 @@ mod __parse__MDyn {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // MDynList = MDyn => ActionFn(38);
-        let __sym0 = __pop_Variant13(__symbols);
+        // InstructionBlock = "{", InstructionList, "}" => ActionFn(34);
+        assert!(__symbols.len() >= 3);
+        let __sym2 = __pop_Variant0(__symbols);
+        let __sym1 = __pop_Variant14(__symbols);
+        let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0;
-        let __end = __sym0.2;
-        let __nt = super::__action38::<>(input, __sym0);
+        let __end = __sym2.2;
+        let __nt = super::__action34::<>(input, __sym0, __sym1, __sym2);
         __symbols.push((__start, __Symbol::Variant14(__nt), __end));
-        (1, 15)
+        (3, 14)
     }
     pub(crate) fn __reduce40<
         'input,
@@ -8929,13 +10151,13 @@ mod __parse__MDyn {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // McLitBool = "True" => ActionFn(54);
-        let __sym0 = __pop_Variant0(__symbols);
+        // InstructionList = CompoundInstruction => ActionFn(38);
+        let __sym0 = __pop_Variant9(__symbols);
         let __start = __sym0.0;
         let __end = __sym0.2;
-        let __nt = super::__action54::<>(input, __sym0);
-        __symbols.push((__start, __Symbol::Variant15(__nt), __end));
-        (1, 16)
+        let __nt = super::__action38::<>(input, __sym0);
+        __symbols.push((__start, __Symbol::Variant14(__nt), __end));
+        (1, 15)
     }
     pub(crate) fn __reduce41<
         'input,
@@ -8946,13 +10168,16 @@ mod __parse__MDyn {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // McLitBool = "False" => ActionFn(55);
-        let __sym0 = __pop_Variant0(__symbols);
+        // InstructionList = CompoundInstruction, ";", InstructionList => ActionFn(39);
+        assert!(__symbols.len() >= 3);
+        let __sym2 = __pop_Variant14(__symbols);
+        let __sym1 = __pop_Variant0(__symbols);
+        let __sym0 = __pop_Variant9(__symbols);
         let __start = __sym0.0;
-        let __end = __sym0.2;
-        let __nt = super::__action55::<>(input, __sym0);
-        __symbols.push((__start, __Symbol::Variant15(__nt), __end));
-        (1, 16)
+        let __end = __sym2.2;
+        let __nt = super::__action39::<>(input, __sym0, __sym1, __sym2);
+        __symbols.push((__start, __Symbol::Variant14(__nt), __end));
+        (3, 15)
     }
     pub(crate) fn __reduce42<
         'input,
@@ -8963,13 +10188,15 @@ mod __parse__MDyn {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // McLitNumber = r#"([+-]?)[0-9]+"# => ActionFn(57);
-        let __sym0 = __pop_Variant0(__symbols);
+        // InstructionList = CompoundInstruction, ";" => ActionFn(40);
+        assert!(__symbols.len() >= 2);
+        let __sym1 = __pop_Variant0(__symbols);
+        let __sym0 = __pop_Variant9(__symbols);
         let __start = __sym0.0;
-        let __end = __sym0.2;
-        let __nt = super::__action57::<>(input, __sym0);
-        __symbols.push((__start, __Symbol::Variant16(__nt), __end));
-        (1, 17)
+        let __end = __sym1.2;
+        let __nt = super::__action40::<>(input, __sym0, __sym1);
+        __symbols.push((__start, __Symbol::Variant14(__nt), __end));
+        (2, 15)
     }
     pub(crate) fn __reduce43<
         'input,
@@ -8980,13 +10207,13 @@ mod __parse__MDyn {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // McLitString = r#"\"[a-z0-9]+\""# => ActionFn(56);
-        let __sym0 = __pop_Variant0(__symbols);
+        // MDyn = AtomicType => ActionFn(48);
+        let __sym0 = __pop_Variant4(__symbols);
         let __start = __sym0.0;
         let __end = __sym0.2;
-        let __nt = super::__action56::<>(input, __sym0);
-        __symbols.push((__start, __Symbol::Variant10(__nt), __end));
-        (1, 18)
+        let __nt = super::__action48::<>(input, __sym0);
+        __symbols.push((__start, __Symbol::Variant15(__nt), __end));
+        (1, 16)
     }
     pub(crate) fn __reduce44<
         'input,
@@ -8997,13 +10224,13 @@ mod __parse__MDyn {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // SomeValue = AtomicValue => ActionFn(16);
-        let __sym0 = __pop_Variant5(__symbols);
+        // MDyn = Dyn => ActionFn(49);
+        let __sym0 = __pop_Variant12(__symbols);
         let __start = __sym0.0;
         let __end = __sym0.2;
-        let __nt = super::__action16::<>(input, __sym0);
-        __symbols.push((__start, __Symbol::Variant17(__nt), __end));
-        (1, 19)
+        let __nt = super::__action49::<>(input, __sym0);
+        __symbols.push((__start, __Symbol::Variant15(__nt), __end));
+        (1, 16)
     }
     pub(crate) fn __reduce45<
         'input,
@@ -9014,13 +10241,15 @@ mod __parse__MDyn {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // SomeValue = CompositeValue => ActionFn(17);
-        let __sym0 = __pop_Variant6(__symbols);
+        // MDyn = "list", MDyn => ActionFn(50);
+        assert!(__symbols.len() >= 2);
+        let __sym1 = __pop_Variant15(__symbols);
+        let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0;
-        let __end = __sym0.2;
-        let __nt = super::__action17::<>(input, __sym0);
-        __symbols.push((__start, __Symbol::Variant17(__nt), __end));
-        (1, 19)
+        let __end = __sym1.2;
+        let __nt = super::__action50::<>(input, __sym0, __sym1);
+        __symbols.push((__start, __Symbol::Variant15(__nt), __end));
+        (2, 16)
     }
     pub(crate) fn __reduce46<
         'input,
@@ -9031,16 +10260,16 @@ mod __parse__MDyn {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // SomeValue = "(", SomeValue, ")" => ActionFn(18);
+        // MDyn = "pair", MDyn, MDyn => ActionFn(51);
         assert!(__symbols.len() >= 3);
-        let __sym2 = __pop_Variant0(__symbols);
-        let __sym1 = __pop_Variant17(__symbols);
+        let __sym2 = __pop_Variant15(__symbols);
+        let __sym1 = __pop_Variant15(__symbols);
         let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0;
         let __end = __sym2.2;
-        let __nt = super::__action18::<>(input, __sym0, __sym1, __sym2);
-        __symbols.push((__start, __Symbol::Variant17(__nt), __end));
-        (3, 19)
+        let __nt = super::__action51::<>(input, __sym0, __sym1, __sym2);
+        __symbols.push((__start, __Symbol::Variant15(__nt), __end));
+        (3, 16)
     }
     pub(crate) fn __reduce47<
         'input,
@@ -9051,13 +10280,16 @@ mod __parse__MDyn {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // SomeValueList = SomeValue => ActionFn(26);
-        let __sym0 = __pop_Variant17(__symbols);
+        // MDyn = "lambda", MDyn, MDyn => ActionFn(52);
+        assert!(__symbols.len() >= 3);
+        let __sym2 = __pop_Variant15(__symbols);
+        let __sym1 = __pop_Variant15(__symbols);
+        let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0;
-        let __end = __sym0.2;
-        let __nt = super::__action26::<>(input, __sym0);
-        __symbols.push((__start, __Symbol::Variant18(__nt), __end));
-        (1, 20)
+        let __end = __sym2.2;
+        let __nt = super::__action52::<>(input, __sym0, __sym1, __sym2);
+        __symbols.push((__start, __Symbol::Variant15(__nt), __end));
+        (3, 16)
     }
     pub(crate) fn __reduce48<
         'input,
@@ -9068,16 +10300,16 @@ mod __parse__MDyn {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // SomeValueList = SomeValue, ";", SomeValueList => ActionFn(27);
+        // MDyn = "(", MDyn, ")" => ActionFn(53);
         assert!(__symbols.len() >= 3);
-        let __sym2 = __pop_Variant18(__symbols);
-        let __sym1 = __pop_Variant0(__symbols);
-        let __sym0 = __pop_Variant17(__symbols);
+        let __sym2 = __pop_Variant0(__symbols);
+        let __sym1 = __pop_Variant15(__symbols);
+        let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0;
         let __end = __sym2.2;
-        let __nt = super::__action27::<>(input, __sym0, __sym1, __sym2);
-        __symbols.push((__start, __Symbol::Variant18(__nt), __end));
-        (3, 20)
+        let __nt = super::__action53::<>(input, __sym0, __sym1, __sym2);
+        __symbols.push((__start, __Symbol::Variant15(__nt), __end));
+        (3, 16)
     }
     pub(crate) fn __reduce49<
         'input,
@@ -9088,15 +10320,16 @@ mod __parse__MDyn {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // SomeValueList = SomeValue, ";" => ActionFn(28);
-        assert!(__symbols.len() >= 2);
+        // MDynList = MDyn, ";", MDynList => ActionFn(46);
+        assert!(__symbols.len() >= 3);
+        let __sym2 = __pop_Variant16(__symbols);
         let __sym1 = __pop_Variant0(__symbols);
-        let __sym0 = __pop_Variant17(__symbols);
+        let __sym0 = __pop_Variant15(__symbols);
         let __start = __sym0.0;
-        let __end = __sym1.2;
-        let __nt = super::__action28::<>(input, __sym0, __sym1);
-        __symbols.push((__start, __Symbol::Variant18(__nt), __end));
-        (2, 20)
+        let __end = __sym2.2;
+        let __nt = super::__action46::<>(input, __sym0, __sym1, __sym2);
+        __symbols.push((__start, __Symbol::Variant16(__nt), __end));
+        (3, 17)
     }
     pub(crate) fn __reduce50<
         'input,
@@ -9107,15 +10340,13 @@ mod __parse__MDyn {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // StackResultElem = "r|", ArgVar => ActionFn(49);
-        assert!(__symbols.len() >= 2);
-        let __sym1 = __pop_Variant2(__symbols);
-        let __sym0 = __pop_Variant0(__symbols);
+        // MDynList = MDyn => ActionFn(47);
+        let __sym0 = __pop_Variant15(__symbols);
         let __start = __sym0.0;
-        let __end = __sym1.2;
-        let __nt = super::__action49::<>(input, __sym0, __sym1);
-        __symbols.push((__start, __Symbol::Variant19(__nt), __end));
-        (2, 21)
+        let __end = __sym0.2;
+        let __nt = super::__action47::<>(input, __sym0);
+        __symbols.push((__start, __Symbol::Variant16(__nt), __end));
+        (1, 17)
     }
     pub(crate) fn __reduce51<
         'input,
@@ -9126,15 +10357,13 @@ mod __parse__MDyn {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // StackResultElem = "a|", AtomicType => ActionFn(50);
-        assert!(__symbols.len() >= 2);
-        let __sym1 = __pop_Variant4(__symbols);
+        // McLitBool = "True" => ActionFn(65);
         let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0;
-        let __end = __sym1.2;
-        let __nt = super::__action50::<>(input, __sym0, __sym1);
-        __symbols.push((__start, __Symbol::Variant19(__nt), __end));
-        (2, 21)
+        let __end = __sym0.2;
+        let __nt = super::__action65::<>(input, __sym0);
+        __symbols.push((__start, __Symbol::Variant17(__nt), __end));
+        (1, 18)
     }
     pub(crate) fn __reduce52<
         'input,
@@ -9145,13 +10374,13 @@ mod __parse__MDyn {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // __ConcreteType = ConcreteType => ActionFn(1);
-        let __sym0 = __pop_Variant8(__symbols);
+        // McLitBool = "False" => ActionFn(66);
+        let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0;
         let __end = __sym0.2;
-        let __nt = super::__action1::<>(input, __sym0);
-        __symbols.push((__start, __Symbol::Variant8(__nt), __end));
-        (1, 22)
+        let __nt = super::__action66::<>(input, __sym0);
+        __symbols.push((__start, __Symbol::Variant17(__nt), __end));
+        (1, 18)
     }
     pub(crate) fn __reduce53<
         'input,
@@ -9162,13 +10391,13 @@ mod __parse__MDyn {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // __Constraint = Constraint => ActionFn(4);
-        let __sym0 = __pop_Variant9(__symbols);
+        // McLitNumber = r#"([+-]?)[0-9]+"# => ActionFn(68);
+        let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0;
         let __end = __sym0.2;
-        let __nt = super::__action4::<>(input, __sym0);
-        __symbols.push((__start, __Symbol::Variant9(__nt), __end));
-        (1, 23)
+        let __nt = super::__action68::<>(input, __sym0);
+        __symbols.push((__start, __Symbol::Variant18(__nt), __end));
+        (1, 19)
     }
     pub(crate) fn __reduce54<
         'input,
@@ -9179,13 +10408,30 @@ mod __parse__MDyn {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // __InstructionList = InstructionList => ActionFn(0);
-        let __sym0 = __pop_Variant12(__symbols);
+        // McLitString = r#"\"[a-z0-9]+\""# => ActionFn(67);
+        let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0;
         let __end = __sym0.2;
-        let __nt = super::__action0::<>(input, __sym0);
+        let __nt = super::__action67::<>(input, __sym0);
         __symbols.push((__start, __Symbol::Variant12(__nt), __end));
-        (1, 24)
+        (1, 20)
+    }
+    pub(crate) fn __reduce55<
+        'input,
+    >(
+        input: &'input str,
+        __lookahead_start: Option<&usize>,
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
+        _: core::marker::PhantomData<(&'input ())>,
+    ) -> (usize, usize)
+    {
+        // SomeValue = AtomicValue => ActionFn(25);
+        let __sym0 = __pop_Variant5(__symbols);
+        let __start = __sym0.0;
+        let __end = __sym0.2;
+        let __nt = super::__action25::<>(input, __sym0);
+        __symbols.push((__start, __Symbol::Variant19(__nt), __end));
+        (1, 21)
     }
     pub(crate) fn __reduce56<
         'input,
@@ -9196,13 +10442,13 @@ mod __parse__MDyn {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // __MDynList = MDynList => ActionFn(2);
-        let __sym0 = __pop_Variant14(__symbols);
+        // SomeValue = CompositeValue => ActionFn(26);
+        let __sym0 = __pop_Variant8(__symbols);
         let __start = __sym0.0;
         let __end = __sym0.2;
-        let __nt = super::__action2::<>(input, __sym0);
-        __symbols.push((__start, __Symbol::Variant14(__nt), __end));
-        (1, 26)
+        let __nt = super::__action26::<>(input, __sym0);
+        __symbols.push((__start, __Symbol::Variant19(__nt), __end));
+        (1, 21)
     }
     pub(crate) fn __reduce57<
         'input,
@@ -9213,13 +10459,195 @@ mod __parse__MDyn {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // __StackResultElem = StackResultElem => ActionFn(5);
+        // SomeValue = "(", SomeValue, ")" => ActionFn(27);
+        assert!(__symbols.len() >= 3);
+        let __sym2 = __pop_Variant0(__symbols);
+        let __sym1 = __pop_Variant19(__symbols);
+        let __sym0 = __pop_Variant0(__symbols);
+        let __start = __sym0.0;
+        let __end = __sym2.2;
+        let __nt = super::__action27::<>(input, __sym0, __sym1, __sym2);
+        __symbols.push((__start, __Symbol::Variant19(__nt), __end));
+        (3, 21)
+    }
+    pub(crate) fn __reduce58<
+        'input,
+    >(
+        input: &'input str,
+        __lookahead_start: Option<&usize>,
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
+        _: core::marker::PhantomData<(&'input ())>,
+    ) -> (usize, usize)
+    {
+        // SomeValueList = SomeValue => ActionFn(35);
         let __sym0 = __pop_Variant19(__symbols);
         let __start = __sym0.0;
         let __end = __sym0.2;
+        let __nt = super::__action35::<>(input, __sym0);
+        __symbols.push((__start, __Symbol::Variant20(__nt), __end));
+        (1, 22)
+    }
+    pub(crate) fn __reduce59<
+        'input,
+    >(
+        input: &'input str,
+        __lookahead_start: Option<&usize>,
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
+        _: core::marker::PhantomData<(&'input ())>,
+    ) -> (usize, usize)
+    {
+        // SomeValueList = SomeValue, ";", SomeValueList => ActionFn(36);
+        assert!(__symbols.len() >= 3);
+        let __sym2 = __pop_Variant20(__symbols);
+        let __sym1 = __pop_Variant0(__symbols);
+        let __sym0 = __pop_Variant19(__symbols);
+        let __start = __sym0.0;
+        let __end = __sym2.2;
+        let __nt = super::__action36::<>(input, __sym0, __sym1, __sym2);
+        __symbols.push((__start, __Symbol::Variant20(__nt), __end));
+        (3, 22)
+    }
+    pub(crate) fn __reduce60<
+        'input,
+    >(
+        input: &'input str,
+        __lookahead_start: Option<&usize>,
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
+        _: core::marker::PhantomData<(&'input ())>,
+    ) -> (usize, usize)
+    {
+        // SomeValueList = SomeValue, ";" => ActionFn(37);
+        assert!(__symbols.len() >= 2);
+        let __sym1 = __pop_Variant0(__symbols);
+        let __sym0 = __pop_Variant19(__symbols);
+        let __start = __sym0.0;
+        let __end = __sym1.2;
+        let __nt = super::__action37::<>(input, __sym0, __sym1);
+        __symbols.push((__start, __Symbol::Variant20(__nt), __end));
+        (2, 22)
+    }
+    pub(crate) fn __reduce61<
+        'input,
+    >(
+        input: &'input str,
+        __lookahead_start: Option<&usize>,
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
+        _: core::marker::PhantomData<(&'input ())>,
+    ) -> (usize, usize)
+    {
+        // StackResultElem = "r|", ArgVar => ActionFn(60);
+        assert!(__symbols.len() >= 2);
+        let __sym1 = __pop_Variant2(__symbols);
+        let __sym0 = __pop_Variant0(__symbols);
+        let __start = __sym0.0;
+        let __end = __sym1.2;
+        let __nt = super::__action60::<>(input, __sym0, __sym1);
+        __symbols.push((__start, __Symbol::Variant21(__nt), __end));
+        (2, 23)
+    }
+    pub(crate) fn __reduce62<
+        'input,
+    >(
+        input: &'input str,
+        __lookahead_start: Option<&usize>,
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
+        _: core::marker::PhantomData<(&'input ())>,
+    ) -> (usize, usize)
+    {
+        // StackResultElem = "a|", AtomicType => ActionFn(61);
+        assert!(__symbols.len() >= 2);
+        let __sym1 = __pop_Variant4(__symbols);
+        let __sym0 = __pop_Variant0(__symbols);
+        let __start = __sym0.0;
+        let __end = __sym1.2;
+        let __nt = super::__action61::<>(input, __sym0, __sym1);
+        __symbols.push((__start, __Symbol::Variant21(__nt), __end));
+        (2, 23)
+    }
+    pub(crate) fn __reduce63<
+        'input,
+    >(
+        input: &'input str,
+        __lookahead_start: Option<&usize>,
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
+        _: core::marker::PhantomData<(&'input ())>,
+    ) -> (usize, usize)
+    {
+        // __ConcreteType = ConcreteType => ActionFn(1);
+        let __sym0 = __pop_Variant10(__symbols);
+        let __start = __sym0.0;
+        let __end = __sym0.2;
+        let __nt = super::__action1::<>(input, __sym0);
+        __symbols.push((__start, __Symbol::Variant10(__nt), __end));
+        (1, 24)
+    }
+    pub(crate) fn __reduce64<
+        'input,
+    >(
+        input: &'input str,
+        __lookahead_start: Option<&usize>,
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
+        _: core::marker::PhantomData<(&'input ())>,
+    ) -> (usize, usize)
+    {
+        // __Constraint = Constraint => ActionFn(4);
+        let __sym0 = __pop_Variant11(__symbols);
+        let __start = __sym0.0;
+        let __end = __sym0.2;
+        let __nt = super::__action4::<>(input, __sym0);
+        __symbols.push((__start, __Symbol::Variant11(__nt), __end));
+        (1, 25)
+    }
+    pub(crate) fn __reduce65<
+        'input,
+    >(
+        input: &'input str,
+        __lookahead_start: Option<&usize>,
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
+        _: core::marker::PhantomData<(&'input ())>,
+    ) -> (usize, usize)
+    {
+        // __InstructionList = InstructionList => ActionFn(0);
+        let __sym0 = __pop_Variant14(__symbols);
+        let __start = __sym0.0;
+        let __end = __sym0.2;
+        let __nt = super::__action0::<>(input, __sym0);
+        __symbols.push((__start, __Symbol::Variant14(__nt), __end));
+        (1, 26)
+    }
+    pub(crate) fn __reduce67<
+        'input,
+    >(
+        input: &'input str,
+        __lookahead_start: Option<&usize>,
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
+        _: core::marker::PhantomData<(&'input ())>,
+    ) -> (usize, usize)
+    {
+        // __MDynList = MDynList => ActionFn(2);
+        let __sym0 = __pop_Variant16(__symbols);
+        let __start = __sym0.0;
+        let __end = __sym0.2;
+        let __nt = super::__action2::<>(input, __sym0);
+        __symbols.push((__start, __Symbol::Variant16(__nt), __end));
+        (1, 28)
+    }
+    pub(crate) fn __reduce68<
+        'input,
+    >(
+        input: &'input str,
+        __lookahead_start: Option<&usize>,
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
+        _: core::marker::PhantomData<(&'input ())>,
+    ) -> (usize, usize)
+    {
+        // __StackResultElem = StackResultElem => ActionFn(5);
+        let __sym0 = __pop_Variant21(__symbols);
+        let __start = __sym0.0;
+        let __end = __sym0.2;
         let __nt = super::__action5::<>(input, __sym0);
-        __symbols.push((__start, __Symbol::Variant19(__nt), __end));
-        (1, 27)
+        __symbols.push((__start, __Symbol::Variant21(__nt), __end));
+        (1, 29)
     }
 }
 pub use self::__parse__MDyn::MDynParser;
@@ -9251,6 +10679,8 @@ mod __parse__MDynList {
     use crate::types::StackResultElem;
     use crate::types::StackResultElem::*;
     use crate::types::CompoundInstruction;
+    use crate::types::Attribute;
+    use crate::types::Attribute::*;
     #[allow(unused_extern_crates)]
     extern crate lalrpop_util as __lalrpop_util;
     #[allow(unused_imports)]
@@ -9267,71 +10697,73 @@ mod __parse__MDynList {
         Variant3(Vec<ArgValue<SomeValue>>),
         Variant4(MAtomic),
         Variant5(AtomicValue),
-        Variant6(CompositeValue),
-        Variant7(CompoundInstruction<SomeValue>),
-        Variant8(ConcreteType),
-        Variant9(ArgConstraint),
-        Variant10(String),
-        Variant11(Instruction<SomeValue>),
-        Variant12(Vec<CompoundInstruction<SomeValue>>),
-        Variant13(MType<DynMType>),
-        Variant14(Vec<MType<DynMType>>),
-        Variant15(bool),
-        Variant16(i32),
-        Variant17(SomeValue),
-        Variant18(Vec<SomeValue>),
-        Variant19(StackResultElem),
+        Variant6(Attribute),
+        Variant7(Vec<Attribute>),
+        Variant8(CompositeValue),
+        Variant9(CompoundInstruction<SomeValue>),
+        Variant10(ConcreteType),
+        Variant11(ArgConstraint),
+        Variant12(String),
+        Variant13(Instruction<SomeValue>),
+        Variant14(Vec<CompoundInstruction<SomeValue>>),
+        Variant15(MType<DynMType>),
+        Variant16(Vec<MType<DynMType>>),
+        Variant17(bool),
+        Variant18(i32),
+        Variant19(SomeValue),
+        Variant20(Vec<SomeValue>),
+        Variant21(StackResultElem),
     }
     const __ACTION: &[i8] = &[
         // State 0
-        2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 13, 14, 3, 4, 15, 5, 0, 16, 0, 0, 0, 0, 0, 0, 17, 0, 0,
+        2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 13, 0, 0, 14, 3, 4, 15, 0, 5, 0, 0, 0, 0, 16, 0, 0, 0, 0, 0, 0, 17, 0, 0,
         // State 1
-        2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 13, 14, 3, 4, 15, 5, 0, 16, 0, 0, 0, 0, 0, 0, 17, 0, 0,
+        2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 13, 0, 0, 14, 3, 4, 15, 0, 5, 0, 0, 0, 0, 16, 0, 0, 0, 0, 0, 0, 17, 0, 0,
         // State 2
-        2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 13, 14, 3, 4, 15, 5, 0, 16, 0, 0, 0, 0, 0, 0, 17, 0, 0,
+        2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 13, 0, 0, 14, 3, 4, 15, 0, 5, 0, 0, 0, 0, 16, 0, 0, 0, 0, 0, 0, 17, 0, 0,
         // State 3
-        2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 13, 14, 3, 4, 15, 5, 0, 16, 0, 0, 0, 0, 0, 0, 17, 0, 0,
+        2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 13, 0, 0, 14, 3, 4, 15, 0, 5, 0, 0, 0, 0, 16, 0, 0, 0, 0, 0, 0, 17, 0, 0,
         // State 4
-        2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 13, 14, 3, 4, 15, 5, 0, 16, 0, 0, 0, 0, 0, 0, 17, 0, 0,
+        2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 13, 0, 0, 14, 3, 4, 15, 0, 5, 0, 0, 0, 0, 16, 0, 0, 0, 0, 0, 0, 17, 0, 0,
         // State 5
-        2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 13, 14, 3, 4, 15, 5, 0, 16, 0, 0, 0, 0, 0, 0, 17, 0, 0,
+        2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 13, 0, 0, 14, 3, 4, 15, 0, 5, 0, 0, 0, 0, 16, 0, 0, 0, 0, 0, 0, 17, 0, 0,
         // State 6
-        2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 13, 14, 3, 4, 15, 5, 0, 16, 0, 0, 0, 0, 0, 0, 17, 0, 0,
+        2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 13, 0, 0, 14, 3, 4, 15, 0, 5, 0, 0, 0, 0, 16, 0, 0, 0, 0, 0, 0, 17, 0, 0,
         // State 7
-        2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 13, 14, 3, 4, 15, 5, 0, 16, 0, 0, 0, 0, 0, 0, 17, 0, 0,
+        2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 13, 0, 0, 14, 3, 4, 15, 0, 5, 0, 0, 0, 0, 16, 0, 0, 0, 0, 0, 0, 17, 0, 0,
         // State 8
-        -33, -33, -33, 0, 0, 0, 0, 0, 0, 0, -33, -33, -33, -33, -33, -33, 0, -33, 0, 0, 0, 0, 0, 0, -33, 0, 0,
+        -44, -44, 0, -44, 0, 0, 0, 0, 0, 0, 0, 0, 0, -44, 0, 0, -44, -44, -44, -44, 0, -44, 0, 0, 0, 0, -44, 0, 0, 0, 0, 0, 0, -44, 0, 0,
         // State 9
-        -34, -34, -34, 0, 0, 0, 0, 0, 0, 0, -34, -34, -34, -34, -34, -34, 0, -34, 0, 0, 0, 0, 0, 0, -34, 0, 0,
+        -45, -45, 0, -45, 0, 0, 0, 0, 0, 0, 0, 0, 0, -45, 0, 0, -45, -45, -45, -45, 0, -45, 0, 0, 0, 0, -45, 0, 0, 0, 0, 0, 0, -45, 0, 0,
         // State 10
-        0, 0, 6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         // State 11
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         // State 12
-        -9, -9, -9, 0, 0, 0, 0, 0, 0, 0, -9, -9, -9, -9, -9, -9, 0, -9, 0, 0, 0, 0, 0, 0, -9, 0, 0,
+        -9, -9, 0, -9, 0, 0, 0, 0, 0, 0, 0, 0, 0, -9, 0, 0, -9, -9, -9, -9, 0, -9, 0, 0, 0, 0, -9, 0, 0, 0, 0, 0, 0, -9, 0, 0,
         // State 13
-        -6, -6, -6, 0, 0, 0, 0, 0, 0, 0, -6, -6, -6, -6, -6, -6, 0, -6, 0, 0, 0, 0, 0, 0, -6, 0, 0,
+        -6, -6, 0, -6, 0, 0, 0, 0, 0, 0, 0, 0, 0, -6, 0, 0, -6, -6, -6, -6, 0, -6, 0, 0, 0, 0, -6, 0, 0, 0, 0, 0, 0, -6, 0, 0,
         // State 14
-        -7, -7, -7, 0, 0, 0, 0, 0, 0, 0, -7, -7, -7, -7, -7, -7, 0, -7, 0, 0, 0, 0, 0, 0, -7, 0, 0,
+        -7, -7, 0, -7, 0, 0, 0, 0, 0, 0, 0, 0, 0, -7, 0, 0, -7, -7, -7, -7, 0, -7, 0, 0, 0, 0, -7, 0, 0, 0, 0, 0, 0, -7, 0, 0,
         // State 15
-        -8, -8, -8, 0, 0, 0, 0, 0, 0, 0, -8, -8, -8, -8, -8, -8, 0, -8, 0, 0, 0, 0, 0, 0, -8, 0, 0,
+        -8, -8, 0, -8, 0, 0, 0, 0, 0, 0, 0, 0, 0, -8, 0, 0, -8, -8, -8, -8, 0, -8, 0, 0, 0, 0, -8, 0, 0, 0, 0, 0, 0, -8, 0, 0,
         // State 16
-        -25, -25, -25, 0, 0, 0, 0, 0, 0, 0, -25, -25, -25, -25, -25, -25, 0, -25, 0, 0, 0, 0, 0, 0, -25, 0, 0,
+        -36, -36, 0, -36, 0, 0, 0, 0, 0, 0, 0, 0, 0, -36, 0, 0, -36, -36, -36, -36, 0, -36, 0, 0, 0, 0, -36, 0, 0, 0, 0, 0, 0, -36, 0, 0,
         // State 17
-        0, 21, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 21, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         // State 18
-        -35, -35, -35, 0, 0, 0, 0, 0, 0, 0, -35, -35, -35, -35, -35, -35, 0, -35, 0, 0, 0, 0, 0, 0, -35, 0, 0,
+        -46, -46, 0, -46, 0, 0, 0, 0, 0, 0, 0, 0, 0, -46, 0, 0, -46, -46, -46, -46, 0, -46, 0, 0, 0, 0, -46, 0, 0, 0, 0, 0, 0, -46, 0, 0,
         // State 19
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         // State 20
-        -38, -38, -38, 0, 0, 0, 0, 0, 0, 0, -38, -38, -38, -38, -38, -38, 0, -38, 0, 0, 0, 0, 0, 0, -38, 0, 0,
+        -49, -49, 0, -49, 0, 0, 0, 0, 0, 0, 0, 0, 0, -49, 0, 0, -49, -49, -49, -49, 0, -49, 0, 0, 0, 0, -49, 0, 0, 0, 0, 0, 0, -49, 0, 0,
         // State 21
-        -37, -37, -37, 0, 0, 0, 0, 0, 0, 0, -37, -37, -37, -37, -37, -37, 0, -37, 0, 0, 0, 0, 0, 0, -37, 0, 0,
+        -48, -48, 0, -48, 0, 0, 0, 0, 0, 0, 0, 0, 0, -48, 0, 0, -48, -48, -48, -48, 0, -48, 0, 0, 0, 0, -48, 0, 0, 0, 0, 0, 0, -48, 0, 0,
         // State 22
-        -36, -36, -36, 0, 0, 0, 0, 0, 0, 0, -36, -36, -36, -36, -36, -36, 0, -36, 0, 0, 0, 0, 0, 0, -36, 0, 0,
+        -47, -47, 0, -47, 0, 0, 0, 0, 0, 0, 0, 0, 0, -47, 0, 0, -47, -47, -47, -47, 0, -47, 0, 0, 0, 0, -47, 0, 0, 0, 0, 0, 0, -47, 0, 0,
     ];
     fn __action(state: i8, integer: usize) -> i8 {
-        __ACTION[(state as usize) * 27 + integer]
+        __ACTION[(state as usize) * 36 + integer]
     }
     const __EOF_ACTION: &[i8] = &[
         // State 0
@@ -9351,13 +10783,13 @@ mod __parse__MDynList {
         // State 7
         0,
         // State 8
-        -33,
+        -44,
         // State 9
-        -34,
+        -45,
         // State 10
-        -40,
+        -51,
         // State 11
-        -57,
+        -68,
         // State 12
         -9,
         // State 13
@@ -9367,25 +10799,25 @@ mod __parse__MDynList {
         // State 15
         -8,
         // State 16
-        -25,
+        -36,
         // State 17
         0,
         // State 18
-        -35,
+        -46,
         // State 19
-        -39,
+        -50,
         // State 20
-        -38,
+        -49,
         // State 21
-        -37,
+        -48,
         // State 22
-        -36,
+        -47,
     ];
     fn __goto(state: i8, nt: usize) -> i8 {
         match nt {
             3 => 8,
-            9 => 9,
-            14 => match state {
+            11 => 9,
+            16 => match state {
                 2 => 6,
                 4 => 7,
                 1 => 17,
@@ -9394,7 +10826,7 @@ mod __parse__MDynList {
                 7 => 22,
                 _ => 10,
             },
-            15 => match state {
+            17 => match state {
                 5 => 19,
                 _ => 11,
             },
@@ -9404,7 +10836,9 @@ mod __parse__MDynList {
     const __TERMINAL: &[&str] = &[
         r###""(""###,
         r###"")""###,
+        r###""+""###,
         r###"";""###,
+        r###""=>""###,
         r###""DIP""###,
         r###""False""###,
         r###""IF""###,
@@ -9412,13 +10846,20 @@ mod __parse__MDynList {
         r###""Pair""###,
         r###""True""###,
         r###""a|""###,
+        r###""bigmapvalue""###,
         r###""bool""###,
+        r###""comparable""###,
+        r###""duplicable""###,
         r###""int""###,
         r###""lambda""###,
         r###""list""###,
         r###""nat""###,
+        r###""packable""###,
         r###""pair""###,
+        r###""passable""###,
+        r###""pushable""###,
         r###""r|""###,
+        r###""storable""###,
         r###""string""###,
         r###""t|""###,
         r###""w|""###,
@@ -9426,7 +10867,7 @@ mod __parse__MDynList {
         r###""}""###,
         r###"r#"\"[a-z0-9]+\""#"###,
         r###"r#"([+-]?)[0-9]+"#"###,
-        r###"r#"<[A-Za-z][A-Za-z0-9|]+>"#"###,
+        r###"r#"<[A-Za-z][A-Za-z0-9|+=>]+>"#"###,
         r###"r#"[A-Za-z][A-Za-z0-9]+"#"###,
         r###"r#"[a-z]"#"###,
     ];
@@ -9497,7 +10938,7 @@ mod __parse__MDynList {
 
         #[inline]
         fn error_action(&self, state: i8) -> i8 {
-            __action(state, 27 - 1)
+            __action(state, 36 - 1)
         }
 
         #[inline]
@@ -9586,11 +11027,20 @@ mod __parse__MDynList {
             Token(24, _) if true => Some(19),
             Token(25, _) if true => Some(20),
             Token(26, _) if true => Some(21),
-            Token(0, _) if true => Some(22),
-            Token(1, _) if true => Some(23),
-            Token(2, _) if true => Some(24),
-            Token(3, _) if true => Some(25),
-            Token(4, _) if true => Some(26),
+            Token(27, _) if true => Some(22),
+            Token(28, _) if true => Some(23),
+            Token(29, _) if true => Some(24),
+            Token(30, _) if true => Some(25),
+            Token(31, _) if true => Some(26),
+            Token(32, _) if true => Some(27),
+            Token(33, _) if true => Some(28),
+            Token(34, _) if true => Some(29),
+            Token(35, _) if true => Some(30),
+            Token(0, _) if true => Some(31),
+            Token(1, _) if true => Some(32),
+            Token(2, _) if true => Some(33),
+            Token(3, _) if true => Some(34),
+            Token(4, _) if true => Some(35),
             _ => None,
         }
     }
@@ -9603,8 +11053,8 @@ mod __parse__MDynList {
     ) -> __Symbol<'input>
     {
         match __token_index {
-            0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13 | 14 | 15 | 16 | 17 | 18 | 19 | 20 | 21 | 22 | 23 | 24 | 25 | 26 => match __token {
-                Token(5, __tok0) | Token(6, __tok0) | Token(7, __tok0) | Token(8, __tok0) | Token(9, __tok0) | Token(10, __tok0) | Token(11, __tok0) | Token(12, __tok0) | Token(13, __tok0) | Token(14, __tok0) | Token(15, __tok0) | Token(16, __tok0) | Token(17, __tok0) | Token(18, __tok0) | Token(19, __tok0) | Token(20, __tok0) | Token(21, __tok0) | Token(22, __tok0) | Token(23, __tok0) | Token(24, __tok0) | Token(25, __tok0) | Token(26, __tok0) | Token(0, __tok0) | Token(1, __tok0) | Token(2, __tok0) | Token(3, __tok0) | Token(4, __tok0) if true => __Symbol::Variant0(__tok0),
+            0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13 | 14 | 15 | 16 | 17 | 18 | 19 | 20 | 21 | 22 | 23 | 24 | 25 | 26 | 27 | 28 | 29 | 30 | 31 | 32 | 33 | 34 | 35 => match __token {
+                Token(5, __tok0) | Token(6, __tok0) | Token(7, __tok0) | Token(8, __tok0) | Token(9, __tok0) | Token(10, __tok0) | Token(11, __tok0) | Token(12, __tok0) | Token(13, __tok0) | Token(14, __tok0) | Token(15, __tok0) | Token(16, __tok0) | Token(17, __tok0) | Token(18, __tok0) | Token(19, __tok0) | Token(20, __tok0) | Token(21, __tok0) | Token(22, __tok0) | Token(23, __tok0) | Token(24, __tok0) | Token(25, __tok0) | Token(26, __tok0) | Token(27, __tok0) | Token(28, __tok0) | Token(29, __tok0) | Token(30, __tok0) | Token(31, __tok0) | Token(32, __tok0) | Token(33, __tok0) | Token(34, __tok0) | Token(35, __tok0) | Token(0, __tok0) | Token(1, __tok0) | Token(2, __tok0) | Token(3, __tok0) | Token(4, __tok0) if true => __Symbol::Variant0(__tok0),
                 _ => unreachable!(),
             },
             _ => unreachable!(),
@@ -9692,13 +11142,13 @@ mod __parse__MDynList {
             }
             12 => {
                 __state_machine::SimulatedReduce::Reduce {
-                    states_to_pop: 3,
+                    states_to_pop: 1,
                     nonterminal_produced: 5,
                 }
             }
             13 => {
                 __state_machine::SimulatedReduce::Reduce {
-                    states_to_pop: 3,
+                    states_to_pop: 1,
                     nonterminal_produced: 5,
                 }
             }
@@ -9710,255 +11160,321 @@ mod __parse__MDynList {
             }
             15 => {
                 __state_machine::SimulatedReduce::Reduce {
-                    states_to_pop: 3,
-                    nonterminal_produced: 6,
+                    states_to_pop: 1,
+                    nonterminal_produced: 5,
                 }
             }
             16 => {
                 __state_machine::SimulatedReduce::Reduce {
-                    states_to_pop: 2,
-                    nonterminal_produced: 6,
+                    states_to_pop: 1,
+                    nonterminal_produced: 5,
                 }
             }
             17 => {
                 __state_machine::SimulatedReduce::Reduce {
-                    states_to_pop: 4,
-                    nonterminal_produced: 6,
+                    states_to_pop: 1,
+                    nonterminal_produced: 5,
                 }
             }
             18 => {
                 __state_machine::SimulatedReduce::Reduce {
                     states_to_pop: 1,
-                    nonterminal_produced: 6,
+                    nonterminal_produced: 5,
                 }
             }
             19 => {
+                __state_machine::SimulatedReduce::Reduce {
+                    states_to_pop: 3,
+                    nonterminal_produced: 6,
+                }
+            }
+            20 => {
+                __state_machine::SimulatedReduce::Reduce {
+                    states_to_pop: 1,
+                    nonterminal_produced: 6,
+                }
+            }
+            21 => {
+                __state_machine::SimulatedReduce::Reduce {
+                    states_to_pop: 3,
+                    nonterminal_produced: 7,
+                }
+            }
+            22 => {
+                __state_machine::SimulatedReduce::Reduce {
+                    states_to_pop: 3,
+                    nonterminal_produced: 7,
+                }
+            }
+            23 => {
                 __state_machine::SimulatedReduce::Reduce {
                     states_to_pop: 1,
                     nonterminal_produced: 7,
                 }
             }
-            20 => {
-                __state_machine::SimulatedReduce::Reduce {
-                    states_to_pop: 2,
-                    nonterminal_produced: 8,
-                }
-            }
-            21 => {
-                __state_machine::SimulatedReduce::Reduce {
-                    states_to_pop: 2,
-                    nonterminal_produced: 8,
-                }
-            }
-            22 => {
-                __state_machine::SimulatedReduce::Reduce {
-                    states_to_pop: 2,
-                    nonterminal_produced: 8,
-                }
-            }
-            23 => {
-                __state_machine::SimulatedReduce::Reduce {
-                    states_to_pop: 2,
-                    nonterminal_produced: 8,
-                }
-            }
             24 => {
                 __state_machine::SimulatedReduce::Reduce {
-                    states_to_pop: 1,
-                    nonterminal_produced: 9,
+                    states_to_pop: 3,
+                    nonterminal_produced: 8,
                 }
             }
             25 => {
                 __state_machine::SimulatedReduce::Reduce {
-                    states_to_pop: 1,
-                    nonterminal_produced: 10,
+                    states_to_pop: 2,
+                    nonterminal_produced: 8,
                 }
             }
             26 => {
                 __state_machine::SimulatedReduce::Reduce {
-                    states_to_pop: 2,
-                    nonterminal_produced: 11,
+                    states_to_pop: 4,
+                    nonterminal_produced: 8,
                 }
             }
             27 => {
                 __state_machine::SimulatedReduce::Reduce {
                     states_to_pop: 1,
-                    nonterminal_produced: 11,
+                    nonterminal_produced: 8,
                 }
             }
             28 => {
                 __state_machine::SimulatedReduce::Reduce {
-                    states_to_pop: 3,
-                    nonterminal_produced: 12,
+                    states_to_pop: 1,
+                    nonterminal_produced: 9,
                 }
             }
             29 => {
                 __state_machine::SimulatedReduce::Reduce {
-                    states_to_pop: 1,
-                    nonterminal_produced: 13,
+                    states_to_pop: 4,
+                    nonterminal_produced: 10,
                 }
             }
             30 => {
                 __state_machine::SimulatedReduce::Reduce {
-                    states_to_pop: 3,
-                    nonterminal_produced: 13,
+                    states_to_pop: 2,
+                    nonterminal_produced: 10,
                 }
             }
             31 => {
                 __state_machine::SimulatedReduce::Reduce {
-                    states_to_pop: 2,
-                    nonterminal_produced: 13,
+                    states_to_pop: 4,
+                    nonterminal_produced: 10,
                 }
             }
             32 => {
                 __state_machine::SimulatedReduce::Reduce {
-                    states_to_pop: 1,
-                    nonterminal_produced: 14,
+                    states_to_pop: 2,
+                    nonterminal_produced: 10,
                 }
             }
             33 => {
                 __state_machine::SimulatedReduce::Reduce {
-                    states_to_pop: 1,
-                    nonterminal_produced: 14,
+                    states_to_pop: 2,
+                    nonterminal_produced: 10,
                 }
             }
             34 => {
                 __state_machine::SimulatedReduce::Reduce {
                     states_to_pop: 2,
-                    nonterminal_produced: 14,
+                    nonterminal_produced: 10,
                 }
             }
             35 => {
                 __state_machine::SimulatedReduce::Reduce {
-                    states_to_pop: 3,
-                    nonterminal_produced: 14,
+                    states_to_pop: 1,
+                    nonterminal_produced: 11,
                 }
             }
             36 => {
                 __state_machine::SimulatedReduce::Reduce {
-                    states_to_pop: 3,
-                    nonterminal_produced: 14,
+                    states_to_pop: 1,
+                    nonterminal_produced: 12,
                 }
             }
             37 => {
                 __state_machine::SimulatedReduce::Reduce {
-                    states_to_pop: 3,
-                    nonterminal_produced: 14,
+                    states_to_pop: 2,
+                    nonterminal_produced: 13,
                 }
             }
             38 => {
                 __state_machine::SimulatedReduce::Reduce {
-                    states_to_pop: 3,
-                    nonterminal_produced: 15,
+                    states_to_pop: 1,
+                    nonterminal_produced: 13,
                 }
             }
             39 => {
                 __state_machine::SimulatedReduce::Reduce {
-                    states_to_pop: 1,
-                    nonterminal_produced: 15,
+                    states_to_pop: 3,
+                    nonterminal_produced: 14,
                 }
             }
             40 => {
                 __state_machine::SimulatedReduce::Reduce {
                     states_to_pop: 1,
-                    nonterminal_produced: 16,
+                    nonterminal_produced: 15,
                 }
             }
             41 => {
                 __state_machine::SimulatedReduce::Reduce {
-                    states_to_pop: 1,
-                    nonterminal_produced: 16,
+                    states_to_pop: 3,
+                    nonterminal_produced: 15,
                 }
             }
             42 => {
                 __state_machine::SimulatedReduce::Reduce {
-                    states_to_pop: 1,
-                    nonterminal_produced: 17,
+                    states_to_pop: 2,
+                    nonterminal_produced: 15,
                 }
             }
             43 => {
                 __state_machine::SimulatedReduce::Reduce {
                     states_to_pop: 1,
-                    nonterminal_produced: 18,
+                    nonterminal_produced: 16,
                 }
             }
             44 => {
                 __state_machine::SimulatedReduce::Reduce {
                     states_to_pop: 1,
-                    nonterminal_produced: 19,
+                    nonterminal_produced: 16,
                 }
             }
             45 => {
                 __state_machine::SimulatedReduce::Reduce {
-                    states_to_pop: 1,
-                    nonterminal_produced: 19,
+                    states_to_pop: 2,
+                    nonterminal_produced: 16,
                 }
             }
             46 => {
                 __state_machine::SimulatedReduce::Reduce {
                     states_to_pop: 3,
-                    nonterminal_produced: 19,
+                    nonterminal_produced: 16,
                 }
             }
             47 => {
                 __state_machine::SimulatedReduce::Reduce {
-                    states_to_pop: 1,
-                    nonterminal_produced: 20,
+                    states_to_pop: 3,
+                    nonterminal_produced: 16,
                 }
             }
             48 => {
                 __state_machine::SimulatedReduce::Reduce {
                     states_to_pop: 3,
-                    nonterminal_produced: 20,
+                    nonterminal_produced: 16,
                 }
             }
             49 => {
                 __state_machine::SimulatedReduce::Reduce {
-                    states_to_pop: 2,
-                    nonterminal_produced: 20,
+                    states_to_pop: 3,
+                    nonterminal_produced: 17,
                 }
             }
             50 => {
                 __state_machine::SimulatedReduce::Reduce {
-                    states_to_pop: 2,
-                    nonterminal_produced: 21,
+                    states_to_pop: 1,
+                    nonterminal_produced: 17,
                 }
             }
             51 => {
                 __state_machine::SimulatedReduce::Reduce {
-                    states_to_pop: 2,
-                    nonterminal_produced: 21,
+                    states_to_pop: 1,
+                    nonterminal_produced: 18,
                 }
             }
             52 => {
                 __state_machine::SimulatedReduce::Reduce {
                     states_to_pop: 1,
-                    nonterminal_produced: 22,
+                    nonterminal_produced: 18,
                 }
             }
             53 => {
                 __state_machine::SimulatedReduce::Reduce {
                     states_to_pop: 1,
-                    nonterminal_produced: 23,
+                    nonterminal_produced: 19,
                 }
             }
             54 => {
                 __state_machine::SimulatedReduce::Reduce {
                     states_to_pop: 1,
-                    nonterminal_produced: 24,
+                    nonterminal_produced: 20,
                 }
             }
             55 => {
                 __state_machine::SimulatedReduce::Reduce {
                     states_to_pop: 1,
+                    nonterminal_produced: 21,
+                }
+            }
+            56 => {
+                __state_machine::SimulatedReduce::Reduce {
+                    states_to_pop: 1,
+                    nonterminal_produced: 21,
+                }
+            }
+            57 => {
+                __state_machine::SimulatedReduce::Reduce {
+                    states_to_pop: 3,
+                    nonterminal_produced: 21,
+                }
+            }
+            58 => {
+                __state_machine::SimulatedReduce::Reduce {
+                    states_to_pop: 1,
+                    nonterminal_produced: 22,
+                }
+            }
+            59 => {
+                __state_machine::SimulatedReduce::Reduce {
+                    states_to_pop: 3,
+                    nonterminal_produced: 22,
+                }
+            }
+            60 => {
+                __state_machine::SimulatedReduce::Reduce {
+                    states_to_pop: 2,
+                    nonterminal_produced: 22,
+                }
+            }
+            61 => {
+                __state_machine::SimulatedReduce::Reduce {
+                    states_to_pop: 2,
+                    nonterminal_produced: 23,
+                }
+            }
+            62 => {
+                __state_machine::SimulatedReduce::Reduce {
+                    states_to_pop: 2,
+                    nonterminal_produced: 23,
+                }
+            }
+            63 => {
+                __state_machine::SimulatedReduce::Reduce {
+                    states_to_pop: 1,
+                    nonterminal_produced: 24,
+                }
+            }
+            64 => {
+                __state_machine::SimulatedReduce::Reduce {
+                    states_to_pop: 1,
                     nonterminal_produced: 25,
                 }
             }
-            56 => __state_machine::SimulatedReduce::Accept,
-            57 => {
+            65 => {
+                __state_machine::SimulatedReduce::Reduce {
+                    states_to_pop: 1,
+                    nonterminal_produced: 26,
+                }
+            }
+            66 => {
                 __state_machine::SimulatedReduce::Reduce {
                     states_to_pop: 1,
                     nonterminal_produced: 27,
+                }
+            }
+            67 => __state_machine::SimulatedReduce::Accept,
+            68 => {
+                __state_machine::SimulatedReduce::Reduce {
+                    states_to_pop: 1,
+                    nonterminal_produced: 29,
                 }
             }
             _ => panic!("invalid reduction index {}", __reduce_index)
@@ -10210,15 +11726,48 @@ mod __parse__MDynList {
                 __reduce55(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&())>)
             }
             56 => {
+                __reduce56(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&())>)
+            }
+            57 => {
+                __reduce57(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&())>)
+            }
+            58 => {
+                __reduce58(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&())>)
+            }
+            59 => {
+                __reduce59(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&())>)
+            }
+            60 => {
+                __reduce60(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&())>)
+            }
+            61 => {
+                __reduce61(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&())>)
+            }
+            62 => {
+                __reduce62(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&())>)
+            }
+            63 => {
+                __reduce63(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&())>)
+            }
+            64 => {
+                __reduce64(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&())>)
+            }
+            65 => {
+                __reduce65(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&())>)
+            }
+            66 => {
+                __reduce66(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&())>)
+            }
+            67 => {
                 // __MDynList = MDynList => ActionFn(2);
-                let __sym0 = __pop_Variant14(__symbols);
+                let __sym0 = __pop_Variant16(__symbols);
                 let __start = __sym0.0;
                 let __end = __sym0.2;
                 let __nt = super::__action2::<>(input, __sym0);
                 return Some(Ok(__nt));
             }
-            57 => {
-                __reduce57(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&())>)
+            68 => {
+                __reduce68(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&())>)
             }
             _ => panic!("invalid action code {}", __action)
         };
@@ -10233,14 +11782,14 @@ mod __parse__MDynList {
     fn __symbol_type_mismatch() -> ! {
         panic!("symbol type mismatch")
     }
-    fn __pop_Variant9<
+    fn __pop_Variant11<
       'input,
     >(
         __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>
     ) -> (usize, ArgConstraint, usize)
      {
         match __symbols.pop() {
-            Some((__l, __Symbol::Variant9(__v), __r)) => (__l, __v, __r),
+            Some((__l, __Symbol::Variant11(__v), __r)) => (__l, __v, __r),
             _ => __symbol_type_mismatch()
         }
     }
@@ -10270,21 +11819,10 @@ mod __parse__MDynList {
       'input,
     >(
         __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>
-    ) -> (usize, CompositeValue, usize)
+    ) -> (usize, Attribute, usize)
      {
         match __symbols.pop() {
             Some((__l, __Symbol::Variant6(__v), __r)) => (__l, __v, __r),
-            _ => __symbol_type_mismatch()
-        }
-    }
-    fn __pop_Variant7<
-      'input,
-    >(
-        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>
-    ) -> (usize, CompoundInstruction<SomeValue>, usize)
-     {
-        match __symbols.pop() {
-            Some((__l, __Symbol::Variant7(__v), __r)) => (__l, __v, __r),
             _ => __symbol_type_mismatch()
         }
     }
@@ -10292,21 +11830,43 @@ mod __parse__MDynList {
       'input,
     >(
         __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>
-    ) -> (usize, ConcreteType, usize)
+    ) -> (usize, CompositeValue, usize)
      {
         match __symbols.pop() {
             Some((__l, __Symbol::Variant8(__v), __r)) => (__l, __v, __r),
             _ => __symbol_type_mismatch()
         }
     }
-    fn __pop_Variant11<
+    fn __pop_Variant9<
+      'input,
+    >(
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>
+    ) -> (usize, CompoundInstruction<SomeValue>, usize)
+     {
+        match __symbols.pop() {
+            Some((__l, __Symbol::Variant9(__v), __r)) => (__l, __v, __r),
+            _ => __symbol_type_mismatch()
+        }
+    }
+    fn __pop_Variant10<
+      'input,
+    >(
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>
+    ) -> (usize, ConcreteType, usize)
+     {
+        match __symbols.pop() {
+            Some((__l, __Symbol::Variant10(__v), __r)) => (__l, __v, __r),
+            _ => __symbol_type_mismatch()
+        }
+    }
+    fn __pop_Variant13<
       'input,
     >(
         __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>
     ) -> (usize, Instruction<SomeValue>, usize)
      {
         match __symbols.pop() {
-            Some((__l, __Symbol::Variant11(__v), __r)) => (__l, __v, __r),
+            Some((__l, __Symbol::Variant13(__v), __r)) => (__l, __v, __r),
             _ => __symbol_type_mismatch()
         }
     }
@@ -10321,25 +11881,14 @@ mod __parse__MDynList {
             _ => __symbol_type_mismatch()
         }
     }
-    fn __pop_Variant13<
+    fn __pop_Variant15<
       'input,
     >(
         __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>
     ) -> (usize, MType<DynMType>, usize)
      {
         match __symbols.pop() {
-            Some((__l, __Symbol::Variant13(__v), __r)) => (__l, __v, __r),
-            _ => __symbol_type_mismatch()
-        }
-    }
-    fn __pop_Variant17<
-      'input,
-    >(
-        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>
-    ) -> (usize, SomeValue, usize)
-     {
-        match __symbols.pop() {
-            Some((__l, __Symbol::Variant17(__v), __r)) => (__l, __v, __r),
+            Some((__l, __Symbol::Variant15(__v), __r)) => (__l, __v, __r),
             _ => __symbol_type_mismatch()
         }
     }
@@ -10347,21 +11896,32 @@ mod __parse__MDynList {
       'input,
     >(
         __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>
-    ) -> (usize, StackResultElem, usize)
+    ) -> (usize, SomeValue, usize)
      {
         match __symbols.pop() {
             Some((__l, __Symbol::Variant19(__v), __r)) => (__l, __v, __r),
             _ => __symbol_type_mismatch()
         }
     }
-    fn __pop_Variant10<
+    fn __pop_Variant21<
+      'input,
+    >(
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>
+    ) -> (usize, StackResultElem, usize)
+     {
+        match __symbols.pop() {
+            Some((__l, __Symbol::Variant21(__v), __r)) => (__l, __v, __r),
+            _ => __symbol_type_mismatch()
+        }
+    }
+    fn __pop_Variant12<
       'input,
     >(
         __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>
     ) -> (usize, String, usize)
      {
         match __symbols.pop() {
-            Some((__l, __Symbol::Variant10(__v), __r)) => (__l, __v, __r),
+            Some((__l, __Symbol::Variant12(__v), __r)) => (__l, __v, __r),
             _ => __symbol_type_mismatch()
         }
     }
@@ -10376,14 +11936,14 @@ mod __parse__MDynList {
             _ => __symbol_type_mismatch()
         }
     }
-    fn __pop_Variant12<
+    fn __pop_Variant7<
       'input,
     >(
         __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>
-    ) -> (usize, Vec<CompoundInstruction<SomeValue>>, usize)
+    ) -> (usize, Vec<Attribute>, usize)
      {
         match __symbols.pop() {
-            Some((__l, __Symbol::Variant12(__v), __r)) => (__l, __v, __r),
+            Some((__l, __Symbol::Variant7(__v), __r)) => (__l, __v, __r),
             _ => __symbol_type_mismatch()
         }
     }
@@ -10391,32 +11951,43 @@ mod __parse__MDynList {
       'input,
     >(
         __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>
-    ) -> (usize, Vec<MType<DynMType>>, usize)
+    ) -> (usize, Vec<CompoundInstruction<SomeValue>>, usize)
      {
         match __symbols.pop() {
             Some((__l, __Symbol::Variant14(__v), __r)) => (__l, __v, __r),
             _ => __symbol_type_mismatch()
         }
     }
-    fn __pop_Variant18<
+    fn __pop_Variant16<
+      'input,
+    >(
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>
+    ) -> (usize, Vec<MType<DynMType>>, usize)
+     {
+        match __symbols.pop() {
+            Some((__l, __Symbol::Variant16(__v), __r)) => (__l, __v, __r),
+            _ => __symbol_type_mismatch()
+        }
+    }
+    fn __pop_Variant20<
       'input,
     >(
         __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>
     ) -> (usize, Vec<SomeValue>, usize)
      {
         match __symbols.pop() {
-            Some((__l, __Symbol::Variant18(__v), __r)) => (__l, __v, __r),
+            Some((__l, __Symbol::Variant20(__v), __r)) => (__l, __v, __r),
             _ => __symbol_type_mismatch()
         }
     }
-    fn __pop_Variant15<
+    fn __pop_Variant17<
       'input,
     >(
         __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>
     ) -> (usize, bool, usize)
      {
         match __symbols.pop() {
-            Some((__l, __Symbol::Variant15(__v), __r)) => (__l, __v, __r),
+            Some((__l, __Symbol::Variant17(__v), __r)) => (__l, __v, __r),
             _ => __symbol_type_mismatch()
         }
     }
@@ -10431,14 +12002,14 @@ mod __parse__MDynList {
             _ => __symbol_type_mismatch()
         }
     }
-    fn __pop_Variant16<
+    fn __pop_Variant18<
       'input,
     >(
         __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>
     ) -> (usize, i32, usize)
      {
         match __symbols.pop() {
-            Some((__l, __Symbol::Variant16(__v), __r)) => (__l, __v, __r),
+            Some((__l, __Symbol::Variant18(__v), __r)) => (__l, __v, __r),
             _ => __symbol_type_mismatch()
         }
     }
@@ -10462,11 +12033,11 @@ mod __parse__MDynList {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // Arg = SomeValue => ActionFn(12);
-        let __sym0 = __pop_Variant17(__symbols);
+        // Arg = SomeValue => ActionFn(21);
+        let __sym0 = __pop_Variant19(__symbols);
         let __start = __sym0.0;
         let __end = __sym0.2;
-        let __nt = super::__action12::<>(input, __sym0);
+        let __nt = super::__action21::<>(input, __sym0);
         __symbols.push((__start, __Symbol::Variant1(__nt), __end));
         (1, 0)
     }
@@ -10479,11 +12050,11 @@ mod __parse__MDynList {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // Arg = ConcreteType => ActionFn(13);
-        let __sym0 = __pop_Variant8(__symbols);
+        // Arg = ConcreteType => ActionFn(22);
+        let __sym0 = __pop_Variant10(__symbols);
         let __start = __sym0.0;
         let __end = __sym0.2;
-        let __nt = super::__action13::<>(input, __sym0);
+        let __nt = super::__action22::<>(input, __sym0);
         __symbols.push((__start, __Symbol::Variant1(__nt), __end));
         (1, 0)
     }
@@ -10496,11 +12067,11 @@ mod __parse__MDynList {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // ArgVar = r#"[a-z]"# => ActionFn(51);
+        // ArgVar = r#"[a-z]"# => ActionFn(62);
         let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0;
         let __end = __sym0.2;
-        let __nt = super::__action51::<>(input, __sym0);
+        let __nt = super::__action62::<>(input, __sym0);
         __symbols.push((__start, __Symbol::Variant2(__nt), __end));
         (1, 1)
     }
@@ -10513,13 +12084,13 @@ mod __parse__MDynList {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // Args = Arg, Args => ActionFn(14);
+        // Args = Arg, Args => ActionFn(23);
         assert!(__symbols.len() >= 2);
         let __sym1 = __pop_Variant3(__symbols);
         let __sym0 = __pop_Variant1(__symbols);
         let __start = __sym0.0;
         let __end = __sym1.2;
-        let __nt = super::__action14::<>(input, __sym0, __sym1);
+        let __nt = super::__action23::<>(input, __sym0, __sym1);
         __symbols.push((__start, __Symbol::Variant3(__nt), __end));
         (2, 2)
     }
@@ -10532,11 +12103,11 @@ mod __parse__MDynList {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // Args = Arg => ActionFn(15);
+        // Args = Arg => ActionFn(24);
         let __sym0 = __pop_Variant1(__symbols);
         let __start = __sym0.0;
         let __end = __sym0.2;
-        let __nt = super::__action15::<>(input, __sym0);
+        let __nt = super::__action24::<>(input, __sym0);
         __symbols.push((__start, __Symbol::Variant3(__nt), __end));
         (1, 2)
     }
@@ -10549,11 +12120,11 @@ mod __parse__MDynList {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // AtomicType = "int" => ActionFn(32);
+        // AtomicType = "int" => ActionFn(41);
         let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0;
         let __end = __sym0.2;
-        let __nt = super::__action32::<>(input, __sym0);
+        let __nt = super::__action41::<>(input, __sym0);
         __symbols.push((__start, __Symbol::Variant4(__nt), __end));
         (1, 3)
     }
@@ -10566,11 +12137,11 @@ mod __parse__MDynList {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // AtomicType = "nat" => ActionFn(33);
+        // AtomicType = "nat" => ActionFn(42);
         let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0;
         let __end = __sym0.2;
-        let __nt = super::__action33::<>(input, __sym0);
+        let __nt = super::__action42::<>(input, __sym0);
         __symbols.push((__start, __Symbol::Variant4(__nt), __end));
         (1, 3)
     }
@@ -10583,11 +12154,11 @@ mod __parse__MDynList {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // AtomicType = "string" => ActionFn(34);
+        // AtomicType = "string" => ActionFn(43);
         let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0;
         let __end = __sym0.2;
-        let __nt = super::__action34::<>(input, __sym0);
+        let __nt = super::__action43::<>(input, __sym0);
         __symbols.push((__start, __Symbol::Variant4(__nt), __end));
         (1, 3)
     }
@@ -10600,11 +12171,11 @@ mod __parse__MDynList {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // AtomicType = "bool" => ActionFn(35);
+        // AtomicType = "bool" => ActionFn(44);
         let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0;
         let __end = __sym0.2;
-        let __nt = super::__action35::<>(input, __sym0);
+        let __nt = super::__action44::<>(input, __sym0);
         __symbols.push((__start, __Symbol::Variant4(__nt), __end));
         (1, 3)
     }
@@ -10617,11 +12188,11 @@ mod __parse__MDynList {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // AtomicValue = McLitNumber => ActionFn(19);
-        let __sym0 = __pop_Variant16(__symbols);
+        // AtomicValue = McLitNumber => ActionFn(28);
+        let __sym0 = __pop_Variant18(__symbols);
         let __start = __sym0.0;
         let __end = __sym0.2;
-        let __nt = super::__action19::<>(input, __sym0);
+        let __nt = super::__action28::<>(input, __sym0);
         __symbols.push((__start, __Symbol::Variant5(__nt), __end));
         (1, 4)
     }
@@ -10634,11 +12205,11 @@ mod __parse__MDynList {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // AtomicValue = McLitString => ActionFn(20);
-        let __sym0 = __pop_Variant10(__symbols);
+        // AtomicValue = McLitString => ActionFn(29);
+        let __sym0 = __pop_Variant12(__symbols);
         let __start = __sym0.0;
         let __end = __sym0.2;
-        let __nt = super::__action20::<>(input, __sym0);
+        let __nt = super::__action29::<>(input, __sym0);
         __symbols.push((__start, __Symbol::Variant5(__nt), __end));
         (1, 4)
     }
@@ -10651,11 +12222,11 @@ mod __parse__MDynList {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // AtomicValue = McLitBool => ActionFn(21);
-        let __sym0 = __pop_Variant15(__symbols);
+        // AtomicValue = McLitBool => ActionFn(30);
+        let __sym0 = __pop_Variant17(__symbols);
         let __start = __sym0.0;
         let __end = __sym0.2;
-        let __nt = super::__action21::<>(input, __sym0);
+        let __nt = super::__action30::<>(input, __sym0);
         __symbols.push((__start, __Symbol::Variant5(__nt), __end));
         (1, 4)
     }
@@ -10668,16 +12239,13 @@ mod __parse__MDynList {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // CompositeValue = "Pair", SomeValue, SomeValue => ActionFn(22);
-        assert!(__symbols.len() >= 3);
-        let __sym2 = __pop_Variant17(__symbols);
-        let __sym1 = __pop_Variant17(__symbols);
+        // Attribute = "comparable" => ActionFn(6);
         let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0;
-        let __end = __sym2.2;
-        let __nt = super::__action22::<>(input, __sym0, __sym1, __sym2);
+        let __end = __sym0.2;
+        let __nt = super::__action6::<>(input, __sym0);
         __symbols.push((__start, __Symbol::Variant6(__nt), __end));
-        (3, 5)
+        (1, 5)
     }
     pub(crate) fn __reduce13<
         'input,
@@ -10688,16 +12256,13 @@ mod __parse__MDynList {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // CompositeValue = "{", SomeValueList, "}" => ActionFn(23);
-        assert!(__symbols.len() >= 3);
-        let __sym2 = __pop_Variant0(__symbols);
-        let __sym1 = __pop_Variant18(__symbols);
+        // Attribute = "passable" => ActionFn(7);
         let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0;
-        let __end = __sym2.2;
-        let __nt = super::__action23::<>(input, __sym0, __sym1, __sym2);
+        let __end = __sym0.2;
+        let __nt = super::__action7::<>(input, __sym0);
         __symbols.push((__start, __Symbol::Variant6(__nt), __end));
-        (3, 5)
+        (1, 5)
     }
     pub(crate) fn __reduce14<
         'input,
@@ -10708,11 +12273,11 @@ mod __parse__MDynList {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // CompositeValue = InstructionBlock => ActionFn(24);
-        let __sym0 = __pop_Variant12(__symbols);
+        // Attribute = "pushable" => ActionFn(8);
+        let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0;
         let __end = __sym0.2;
-        let __nt = super::__action24::<>(input, __sym0);
+        let __nt = super::__action8::<>(input, __sym0);
         __symbols.push((__start, __Symbol::Variant6(__nt), __end));
         (1, 5)
     }
@@ -10725,16 +12290,13 @@ mod __parse__MDynList {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // CompoundInstruction = "IF", InstructionBlock, InstructionBlock => ActionFn(6);
-        assert!(__symbols.len() >= 3);
-        let __sym2 = __pop_Variant12(__symbols);
-        let __sym1 = __pop_Variant12(__symbols);
+        // Attribute = "storable" => ActionFn(9);
         let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0;
-        let __end = __sym2.2;
-        let __nt = super::__action6::<>(input, __sym0, __sym1, __sym2);
-        __symbols.push((__start, __Symbol::Variant7(__nt), __end));
-        (3, 6)
+        let __end = __sym0.2;
+        let __nt = super::__action9::<>(input, __sym0);
+        __symbols.push((__start, __Symbol::Variant6(__nt), __end));
+        (1, 5)
     }
     pub(crate) fn __reduce16<
         'input,
@@ -10745,15 +12307,13 @@ mod __parse__MDynList {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // CompoundInstruction = "DIP", InstructionBlock => ActionFn(7);
-        assert!(__symbols.len() >= 2);
-        let __sym1 = __pop_Variant12(__symbols);
+        // Attribute = "packable" => ActionFn(10);
         let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0;
-        let __end = __sym1.2;
-        let __nt = super::__action7::<>(input, __sym0, __sym1);
-        __symbols.push((__start, __Symbol::Variant7(__nt), __end));
-        (2, 6)
+        let __end = __sym0.2;
+        let __nt = super::__action10::<>(input, __sym0);
+        __symbols.push((__start, __Symbol::Variant6(__nt), __end));
+        (1, 5)
     }
     pub(crate) fn __reduce17<
         'input,
@@ -10764,17 +12324,13 @@ mod __parse__MDynList {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // CompoundInstruction = "LAMBDA_REC", ConcreteType, ConcreteType, InstructionBlock => ActionFn(8);
-        assert!(__symbols.len() >= 4);
-        let __sym3 = __pop_Variant12(__symbols);
-        let __sym2 = __pop_Variant8(__symbols);
-        let __sym1 = __pop_Variant8(__symbols);
+        // Attribute = "bigmapvalue" => ActionFn(11);
         let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0;
-        let __end = __sym3.2;
-        let __nt = super::__action8::<>(input, __sym0, __sym1, __sym2, __sym3);
-        __symbols.push((__start, __Symbol::Variant7(__nt), __end));
-        (4, 6)
+        let __end = __sym0.2;
+        let __nt = super::__action11::<>(input, __sym0);
+        __symbols.push((__start, __Symbol::Variant6(__nt), __end));
+        (1, 5)
     }
     pub(crate) fn __reduce18<
         'input,
@@ -10785,13 +12341,13 @@ mod __parse__MDynList {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // CompoundInstruction = Instruction => ActionFn(9);
-        let __sym0 = __pop_Variant11(__symbols);
+        // Attribute = "duplicable" => ActionFn(12);
+        let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0;
         let __end = __sym0.2;
-        let __nt = super::__action9::<>(input, __sym0);
-        __symbols.push((__start, __Symbol::Variant7(__nt), __end));
-        (1, 6)
+        let __nt = super::__action12::<>(input, __sym0);
+        __symbols.push((__start, __Symbol::Variant6(__nt), __end));
+        (1, 5)
     }
     pub(crate) fn __reduce19<
         'input,
@@ -10802,13 +12358,16 @@ mod __parse__MDynList {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // ConcreteType = MDyn => ActionFn(36);
-        let __sym0 = __pop_Variant13(__symbols);
+        // AttributeList = Attribute, "+", AttributeList => ActionFn(13);
+        assert!(__symbols.len() >= 3);
+        let __sym2 = __pop_Variant7(__symbols);
+        let __sym1 = __pop_Variant0(__symbols);
+        let __sym0 = __pop_Variant6(__symbols);
         let __start = __sym0.0;
-        let __end = __sym0.2;
-        let __nt = super::__action36::<>(input, __sym0);
-        __symbols.push((__start, __Symbol::Variant8(__nt), __end));
-        (1, 7)
+        let __end = __sym2.2;
+        let __nt = super::__action13::<>(input, __sym0, __sym1, __sym2);
+        __symbols.push((__start, __Symbol::Variant7(__nt), __end));
+        (3, 6)
     }
     pub(crate) fn __reduce20<
         'input,
@@ -10819,15 +12378,13 @@ mod __parse__MDynList {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // Constraint = "w|", ArgVar => ActionFn(45);
-        assert!(__symbols.len() >= 2);
-        let __sym1 = __pop_Variant2(__symbols);
-        let __sym0 = __pop_Variant0(__symbols);
+        // AttributeList = Attribute => ActionFn(14);
+        let __sym0 = __pop_Variant6(__symbols);
         let __start = __sym0.0;
-        let __end = __sym1.2;
-        let __nt = super::__action45::<>(input, __sym0, __sym1);
-        __symbols.push((__start, __Symbol::Variant9(__nt), __end));
-        (2, 8)
+        let __end = __sym0.2;
+        let __nt = super::__action14::<>(input, __sym0);
+        __symbols.push((__start, __Symbol::Variant7(__nt), __end));
+        (1, 6)
     }
     pub(crate) fn __reduce21<
         'input,
@@ -10838,15 +12395,16 @@ mod __parse__MDynList {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // Constraint = "t|", ArgVar => ActionFn(46);
-        assert!(__symbols.len() >= 2);
-        let __sym1 = __pop_Variant2(__symbols);
+        // CompositeValue = "Pair", SomeValue, SomeValue => ActionFn(31);
+        assert!(__symbols.len() >= 3);
+        let __sym2 = __pop_Variant19(__symbols);
+        let __sym1 = __pop_Variant19(__symbols);
         let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0;
-        let __end = __sym1.2;
-        let __nt = super::__action46::<>(input, __sym0, __sym1);
-        __symbols.push((__start, __Symbol::Variant9(__nt), __end));
-        (2, 8)
+        let __end = __sym2.2;
+        let __nt = super::__action31::<>(input, __sym0, __sym1, __sym2);
+        __symbols.push((__start, __Symbol::Variant8(__nt), __end));
+        (3, 7)
     }
     pub(crate) fn __reduce22<
         'input,
@@ -10857,15 +12415,16 @@ mod __parse__MDynList {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // Constraint = "r|", ArgVar => ActionFn(47);
-        assert!(__symbols.len() >= 2);
-        let __sym1 = __pop_Variant2(__symbols);
+        // CompositeValue = "{", SomeValueList, "}" => ActionFn(32);
+        assert!(__symbols.len() >= 3);
+        let __sym2 = __pop_Variant0(__symbols);
+        let __sym1 = __pop_Variant20(__symbols);
         let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0;
-        let __end = __sym1.2;
-        let __nt = super::__action47::<>(input, __sym0, __sym1);
-        __symbols.push((__start, __Symbol::Variant9(__nt), __end));
-        (2, 8)
+        let __end = __sym2.2;
+        let __nt = super::__action32::<>(input, __sym0, __sym1, __sym2);
+        __symbols.push((__start, __Symbol::Variant8(__nt), __end));
+        (3, 7)
     }
     pub(crate) fn __reduce23<
         'input,
@@ -10876,15 +12435,13 @@ mod __parse__MDynList {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // Constraint = "a|", AtomicType => ActionFn(48);
-        assert!(__symbols.len() >= 2);
-        let __sym1 = __pop_Variant4(__symbols);
-        let __sym0 = __pop_Variant0(__symbols);
+        // CompositeValue = InstructionBlock => ActionFn(33);
+        let __sym0 = __pop_Variant14(__symbols);
         let __start = __sym0.0;
-        let __end = __sym1.2;
-        let __nt = super::__action48::<>(input, __sym0, __sym1);
-        __symbols.push((__start, __Symbol::Variant9(__nt), __end));
-        (2, 8)
+        let __end = __sym0.2;
+        let __nt = super::__action33::<>(input, __sym0);
+        __symbols.push((__start, __Symbol::Variant8(__nt), __end));
+        (1, 7)
     }
     pub(crate) fn __reduce24<
         'input,
@@ -10895,13 +12452,16 @@ mod __parse__MDynList {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // Dyn = r#"<[A-Za-z][A-Za-z0-9|]+>"# => ActionFn(52);
+        // CompoundInstruction = "IF", InstructionBlock, InstructionBlock => ActionFn(15);
+        assert!(__symbols.len() >= 3);
+        let __sym2 = __pop_Variant14(__symbols);
+        let __sym1 = __pop_Variant14(__symbols);
         let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0;
-        let __end = __sym0.2;
-        let __nt = super::__action52::<>(input, __sym0);
-        __symbols.push((__start, __Symbol::Variant10(__nt), __end));
-        (1, 9)
+        let __end = __sym2.2;
+        let __nt = super::__action15::<>(input, __sym0, __sym1, __sym2);
+        __symbols.push((__start, __Symbol::Variant9(__nt), __end));
+        (3, 8)
     }
     pub(crate) fn __reduce25<
         'input,
@@ -10912,13 +12472,15 @@ mod __parse__MDynList {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // Identifier = r#"[A-Za-z][A-Za-z0-9]+"# => ActionFn(53);
+        // CompoundInstruction = "DIP", InstructionBlock => ActionFn(16);
+        assert!(__symbols.len() >= 2);
+        let __sym1 = __pop_Variant14(__symbols);
         let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0;
-        let __end = __sym0.2;
-        let __nt = super::__action53::<>(input, __sym0);
-        __symbols.push((__start, __Symbol::Variant10(__nt), __end));
-        (1, 10)
+        let __end = __sym1.2;
+        let __nt = super::__action16::<>(input, __sym0, __sym1);
+        __symbols.push((__start, __Symbol::Variant9(__nt), __end));
+        (2, 8)
     }
     pub(crate) fn __reduce26<
         'input,
@@ -10929,15 +12491,17 @@ mod __parse__MDynList {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // Instruction = Identifier, Args => ActionFn(10);
-        assert!(__symbols.len() >= 2);
-        let __sym1 = __pop_Variant3(__symbols);
-        let __sym0 = __pop_Variant10(__symbols);
+        // CompoundInstruction = "LAMBDA_REC", ConcreteType, ConcreteType, InstructionBlock => ActionFn(17);
+        assert!(__symbols.len() >= 4);
+        let __sym3 = __pop_Variant14(__symbols);
+        let __sym2 = __pop_Variant10(__symbols);
+        let __sym1 = __pop_Variant10(__symbols);
+        let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0;
-        let __end = __sym1.2;
-        let __nt = super::__action10::<>(input, __sym0, __sym1);
-        __symbols.push((__start, __Symbol::Variant11(__nt), __end));
-        (2, 11)
+        let __end = __sym3.2;
+        let __nt = super::__action17::<>(input, __sym0, __sym1, __sym2, __sym3);
+        __symbols.push((__start, __Symbol::Variant9(__nt), __end));
+        (4, 8)
     }
     pub(crate) fn __reduce27<
         'input,
@@ -10948,13 +12512,13 @@ mod __parse__MDynList {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // Instruction = Identifier => ActionFn(11);
-        let __sym0 = __pop_Variant10(__symbols);
+        // CompoundInstruction = Instruction => ActionFn(18);
+        let __sym0 = __pop_Variant13(__symbols);
         let __start = __sym0.0;
         let __end = __sym0.2;
-        let __nt = super::__action11::<>(input, __sym0);
-        __symbols.push((__start, __Symbol::Variant11(__nt), __end));
-        (1, 11)
+        let __nt = super::__action18::<>(input, __sym0);
+        __symbols.push((__start, __Symbol::Variant9(__nt), __end));
+        (1, 8)
     }
     pub(crate) fn __reduce28<
         'input,
@@ -10965,16 +12529,13 @@ mod __parse__MDynList {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // InstructionBlock = "{", InstructionList, "}" => ActionFn(25);
-        assert!(__symbols.len() >= 3);
-        let __sym2 = __pop_Variant0(__symbols);
-        let __sym1 = __pop_Variant12(__symbols);
-        let __sym0 = __pop_Variant0(__symbols);
+        // ConcreteType = MDyn => ActionFn(45);
+        let __sym0 = __pop_Variant15(__symbols);
         let __start = __sym0.0;
-        let __end = __sym2.2;
-        let __nt = super::__action25::<>(input, __sym0, __sym1, __sym2);
-        __symbols.push((__start, __Symbol::Variant12(__nt), __end));
-        (3, 12)
+        let __end = __sym0.2;
+        let __nt = super::__action45::<>(input, __sym0);
+        __symbols.push((__start, __Symbol::Variant10(__nt), __end));
+        (1, 9)
     }
     pub(crate) fn __reduce29<
         'input,
@@ -10985,13 +12546,17 @@ mod __parse__MDynList {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // InstructionList = CompoundInstruction => ActionFn(29);
-        let __sym0 = __pop_Variant7(__symbols);
+        // Constraint = "w|", ArgVar, "=>", AttributeList => ActionFn(54);
+        assert!(__symbols.len() >= 4);
+        let __sym3 = __pop_Variant7(__symbols);
+        let __sym2 = __pop_Variant0(__symbols);
+        let __sym1 = __pop_Variant2(__symbols);
+        let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0;
-        let __end = __sym0.2;
-        let __nt = super::__action29::<>(input, __sym0);
-        __symbols.push((__start, __Symbol::Variant12(__nt), __end));
-        (1, 13)
+        let __end = __sym3.2;
+        let __nt = super::__action54::<>(input, __sym0, __sym1, __sym2, __sym3);
+        __symbols.push((__start, __Symbol::Variant11(__nt), __end));
+        (4, 10)
     }
     pub(crate) fn __reduce30<
         'input,
@@ -11002,16 +12567,15 @@ mod __parse__MDynList {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // InstructionList = CompoundInstruction, ";", InstructionList => ActionFn(30);
-        assert!(__symbols.len() >= 3);
-        let __sym2 = __pop_Variant12(__symbols);
-        let __sym1 = __pop_Variant0(__symbols);
-        let __sym0 = __pop_Variant7(__symbols);
+        // Constraint = "w|", ArgVar => ActionFn(55);
+        assert!(__symbols.len() >= 2);
+        let __sym1 = __pop_Variant2(__symbols);
+        let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0;
-        let __end = __sym2.2;
-        let __nt = super::__action30::<>(input, __sym0, __sym1, __sym2);
-        __symbols.push((__start, __Symbol::Variant12(__nt), __end));
-        (3, 13)
+        let __end = __sym1.2;
+        let __nt = super::__action55::<>(input, __sym0, __sym1);
+        __symbols.push((__start, __Symbol::Variant11(__nt), __end));
+        (2, 10)
     }
     pub(crate) fn __reduce31<
         'input,
@@ -11022,15 +12586,17 @@ mod __parse__MDynList {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // InstructionList = CompoundInstruction, ";" => ActionFn(31);
-        assert!(__symbols.len() >= 2);
-        let __sym1 = __pop_Variant0(__symbols);
-        let __sym0 = __pop_Variant7(__symbols);
+        // Constraint = "t|", ArgVar, "=>", AttributeList => ActionFn(56);
+        assert!(__symbols.len() >= 4);
+        let __sym3 = __pop_Variant7(__symbols);
+        let __sym2 = __pop_Variant0(__symbols);
+        let __sym1 = __pop_Variant2(__symbols);
+        let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0;
-        let __end = __sym1.2;
-        let __nt = super::__action31::<>(input, __sym0, __sym1);
-        __symbols.push((__start, __Symbol::Variant12(__nt), __end));
-        (2, 13)
+        let __end = __sym3.2;
+        let __nt = super::__action56::<>(input, __sym0, __sym1, __sym2, __sym3);
+        __symbols.push((__start, __Symbol::Variant11(__nt), __end));
+        (4, 10)
     }
     pub(crate) fn __reduce32<
         'input,
@@ -11041,13 +12607,15 @@ mod __parse__MDynList {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // MDyn = AtomicType => ActionFn(39);
-        let __sym0 = __pop_Variant4(__symbols);
+        // Constraint = "t|", ArgVar => ActionFn(57);
+        assert!(__symbols.len() >= 2);
+        let __sym1 = __pop_Variant2(__symbols);
+        let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0;
-        let __end = __sym0.2;
-        let __nt = super::__action39::<>(input, __sym0);
-        __symbols.push((__start, __Symbol::Variant13(__nt), __end));
-        (1, 14)
+        let __end = __sym1.2;
+        let __nt = super::__action57::<>(input, __sym0, __sym1);
+        __symbols.push((__start, __Symbol::Variant11(__nt), __end));
+        (2, 10)
     }
     pub(crate) fn __reduce33<
         'input,
@@ -11058,13 +12626,15 @@ mod __parse__MDynList {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // MDyn = Dyn => ActionFn(40);
-        let __sym0 = __pop_Variant10(__symbols);
+        // Constraint = "r|", ArgVar => ActionFn(58);
+        assert!(__symbols.len() >= 2);
+        let __sym1 = __pop_Variant2(__symbols);
+        let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0;
-        let __end = __sym0.2;
-        let __nt = super::__action40::<>(input, __sym0);
-        __symbols.push((__start, __Symbol::Variant13(__nt), __end));
-        (1, 14)
+        let __end = __sym1.2;
+        let __nt = super::__action58::<>(input, __sym0, __sym1);
+        __symbols.push((__start, __Symbol::Variant11(__nt), __end));
+        (2, 10)
     }
     pub(crate) fn __reduce34<
         'input,
@@ -11075,15 +12645,15 @@ mod __parse__MDynList {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // MDyn = "list", MDyn => ActionFn(41);
+        // Constraint = "a|", AtomicType => ActionFn(59);
         assert!(__symbols.len() >= 2);
-        let __sym1 = __pop_Variant13(__symbols);
+        let __sym1 = __pop_Variant4(__symbols);
         let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0;
         let __end = __sym1.2;
-        let __nt = super::__action41::<>(input, __sym0, __sym1);
-        __symbols.push((__start, __Symbol::Variant13(__nt), __end));
-        (2, 14)
+        let __nt = super::__action59::<>(input, __sym0, __sym1);
+        __symbols.push((__start, __Symbol::Variant11(__nt), __end));
+        (2, 10)
     }
     pub(crate) fn __reduce35<
         'input,
@@ -11094,16 +12664,13 @@ mod __parse__MDynList {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // MDyn = "pair", MDyn, MDyn => ActionFn(42);
-        assert!(__symbols.len() >= 3);
-        let __sym2 = __pop_Variant13(__symbols);
-        let __sym1 = __pop_Variant13(__symbols);
+        // Dyn = r#"<[A-Za-z][A-Za-z0-9|+=>]+>"# => ActionFn(63);
         let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0;
-        let __end = __sym2.2;
-        let __nt = super::__action42::<>(input, __sym0, __sym1, __sym2);
-        __symbols.push((__start, __Symbol::Variant13(__nt), __end));
-        (3, 14)
+        let __end = __sym0.2;
+        let __nt = super::__action63::<>(input, __sym0);
+        __symbols.push((__start, __Symbol::Variant12(__nt), __end));
+        (1, 11)
     }
     pub(crate) fn __reduce36<
         'input,
@@ -11114,16 +12681,13 @@ mod __parse__MDynList {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // MDyn = "lambda", MDyn, MDyn => ActionFn(43);
-        assert!(__symbols.len() >= 3);
-        let __sym2 = __pop_Variant13(__symbols);
-        let __sym1 = __pop_Variant13(__symbols);
+        // Identifier = r#"[A-Za-z][A-Za-z0-9]+"# => ActionFn(64);
         let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0;
-        let __end = __sym2.2;
-        let __nt = super::__action43::<>(input, __sym0, __sym1, __sym2);
-        __symbols.push((__start, __Symbol::Variant13(__nt), __end));
-        (3, 14)
+        let __end = __sym0.2;
+        let __nt = super::__action64::<>(input, __sym0);
+        __symbols.push((__start, __Symbol::Variant12(__nt), __end));
+        (1, 12)
     }
     pub(crate) fn __reduce37<
         'input,
@@ -11134,16 +12698,15 @@ mod __parse__MDynList {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // MDyn = "(", MDyn, ")" => ActionFn(44);
-        assert!(__symbols.len() >= 3);
-        let __sym2 = __pop_Variant0(__symbols);
-        let __sym1 = __pop_Variant13(__symbols);
-        let __sym0 = __pop_Variant0(__symbols);
+        // Instruction = Identifier, Args => ActionFn(19);
+        assert!(__symbols.len() >= 2);
+        let __sym1 = __pop_Variant3(__symbols);
+        let __sym0 = __pop_Variant12(__symbols);
         let __start = __sym0.0;
-        let __end = __sym2.2;
-        let __nt = super::__action44::<>(input, __sym0, __sym1, __sym2);
+        let __end = __sym1.2;
+        let __nt = super::__action19::<>(input, __sym0, __sym1);
         __symbols.push((__start, __Symbol::Variant13(__nt), __end));
-        (3, 14)
+        (2, 13)
     }
     pub(crate) fn __reduce38<
         'input,
@@ -11154,16 +12717,13 @@ mod __parse__MDynList {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // MDynList = MDyn, ";", MDynList => ActionFn(37);
-        assert!(__symbols.len() >= 3);
-        let __sym2 = __pop_Variant14(__symbols);
-        let __sym1 = __pop_Variant0(__symbols);
-        let __sym0 = __pop_Variant13(__symbols);
+        // Instruction = Identifier => ActionFn(20);
+        let __sym0 = __pop_Variant12(__symbols);
         let __start = __sym0.0;
-        let __end = __sym2.2;
-        let __nt = super::__action37::<>(input, __sym0, __sym1, __sym2);
-        __symbols.push((__start, __Symbol::Variant14(__nt), __end));
-        (3, 15)
+        let __end = __sym0.2;
+        let __nt = super::__action20::<>(input, __sym0);
+        __symbols.push((__start, __Symbol::Variant13(__nt), __end));
+        (1, 13)
     }
     pub(crate) fn __reduce39<
         'input,
@@ -11174,13 +12734,16 @@ mod __parse__MDynList {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // MDynList = MDyn => ActionFn(38);
-        let __sym0 = __pop_Variant13(__symbols);
+        // InstructionBlock = "{", InstructionList, "}" => ActionFn(34);
+        assert!(__symbols.len() >= 3);
+        let __sym2 = __pop_Variant0(__symbols);
+        let __sym1 = __pop_Variant14(__symbols);
+        let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0;
-        let __end = __sym0.2;
-        let __nt = super::__action38::<>(input, __sym0);
+        let __end = __sym2.2;
+        let __nt = super::__action34::<>(input, __sym0, __sym1, __sym2);
         __symbols.push((__start, __Symbol::Variant14(__nt), __end));
-        (1, 15)
+        (3, 14)
     }
     pub(crate) fn __reduce40<
         'input,
@@ -11191,13 +12754,13 @@ mod __parse__MDynList {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // McLitBool = "True" => ActionFn(54);
-        let __sym0 = __pop_Variant0(__symbols);
+        // InstructionList = CompoundInstruction => ActionFn(38);
+        let __sym0 = __pop_Variant9(__symbols);
         let __start = __sym0.0;
         let __end = __sym0.2;
-        let __nt = super::__action54::<>(input, __sym0);
-        __symbols.push((__start, __Symbol::Variant15(__nt), __end));
-        (1, 16)
+        let __nt = super::__action38::<>(input, __sym0);
+        __symbols.push((__start, __Symbol::Variant14(__nt), __end));
+        (1, 15)
     }
     pub(crate) fn __reduce41<
         'input,
@@ -11208,13 +12771,16 @@ mod __parse__MDynList {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // McLitBool = "False" => ActionFn(55);
-        let __sym0 = __pop_Variant0(__symbols);
+        // InstructionList = CompoundInstruction, ";", InstructionList => ActionFn(39);
+        assert!(__symbols.len() >= 3);
+        let __sym2 = __pop_Variant14(__symbols);
+        let __sym1 = __pop_Variant0(__symbols);
+        let __sym0 = __pop_Variant9(__symbols);
         let __start = __sym0.0;
-        let __end = __sym0.2;
-        let __nt = super::__action55::<>(input, __sym0);
-        __symbols.push((__start, __Symbol::Variant15(__nt), __end));
-        (1, 16)
+        let __end = __sym2.2;
+        let __nt = super::__action39::<>(input, __sym0, __sym1, __sym2);
+        __symbols.push((__start, __Symbol::Variant14(__nt), __end));
+        (3, 15)
     }
     pub(crate) fn __reduce42<
         'input,
@@ -11225,13 +12791,15 @@ mod __parse__MDynList {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // McLitNumber = r#"([+-]?)[0-9]+"# => ActionFn(57);
-        let __sym0 = __pop_Variant0(__symbols);
+        // InstructionList = CompoundInstruction, ";" => ActionFn(40);
+        assert!(__symbols.len() >= 2);
+        let __sym1 = __pop_Variant0(__symbols);
+        let __sym0 = __pop_Variant9(__symbols);
         let __start = __sym0.0;
-        let __end = __sym0.2;
-        let __nt = super::__action57::<>(input, __sym0);
-        __symbols.push((__start, __Symbol::Variant16(__nt), __end));
-        (1, 17)
+        let __end = __sym1.2;
+        let __nt = super::__action40::<>(input, __sym0, __sym1);
+        __symbols.push((__start, __Symbol::Variant14(__nt), __end));
+        (2, 15)
     }
     pub(crate) fn __reduce43<
         'input,
@@ -11242,13 +12810,13 @@ mod __parse__MDynList {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // McLitString = r#"\"[a-z0-9]+\""# => ActionFn(56);
-        let __sym0 = __pop_Variant0(__symbols);
+        // MDyn = AtomicType => ActionFn(48);
+        let __sym0 = __pop_Variant4(__symbols);
         let __start = __sym0.0;
         let __end = __sym0.2;
-        let __nt = super::__action56::<>(input, __sym0);
-        __symbols.push((__start, __Symbol::Variant10(__nt), __end));
-        (1, 18)
+        let __nt = super::__action48::<>(input, __sym0);
+        __symbols.push((__start, __Symbol::Variant15(__nt), __end));
+        (1, 16)
     }
     pub(crate) fn __reduce44<
         'input,
@@ -11259,13 +12827,13 @@ mod __parse__MDynList {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // SomeValue = AtomicValue => ActionFn(16);
-        let __sym0 = __pop_Variant5(__symbols);
+        // MDyn = Dyn => ActionFn(49);
+        let __sym0 = __pop_Variant12(__symbols);
         let __start = __sym0.0;
         let __end = __sym0.2;
-        let __nt = super::__action16::<>(input, __sym0);
-        __symbols.push((__start, __Symbol::Variant17(__nt), __end));
-        (1, 19)
+        let __nt = super::__action49::<>(input, __sym0);
+        __symbols.push((__start, __Symbol::Variant15(__nt), __end));
+        (1, 16)
     }
     pub(crate) fn __reduce45<
         'input,
@@ -11276,13 +12844,15 @@ mod __parse__MDynList {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // SomeValue = CompositeValue => ActionFn(17);
-        let __sym0 = __pop_Variant6(__symbols);
+        // MDyn = "list", MDyn => ActionFn(50);
+        assert!(__symbols.len() >= 2);
+        let __sym1 = __pop_Variant15(__symbols);
+        let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0;
-        let __end = __sym0.2;
-        let __nt = super::__action17::<>(input, __sym0);
-        __symbols.push((__start, __Symbol::Variant17(__nt), __end));
-        (1, 19)
+        let __end = __sym1.2;
+        let __nt = super::__action50::<>(input, __sym0, __sym1);
+        __symbols.push((__start, __Symbol::Variant15(__nt), __end));
+        (2, 16)
     }
     pub(crate) fn __reduce46<
         'input,
@@ -11293,16 +12863,16 @@ mod __parse__MDynList {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // SomeValue = "(", SomeValue, ")" => ActionFn(18);
+        // MDyn = "pair", MDyn, MDyn => ActionFn(51);
         assert!(__symbols.len() >= 3);
-        let __sym2 = __pop_Variant0(__symbols);
-        let __sym1 = __pop_Variant17(__symbols);
+        let __sym2 = __pop_Variant15(__symbols);
+        let __sym1 = __pop_Variant15(__symbols);
         let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0;
         let __end = __sym2.2;
-        let __nt = super::__action18::<>(input, __sym0, __sym1, __sym2);
-        __symbols.push((__start, __Symbol::Variant17(__nt), __end));
-        (3, 19)
+        let __nt = super::__action51::<>(input, __sym0, __sym1, __sym2);
+        __symbols.push((__start, __Symbol::Variant15(__nt), __end));
+        (3, 16)
     }
     pub(crate) fn __reduce47<
         'input,
@@ -11313,13 +12883,16 @@ mod __parse__MDynList {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // SomeValueList = SomeValue => ActionFn(26);
-        let __sym0 = __pop_Variant17(__symbols);
+        // MDyn = "lambda", MDyn, MDyn => ActionFn(52);
+        assert!(__symbols.len() >= 3);
+        let __sym2 = __pop_Variant15(__symbols);
+        let __sym1 = __pop_Variant15(__symbols);
+        let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0;
-        let __end = __sym0.2;
-        let __nt = super::__action26::<>(input, __sym0);
-        __symbols.push((__start, __Symbol::Variant18(__nt), __end));
-        (1, 20)
+        let __end = __sym2.2;
+        let __nt = super::__action52::<>(input, __sym0, __sym1, __sym2);
+        __symbols.push((__start, __Symbol::Variant15(__nt), __end));
+        (3, 16)
     }
     pub(crate) fn __reduce48<
         'input,
@@ -11330,16 +12903,16 @@ mod __parse__MDynList {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // SomeValueList = SomeValue, ";", SomeValueList => ActionFn(27);
+        // MDyn = "(", MDyn, ")" => ActionFn(53);
         assert!(__symbols.len() >= 3);
-        let __sym2 = __pop_Variant18(__symbols);
-        let __sym1 = __pop_Variant0(__symbols);
-        let __sym0 = __pop_Variant17(__symbols);
+        let __sym2 = __pop_Variant0(__symbols);
+        let __sym1 = __pop_Variant15(__symbols);
+        let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0;
         let __end = __sym2.2;
-        let __nt = super::__action27::<>(input, __sym0, __sym1, __sym2);
-        __symbols.push((__start, __Symbol::Variant18(__nt), __end));
-        (3, 20)
+        let __nt = super::__action53::<>(input, __sym0, __sym1, __sym2);
+        __symbols.push((__start, __Symbol::Variant15(__nt), __end));
+        (3, 16)
     }
     pub(crate) fn __reduce49<
         'input,
@@ -11350,15 +12923,16 @@ mod __parse__MDynList {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // SomeValueList = SomeValue, ";" => ActionFn(28);
-        assert!(__symbols.len() >= 2);
+        // MDynList = MDyn, ";", MDynList => ActionFn(46);
+        assert!(__symbols.len() >= 3);
+        let __sym2 = __pop_Variant16(__symbols);
         let __sym1 = __pop_Variant0(__symbols);
-        let __sym0 = __pop_Variant17(__symbols);
+        let __sym0 = __pop_Variant15(__symbols);
         let __start = __sym0.0;
-        let __end = __sym1.2;
-        let __nt = super::__action28::<>(input, __sym0, __sym1);
-        __symbols.push((__start, __Symbol::Variant18(__nt), __end));
-        (2, 20)
+        let __end = __sym2.2;
+        let __nt = super::__action46::<>(input, __sym0, __sym1, __sym2);
+        __symbols.push((__start, __Symbol::Variant16(__nt), __end));
+        (3, 17)
     }
     pub(crate) fn __reduce50<
         'input,
@@ -11369,15 +12943,13 @@ mod __parse__MDynList {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // StackResultElem = "r|", ArgVar => ActionFn(49);
-        assert!(__symbols.len() >= 2);
-        let __sym1 = __pop_Variant2(__symbols);
-        let __sym0 = __pop_Variant0(__symbols);
+        // MDynList = MDyn => ActionFn(47);
+        let __sym0 = __pop_Variant15(__symbols);
         let __start = __sym0.0;
-        let __end = __sym1.2;
-        let __nt = super::__action49::<>(input, __sym0, __sym1);
-        __symbols.push((__start, __Symbol::Variant19(__nt), __end));
-        (2, 21)
+        let __end = __sym0.2;
+        let __nt = super::__action47::<>(input, __sym0);
+        __symbols.push((__start, __Symbol::Variant16(__nt), __end));
+        (1, 17)
     }
     pub(crate) fn __reduce51<
         'input,
@@ -11388,15 +12960,13 @@ mod __parse__MDynList {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // StackResultElem = "a|", AtomicType => ActionFn(50);
-        assert!(__symbols.len() >= 2);
-        let __sym1 = __pop_Variant4(__symbols);
+        // McLitBool = "True" => ActionFn(65);
         let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0;
-        let __end = __sym1.2;
-        let __nt = super::__action50::<>(input, __sym0, __sym1);
-        __symbols.push((__start, __Symbol::Variant19(__nt), __end));
-        (2, 21)
+        let __end = __sym0.2;
+        let __nt = super::__action65::<>(input, __sym0);
+        __symbols.push((__start, __Symbol::Variant17(__nt), __end));
+        (1, 18)
     }
     pub(crate) fn __reduce52<
         'input,
@@ -11407,13 +12977,13 @@ mod __parse__MDynList {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // __ConcreteType = ConcreteType => ActionFn(1);
-        let __sym0 = __pop_Variant8(__symbols);
+        // McLitBool = "False" => ActionFn(66);
+        let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0;
         let __end = __sym0.2;
-        let __nt = super::__action1::<>(input, __sym0);
-        __symbols.push((__start, __Symbol::Variant8(__nt), __end));
-        (1, 22)
+        let __nt = super::__action66::<>(input, __sym0);
+        __symbols.push((__start, __Symbol::Variant17(__nt), __end));
+        (1, 18)
     }
     pub(crate) fn __reduce53<
         'input,
@@ -11424,13 +12994,13 @@ mod __parse__MDynList {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // __Constraint = Constraint => ActionFn(4);
-        let __sym0 = __pop_Variant9(__symbols);
+        // McLitNumber = r#"([+-]?)[0-9]+"# => ActionFn(68);
+        let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0;
         let __end = __sym0.2;
-        let __nt = super::__action4::<>(input, __sym0);
-        __symbols.push((__start, __Symbol::Variant9(__nt), __end));
-        (1, 23)
+        let __nt = super::__action68::<>(input, __sym0);
+        __symbols.push((__start, __Symbol::Variant18(__nt), __end));
+        (1, 19)
     }
     pub(crate) fn __reduce54<
         'input,
@@ -11441,13 +13011,13 @@ mod __parse__MDynList {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // __InstructionList = InstructionList => ActionFn(0);
-        let __sym0 = __pop_Variant12(__symbols);
+        // McLitString = r#"\"[a-z0-9]+\""# => ActionFn(67);
+        let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0;
         let __end = __sym0.2;
-        let __nt = super::__action0::<>(input, __sym0);
+        let __nt = super::__action67::<>(input, __sym0);
         __symbols.push((__start, __Symbol::Variant12(__nt), __end));
-        (1, 24)
+        (1, 20)
     }
     pub(crate) fn __reduce55<
         'input,
@@ -11458,13 +13028,30 @@ mod __parse__MDynList {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // __MDyn = MDyn => ActionFn(3);
-        let __sym0 = __pop_Variant13(__symbols);
+        // SomeValue = AtomicValue => ActionFn(25);
+        let __sym0 = __pop_Variant5(__symbols);
         let __start = __sym0.0;
         let __end = __sym0.2;
-        let __nt = super::__action3::<>(input, __sym0);
-        __symbols.push((__start, __Symbol::Variant13(__nt), __end));
-        (1, 25)
+        let __nt = super::__action25::<>(input, __sym0);
+        __symbols.push((__start, __Symbol::Variant19(__nt), __end));
+        (1, 21)
+    }
+    pub(crate) fn __reduce56<
+        'input,
+    >(
+        input: &'input str,
+        __lookahead_start: Option<&usize>,
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
+        _: core::marker::PhantomData<(&'input ())>,
+    ) -> (usize, usize)
+    {
+        // SomeValue = CompositeValue => ActionFn(26);
+        let __sym0 = __pop_Variant8(__symbols);
+        let __start = __sym0.0;
+        let __end = __sym0.2;
+        let __nt = super::__action26::<>(input, __sym0);
+        __symbols.push((__start, __Symbol::Variant19(__nt), __end));
+        (1, 21)
     }
     pub(crate) fn __reduce57<
         'input,
@@ -11475,13 +13062,195 @@ mod __parse__MDynList {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // __StackResultElem = StackResultElem => ActionFn(5);
+        // SomeValue = "(", SomeValue, ")" => ActionFn(27);
+        assert!(__symbols.len() >= 3);
+        let __sym2 = __pop_Variant0(__symbols);
+        let __sym1 = __pop_Variant19(__symbols);
+        let __sym0 = __pop_Variant0(__symbols);
+        let __start = __sym0.0;
+        let __end = __sym2.2;
+        let __nt = super::__action27::<>(input, __sym0, __sym1, __sym2);
+        __symbols.push((__start, __Symbol::Variant19(__nt), __end));
+        (3, 21)
+    }
+    pub(crate) fn __reduce58<
+        'input,
+    >(
+        input: &'input str,
+        __lookahead_start: Option<&usize>,
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
+        _: core::marker::PhantomData<(&'input ())>,
+    ) -> (usize, usize)
+    {
+        // SomeValueList = SomeValue => ActionFn(35);
         let __sym0 = __pop_Variant19(__symbols);
         let __start = __sym0.0;
         let __end = __sym0.2;
-        let __nt = super::__action5::<>(input, __sym0);
-        __symbols.push((__start, __Symbol::Variant19(__nt), __end));
+        let __nt = super::__action35::<>(input, __sym0);
+        __symbols.push((__start, __Symbol::Variant20(__nt), __end));
+        (1, 22)
+    }
+    pub(crate) fn __reduce59<
+        'input,
+    >(
+        input: &'input str,
+        __lookahead_start: Option<&usize>,
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
+        _: core::marker::PhantomData<(&'input ())>,
+    ) -> (usize, usize)
+    {
+        // SomeValueList = SomeValue, ";", SomeValueList => ActionFn(36);
+        assert!(__symbols.len() >= 3);
+        let __sym2 = __pop_Variant20(__symbols);
+        let __sym1 = __pop_Variant0(__symbols);
+        let __sym0 = __pop_Variant19(__symbols);
+        let __start = __sym0.0;
+        let __end = __sym2.2;
+        let __nt = super::__action36::<>(input, __sym0, __sym1, __sym2);
+        __symbols.push((__start, __Symbol::Variant20(__nt), __end));
+        (3, 22)
+    }
+    pub(crate) fn __reduce60<
+        'input,
+    >(
+        input: &'input str,
+        __lookahead_start: Option<&usize>,
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
+        _: core::marker::PhantomData<(&'input ())>,
+    ) -> (usize, usize)
+    {
+        // SomeValueList = SomeValue, ";" => ActionFn(37);
+        assert!(__symbols.len() >= 2);
+        let __sym1 = __pop_Variant0(__symbols);
+        let __sym0 = __pop_Variant19(__symbols);
+        let __start = __sym0.0;
+        let __end = __sym1.2;
+        let __nt = super::__action37::<>(input, __sym0, __sym1);
+        __symbols.push((__start, __Symbol::Variant20(__nt), __end));
+        (2, 22)
+    }
+    pub(crate) fn __reduce61<
+        'input,
+    >(
+        input: &'input str,
+        __lookahead_start: Option<&usize>,
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
+        _: core::marker::PhantomData<(&'input ())>,
+    ) -> (usize, usize)
+    {
+        // StackResultElem = "r|", ArgVar => ActionFn(60);
+        assert!(__symbols.len() >= 2);
+        let __sym1 = __pop_Variant2(__symbols);
+        let __sym0 = __pop_Variant0(__symbols);
+        let __start = __sym0.0;
+        let __end = __sym1.2;
+        let __nt = super::__action60::<>(input, __sym0, __sym1);
+        __symbols.push((__start, __Symbol::Variant21(__nt), __end));
+        (2, 23)
+    }
+    pub(crate) fn __reduce62<
+        'input,
+    >(
+        input: &'input str,
+        __lookahead_start: Option<&usize>,
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
+        _: core::marker::PhantomData<(&'input ())>,
+    ) -> (usize, usize)
+    {
+        // StackResultElem = "a|", AtomicType => ActionFn(61);
+        assert!(__symbols.len() >= 2);
+        let __sym1 = __pop_Variant4(__symbols);
+        let __sym0 = __pop_Variant0(__symbols);
+        let __start = __sym0.0;
+        let __end = __sym1.2;
+        let __nt = super::__action61::<>(input, __sym0, __sym1);
+        __symbols.push((__start, __Symbol::Variant21(__nt), __end));
+        (2, 23)
+    }
+    pub(crate) fn __reduce63<
+        'input,
+    >(
+        input: &'input str,
+        __lookahead_start: Option<&usize>,
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
+        _: core::marker::PhantomData<(&'input ())>,
+    ) -> (usize, usize)
+    {
+        // __ConcreteType = ConcreteType => ActionFn(1);
+        let __sym0 = __pop_Variant10(__symbols);
+        let __start = __sym0.0;
+        let __end = __sym0.2;
+        let __nt = super::__action1::<>(input, __sym0);
+        __symbols.push((__start, __Symbol::Variant10(__nt), __end));
+        (1, 24)
+    }
+    pub(crate) fn __reduce64<
+        'input,
+    >(
+        input: &'input str,
+        __lookahead_start: Option<&usize>,
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
+        _: core::marker::PhantomData<(&'input ())>,
+    ) -> (usize, usize)
+    {
+        // __Constraint = Constraint => ActionFn(4);
+        let __sym0 = __pop_Variant11(__symbols);
+        let __start = __sym0.0;
+        let __end = __sym0.2;
+        let __nt = super::__action4::<>(input, __sym0);
+        __symbols.push((__start, __Symbol::Variant11(__nt), __end));
+        (1, 25)
+    }
+    pub(crate) fn __reduce65<
+        'input,
+    >(
+        input: &'input str,
+        __lookahead_start: Option<&usize>,
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
+        _: core::marker::PhantomData<(&'input ())>,
+    ) -> (usize, usize)
+    {
+        // __InstructionList = InstructionList => ActionFn(0);
+        let __sym0 = __pop_Variant14(__symbols);
+        let __start = __sym0.0;
+        let __end = __sym0.2;
+        let __nt = super::__action0::<>(input, __sym0);
+        __symbols.push((__start, __Symbol::Variant14(__nt), __end));
+        (1, 26)
+    }
+    pub(crate) fn __reduce66<
+        'input,
+    >(
+        input: &'input str,
+        __lookahead_start: Option<&usize>,
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
+        _: core::marker::PhantomData<(&'input ())>,
+    ) -> (usize, usize)
+    {
+        // __MDyn = MDyn => ActionFn(3);
+        let __sym0 = __pop_Variant15(__symbols);
+        let __start = __sym0.0;
+        let __end = __sym0.2;
+        let __nt = super::__action3::<>(input, __sym0);
+        __symbols.push((__start, __Symbol::Variant15(__nt), __end));
         (1, 27)
+    }
+    pub(crate) fn __reduce68<
+        'input,
+    >(
+        input: &'input str,
+        __lookahead_start: Option<&usize>,
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
+        _: core::marker::PhantomData<(&'input ())>,
+    ) -> (usize, usize)
+    {
+        // __StackResultElem = StackResultElem => ActionFn(5);
+        let __sym0 = __pop_Variant21(__symbols);
+        let __start = __sym0.0;
+        let __end = __sym0.2;
+        let __nt = super::__action5::<>(input, __sym0);
+        __symbols.push((__start, __Symbol::Variant21(__nt), __end));
+        (1, 29)
     }
 }
 pub use self::__parse__MDynList::MDynListParser;
@@ -11513,6 +13282,8 @@ mod __parse__StackResultElem {
     use crate::types::StackResultElem;
     use crate::types::StackResultElem::*;
     use crate::types::CompoundInstruction;
+    use crate::types::Attribute;
+    use crate::types::Attribute::*;
     #[allow(unused_extern_crates)]
     extern crate lalrpop_util as __lalrpop_util;
     #[allow(unused_imports)]
@@ -11529,47 +13300,49 @@ mod __parse__StackResultElem {
         Variant3(Vec<ArgValue<SomeValue>>),
         Variant4(MAtomic),
         Variant5(AtomicValue),
-        Variant6(CompositeValue),
-        Variant7(CompoundInstruction<SomeValue>),
-        Variant8(ConcreteType),
-        Variant9(ArgConstraint),
-        Variant10(String),
-        Variant11(Instruction<SomeValue>),
-        Variant12(Vec<CompoundInstruction<SomeValue>>),
-        Variant13(MType<DynMType>),
-        Variant14(Vec<MType<DynMType>>),
-        Variant15(bool),
-        Variant16(i32),
-        Variant17(SomeValue),
-        Variant18(Vec<SomeValue>),
-        Variant19(StackResultElem),
+        Variant6(Attribute),
+        Variant7(Vec<Attribute>),
+        Variant8(CompositeValue),
+        Variant9(CompoundInstruction<SomeValue>),
+        Variant10(ConcreteType),
+        Variant11(ArgConstraint),
+        Variant12(String),
+        Variant13(Instruction<SomeValue>),
+        Variant14(Vec<CompoundInstruction<SomeValue>>),
+        Variant15(MType<DynMType>),
+        Variant16(Vec<MType<DynMType>>),
+        Variant17(bool),
+        Variant18(i32),
+        Variant19(SomeValue),
+        Variant20(Vec<SomeValue>),
+        Variant21(StackResultElem),
     }
     const __ACTION: &[i8] = &[
         // State 0
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         // State 1
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 6, 7, 0, 0, 8, 0, 0, 9, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 6, 0, 0, 7, 0, 0, 8, 0, 0, 0, 0, 0, 0, 9, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         // State 2
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 11,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 11,
         // State 3
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         // State 4
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         // State 5
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         // State 6
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         // State 7
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         // State 8
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         // State 9
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         // State 10
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
     ];
     fn __action(state: i8, integer: usize) -> i8 {
-        __ACTION[(state as usize) * 27 + integer]
+        __ACTION[(state as usize) * 36 + integer]
     }
     const __EOF_ACTION: &[i8] = &[
         // State 0
@@ -11579,9 +13352,9 @@ mod __parse__StackResultElem {
         // State 2
         0,
         // State 3
-        -58,
+        -69,
         // State 4
-        -52,
+        -63,
         // State 5
         -9,
         // State 6
@@ -11591,7 +13364,7 @@ mod __parse__StackResultElem {
         // State 8
         -8,
         // State 9
-        -51,
+        -62,
         // State 10
         -3,
     ];
@@ -11599,14 +13372,16 @@ mod __parse__StackResultElem {
         match nt {
             1 => 9,
             3 => 4,
-            21 => 3,
+            23 => 3,
             _ => 0,
         }
     }
     const __TERMINAL: &[&str] = &[
         r###""(""###,
         r###"")""###,
+        r###""+""###,
         r###"";""###,
+        r###""=>""###,
         r###""DIP""###,
         r###""False""###,
         r###""IF""###,
@@ -11614,13 +13389,20 @@ mod __parse__StackResultElem {
         r###""Pair""###,
         r###""True""###,
         r###""a|""###,
+        r###""bigmapvalue""###,
         r###""bool""###,
+        r###""comparable""###,
+        r###""duplicable""###,
         r###""int""###,
         r###""lambda""###,
         r###""list""###,
         r###""nat""###,
+        r###""packable""###,
         r###""pair""###,
+        r###""passable""###,
+        r###""pushable""###,
         r###""r|""###,
+        r###""storable""###,
         r###""string""###,
         r###""t|""###,
         r###""w|""###,
@@ -11628,7 +13410,7 @@ mod __parse__StackResultElem {
         r###""}""###,
         r###"r#"\"[a-z0-9]+\""#"###,
         r###"r#"([+-]?)[0-9]+"#"###,
-        r###"r#"<[A-Za-z][A-Za-z0-9|]+>"#"###,
+        r###"r#"<[A-Za-z][A-Za-z0-9|+=>]+>"#"###,
         r###"r#"[A-Za-z][A-Za-z0-9]+"#"###,
         r###"r#"[a-z]"#"###,
     ];
@@ -11699,7 +13481,7 @@ mod __parse__StackResultElem {
 
         #[inline]
         fn error_action(&self, state: i8) -> i8 {
-            __action(state, 27 - 1)
+            __action(state, 36 - 1)
         }
 
         #[inline]
@@ -11788,11 +13570,20 @@ mod __parse__StackResultElem {
             Token(24, _) if true => Some(19),
             Token(25, _) if true => Some(20),
             Token(26, _) if true => Some(21),
-            Token(0, _) if true => Some(22),
-            Token(1, _) if true => Some(23),
-            Token(2, _) if true => Some(24),
-            Token(3, _) if true => Some(25),
-            Token(4, _) if true => Some(26),
+            Token(27, _) if true => Some(22),
+            Token(28, _) if true => Some(23),
+            Token(29, _) if true => Some(24),
+            Token(30, _) if true => Some(25),
+            Token(31, _) if true => Some(26),
+            Token(32, _) if true => Some(27),
+            Token(33, _) if true => Some(28),
+            Token(34, _) if true => Some(29),
+            Token(35, _) if true => Some(30),
+            Token(0, _) if true => Some(31),
+            Token(1, _) if true => Some(32),
+            Token(2, _) if true => Some(33),
+            Token(3, _) if true => Some(34),
+            Token(4, _) if true => Some(35),
             _ => None,
         }
     }
@@ -11805,8 +13596,8 @@ mod __parse__StackResultElem {
     ) -> __Symbol<'input>
     {
         match __token_index {
-            0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13 | 14 | 15 | 16 | 17 | 18 | 19 | 20 | 21 | 22 | 23 | 24 | 25 | 26 => match __token {
-                Token(5, __tok0) | Token(6, __tok0) | Token(7, __tok0) | Token(8, __tok0) | Token(9, __tok0) | Token(10, __tok0) | Token(11, __tok0) | Token(12, __tok0) | Token(13, __tok0) | Token(14, __tok0) | Token(15, __tok0) | Token(16, __tok0) | Token(17, __tok0) | Token(18, __tok0) | Token(19, __tok0) | Token(20, __tok0) | Token(21, __tok0) | Token(22, __tok0) | Token(23, __tok0) | Token(24, __tok0) | Token(25, __tok0) | Token(26, __tok0) | Token(0, __tok0) | Token(1, __tok0) | Token(2, __tok0) | Token(3, __tok0) | Token(4, __tok0) if true => __Symbol::Variant0(__tok0),
+            0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13 | 14 | 15 | 16 | 17 | 18 | 19 | 20 | 21 | 22 | 23 | 24 | 25 | 26 | 27 | 28 | 29 | 30 | 31 | 32 | 33 | 34 | 35 => match __token {
+                Token(5, __tok0) | Token(6, __tok0) | Token(7, __tok0) | Token(8, __tok0) | Token(9, __tok0) | Token(10, __tok0) | Token(11, __tok0) | Token(12, __tok0) | Token(13, __tok0) | Token(14, __tok0) | Token(15, __tok0) | Token(16, __tok0) | Token(17, __tok0) | Token(18, __tok0) | Token(19, __tok0) | Token(20, __tok0) | Token(21, __tok0) | Token(22, __tok0) | Token(23, __tok0) | Token(24, __tok0) | Token(25, __tok0) | Token(26, __tok0) | Token(27, __tok0) | Token(28, __tok0) | Token(29, __tok0) | Token(30, __tok0) | Token(31, __tok0) | Token(32, __tok0) | Token(33, __tok0) | Token(34, __tok0) | Token(35, __tok0) | Token(0, __tok0) | Token(1, __tok0) | Token(2, __tok0) | Token(3, __tok0) | Token(4, __tok0) if true => __Symbol::Variant0(__tok0),
                 _ => unreachable!(),
             },
             _ => unreachable!(),
@@ -11894,13 +13685,13 @@ mod __parse__StackResultElem {
             }
             12 => {
                 __state_machine::SimulatedReduce::Reduce {
-                    states_to_pop: 3,
+                    states_to_pop: 1,
                     nonterminal_produced: 5,
                 }
             }
             13 => {
                 __state_machine::SimulatedReduce::Reduce {
-                    states_to_pop: 3,
+                    states_to_pop: 1,
                     nonterminal_produced: 5,
                 }
             }
@@ -11912,257 +13703,323 @@ mod __parse__StackResultElem {
             }
             15 => {
                 __state_machine::SimulatedReduce::Reduce {
-                    states_to_pop: 3,
-                    nonterminal_produced: 6,
+                    states_to_pop: 1,
+                    nonterminal_produced: 5,
                 }
             }
             16 => {
                 __state_machine::SimulatedReduce::Reduce {
-                    states_to_pop: 2,
-                    nonterminal_produced: 6,
+                    states_to_pop: 1,
+                    nonterminal_produced: 5,
                 }
             }
             17 => {
                 __state_machine::SimulatedReduce::Reduce {
-                    states_to_pop: 4,
-                    nonterminal_produced: 6,
+                    states_to_pop: 1,
+                    nonterminal_produced: 5,
                 }
             }
             18 => {
                 __state_machine::SimulatedReduce::Reduce {
                     states_to_pop: 1,
-                    nonterminal_produced: 6,
+                    nonterminal_produced: 5,
                 }
             }
             19 => {
+                __state_machine::SimulatedReduce::Reduce {
+                    states_to_pop: 3,
+                    nonterminal_produced: 6,
+                }
+            }
+            20 => {
+                __state_machine::SimulatedReduce::Reduce {
+                    states_to_pop: 1,
+                    nonterminal_produced: 6,
+                }
+            }
+            21 => {
+                __state_machine::SimulatedReduce::Reduce {
+                    states_to_pop: 3,
+                    nonterminal_produced: 7,
+                }
+            }
+            22 => {
+                __state_machine::SimulatedReduce::Reduce {
+                    states_to_pop: 3,
+                    nonterminal_produced: 7,
+                }
+            }
+            23 => {
                 __state_machine::SimulatedReduce::Reduce {
                     states_to_pop: 1,
                     nonterminal_produced: 7,
                 }
             }
-            20 => {
-                __state_machine::SimulatedReduce::Reduce {
-                    states_to_pop: 2,
-                    nonterminal_produced: 8,
-                }
-            }
-            21 => {
-                __state_machine::SimulatedReduce::Reduce {
-                    states_to_pop: 2,
-                    nonterminal_produced: 8,
-                }
-            }
-            22 => {
-                __state_machine::SimulatedReduce::Reduce {
-                    states_to_pop: 2,
-                    nonterminal_produced: 8,
-                }
-            }
-            23 => {
-                __state_machine::SimulatedReduce::Reduce {
-                    states_to_pop: 2,
-                    nonterminal_produced: 8,
-                }
-            }
             24 => {
                 __state_machine::SimulatedReduce::Reduce {
-                    states_to_pop: 1,
-                    nonterminal_produced: 9,
+                    states_to_pop: 3,
+                    nonterminal_produced: 8,
                 }
             }
             25 => {
                 __state_machine::SimulatedReduce::Reduce {
-                    states_to_pop: 1,
-                    nonterminal_produced: 10,
+                    states_to_pop: 2,
+                    nonterminal_produced: 8,
                 }
             }
             26 => {
                 __state_machine::SimulatedReduce::Reduce {
-                    states_to_pop: 2,
-                    nonterminal_produced: 11,
+                    states_to_pop: 4,
+                    nonterminal_produced: 8,
                 }
             }
             27 => {
                 __state_machine::SimulatedReduce::Reduce {
                     states_to_pop: 1,
-                    nonterminal_produced: 11,
+                    nonterminal_produced: 8,
                 }
             }
             28 => {
                 __state_machine::SimulatedReduce::Reduce {
-                    states_to_pop: 3,
-                    nonterminal_produced: 12,
+                    states_to_pop: 1,
+                    nonterminal_produced: 9,
                 }
             }
             29 => {
                 __state_machine::SimulatedReduce::Reduce {
-                    states_to_pop: 1,
-                    nonterminal_produced: 13,
+                    states_to_pop: 4,
+                    nonterminal_produced: 10,
                 }
             }
             30 => {
                 __state_machine::SimulatedReduce::Reduce {
-                    states_to_pop: 3,
-                    nonterminal_produced: 13,
+                    states_to_pop: 2,
+                    nonterminal_produced: 10,
                 }
             }
             31 => {
                 __state_machine::SimulatedReduce::Reduce {
-                    states_to_pop: 2,
-                    nonterminal_produced: 13,
+                    states_to_pop: 4,
+                    nonterminal_produced: 10,
                 }
             }
             32 => {
                 __state_machine::SimulatedReduce::Reduce {
-                    states_to_pop: 1,
-                    nonterminal_produced: 14,
+                    states_to_pop: 2,
+                    nonterminal_produced: 10,
                 }
             }
             33 => {
                 __state_machine::SimulatedReduce::Reduce {
-                    states_to_pop: 1,
-                    nonterminal_produced: 14,
+                    states_to_pop: 2,
+                    nonterminal_produced: 10,
                 }
             }
             34 => {
                 __state_machine::SimulatedReduce::Reduce {
                     states_to_pop: 2,
-                    nonterminal_produced: 14,
+                    nonterminal_produced: 10,
                 }
             }
             35 => {
                 __state_machine::SimulatedReduce::Reduce {
-                    states_to_pop: 3,
-                    nonterminal_produced: 14,
+                    states_to_pop: 1,
+                    nonterminal_produced: 11,
                 }
             }
             36 => {
                 __state_machine::SimulatedReduce::Reduce {
-                    states_to_pop: 3,
-                    nonterminal_produced: 14,
+                    states_to_pop: 1,
+                    nonterminal_produced: 12,
                 }
             }
             37 => {
                 __state_machine::SimulatedReduce::Reduce {
-                    states_to_pop: 3,
-                    nonterminal_produced: 14,
+                    states_to_pop: 2,
+                    nonterminal_produced: 13,
                 }
             }
             38 => {
                 __state_machine::SimulatedReduce::Reduce {
-                    states_to_pop: 3,
-                    nonterminal_produced: 15,
+                    states_to_pop: 1,
+                    nonterminal_produced: 13,
                 }
             }
             39 => {
                 __state_machine::SimulatedReduce::Reduce {
-                    states_to_pop: 1,
-                    nonterminal_produced: 15,
+                    states_to_pop: 3,
+                    nonterminal_produced: 14,
                 }
             }
             40 => {
                 __state_machine::SimulatedReduce::Reduce {
                     states_to_pop: 1,
-                    nonterminal_produced: 16,
+                    nonterminal_produced: 15,
                 }
             }
             41 => {
                 __state_machine::SimulatedReduce::Reduce {
-                    states_to_pop: 1,
-                    nonterminal_produced: 16,
+                    states_to_pop: 3,
+                    nonterminal_produced: 15,
                 }
             }
             42 => {
                 __state_machine::SimulatedReduce::Reduce {
-                    states_to_pop: 1,
-                    nonterminal_produced: 17,
+                    states_to_pop: 2,
+                    nonterminal_produced: 15,
                 }
             }
             43 => {
                 __state_machine::SimulatedReduce::Reduce {
                     states_to_pop: 1,
-                    nonterminal_produced: 18,
+                    nonterminal_produced: 16,
                 }
             }
             44 => {
                 __state_machine::SimulatedReduce::Reduce {
                     states_to_pop: 1,
-                    nonterminal_produced: 19,
+                    nonterminal_produced: 16,
                 }
             }
             45 => {
                 __state_machine::SimulatedReduce::Reduce {
-                    states_to_pop: 1,
-                    nonterminal_produced: 19,
+                    states_to_pop: 2,
+                    nonterminal_produced: 16,
                 }
             }
             46 => {
                 __state_machine::SimulatedReduce::Reduce {
                     states_to_pop: 3,
-                    nonterminal_produced: 19,
+                    nonterminal_produced: 16,
                 }
             }
             47 => {
                 __state_machine::SimulatedReduce::Reduce {
-                    states_to_pop: 1,
-                    nonterminal_produced: 20,
+                    states_to_pop: 3,
+                    nonterminal_produced: 16,
                 }
             }
             48 => {
                 __state_machine::SimulatedReduce::Reduce {
                     states_to_pop: 3,
-                    nonterminal_produced: 20,
+                    nonterminal_produced: 16,
                 }
             }
             49 => {
                 __state_machine::SimulatedReduce::Reduce {
-                    states_to_pop: 2,
-                    nonterminal_produced: 20,
+                    states_to_pop: 3,
+                    nonterminal_produced: 17,
                 }
             }
             50 => {
                 __state_machine::SimulatedReduce::Reduce {
-                    states_to_pop: 2,
-                    nonterminal_produced: 21,
+                    states_to_pop: 1,
+                    nonterminal_produced: 17,
                 }
             }
             51 => {
                 __state_machine::SimulatedReduce::Reduce {
-                    states_to_pop: 2,
-                    nonterminal_produced: 21,
+                    states_to_pop: 1,
+                    nonterminal_produced: 18,
                 }
             }
             52 => {
                 __state_machine::SimulatedReduce::Reduce {
                     states_to_pop: 1,
-                    nonterminal_produced: 22,
+                    nonterminal_produced: 18,
                 }
             }
             53 => {
                 __state_machine::SimulatedReduce::Reduce {
                     states_to_pop: 1,
-                    nonterminal_produced: 23,
+                    nonterminal_produced: 19,
                 }
             }
             54 => {
                 __state_machine::SimulatedReduce::Reduce {
                     states_to_pop: 1,
-                    nonterminal_produced: 24,
+                    nonterminal_produced: 20,
                 }
             }
             55 => {
                 __state_machine::SimulatedReduce::Reduce {
                     states_to_pop: 1,
-                    nonterminal_produced: 25,
+                    nonterminal_produced: 21,
                 }
             }
             56 => {
                 __state_machine::SimulatedReduce::Reduce {
                     states_to_pop: 1,
+                    nonterminal_produced: 21,
+                }
+            }
+            57 => {
+                __state_machine::SimulatedReduce::Reduce {
+                    states_to_pop: 3,
+                    nonterminal_produced: 21,
+                }
+            }
+            58 => {
+                __state_machine::SimulatedReduce::Reduce {
+                    states_to_pop: 1,
+                    nonterminal_produced: 22,
+                }
+            }
+            59 => {
+                __state_machine::SimulatedReduce::Reduce {
+                    states_to_pop: 3,
+                    nonterminal_produced: 22,
+                }
+            }
+            60 => {
+                __state_machine::SimulatedReduce::Reduce {
+                    states_to_pop: 2,
+                    nonterminal_produced: 22,
+                }
+            }
+            61 => {
+                __state_machine::SimulatedReduce::Reduce {
+                    states_to_pop: 2,
+                    nonterminal_produced: 23,
+                }
+            }
+            62 => {
+                __state_machine::SimulatedReduce::Reduce {
+                    states_to_pop: 2,
+                    nonterminal_produced: 23,
+                }
+            }
+            63 => {
+                __state_machine::SimulatedReduce::Reduce {
+                    states_to_pop: 1,
+                    nonterminal_produced: 24,
+                }
+            }
+            64 => {
+                __state_machine::SimulatedReduce::Reduce {
+                    states_to_pop: 1,
+                    nonterminal_produced: 25,
+                }
+            }
+            65 => {
+                __state_machine::SimulatedReduce::Reduce {
+                    states_to_pop: 1,
                     nonterminal_produced: 26,
                 }
             }
-            57 => __state_machine::SimulatedReduce::Accept,
+            66 => {
+                __state_machine::SimulatedReduce::Reduce {
+                    states_to_pop: 1,
+                    nonterminal_produced: 27,
+                }
+            }
+            67 => {
+                __state_machine::SimulatedReduce::Reduce {
+                    states_to_pop: 1,
+                    nonterminal_produced: 28,
+                }
+            }
+            68 => __state_machine::SimulatedReduce::Accept,
             _ => panic!("invalid reduction index {}", __reduce_index)
         }
     }
@@ -12415,8 +14272,41 @@ mod __parse__StackResultElem {
                 __reduce56(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&())>)
             }
             57 => {
+                __reduce57(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&())>)
+            }
+            58 => {
+                __reduce58(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&())>)
+            }
+            59 => {
+                __reduce59(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&())>)
+            }
+            60 => {
+                __reduce60(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&())>)
+            }
+            61 => {
+                __reduce61(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&())>)
+            }
+            62 => {
+                __reduce62(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&())>)
+            }
+            63 => {
+                __reduce63(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&())>)
+            }
+            64 => {
+                __reduce64(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&())>)
+            }
+            65 => {
+                __reduce65(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&())>)
+            }
+            66 => {
+                __reduce66(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&())>)
+            }
+            67 => {
+                __reduce67(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&())>)
+            }
+            68 => {
                 // __StackResultElem = StackResultElem => ActionFn(5);
-                let __sym0 = __pop_Variant19(__symbols);
+                let __sym0 = __pop_Variant21(__symbols);
                 let __start = __sym0.0;
                 let __end = __sym0.2;
                 let __nt = super::__action5::<>(input, __sym0);
@@ -12435,14 +14325,14 @@ mod __parse__StackResultElem {
     fn __symbol_type_mismatch() -> ! {
         panic!("symbol type mismatch")
     }
-    fn __pop_Variant9<
+    fn __pop_Variant11<
       'input,
     >(
         __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>
     ) -> (usize, ArgConstraint, usize)
      {
         match __symbols.pop() {
-            Some((__l, __Symbol::Variant9(__v), __r)) => (__l, __v, __r),
+            Some((__l, __Symbol::Variant11(__v), __r)) => (__l, __v, __r),
             _ => __symbol_type_mismatch()
         }
     }
@@ -12472,21 +14362,10 @@ mod __parse__StackResultElem {
       'input,
     >(
         __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>
-    ) -> (usize, CompositeValue, usize)
+    ) -> (usize, Attribute, usize)
      {
         match __symbols.pop() {
             Some((__l, __Symbol::Variant6(__v), __r)) => (__l, __v, __r),
-            _ => __symbol_type_mismatch()
-        }
-    }
-    fn __pop_Variant7<
-      'input,
-    >(
-        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>
-    ) -> (usize, CompoundInstruction<SomeValue>, usize)
-     {
-        match __symbols.pop() {
-            Some((__l, __Symbol::Variant7(__v), __r)) => (__l, __v, __r),
             _ => __symbol_type_mismatch()
         }
     }
@@ -12494,21 +14373,43 @@ mod __parse__StackResultElem {
       'input,
     >(
         __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>
-    ) -> (usize, ConcreteType, usize)
+    ) -> (usize, CompositeValue, usize)
      {
         match __symbols.pop() {
             Some((__l, __Symbol::Variant8(__v), __r)) => (__l, __v, __r),
             _ => __symbol_type_mismatch()
         }
     }
-    fn __pop_Variant11<
+    fn __pop_Variant9<
+      'input,
+    >(
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>
+    ) -> (usize, CompoundInstruction<SomeValue>, usize)
+     {
+        match __symbols.pop() {
+            Some((__l, __Symbol::Variant9(__v), __r)) => (__l, __v, __r),
+            _ => __symbol_type_mismatch()
+        }
+    }
+    fn __pop_Variant10<
+      'input,
+    >(
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>
+    ) -> (usize, ConcreteType, usize)
+     {
+        match __symbols.pop() {
+            Some((__l, __Symbol::Variant10(__v), __r)) => (__l, __v, __r),
+            _ => __symbol_type_mismatch()
+        }
+    }
+    fn __pop_Variant13<
       'input,
     >(
         __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>
     ) -> (usize, Instruction<SomeValue>, usize)
      {
         match __symbols.pop() {
-            Some((__l, __Symbol::Variant11(__v), __r)) => (__l, __v, __r),
+            Some((__l, __Symbol::Variant13(__v), __r)) => (__l, __v, __r),
             _ => __symbol_type_mismatch()
         }
     }
@@ -12523,25 +14424,14 @@ mod __parse__StackResultElem {
             _ => __symbol_type_mismatch()
         }
     }
-    fn __pop_Variant13<
+    fn __pop_Variant15<
       'input,
     >(
         __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>
     ) -> (usize, MType<DynMType>, usize)
      {
         match __symbols.pop() {
-            Some((__l, __Symbol::Variant13(__v), __r)) => (__l, __v, __r),
-            _ => __symbol_type_mismatch()
-        }
-    }
-    fn __pop_Variant17<
-      'input,
-    >(
-        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>
-    ) -> (usize, SomeValue, usize)
-     {
-        match __symbols.pop() {
-            Some((__l, __Symbol::Variant17(__v), __r)) => (__l, __v, __r),
+            Some((__l, __Symbol::Variant15(__v), __r)) => (__l, __v, __r),
             _ => __symbol_type_mismatch()
         }
     }
@@ -12549,21 +14439,32 @@ mod __parse__StackResultElem {
       'input,
     >(
         __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>
-    ) -> (usize, StackResultElem, usize)
+    ) -> (usize, SomeValue, usize)
      {
         match __symbols.pop() {
             Some((__l, __Symbol::Variant19(__v), __r)) => (__l, __v, __r),
             _ => __symbol_type_mismatch()
         }
     }
-    fn __pop_Variant10<
+    fn __pop_Variant21<
+      'input,
+    >(
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>
+    ) -> (usize, StackResultElem, usize)
+     {
+        match __symbols.pop() {
+            Some((__l, __Symbol::Variant21(__v), __r)) => (__l, __v, __r),
+            _ => __symbol_type_mismatch()
+        }
+    }
+    fn __pop_Variant12<
       'input,
     >(
         __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>
     ) -> (usize, String, usize)
      {
         match __symbols.pop() {
-            Some((__l, __Symbol::Variant10(__v), __r)) => (__l, __v, __r),
+            Some((__l, __Symbol::Variant12(__v), __r)) => (__l, __v, __r),
             _ => __symbol_type_mismatch()
         }
     }
@@ -12578,14 +14479,14 @@ mod __parse__StackResultElem {
             _ => __symbol_type_mismatch()
         }
     }
-    fn __pop_Variant12<
+    fn __pop_Variant7<
       'input,
     >(
         __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>
-    ) -> (usize, Vec<CompoundInstruction<SomeValue>>, usize)
+    ) -> (usize, Vec<Attribute>, usize)
      {
         match __symbols.pop() {
-            Some((__l, __Symbol::Variant12(__v), __r)) => (__l, __v, __r),
+            Some((__l, __Symbol::Variant7(__v), __r)) => (__l, __v, __r),
             _ => __symbol_type_mismatch()
         }
     }
@@ -12593,32 +14494,43 @@ mod __parse__StackResultElem {
       'input,
     >(
         __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>
-    ) -> (usize, Vec<MType<DynMType>>, usize)
+    ) -> (usize, Vec<CompoundInstruction<SomeValue>>, usize)
      {
         match __symbols.pop() {
             Some((__l, __Symbol::Variant14(__v), __r)) => (__l, __v, __r),
             _ => __symbol_type_mismatch()
         }
     }
-    fn __pop_Variant18<
+    fn __pop_Variant16<
+      'input,
+    >(
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>
+    ) -> (usize, Vec<MType<DynMType>>, usize)
+     {
+        match __symbols.pop() {
+            Some((__l, __Symbol::Variant16(__v), __r)) => (__l, __v, __r),
+            _ => __symbol_type_mismatch()
+        }
+    }
+    fn __pop_Variant20<
       'input,
     >(
         __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>
     ) -> (usize, Vec<SomeValue>, usize)
      {
         match __symbols.pop() {
-            Some((__l, __Symbol::Variant18(__v), __r)) => (__l, __v, __r),
+            Some((__l, __Symbol::Variant20(__v), __r)) => (__l, __v, __r),
             _ => __symbol_type_mismatch()
         }
     }
-    fn __pop_Variant15<
+    fn __pop_Variant17<
       'input,
     >(
         __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>
     ) -> (usize, bool, usize)
      {
         match __symbols.pop() {
-            Some((__l, __Symbol::Variant15(__v), __r)) => (__l, __v, __r),
+            Some((__l, __Symbol::Variant17(__v), __r)) => (__l, __v, __r),
             _ => __symbol_type_mismatch()
         }
     }
@@ -12633,14 +14545,14 @@ mod __parse__StackResultElem {
             _ => __symbol_type_mismatch()
         }
     }
-    fn __pop_Variant16<
+    fn __pop_Variant18<
       'input,
     >(
         __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>
     ) -> (usize, i32, usize)
      {
         match __symbols.pop() {
-            Some((__l, __Symbol::Variant16(__v), __r)) => (__l, __v, __r),
+            Some((__l, __Symbol::Variant18(__v), __r)) => (__l, __v, __r),
             _ => __symbol_type_mismatch()
         }
     }
@@ -12664,11 +14576,11 @@ mod __parse__StackResultElem {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // Arg = SomeValue => ActionFn(12);
-        let __sym0 = __pop_Variant17(__symbols);
+        // Arg = SomeValue => ActionFn(21);
+        let __sym0 = __pop_Variant19(__symbols);
         let __start = __sym0.0;
         let __end = __sym0.2;
-        let __nt = super::__action12::<>(input, __sym0);
+        let __nt = super::__action21::<>(input, __sym0);
         __symbols.push((__start, __Symbol::Variant1(__nt), __end));
         (1, 0)
     }
@@ -12681,11 +14593,11 @@ mod __parse__StackResultElem {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // Arg = ConcreteType => ActionFn(13);
-        let __sym0 = __pop_Variant8(__symbols);
+        // Arg = ConcreteType => ActionFn(22);
+        let __sym0 = __pop_Variant10(__symbols);
         let __start = __sym0.0;
         let __end = __sym0.2;
-        let __nt = super::__action13::<>(input, __sym0);
+        let __nt = super::__action22::<>(input, __sym0);
         __symbols.push((__start, __Symbol::Variant1(__nt), __end));
         (1, 0)
     }
@@ -12698,11 +14610,11 @@ mod __parse__StackResultElem {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // ArgVar = r#"[a-z]"# => ActionFn(51);
+        // ArgVar = r#"[a-z]"# => ActionFn(62);
         let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0;
         let __end = __sym0.2;
-        let __nt = super::__action51::<>(input, __sym0);
+        let __nt = super::__action62::<>(input, __sym0);
         __symbols.push((__start, __Symbol::Variant2(__nt), __end));
         (1, 1)
     }
@@ -12715,13 +14627,13 @@ mod __parse__StackResultElem {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // Args = Arg, Args => ActionFn(14);
+        // Args = Arg, Args => ActionFn(23);
         assert!(__symbols.len() >= 2);
         let __sym1 = __pop_Variant3(__symbols);
         let __sym0 = __pop_Variant1(__symbols);
         let __start = __sym0.0;
         let __end = __sym1.2;
-        let __nt = super::__action14::<>(input, __sym0, __sym1);
+        let __nt = super::__action23::<>(input, __sym0, __sym1);
         __symbols.push((__start, __Symbol::Variant3(__nt), __end));
         (2, 2)
     }
@@ -12734,11 +14646,11 @@ mod __parse__StackResultElem {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // Args = Arg => ActionFn(15);
+        // Args = Arg => ActionFn(24);
         let __sym0 = __pop_Variant1(__symbols);
         let __start = __sym0.0;
         let __end = __sym0.2;
-        let __nt = super::__action15::<>(input, __sym0);
+        let __nt = super::__action24::<>(input, __sym0);
         __symbols.push((__start, __Symbol::Variant3(__nt), __end));
         (1, 2)
     }
@@ -12751,11 +14663,11 @@ mod __parse__StackResultElem {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // AtomicType = "int" => ActionFn(32);
+        // AtomicType = "int" => ActionFn(41);
         let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0;
         let __end = __sym0.2;
-        let __nt = super::__action32::<>(input, __sym0);
+        let __nt = super::__action41::<>(input, __sym0);
         __symbols.push((__start, __Symbol::Variant4(__nt), __end));
         (1, 3)
     }
@@ -12768,11 +14680,11 @@ mod __parse__StackResultElem {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // AtomicType = "nat" => ActionFn(33);
+        // AtomicType = "nat" => ActionFn(42);
         let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0;
         let __end = __sym0.2;
-        let __nt = super::__action33::<>(input, __sym0);
+        let __nt = super::__action42::<>(input, __sym0);
         __symbols.push((__start, __Symbol::Variant4(__nt), __end));
         (1, 3)
     }
@@ -12785,11 +14697,11 @@ mod __parse__StackResultElem {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // AtomicType = "string" => ActionFn(34);
+        // AtomicType = "string" => ActionFn(43);
         let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0;
         let __end = __sym0.2;
-        let __nt = super::__action34::<>(input, __sym0);
+        let __nt = super::__action43::<>(input, __sym0);
         __symbols.push((__start, __Symbol::Variant4(__nt), __end));
         (1, 3)
     }
@@ -12802,11 +14714,11 @@ mod __parse__StackResultElem {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // AtomicType = "bool" => ActionFn(35);
+        // AtomicType = "bool" => ActionFn(44);
         let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0;
         let __end = __sym0.2;
-        let __nt = super::__action35::<>(input, __sym0);
+        let __nt = super::__action44::<>(input, __sym0);
         __symbols.push((__start, __Symbol::Variant4(__nt), __end));
         (1, 3)
     }
@@ -12819,11 +14731,11 @@ mod __parse__StackResultElem {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // AtomicValue = McLitNumber => ActionFn(19);
-        let __sym0 = __pop_Variant16(__symbols);
+        // AtomicValue = McLitNumber => ActionFn(28);
+        let __sym0 = __pop_Variant18(__symbols);
         let __start = __sym0.0;
         let __end = __sym0.2;
-        let __nt = super::__action19::<>(input, __sym0);
+        let __nt = super::__action28::<>(input, __sym0);
         __symbols.push((__start, __Symbol::Variant5(__nt), __end));
         (1, 4)
     }
@@ -12836,11 +14748,11 @@ mod __parse__StackResultElem {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // AtomicValue = McLitString => ActionFn(20);
-        let __sym0 = __pop_Variant10(__symbols);
+        // AtomicValue = McLitString => ActionFn(29);
+        let __sym0 = __pop_Variant12(__symbols);
         let __start = __sym0.0;
         let __end = __sym0.2;
-        let __nt = super::__action20::<>(input, __sym0);
+        let __nt = super::__action29::<>(input, __sym0);
         __symbols.push((__start, __Symbol::Variant5(__nt), __end));
         (1, 4)
     }
@@ -12853,11 +14765,11 @@ mod __parse__StackResultElem {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // AtomicValue = McLitBool => ActionFn(21);
-        let __sym0 = __pop_Variant15(__symbols);
+        // AtomicValue = McLitBool => ActionFn(30);
+        let __sym0 = __pop_Variant17(__symbols);
         let __start = __sym0.0;
         let __end = __sym0.2;
-        let __nt = super::__action21::<>(input, __sym0);
+        let __nt = super::__action30::<>(input, __sym0);
         __symbols.push((__start, __Symbol::Variant5(__nt), __end));
         (1, 4)
     }
@@ -12870,16 +14782,13 @@ mod __parse__StackResultElem {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // CompositeValue = "Pair", SomeValue, SomeValue => ActionFn(22);
-        assert!(__symbols.len() >= 3);
-        let __sym2 = __pop_Variant17(__symbols);
-        let __sym1 = __pop_Variant17(__symbols);
+        // Attribute = "comparable" => ActionFn(6);
         let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0;
-        let __end = __sym2.2;
-        let __nt = super::__action22::<>(input, __sym0, __sym1, __sym2);
+        let __end = __sym0.2;
+        let __nt = super::__action6::<>(input, __sym0);
         __symbols.push((__start, __Symbol::Variant6(__nt), __end));
-        (3, 5)
+        (1, 5)
     }
     pub(crate) fn __reduce13<
         'input,
@@ -12890,16 +14799,13 @@ mod __parse__StackResultElem {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // CompositeValue = "{", SomeValueList, "}" => ActionFn(23);
-        assert!(__symbols.len() >= 3);
-        let __sym2 = __pop_Variant0(__symbols);
-        let __sym1 = __pop_Variant18(__symbols);
+        // Attribute = "passable" => ActionFn(7);
         let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0;
-        let __end = __sym2.2;
-        let __nt = super::__action23::<>(input, __sym0, __sym1, __sym2);
+        let __end = __sym0.2;
+        let __nt = super::__action7::<>(input, __sym0);
         __symbols.push((__start, __Symbol::Variant6(__nt), __end));
-        (3, 5)
+        (1, 5)
     }
     pub(crate) fn __reduce14<
         'input,
@@ -12910,11 +14816,11 @@ mod __parse__StackResultElem {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // CompositeValue = InstructionBlock => ActionFn(24);
-        let __sym0 = __pop_Variant12(__symbols);
+        // Attribute = "pushable" => ActionFn(8);
+        let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0;
         let __end = __sym0.2;
-        let __nt = super::__action24::<>(input, __sym0);
+        let __nt = super::__action8::<>(input, __sym0);
         __symbols.push((__start, __Symbol::Variant6(__nt), __end));
         (1, 5)
     }
@@ -12927,16 +14833,13 @@ mod __parse__StackResultElem {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // CompoundInstruction = "IF", InstructionBlock, InstructionBlock => ActionFn(6);
-        assert!(__symbols.len() >= 3);
-        let __sym2 = __pop_Variant12(__symbols);
-        let __sym1 = __pop_Variant12(__symbols);
+        // Attribute = "storable" => ActionFn(9);
         let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0;
-        let __end = __sym2.2;
-        let __nt = super::__action6::<>(input, __sym0, __sym1, __sym2);
-        __symbols.push((__start, __Symbol::Variant7(__nt), __end));
-        (3, 6)
+        let __end = __sym0.2;
+        let __nt = super::__action9::<>(input, __sym0);
+        __symbols.push((__start, __Symbol::Variant6(__nt), __end));
+        (1, 5)
     }
     pub(crate) fn __reduce16<
         'input,
@@ -12947,15 +14850,13 @@ mod __parse__StackResultElem {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // CompoundInstruction = "DIP", InstructionBlock => ActionFn(7);
-        assert!(__symbols.len() >= 2);
-        let __sym1 = __pop_Variant12(__symbols);
+        // Attribute = "packable" => ActionFn(10);
         let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0;
-        let __end = __sym1.2;
-        let __nt = super::__action7::<>(input, __sym0, __sym1);
-        __symbols.push((__start, __Symbol::Variant7(__nt), __end));
-        (2, 6)
+        let __end = __sym0.2;
+        let __nt = super::__action10::<>(input, __sym0);
+        __symbols.push((__start, __Symbol::Variant6(__nt), __end));
+        (1, 5)
     }
     pub(crate) fn __reduce17<
         'input,
@@ -12966,17 +14867,13 @@ mod __parse__StackResultElem {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // CompoundInstruction = "LAMBDA_REC", ConcreteType, ConcreteType, InstructionBlock => ActionFn(8);
-        assert!(__symbols.len() >= 4);
-        let __sym3 = __pop_Variant12(__symbols);
-        let __sym2 = __pop_Variant8(__symbols);
-        let __sym1 = __pop_Variant8(__symbols);
+        // Attribute = "bigmapvalue" => ActionFn(11);
         let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0;
-        let __end = __sym3.2;
-        let __nt = super::__action8::<>(input, __sym0, __sym1, __sym2, __sym3);
-        __symbols.push((__start, __Symbol::Variant7(__nt), __end));
-        (4, 6)
+        let __end = __sym0.2;
+        let __nt = super::__action11::<>(input, __sym0);
+        __symbols.push((__start, __Symbol::Variant6(__nt), __end));
+        (1, 5)
     }
     pub(crate) fn __reduce18<
         'input,
@@ -12987,13 +14884,13 @@ mod __parse__StackResultElem {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // CompoundInstruction = Instruction => ActionFn(9);
-        let __sym0 = __pop_Variant11(__symbols);
+        // Attribute = "duplicable" => ActionFn(12);
+        let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0;
         let __end = __sym0.2;
-        let __nt = super::__action9::<>(input, __sym0);
-        __symbols.push((__start, __Symbol::Variant7(__nt), __end));
-        (1, 6)
+        let __nt = super::__action12::<>(input, __sym0);
+        __symbols.push((__start, __Symbol::Variant6(__nt), __end));
+        (1, 5)
     }
     pub(crate) fn __reduce19<
         'input,
@@ -13004,13 +14901,16 @@ mod __parse__StackResultElem {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // ConcreteType = MDyn => ActionFn(36);
-        let __sym0 = __pop_Variant13(__symbols);
+        // AttributeList = Attribute, "+", AttributeList => ActionFn(13);
+        assert!(__symbols.len() >= 3);
+        let __sym2 = __pop_Variant7(__symbols);
+        let __sym1 = __pop_Variant0(__symbols);
+        let __sym0 = __pop_Variant6(__symbols);
         let __start = __sym0.0;
-        let __end = __sym0.2;
-        let __nt = super::__action36::<>(input, __sym0);
-        __symbols.push((__start, __Symbol::Variant8(__nt), __end));
-        (1, 7)
+        let __end = __sym2.2;
+        let __nt = super::__action13::<>(input, __sym0, __sym1, __sym2);
+        __symbols.push((__start, __Symbol::Variant7(__nt), __end));
+        (3, 6)
     }
     pub(crate) fn __reduce20<
         'input,
@@ -13021,15 +14921,13 @@ mod __parse__StackResultElem {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // Constraint = "w|", ArgVar => ActionFn(45);
-        assert!(__symbols.len() >= 2);
-        let __sym1 = __pop_Variant2(__symbols);
-        let __sym0 = __pop_Variant0(__symbols);
+        // AttributeList = Attribute => ActionFn(14);
+        let __sym0 = __pop_Variant6(__symbols);
         let __start = __sym0.0;
-        let __end = __sym1.2;
-        let __nt = super::__action45::<>(input, __sym0, __sym1);
-        __symbols.push((__start, __Symbol::Variant9(__nt), __end));
-        (2, 8)
+        let __end = __sym0.2;
+        let __nt = super::__action14::<>(input, __sym0);
+        __symbols.push((__start, __Symbol::Variant7(__nt), __end));
+        (1, 6)
     }
     pub(crate) fn __reduce21<
         'input,
@@ -13040,15 +14938,16 @@ mod __parse__StackResultElem {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // Constraint = "t|", ArgVar => ActionFn(46);
-        assert!(__symbols.len() >= 2);
-        let __sym1 = __pop_Variant2(__symbols);
+        // CompositeValue = "Pair", SomeValue, SomeValue => ActionFn(31);
+        assert!(__symbols.len() >= 3);
+        let __sym2 = __pop_Variant19(__symbols);
+        let __sym1 = __pop_Variant19(__symbols);
         let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0;
-        let __end = __sym1.2;
-        let __nt = super::__action46::<>(input, __sym0, __sym1);
-        __symbols.push((__start, __Symbol::Variant9(__nt), __end));
-        (2, 8)
+        let __end = __sym2.2;
+        let __nt = super::__action31::<>(input, __sym0, __sym1, __sym2);
+        __symbols.push((__start, __Symbol::Variant8(__nt), __end));
+        (3, 7)
     }
     pub(crate) fn __reduce22<
         'input,
@@ -13059,15 +14958,16 @@ mod __parse__StackResultElem {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // Constraint = "r|", ArgVar => ActionFn(47);
-        assert!(__symbols.len() >= 2);
-        let __sym1 = __pop_Variant2(__symbols);
+        // CompositeValue = "{", SomeValueList, "}" => ActionFn(32);
+        assert!(__symbols.len() >= 3);
+        let __sym2 = __pop_Variant0(__symbols);
+        let __sym1 = __pop_Variant20(__symbols);
         let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0;
-        let __end = __sym1.2;
-        let __nt = super::__action47::<>(input, __sym0, __sym1);
-        __symbols.push((__start, __Symbol::Variant9(__nt), __end));
-        (2, 8)
+        let __end = __sym2.2;
+        let __nt = super::__action32::<>(input, __sym0, __sym1, __sym2);
+        __symbols.push((__start, __Symbol::Variant8(__nt), __end));
+        (3, 7)
     }
     pub(crate) fn __reduce23<
         'input,
@@ -13078,15 +14978,13 @@ mod __parse__StackResultElem {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // Constraint = "a|", AtomicType => ActionFn(48);
-        assert!(__symbols.len() >= 2);
-        let __sym1 = __pop_Variant4(__symbols);
-        let __sym0 = __pop_Variant0(__symbols);
+        // CompositeValue = InstructionBlock => ActionFn(33);
+        let __sym0 = __pop_Variant14(__symbols);
         let __start = __sym0.0;
-        let __end = __sym1.2;
-        let __nt = super::__action48::<>(input, __sym0, __sym1);
-        __symbols.push((__start, __Symbol::Variant9(__nt), __end));
-        (2, 8)
+        let __end = __sym0.2;
+        let __nt = super::__action33::<>(input, __sym0);
+        __symbols.push((__start, __Symbol::Variant8(__nt), __end));
+        (1, 7)
     }
     pub(crate) fn __reduce24<
         'input,
@@ -13097,13 +14995,16 @@ mod __parse__StackResultElem {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // Dyn = r#"<[A-Za-z][A-Za-z0-9|]+>"# => ActionFn(52);
+        // CompoundInstruction = "IF", InstructionBlock, InstructionBlock => ActionFn(15);
+        assert!(__symbols.len() >= 3);
+        let __sym2 = __pop_Variant14(__symbols);
+        let __sym1 = __pop_Variant14(__symbols);
         let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0;
-        let __end = __sym0.2;
-        let __nt = super::__action52::<>(input, __sym0);
-        __symbols.push((__start, __Symbol::Variant10(__nt), __end));
-        (1, 9)
+        let __end = __sym2.2;
+        let __nt = super::__action15::<>(input, __sym0, __sym1, __sym2);
+        __symbols.push((__start, __Symbol::Variant9(__nt), __end));
+        (3, 8)
     }
     pub(crate) fn __reduce25<
         'input,
@@ -13114,13 +15015,15 @@ mod __parse__StackResultElem {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // Identifier = r#"[A-Za-z][A-Za-z0-9]+"# => ActionFn(53);
+        // CompoundInstruction = "DIP", InstructionBlock => ActionFn(16);
+        assert!(__symbols.len() >= 2);
+        let __sym1 = __pop_Variant14(__symbols);
         let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0;
-        let __end = __sym0.2;
-        let __nt = super::__action53::<>(input, __sym0);
-        __symbols.push((__start, __Symbol::Variant10(__nt), __end));
-        (1, 10)
+        let __end = __sym1.2;
+        let __nt = super::__action16::<>(input, __sym0, __sym1);
+        __symbols.push((__start, __Symbol::Variant9(__nt), __end));
+        (2, 8)
     }
     pub(crate) fn __reduce26<
         'input,
@@ -13131,15 +15034,17 @@ mod __parse__StackResultElem {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // Instruction = Identifier, Args => ActionFn(10);
-        assert!(__symbols.len() >= 2);
-        let __sym1 = __pop_Variant3(__symbols);
-        let __sym0 = __pop_Variant10(__symbols);
+        // CompoundInstruction = "LAMBDA_REC", ConcreteType, ConcreteType, InstructionBlock => ActionFn(17);
+        assert!(__symbols.len() >= 4);
+        let __sym3 = __pop_Variant14(__symbols);
+        let __sym2 = __pop_Variant10(__symbols);
+        let __sym1 = __pop_Variant10(__symbols);
+        let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0;
-        let __end = __sym1.2;
-        let __nt = super::__action10::<>(input, __sym0, __sym1);
-        __symbols.push((__start, __Symbol::Variant11(__nt), __end));
-        (2, 11)
+        let __end = __sym3.2;
+        let __nt = super::__action17::<>(input, __sym0, __sym1, __sym2, __sym3);
+        __symbols.push((__start, __Symbol::Variant9(__nt), __end));
+        (4, 8)
     }
     pub(crate) fn __reduce27<
         'input,
@@ -13150,13 +15055,13 @@ mod __parse__StackResultElem {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // Instruction = Identifier => ActionFn(11);
-        let __sym0 = __pop_Variant10(__symbols);
+        // CompoundInstruction = Instruction => ActionFn(18);
+        let __sym0 = __pop_Variant13(__symbols);
         let __start = __sym0.0;
         let __end = __sym0.2;
-        let __nt = super::__action11::<>(input, __sym0);
-        __symbols.push((__start, __Symbol::Variant11(__nt), __end));
-        (1, 11)
+        let __nt = super::__action18::<>(input, __sym0);
+        __symbols.push((__start, __Symbol::Variant9(__nt), __end));
+        (1, 8)
     }
     pub(crate) fn __reduce28<
         'input,
@@ -13167,16 +15072,13 @@ mod __parse__StackResultElem {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // InstructionBlock = "{", InstructionList, "}" => ActionFn(25);
-        assert!(__symbols.len() >= 3);
-        let __sym2 = __pop_Variant0(__symbols);
-        let __sym1 = __pop_Variant12(__symbols);
-        let __sym0 = __pop_Variant0(__symbols);
+        // ConcreteType = MDyn => ActionFn(45);
+        let __sym0 = __pop_Variant15(__symbols);
         let __start = __sym0.0;
-        let __end = __sym2.2;
-        let __nt = super::__action25::<>(input, __sym0, __sym1, __sym2);
-        __symbols.push((__start, __Symbol::Variant12(__nt), __end));
-        (3, 12)
+        let __end = __sym0.2;
+        let __nt = super::__action45::<>(input, __sym0);
+        __symbols.push((__start, __Symbol::Variant10(__nt), __end));
+        (1, 9)
     }
     pub(crate) fn __reduce29<
         'input,
@@ -13187,13 +15089,17 @@ mod __parse__StackResultElem {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // InstructionList = CompoundInstruction => ActionFn(29);
-        let __sym0 = __pop_Variant7(__symbols);
+        // Constraint = "w|", ArgVar, "=>", AttributeList => ActionFn(54);
+        assert!(__symbols.len() >= 4);
+        let __sym3 = __pop_Variant7(__symbols);
+        let __sym2 = __pop_Variant0(__symbols);
+        let __sym1 = __pop_Variant2(__symbols);
+        let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0;
-        let __end = __sym0.2;
-        let __nt = super::__action29::<>(input, __sym0);
-        __symbols.push((__start, __Symbol::Variant12(__nt), __end));
-        (1, 13)
+        let __end = __sym3.2;
+        let __nt = super::__action54::<>(input, __sym0, __sym1, __sym2, __sym3);
+        __symbols.push((__start, __Symbol::Variant11(__nt), __end));
+        (4, 10)
     }
     pub(crate) fn __reduce30<
         'input,
@@ -13204,16 +15110,15 @@ mod __parse__StackResultElem {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // InstructionList = CompoundInstruction, ";", InstructionList => ActionFn(30);
-        assert!(__symbols.len() >= 3);
-        let __sym2 = __pop_Variant12(__symbols);
-        let __sym1 = __pop_Variant0(__symbols);
-        let __sym0 = __pop_Variant7(__symbols);
+        // Constraint = "w|", ArgVar => ActionFn(55);
+        assert!(__symbols.len() >= 2);
+        let __sym1 = __pop_Variant2(__symbols);
+        let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0;
-        let __end = __sym2.2;
-        let __nt = super::__action30::<>(input, __sym0, __sym1, __sym2);
-        __symbols.push((__start, __Symbol::Variant12(__nt), __end));
-        (3, 13)
+        let __end = __sym1.2;
+        let __nt = super::__action55::<>(input, __sym0, __sym1);
+        __symbols.push((__start, __Symbol::Variant11(__nt), __end));
+        (2, 10)
     }
     pub(crate) fn __reduce31<
         'input,
@@ -13224,15 +15129,17 @@ mod __parse__StackResultElem {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // InstructionList = CompoundInstruction, ";" => ActionFn(31);
-        assert!(__symbols.len() >= 2);
-        let __sym1 = __pop_Variant0(__symbols);
-        let __sym0 = __pop_Variant7(__symbols);
+        // Constraint = "t|", ArgVar, "=>", AttributeList => ActionFn(56);
+        assert!(__symbols.len() >= 4);
+        let __sym3 = __pop_Variant7(__symbols);
+        let __sym2 = __pop_Variant0(__symbols);
+        let __sym1 = __pop_Variant2(__symbols);
+        let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0;
-        let __end = __sym1.2;
-        let __nt = super::__action31::<>(input, __sym0, __sym1);
-        __symbols.push((__start, __Symbol::Variant12(__nt), __end));
-        (2, 13)
+        let __end = __sym3.2;
+        let __nt = super::__action56::<>(input, __sym0, __sym1, __sym2, __sym3);
+        __symbols.push((__start, __Symbol::Variant11(__nt), __end));
+        (4, 10)
     }
     pub(crate) fn __reduce32<
         'input,
@@ -13243,13 +15150,15 @@ mod __parse__StackResultElem {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // MDyn = AtomicType => ActionFn(39);
-        let __sym0 = __pop_Variant4(__symbols);
+        // Constraint = "t|", ArgVar => ActionFn(57);
+        assert!(__symbols.len() >= 2);
+        let __sym1 = __pop_Variant2(__symbols);
+        let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0;
-        let __end = __sym0.2;
-        let __nt = super::__action39::<>(input, __sym0);
-        __symbols.push((__start, __Symbol::Variant13(__nt), __end));
-        (1, 14)
+        let __end = __sym1.2;
+        let __nt = super::__action57::<>(input, __sym0, __sym1);
+        __symbols.push((__start, __Symbol::Variant11(__nt), __end));
+        (2, 10)
     }
     pub(crate) fn __reduce33<
         'input,
@@ -13260,13 +15169,15 @@ mod __parse__StackResultElem {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // MDyn = Dyn => ActionFn(40);
-        let __sym0 = __pop_Variant10(__symbols);
+        // Constraint = "r|", ArgVar => ActionFn(58);
+        assert!(__symbols.len() >= 2);
+        let __sym1 = __pop_Variant2(__symbols);
+        let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0;
-        let __end = __sym0.2;
-        let __nt = super::__action40::<>(input, __sym0);
-        __symbols.push((__start, __Symbol::Variant13(__nt), __end));
-        (1, 14)
+        let __end = __sym1.2;
+        let __nt = super::__action58::<>(input, __sym0, __sym1);
+        __symbols.push((__start, __Symbol::Variant11(__nt), __end));
+        (2, 10)
     }
     pub(crate) fn __reduce34<
         'input,
@@ -13277,15 +15188,15 @@ mod __parse__StackResultElem {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // MDyn = "list", MDyn => ActionFn(41);
+        // Constraint = "a|", AtomicType => ActionFn(59);
         assert!(__symbols.len() >= 2);
-        let __sym1 = __pop_Variant13(__symbols);
+        let __sym1 = __pop_Variant4(__symbols);
         let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0;
         let __end = __sym1.2;
-        let __nt = super::__action41::<>(input, __sym0, __sym1);
-        __symbols.push((__start, __Symbol::Variant13(__nt), __end));
-        (2, 14)
+        let __nt = super::__action59::<>(input, __sym0, __sym1);
+        __symbols.push((__start, __Symbol::Variant11(__nt), __end));
+        (2, 10)
     }
     pub(crate) fn __reduce35<
         'input,
@@ -13296,16 +15207,13 @@ mod __parse__StackResultElem {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // MDyn = "pair", MDyn, MDyn => ActionFn(42);
-        assert!(__symbols.len() >= 3);
-        let __sym2 = __pop_Variant13(__symbols);
-        let __sym1 = __pop_Variant13(__symbols);
+        // Dyn = r#"<[A-Za-z][A-Za-z0-9|+=>]+>"# => ActionFn(63);
         let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0;
-        let __end = __sym2.2;
-        let __nt = super::__action42::<>(input, __sym0, __sym1, __sym2);
-        __symbols.push((__start, __Symbol::Variant13(__nt), __end));
-        (3, 14)
+        let __end = __sym0.2;
+        let __nt = super::__action63::<>(input, __sym0);
+        __symbols.push((__start, __Symbol::Variant12(__nt), __end));
+        (1, 11)
     }
     pub(crate) fn __reduce36<
         'input,
@@ -13316,16 +15224,13 @@ mod __parse__StackResultElem {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // MDyn = "lambda", MDyn, MDyn => ActionFn(43);
-        assert!(__symbols.len() >= 3);
-        let __sym2 = __pop_Variant13(__symbols);
-        let __sym1 = __pop_Variant13(__symbols);
+        // Identifier = r#"[A-Za-z][A-Za-z0-9]+"# => ActionFn(64);
         let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0;
-        let __end = __sym2.2;
-        let __nt = super::__action43::<>(input, __sym0, __sym1, __sym2);
-        __symbols.push((__start, __Symbol::Variant13(__nt), __end));
-        (3, 14)
+        let __end = __sym0.2;
+        let __nt = super::__action64::<>(input, __sym0);
+        __symbols.push((__start, __Symbol::Variant12(__nt), __end));
+        (1, 12)
     }
     pub(crate) fn __reduce37<
         'input,
@@ -13336,16 +15241,15 @@ mod __parse__StackResultElem {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // MDyn = "(", MDyn, ")" => ActionFn(44);
-        assert!(__symbols.len() >= 3);
-        let __sym2 = __pop_Variant0(__symbols);
-        let __sym1 = __pop_Variant13(__symbols);
-        let __sym0 = __pop_Variant0(__symbols);
+        // Instruction = Identifier, Args => ActionFn(19);
+        assert!(__symbols.len() >= 2);
+        let __sym1 = __pop_Variant3(__symbols);
+        let __sym0 = __pop_Variant12(__symbols);
         let __start = __sym0.0;
-        let __end = __sym2.2;
-        let __nt = super::__action44::<>(input, __sym0, __sym1, __sym2);
+        let __end = __sym1.2;
+        let __nt = super::__action19::<>(input, __sym0, __sym1);
         __symbols.push((__start, __Symbol::Variant13(__nt), __end));
-        (3, 14)
+        (2, 13)
     }
     pub(crate) fn __reduce38<
         'input,
@@ -13356,16 +15260,13 @@ mod __parse__StackResultElem {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // MDynList = MDyn, ";", MDynList => ActionFn(37);
-        assert!(__symbols.len() >= 3);
-        let __sym2 = __pop_Variant14(__symbols);
-        let __sym1 = __pop_Variant0(__symbols);
-        let __sym0 = __pop_Variant13(__symbols);
+        // Instruction = Identifier => ActionFn(20);
+        let __sym0 = __pop_Variant12(__symbols);
         let __start = __sym0.0;
-        let __end = __sym2.2;
-        let __nt = super::__action37::<>(input, __sym0, __sym1, __sym2);
-        __symbols.push((__start, __Symbol::Variant14(__nt), __end));
-        (3, 15)
+        let __end = __sym0.2;
+        let __nt = super::__action20::<>(input, __sym0);
+        __symbols.push((__start, __Symbol::Variant13(__nt), __end));
+        (1, 13)
     }
     pub(crate) fn __reduce39<
         'input,
@@ -13376,13 +15277,16 @@ mod __parse__StackResultElem {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // MDynList = MDyn => ActionFn(38);
-        let __sym0 = __pop_Variant13(__symbols);
+        // InstructionBlock = "{", InstructionList, "}" => ActionFn(34);
+        assert!(__symbols.len() >= 3);
+        let __sym2 = __pop_Variant0(__symbols);
+        let __sym1 = __pop_Variant14(__symbols);
+        let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0;
-        let __end = __sym0.2;
-        let __nt = super::__action38::<>(input, __sym0);
+        let __end = __sym2.2;
+        let __nt = super::__action34::<>(input, __sym0, __sym1, __sym2);
         __symbols.push((__start, __Symbol::Variant14(__nt), __end));
-        (1, 15)
+        (3, 14)
     }
     pub(crate) fn __reduce40<
         'input,
@@ -13393,13 +15297,13 @@ mod __parse__StackResultElem {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // McLitBool = "True" => ActionFn(54);
-        let __sym0 = __pop_Variant0(__symbols);
+        // InstructionList = CompoundInstruction => ActionFn(38);
+        let __sym0 = __pop_Variant9(__symbols);
         let __start = __sym0.0;
         let __end = __sym0.2;
-        let __nt = super::__action54::<>(input, __sym0);
-        __symbols.push((__start, __Symbol::Variant15(__nt), __end));
-        (1, 16)
+        let __nt = super::__action38::<>(input, __sym0);
+        __symbols.push((__start, __Symbol::Variant14(__nt), __end));
+        (1, 15)
     }
     pub(crate) fn __reduce41<
         'input,
@@ -13410,13 +15314,16 @@ mod __parse__StackResultElem {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // McLitBool = "False" => ActionFn(55);
-        let __sym0 = __pop_Variant0(__symbols);
+        // InstructionList = CompoundInstruction, ";", InstructionList => ActionFn(39);
+        assert!(__symbols.len() >= 3);
+        let __sym2 = __pop_Variant14(__symbols);
+        let __sym1 = __pop_Variant0(__symbols);
+        let __sym0 = __pop_Variant9(__symbols);
         let __start = __sym0.0;
-        let __end = __sym0.2;
-        let __nt = super::__action55::<>(input, __sym0);
-        __symbols.push((__start, __Symbol::Variant15(__nt), __end));
-        (1, 16)
+        let __end = __sym2.2;
+        let __nt = super::__action39::<>(input, __sym0, __sym1, __sym2);
+        __symbols.push((__start, __Symbol::Variant14(__nt), __end));
+        (3, 15)
     }
     pub(crate) fn __reduce42<
         'input,
@@ -13427,13 +15334,15 @@ mod __parse__StackResultElem {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // McLitNumber = r#"([+-]?)[0-9]+"# => ActionFn(57);
-        let __sym0 = __pop_Variant0(__symbols);
+        // InstructionList = CompoundInstruction, ";" => ActionFn(40);
+        assert!(__symbols.len() >= 2);
+        let __sym1 = __pop_Variant0(__symbols);
+        let __sym0 = __pop_Variant9(__symbols);
         let __start = __sym0.0;
-        let __end = __sym0.2;
-        let __nt = super::__action57::<>(input, __sym0);
-        __symbols.push((__start, __Symbol::Variant16(__nt), __end));
-        (1, 17)
+        let __end = __sym1.2;
+        let __nt = super::__action40::<>(input, __sym0, __sym1);
+        __symbols.push((__start, __Symbol::Variant14(__nt), __end));
+        (2, 15)
     }
     pub(crate) fn __reduce43<
         'input,
@@ -13444,13 +15353,13 @@ mod __parse__StackResultElem {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // McLitString = r#"\"[a-z0-9]+\""# => ActionFn(56);
-        let __sym0 = __pop_Variant0(__symbols);
+        // MDyn = AtomicType => ActionFn(48);
+        let __sym0 = __pop_Variant4(__symbols);
         let __start = __sym0.0;
         let __end = __sym0.2;
-        let __nt = super::__action56::<>(input, __sym0);
-        __symbols.push((__start, __Symbol::Variant10(__nt), __end));
-        (1, 18)
+        let __nt = super::__action48::<>(input, __sym0);
+        __symbols.push((__start, __Symbol::Variant15(__nt), __end));
+        (1, 16)
     }
     pub(crate) fn __reduce44<
         'input,
@@ -13461,13 +15370,13 @@ mod __parse__StackResultElem {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // SomeValue = AtomicValue => ActionFn(16);
-        let __sym0 = __pop_Variant5(__symbols);
+        // MDyn = Dyn => ActionFn(49);
+        let __sym0 = __pop_Variant12(__symbols);
         let __start = __sym0.0;
         let __end = __sym0.2;
-        let __nt = super::__action16::<>(input, __sym0);
-        __symbols.push((__start, __Symbol::Variant17(__nt), __end));
-        (1, 19)
+        let __nt = super::__action49::<>(input, __sym0);
+        __symbols.push((__start, __Symbol::Variant15(__nt), __end));
+        (1, 16)
     }
     pub(crate) fn __reduce45<
         'input,
@@ -13478,13 +15387,15 @@ mod __parse__StackResultElem {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // SomeValue = CompositeValue => ActionFn(17);
-        let __sym0 = __pop_Variant6(__symbols);
+        // MDyn = "list", MDyn => ActionFn(50);
+        assert!(__symbols.len() >= 2);
+        let __sym1 = __pop_Variant15(__symbols);
+        let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0;
-        let __end = __sym0.2;
-        let __nt = super::__action17::<>(input, __sym0);
-        __symbols.push((__start, __Symbol::Variant17(__nt), __end));
-        (1, 19)
+        let __end = __sym1.2;
+        let __nt = super::__action50::<>(input, __sym0, __sym1);
+        __symbols.push((__start, __Symbol::Variant15(__nt), __end));
+        (2, 16)
     }
     pub(crate) fn __reduce46<
         'input,
@@ -13495,16 +15406,16 @@ mod __parse__StackResultElem {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // SomeValue = "(", SomeValue, ")" => ActionFn(18);
+        // MDyn = "pair", MDyn, MDyn => ActionFn(51);
         assert!(__symbols.len() >= 3);
-        let __sym2 = __pop_Variant0(__symbols);
-        let __sym1 = __pop_Variant17(__symbols);
+        let __sym2 = __pop_Variant15(__symbols);
+        let __sym1 = __pop_Variant15(__symbols);
         let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0;
         let __end = __sym2.2;
-        let __nt = super::__action18::<>(input, __sym0, __sym1, __sym2);
-        __symbols.push((__start, __Symbol::Variant17(__nt), __end));
-        (3, 19)
+        let __nt = super::__action51::<>(input, __sym0, __sym1, __sym2);
+        __symbols.push((__start, __Symbol::Variant15(__nt), __end));
+        (3, 16)
     }
     pub(crate) fn __reduce47<
         'input,
@@ -13515,13 +15426,16 @@ mod __parse__StackResultElem {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // SomeValueList = SomeValue => ActionFn(26);
-        let __sym0 = __pop_Variant17(__symbols);
+        // MDyn = "lambda", MDyn, MDyn => ActionFn(52);
+        assert!(__symbols.len() >= 3);
+        let __sym2 = __pop_Variant15(__symbols);
+        let __sym1 = __pop_Variant15(__symbols);
+        let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0;
-        let __end = __sym0.2;
-        let __nt = super::__action26::<>(input, __sym0);
-        __symbols.push((__start, __Symbol::Variant18(__nt), __end));
-        (1, 20)
+        let __end = __sym2.2;
+        let __nt = super::__action52::<>(input, __sym0, __sym1, __sym2);
+        __symbols.push((__start, __Symbol::Variant15(__nt), __end));
+        (3, 16)
     }
     pub(crate) fn __reduce48<
         'input,
@@ -13532,16 +15446,16 @@ mod __parse__StackResultElem {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // SomeValueList = SomeValue, ";", SomeValueList => ActionFn(27);
+        // MDyn = "(", MDyn, ")" => ActionFn(53);
         assert!(__symbols.len() >= 3);
-        let __sym2 = __pop_Variant18(__symbols);
-        let __sym1 = __pop_Variant0(__symbols);
-        let __sym0 = __pop_Variant17(__symbols);
+        let __sym2 = __pop_Variant0(__symbols);
+        let __sym1 = __pop_Variant15(__symbols);
+        let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0;
         let __end = __sym2.2;
-        let __nt = super::__action27::<>(input, __sym0, __sym1, __sym2);
-        __symbols.push((__start, __Symbol::Variant18(__nt), __end));
-        (3, 20)
+        let __nt = super::__action53::<>(input, __sym0, __sym1, __sym2);
+        __symbols.push((__start, __Symbol::Variant15(__nt), __end));
+        (3, 16)
     }
     pub(crate) fn __reduce49<
         'input,
@@ -13552,15 +15466,16 @@ mod __parse__StackResultElem {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // SomeValueList = SomeValue, ";" => ActionFn(28);
-        assert!(__symbols.len() >= 2);
+        // MDynList = MDyn, ";", MDynList => ActionFn(46);
+        assert!(__symbols.len() >= 3);
+        let __sym2 = __pop_Variant16(__symbols);
         let __sym1 = __pop_Variant0(__symbols);
-        let __sym0 = __pop_Variant17(__symbols);
+        let __sym0 = __pop_Variant15(__symbols);
         let __start = __sym0.0;
-        let __end = __sym1.2;
-        let __nt = super::__action28::<>(input, __sym0, __sym1);
-        __symbols.push((__start, __Symbol::Variant18(__nt), __end));
-        (2, 20)
+        let __end = __sym2.2;
+        let __nt = super::__action46::<>(input, __sym0, __sym1, __sym2);
+        __symbols.push((__start, __Symbol::Variant16(__nt), __end));
+        (3, 17)
     }
     pub(crate) fn __reduce50<
         'input,
@@ -13571,15 +15486,13 @@ mod __parse__StackResultElem {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // StackResultElem = "r|", ArgVar => ActionFn(49);
-        assert!(__symbols.len() >= 2);
-        let __sym1 = __pop_Variant2(__symbols);
-        let __sym0 = __pop_Variant0(__symbols);
+        // MDynList = MDyn => ActionFn(47);
+        let __sym0 = __pop_Variant15(__symbols);
         let __start = __sym0.0;
-        let __end = __sym1.2;
-        let __nt = super::__action49::<>(input, __sym0, __sym1);
-        __symbols.push((__start, __Symbol::Variant19(__nt), __end));
-        (2, 21)
+        let __end = __sym0.2;
+        let __nt = super::__action47::<>(input, __sym0);
+        __symbols.push((__start, __Symbol::Variant16(__nt), __end));
+        (1, 17)
     }
     pub(crate) fn __reduce51<
         'input,
@@ -13590,15 +15503,13 @@ mod __parse__StackResultElem {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // StackResultElem = "a|", AtomicType => ActionFn(50);
-        assert!(__symbols.len() >= 2);
-        let __sym1 = __pop_Variant4(__symbols);
+        // McLitBool = "True" => ActionFn(65);
         let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0;
-        let __end = __sym1.2;
-        let __nt = super::__action50::<>(input, __sym0, __sym1);
-        __symbols.push((__start, __Symbol::Variant19(__nt), __end));
-        (2, 21)
+        let __end = __sym0.2;
+        let __nt = super::__action65::<>(input, __sym0);
+        __symbols.push((__start, __Symbol::Variant17(__nt), __end));
+        (1, 18)
     }
     pub(crate) fn __reduce52<
         'input,
@@ -13609,13 +15520,13 @@ mod __parse__StackResultElem {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // __ConcreteType = ConcreteType => ActionFn(1);
-        let __sym0 = __pop_Variant8(__symbols);
+        // McLitBool = "False" => ActionFn(66);
+        let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0;
         let __end = __sym0.2;
-        let __nt = super::__action1::<>(input, __sym0);
-        __symbols.push((__start, __Symbol::Variant8(__nt), __end));
-        (1, 22)
+        let __nt = super::__action66::<>(input, __sym0);
+        __symbols.push((__start, __Symbol::Variant17(__nt), __end));
+        (1, 18)
     }
     pub(crate) fn __reduce53<
         'input,
@@ -13626,13 +15537,13 @@ mod __parse__StackResultElem {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // __Constraint = Constraint => ActionFn(4);
-        let __sym0 = __pop_Variant9(__symbols);
+        // McLitNumber = r#"([+-]?)[0-9]+"# => ActionFn(68);
+        let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0;
         let __end = __sym0.2;
-        let __nt = super::__action4::<>(input, __sym0);
-        __symbols.push((__start, __Symbol::Variant9(__nt), __end));
-        (1, 23)
+        let __nt = super::__action68::<>(input, __sym0);
+        __symbols.push((__start, __Symbol::Variant18(__nt), __end));
+        (1, 19)
     }
     pub(crate) fn __reduce54<
         'input,
@@ -13643,13 +15554,13 @@ mod __parse__StackResultElem {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // __InstructionList = InstructionList => ActionFn(0);
-        let __sym0 = __pop_Variant12(__symbols);
+        // McLitString = r#"\"[a-z0-9]+\""# => ActionFn(67);
+        let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0;
         let __end = __sym0.2;
-        let __nt = super::__action0::<>(input, __sym0);
+        let __nt = super::__action67::<>(input, __sym0);
         __symbols.push((__start, __Symbol::Variant12(__nt), __end));
-        (1, 24)
+        (1, 20)
     }
     pub(crate) fn __reduce55<
         'input,
@@ -13660,13 +15571,13 @@ mod __parse__StackResultElem {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // __MDyn = MDyn => ActionFn(3);
-        let __sym0 = __pop_Variant13(__symbols);
+        // SomeValue = AtomicValue => ActionFn(25);
+        let __sym0 = __pop_Variant5(__symbols);
         let __start = __sym0.0;
         let __end = __sym0.2;
-        let __nt = super::__action3::<>(input, __sym0);
-        __symbols.push((__start, __Symbol::Variant13(__nt), __end));
-        (1, 25)
+        let __nt = super::__action25::<>(input, __sym0);
+        __symbols.push((__start, __Symbol::Variant19(__nt), __end));
+        (1, 21)
     }
     pub(crate) fn __reduce56<
         'input,
@@ -13677,13 +15588,212 @@ mod __parse__StackResultElem {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // __MDynList = MDynList => ActionFn(2);
+        // SomeValue = CompositeValue => ActionFn(26);
+        let __sym0 = __pop_Variant8(__symbols);
+        let __start = __sym0.0;
+        let __end = __sym0.2;
+        let __nt = super::__action26::<>(input, __sym0);
+        __symbols.push((__start, __Symbol::Variant19(__nt), __end));
+        (1, 21)
+    }
+    pub(crate) fn __reduce57<
+        'input,
+    >(
+        input: &'input str,
+        __lookahead_start: Option<&usize>,
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
+        _: core::marker::PhantomData<(&'input ())>,
+    ) -> (usize, usize)
+    {
+        // SomeValue = "(", SomeValue, ")" => ActionFn(27);
+        assert!(__symbols.len() >= 3);
+        let __sym2 = __pop_Variant0(__symbols);
+        let __sym1 = __pop_Variant19(__symbols);
+        let __sym0 = __pop_Variant0(__symbols);
+        let __start = __sym0.0;
+        let __end = __sym2.2;
+        let __nt = super::__action27::<>(input, __sym0, __sym1, __sym2);
+        __symbols.push((__start, __Symbol::Variant19(__nt), __end));
+        (3, 21)
+    }
+    pub(crate) fn __reduce58<
+        'input,
+    >(
+        input: &'input str,
+        __lookahead_start: Option<&usize>,
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
+        _: core::marker::PhantomData<(&'input ())>,
+    ) -> (usize, usize)
+    {
+        // SomeValueList = SomeValue => ActionFn(35);
+        let __sym0 = __pop_Variant19(__symbols);
+        let __start = __sym0.0;
+        let __end = __sym0.2;
+        let __nt = super::__action35::<>(input, __sym0);
+        __symbols.push((__start, __Symbol::Variant20(__nt), __end));
+        (1, 22)
+    }
+    pub(crate) fn __reduce59<
+        'input,
+    >(
+        input: &'input str,
+        __lookahead_start: Option<&usize>,
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
+        _: core::marker::PhantomData<(&'input ())>,
+    ) -> (usize, usize)
+    {
+        // SomeValueList = SomeValue, ";", SomeValueList => ActionFn(36);
+        assert!(__symbols.len() >= 3);
+        let __sym2 = __pop_Variant20(__symbols);
+        let __sym1 = __pop_Variant0(__symbols);
+        let __sym0 = __pop_Variant19(__symbols);
+        let __start = __sym0.0;
+        let __end = __sym2.2;
+        let __nt = super::__action36::<>(input, __sym0, __sym1, __sym2);
+        __symbols.push((__start, __Symbol::Variant20(__nt), __end));
+        (3, 22)
+    }
+    pub(crate) fn __reduce60<
+        'input,
+    >(
+        input: &'input str,
+        __lookahead_start: Option<&usize>,
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
+        _: core::marker::PhantomData<(&'input ())>,
+    ) -> (usize, usize)
+    {
+        // SomeValueList = SomeValue, ";" => ActionFn(37);
+        assert!(__symbols.len() >= 2);
+        let __sym1 = __pop_Variant0(__symbols);
+        let __sym0 = __pop_Variant19(__symbols);
+        let __start = __sym0.0;
+        let __end = __sym1.2;
+        let __nt = super::__action37::<>(input, __sym0, __sym1);
+        __symbols.push((__start, __Symbol::Variant20(__nt), __end));
+        (2, 22)
+    }
+    pub(crate) fn __reduce61<
+        'input,
+    >(
+        input: &'input str,
+        __lookahead_start: Option<&usize>,
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
+        _: core::marker::PhantomData<(&'input ())>,
+    ) -> (usize, usize)
+    {
+        // StackResultElem = "r|", ArgVar => ActionFn(60);
+        assert!(__symbols.len() >= 2);
+        let __sym1 = __pop_Variant2(__symbols);
+        let __sym0 = __pop_Variant0(__symbols);
+        let __start = __sym0.0;
+        let __end = __sym1.2;
+        let __nt = super::__action60::<>(input, __sym0, __sym1);
+        __symbols.push((__start, __Symbol::Variant21(__nt), __end));
+        (2, 23)
+    }
+    pub(crate) fn __reduce62<
+        'input,
+    >(
+        input: &'input str,
+        __lookahead_start: Option<&usize>,
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
+        _: core::marker::PhantomData<(&'input ())>,
+    ) -> (usize, usize)
+    {
+        // StackResultElem = "a|", AtomicType => ActionFn(61);
+        assert!(__symbols.len() >= 2);
+        let __sym1 = __pop_Variant4(__symbols);
+        let __sym0 = __pop_Variant0(__symbols);
+        let __start = __sym0.0;
+        let __end = __sym1.2;
+        let __nt = super::__action61::<>(input, __sym0, __sym1);
+        __symbols.push((__start, __Symbol::Variant21(__nt), __end));
+        (2, 23)
+    }
+    pub(crate) fn __reduce63<
+        'input,
+    >(
+        input: &'input str,
+        __lookahead_start: Option<&usize>,
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
+        _: core::marker::PhantomData<(&'input ())>,
+    ) -> (usize, usize)
+    {
+        // __ConcreteType = ConcreteType => ActionFn(1);
+        let __sym0 = __pop_Variant10(__symbols);
+        let __start = __sym0.0;
+        let __end = __sym0.2;
+        let __nt = super::__action1::<>(input, __sym0);
+        __symbols.push((__start, __Symbol::Variant10(__nt), __end));
+        (1, 24)
+    }
+    pub(crate) fn __reduce64<
+        'input,
+    >(
+        input: &'input str,
+        __lookahead_start: Option<&usize>,
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
+        _: core::marker::PhantomData<(&'input ())>,
+    ) -> (usize, usize)
+    {
+        // __Constraint = Constraint => ActionFn(4);
+        let __sym0 = __pop_Variant11(__symbols);
+        let __start = __sym0.0;
+        let __end = __sym0.2;
+        let __nt = super::__action4::<>(input, __sym0);
+        __symbols.push((__start, __Symbol::Variant11(__nt), __end));
+        (1, 25)
+    }
+    pub(crate) fn __reduce65<
+        'input,
+    >(
+        input: &'input str,
+        __lookahead_start: Option<&usize>,
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
+        _: core::marker::PhantomData<(&'input ())>,
+    ) -> (usize, usize)
+    {
+        // __InstructionList = InstructionList => ActionFn(0);
         let __sym0 = __pop_Variant14(__symbols);
         let __start = __sym0.0;
         let __end = __sym0.2;
-        let __nt = super::__action2::<>(input, __sym0);
+        let __nt = super::__action0::<>(input, __sym0);
         __symbols.push((__start, __Symbol::Variant14(__nt), __end));
         (1, 26)
+    }
+    pub(crate) fn __reduce66<
+        'input,
+    >(
+        input: &'input str,
+        __lookahead_start: Option<&usize>,
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
+        _: core::marker::PhantomData<(&'input ())>,
+    ) -> (usize, usize)
+    {
+        // __MDyn = MDyn => ActionFn(3);
+        let __sym0 = __pop_Variant15(__symbols);
+        let __start = __sym0.0;
+        let __end = __sym0.2;
+        let __nt = super::__action3::<>(input, __sym0);
+        __symbols.push((__start, __Symbol::Variant15(__nt), __end));
+        (1, 27)
+    }
+    pub(crate) fn __reduce67<
+        'input,
+    >(
+        input: &'input str,
+        __lookahead_start: Option<&usize>,
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
+        _: core::marker::PhantomData<(&'input ())>,
+    ) -> (usize, usize)
+    {
+        // __MDynList = MDynList => ActionFn(2);
+        let __sym0 = __pop_Variant16(__symbols);
+        let __start = __sym0.0;
+        let __end = __sym0.2;
+        let __nt = super::__action2::<>(input, __sym0);
+        __symbols.push((__start, __Symbol::Variant16(__nt), __end));
+        (1, 28)
     }
 }
 pub use self::__parse__StackResultElem::StackResultElemParser;
@@ -13713,6 +15823,8 @@ mod __intern_token {
     use crate::types::StackResultElem;
     use crate::types::StackResultElem::*;
     use crate::types::CompoundInstruction;
+    use crate::types::Attribute;
+    use crate::types::Attribute::*;
     #[allow(unused_extern_crates)]
     extern crate lalrpop_util as __lalrpop_util;
     #[allow(unused_imports)]
@@ -13723,12 +15835,14 @@ mod __intern_token {
         let __strs: &[(&str, bool)] = &[
             ("^((?:\"[0-9a-z]+\"))", false),
             ("^((?:([\\+\\-]?)[0-9]+))", false),
-            ("^((?:<[A-Za-z][0-9A-Za-z\\|]+>))", false),
+            ("^((?:<[A-Za-z][\\+0-9=>A-Za-z\\|]+>))", false),
             ("^((?:[A-Za-z][0-9A-Za-z]+))", false),
             ("^([a-z])", false),
             ("^(\\()", false),
             ("^(\\))", false),
+            ("^(\\+)", false),
             ("^(;)", false),
+            ("^((?:=>))", false),
             ("^((?:DIP))", false),
             ("^((?:False))", false),
             ("^((?:IF))", false),
@@ -13736,13 +15850,20 @@ mod __intern_token {
             ("^((?:Pair))", false),
             ("^((?:True))", false),
             ("^((?:a\\|))", false),
+            ("^((?:bigmapvalue))", false),
             ("^((?:bool))", false),
+            ("^((?:comparable))", false),
+            ("^((?:duplicable))", false),
             ("^((?:int))", false),
             ("^((?:lambda))", false),
             ("^((?:list))", false),
             ("^((?:nat))", false),
+            ("^((?:packable))", false),
             ("^((?:pair))", false),
+            ("^((?:passable))", false),
+            ("^((?:pushable))", false),
             ("^((?:r\\|))", false),
+            ("^((?:storable))", false),
             ("^((?:string))", false),
             ("^((?:t\\|))", false),
             ("^((?:w\\|))", false),
@@ -13833,6 +15954,116 @@ fn __action6<
     'input,
 >(
     input: &'input str,
+    (_, __0, _): (usize, &'input str, usize),
+) -> Attribute
+{
+    Comparable
+}
+
+#[allow(unused_variables)]
+#[allow(clippy::too_many_arguments)]
+fn __action7<
+    'input,
+>(
+    input: &'input str,
+    (_, __0, _): (usize, &'input str, usize),
+) -> Attribute
+{
+    Passable
+}
+
+#[allow(unused_variables)]
+#[allow(clippy::too_many_arguments)]
+fn __action8<
+    'input,
+>(
+    input: &'input str,
+    (_, __0, _): (usize, &'input str, usize),
+) -> Attribute
+{
+    Pushable
+}
+
+#[allow(unused_variables)]
+#[allow(clippy::too_many_arguments)]
+fn __action9<
+    'input,
+>(
+    input: &'input str,
+    (_, __0, _): (usize, &'input str, usize),
+) -> Attribute
+{
+    Storable
+}
+
+#[allow(unused_variables)]
+#[allow(clippy::too_many_arguments)]
+fn __action10<
+    'input,
+>(
+    input: &'input str,
+    (_, __0, _): (usize, &'input str, usize),
+) -> Attribute
+{
+    Packable
+}
+
+#[allow(unused_variables)]
+#[allow(clippy::too_many_arguments)]
+fn __action11<
+    'input,
+>(
+    input: &'input str,
+    (_, __0, _): (usize, &'input str, usize),
+) -> Attribute
+{
+    BigmapValue
+}
+
+#[allow(unused_variables)]
+#[allow(clippy::too_many_arguments)]
+fn __action12<
+    'input,
+>(
+    input: &'input str,
+    (_, __0, _): (usize, &'input str, usize),
+) -> Attribute
+{
+    Duplicable
+}
+
+#[allow(unused_variables)]
+#[allow(clippy::too_many_arguments)]
+fn __action13<
+    'input,
+>(
+    input: &'input str,
+    (_, atr, _): (usize, Attribute, usize),
+    (_, _, _): (usize, &'input str, usize),
+    (_, mut atrl, _): (usize, Vec<Attribute>, usize),
+) -> Vec<Attribute>
+{
+    { atrl.insert(0, atr); atrl }
+}
+
+#[allow(unused_variables)]
+#[allow(clippy::too_many_arguments)]
+fn __action14<
+    'input,
+>(
+    input: &'input str,
+    (_, atr, _): (usize, Attribute, usize),
+) -> Vec<Attribute>
+{
+    vec![atr]
+}
+
+#[allow(unused_variables)]
+#[allow(clippy::too_many_arguments)]
+fn __action15<
+    'input,
+>(
+    input: &'input str,
     (_, _, _): (usize, &'input str, usize),
     (_, ibt, _): (usize, Vec<CompoundInstruction<SomeValue>>, usize),
     (_, ibf, _): (usize, Vec<CompoundInstruction<SomeValue>>, usize),
@@ -13843,7 +16074,7 @@ fn __action6<
 
 #[allow(unused_variables)]
 #[allow(clippy::too_many_arguments)]
-fn __action7<
+fn __action16<
     'input,
 >(
     input: &'input str,
@@ -13856,7 +16087,7 @@ fn __action7<
 
 #[allow(unused_variables)]
 #[allow(clippy::too_many_arguments)]
-fn __action8<
+fn __action17<
     'input,
 >(
     input: &'input str,
@@ -13871,7 +16102,7 @@ fn __action8<
 
 #[allow(unused_variables)]
 #[allow(clippy::too_many_arguments)]
-fn __action9<
+fn __action18<
     'input,
 >(
     input: &'input str,
@@ -13883,7 +16114,7 @@ fn __action9<
 
 #[allow(unused_variables)]
 #[allow(clippy::too_many_arguments)]
-fn __action10<
+fn __action19<
     'input,
 >(
     input: &'input str,
@@ -13896,7 +16127,7 @@ fn __action10<
 
 #[allow(unused_variables)]
 #[allow(clippy::too_many_arguments)]
-fn __action11<
+fn __action20<
     'input,
 >(
     input: &'input str,
@@ -13908,7 +16139,7 @@ fn __action11<
 
 #[allow(unused_variables)]
 #[allow(clippy::too_many_arguments)]
-fn __action12<
+fn __action21<
     'input,
 >(
     input: &'input str,
@@ -13920,7 +16151,7 @@ fn __action12<
 
 #[allow(unused_variables)]
 #[allow(clippy::too_many_arguments)]
-fn __action13<
+fn __action22<
     'input,
 >(
     input: &'input str,
@@ -13932,7 +16163,7 @@ fn __action13<
 
 #[allow(unused_variables)]
 #[allow(clippy::too_many_arguments)]
-fn __action14<
+fn __action23<
     'input,
 >(
     input: &'input str,
@@ -13945,7 +16176,7 @@ fn __action14<
 
 #[allow(unused_variables)]
 #[allow(clippy::too_many_arguments)]
-fn __action15<
+fn __action24<
     'input,
 >(
     input: &'input str,
@@ -13957,7 +16188,7 @@ fn __action15<
 
 #[allow(unused_variables)]
 #[allow(clippy::too_many_arguments)]
-fn __action16<
+fn __action25<
     'input,
 >(
     input: &'input str,
@@ -13969,7 +16200,7 @@ fn __action16<
 
 #[allow(unused_variables)]
 #[allow(clippy::too_many_arguments)]
-fn __action17<
+fn __action26<
     'input,
 >(
     input: &'input str,
@@ -13981,7 +16212,7 @@ fn __action17<
 
 #[allow(unused_variables)]
 #[allow(clippy::too_many_arguments)]
-fn __action18<
+fn __action27<
     'input,
 >(
     input: &'input str,
@@ -13995,7 +16226,7 @@ fn __action18<
 
 #[allow(unused_variables)]
 #[allow(clippy::too_many_arguments)]
-fn __action19<
+fn __action28<
     'input,
 >(
     input: &'input str,
@@ -14007,7 +16238,7 @@ fn __action19<
 
 #[allow(unused_variables)]
 #[allow(clippy::too_many_arguments)]
-fn __action20<
+fn __action29<
     'input,
 >(
     input: &'input str,
@@ -14019,7 +16250,7 @@ fn __action20<
 
 #[allow(unused_variables)]
 #[allow(clippy::too_many_arguments)]
-fn __action21<
+fn __action30<
     'input,
 >(
     input: &'input str,
@@ -14031,7 +16262,7 @@ fn __action21<
 
 #[allow(unused_variables)]
 #[allow(clippy::too_many_arguments)]
-fn __action22<
+fn __action31<
     'input,
 >(
     input: &'input str,
@@ -14045,7 +16276,7 @@ fn __action22<
 
 #[allow(unused_variables)]
 #[allow(clippy::too_many_arguments)]
-fn __action23<
+fn __action32<
     'input,
 >(
     input: &'input str,
@@ -14059,7 +16290,7 @@ fn __action23<
 
 #[allow(unused_variables)]
 #[allow(clippy::too_many_arguments)]
-fn __action24<
+fn __action33<
     'input,
 >(
     input: &'input str,
@@ -14071,7 +16302,7 @@ fn __action24<
 
 #[allow(unused_variables)]
 #[allow(clippy::too_many_arguments)]
-fn __action25<
+fn __action34<
     'input,
 >(
     input: &'input str,
@@ -14085,7 +16316,7 @@ fn __action25<
 
 #[allow(unused_variables)]
 #[allow(clippy::too_many_arguments)]
-fn __action26<
+fn __action35<
     'input,
 >(
     input: &'input str,
@@ -14097,7 +16328,7 @@ fn __action26<
 
 #[allow(unused_variables)]
 #[allow(clippy::too_many_arguments)]
-fn __action27<
+fn __action36<
     'input,
 >(
     input: &'input str,
@@ -14111,7 +16342,7 @@ fn __action27<
 
 #[allow(unused_variables)]
 #[allow(clippy::too_many_arguments)]
-fn __action28<
+fn __action37<
     'input,
 >(
     input: &'input str,
@@ -14124,7 +16355,7 @@ fn __action28<
 
 #[allow(unused_variables)]
 #[allow(clippy::too_many_arguments)]
-fn __action29<
+fn __action38<
     'input,
 >(
     input: &'input str,
@@ -14136,7 +16367,7 @@ fn __action29<
 
 #[allow(unused_variables)]
 #[allow(clippy::too_many_arguments)]
-fn __action30<
+fn __action39<
     'input,
 >(
     input: &'input str,
@@ -14150,7 +16381,7 @@ fn __action30<
 
 #[allow(unused_variables)]
 #[allow(clippy::too_many_arguments)]
-fn __action31<
+fn __action40<
     'input,
 >(
     input: &'input str,
@@ -14163,7 +16394,7 @@ fn __action31<
 
 #[allow(unused_variables)]
 #[allow(clippy::too_many_arguments)]
-fn __action32<
+fn __action41<
     'input,
 >(
     input: &'input str,
@@ -14175,7 +16406,7 @@ fn __action32<
 
 #[allow(unused_variables)]
 #[allow(clippy::too_many_arguments)]
-fn __action33<
+fn __action42<
     'input,
 >(
     input: &'input str,
@@ -14187,7 +16418,7 @@ fn __action33<
 
 #[allow(unused_variables)]
 #[allow(clippy::too_many_arguments)]
-fn __action34<
+fn __action43<
     'input,
 >(
     input: &'input str,
@@ -14199,7 +16430,7 @@ fn __action34<
 
 #[allow(unused_variables)]
 #[allow(clippy::too_many_arguments)]
-fn __action35<
+fn __action44<
     'input,
 >(
     input: &'input str,
@@ -14211,7 +16442,7 @@ fn __action35<
 
 #[allow(unused_variables)]
 #[allow(clippy::too_many_arguments)]
-fn __action36<
+fn __action45<
     'input,
 >(
     input: &'input str,
@@ -14223,7 +16454,7 @@ fn __action36<
 
 #[allow(unused_variables)]
 #[allow(clippy::too_many_arguments)]
-fn __action37<
+fn __action46<
     'input,
 >(
     input: &'input str,
@@ -14237,7 +16468,7 @@ fn __action37<
 
 #[allow(unused_variables)]
 #[allow(clippy::too_many_arguments)]
-fn __action38<
+fn __action47<
     'input,
 >(
     input: &'input str,
@@ -14249,7 +16480,7 @@ fn __action38<
 
 #[allow(unused_variables)]
 #[allow(clippy::too_many_arguments)]
-fn __action39<
+fn __action48<
     'input,
 >(
     input: &'input str,
@@ -14261,7 +16492,7 @@ fn __action39<
 
 #[allow(unused_variables)]
 #[allow(clippy::too_many_arguments)]
-fn __action40<
+fn __action49<
     'input,
 >(
     input: &'input str,
@@ -14273,7 +16504,7 @@ fn __action40<
 
 #[allow(unused_variables)]
 #[allow(clippy::too_many_arguments)]
-fn __action41<
+fn __action50<
     'input,
 >(
     input: &'input str,
@@ -14286,7 +16517,7 @@ fn __action41<
 
 #[allow(unused_variables)]
 #[allow(clippy::too_many_arguments)]
-fn __action42<
+fn __action51<
     'input,
 >(
     input: &'input str,
@@ -14300,7 +16531,7 @@ fn __action42<
 
 #[allow(unused_variables)]
 #[allow(clippy::too_many_arguments)]
-fn __action43<
+fn __action52<
     'input,
 >(
     input: &'input str,
@@ -14314,7 +16545,7 @@ fn __action43<
 
 #[allow(unused_variables)]
 #[allow(clippy::too_many_arguments)]
-fn __action44<
+fn __action53<
     'input,
 >(
     input: &'input str,
@@ -14328,7 +16559,22 @@ fn __action44<
 
 #[allow(unused_variables)]
 #[allow(clippy::too_many_arguments)]
-fn __action45<
+fn __action54<
+    'input,
+>(
+    input: &'input str,
+    (_, _, _): (usize, &'input str, usize),
+    (_, v, _): (usize, char, usize),
+    (_, _, _): (usize, &'input str, usize),
+    (_, atrl, _): (usize, Vec<Attribute>, usize),
+) -> ArgConstraint
+{
+    CWarg(v, atrl)
+}
+
+#[allow(unused_variables)]
+#[allow(clippy::too_many_arguments)]
+fn __action55<
     'input,
 >(
     input: &'input str,
@@ -14336,12 +16582,27 @@ fn __action45<
     (_, v, _): (usize, char, usize),
 ) -> ArgConstraint
 {
-    CWarg(v)
+    CWarg(v, vec![])
 }
 
 #[allow(unused_variables)]
 #[allow(clippy::too_many_arguments)]
-fn __action46<
+fn __action56<
+    'input,
+>(
+    input: &'input str,
+    (_, _, _): (usize, &'input str, usize),
+    (_, v, _): (usize, char, usize),
+    (_, _, _): (usize, &'input str, usize),
+    (_, atrl, _): (usize, Vec<Attribute>, usize),
+) -> ArgConstraint
+{
+    CTypeArg(v, atrl)
+}
+
+#[allow(unused_variables)]
+#[allow(clippy::too_many_arguments)]
+fn __action57<
     'input,
 >(
     input: &'input str,
@@ -14349,12 +16610,12 @@ fn __action46<
     (_, v, _): (usize, char, usize),
 ) -> ArgConstraint
 {
-    CTypeArg(v)
+    CTypeArg(v, vec![])
 }
 
 #[allow(unused_variables)]
 #[allow(clippy::too_many_arguments)]
-fn __action47<
+fn __action58<
     'input,
 >(
     input: &'input str,
@@ -14367,7 +16628,7 @@ fn __action47<
 
 #[allow(unused_variables)]
 #[allow(clippy::too_many_arguments)]
-fn __action48<
+fn __action59<
     'input,
 >(
     input: &'input str,
@@ -14380,7 +16641,7 @@ fn __action48<
 
 #[allow(unused_variables)]
 #[allow(clippy::too_many_arguments)]
-fn __action49<
+fn __action60<
     'input,
 >(
     input: &'input str,
@@ -14393,7 +16654,7 @@ fn __action49<
 
 #[allow(unused_variables)]
 #[allow(clippy::too_many_arguments)]
-fn __action50<
+fn __action61<
     'input,
 >(
     input: &'input str,
@@ -14406,7 +16667,7 @@ fn __action50<
 
 #[allow(unused_variables)]
 #[allow(clippy::too_many_arguments)]
-fn __action51<
+fn __action62<
     'input,
 >(
     input: &'input str,
@@ -14418,7 +16679,7 @@ fn __action51<
 
 #[allow(unused_variables)]
 #[allow(clippy::too_many_arguments)]
-fn __action52<
+fn __action63<
     'input,
 >(
     input: &'input str,
@@ -14430,7 +16691,7 @@ fn __action52<
 
 #[allow(unused_variables)]
 #[allow(clippy::too_many_arguments)]
-fn __action53<
+fn __action64<
     'input,
 >(
     input: &'input str,
@@ -14442,7 +16703,7 @@ fn __action53<
 
 #[allow(unused_variables)]
 #[allow(clippy::too_many_arguments)]
-fn __action54<
+fn __action65<
     'input,
 >(
     input: &'input str,
@@ -14454,7 +16715,7 @@ fn __action54<
 
 #[allow(unused_variables)]
 #[allow(clippy::too_many_arguments)]
-fn __action55<
+fn __action66<
     'input,
 >(
     input: &'input str,
@@ -14466,7 +16727,7 @@ fn __action55<
 
 #[allow(unused_variables)]
 #[allow(clippy::too_many_arguments)]
-fn __action56<
+fn __action67<
     'input,
 >(
     input: &'input str,
@@ -14478,7 +16739,7 @@ fn __action56<
 
 #[allow(unused_variables)]
 #[allow(clippy::too_many_arguments)]
-fn __action57<
+fn __action68<
     'input,
 >(
     input: &'input str,

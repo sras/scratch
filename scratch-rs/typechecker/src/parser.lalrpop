@@ -21,8 +21,25 @@ use crate::types::CompositeValue::*;
 use crate::types::StackResultElem;
 use crate::types::StackResultElem::*;
 use crate::types::CompoundInstruction;
+use crate::types::Attribute;
+use crate::types::Attribute::*;
 
 grammar;
+
+Attribute: Attribute = {
+  "comparable" => Comparable,
+  "passable" => Passable,
+  "pushable" => Pushable,
+  "storable" => Storable,
+  "packable" => Packable,
+  "bigmapvalue" => BigmapValue,
+  "duplicable" => Duplicable
+}
+
+AttributeList: Vec<Attribute> = {
+  <atr:Attribute>"+"<mut atrl:AttributeList> => { atrl.insert(0, atr); atrl },
+  <atr:Attribute> => vec![atr],
+}
 
 CompoundInstruction: CompoundInstruction<SomeValue> = {
   "IF" <ibt:InstructionBlock> <ibf:InstructionBlock> => CompoundInstruction::IF(ibt, ibf),
@@ -106,8 +123,10 @@ pub MDyn: MType<DynMType> = {
 };
 
 pub Constraint: ArgConstraint = {
-  "w|"<v:ArgVar> => CWarg(v),
-  "t|"<v:ArgVar> => CTypeArg(v),
+  "w|"<v:ArgVar>"=>"<atrl:AttributeList> => CWarg(v, atrl),
+  "w|"<v:ArgVar> => CWarg(v, vec![]),
+  "t|"<v:ArgVar>"=>"<atrl:AttributeList> => CTypeArg(v, atrl),
+  "t|"<v:ArgVar> => CTypeArg(v, vec![]),
   "r|"<v:ArgVar> => CTypeArgRef(v),
   "a|"<v:AtomicType> => CAtomic(v)
 }
@@ -119,7 +138,7 @@ pub StackResultElem: StackResultElem = {
 
 ArgVar: char = <c:r"[a-z]"> => c.chars().next().unwrap();
 
-Dyn: String = <s:r"<[A-Za-z][A-Za-z0-9|]+>"> => s[1..s.len()-1].into();
+Dyn: String = <s:r"<[A-Za-z][A-Za-z0-9|+=>]+>"> => s[1..s.len()-1].into();
 
 Identifier: String = <s:r"[A-Za-z][A-Za-z0-9]+"> => String::from(s);
 

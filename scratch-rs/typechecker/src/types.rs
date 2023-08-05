@@ -79,8 +79,8 @@ pub enum CompoundInstruction<T> {
 #[derive(Debug)]
 pub enum ArgConstraint {
     CAtomic(MAtomic),
-    CWarg(char),       // An type variable.
-    CTypeArg(char),    // A argument that accept a type name, like Nat.
+    CWarg(char, Vec<Attribute>),       // An type variable.
+    CTypeArg(char, Vec<Attribute>),    // A argument that accept a type name, like Nat.
     CTypeArgRef(char), // A argument that accept a value of a type referred by previously encountered TypeArg.
 }
 
@@ -103,6 +103,17 @@ pub struct InstructionDef {
     pub args: Vec<Constraint>,
     pub input_stack: Vec<StackArg>,
     pub output_stack: Vec<StackResult>,
+}
+
+#[derive(Debug)]
+pub enum Attribute {
+    Comparable,
+    Passable,
+    Pushable,
+    Storable,
+    Packable,
+    BigmapValue,
+    Duplicable,
 }
 
 // Parser helpers

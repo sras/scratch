@@ -50,11 +50,11 @@ fn unify_concrete_arg<'a>(
     arg_con: &Constraint,
 ) -> Result<(), &'a str> {
     match arg_con {
-        MWrapped(CWarg(c)) => {
+        MWrapped(CWarg(c, rattr)) => {
             add_symbol(resolved, c.clone(), arg);
             return Result::Ok(());
         }
-        MWrapped(CTypeArg(c)) => {
+        MWrapped(CTypeArg(c, rattr)) => {
             add_symbol(resolved, c.clone(), arg);
             return Result::Ok(());
         }
@@ -139,7 +139,7 @@ fn unify_arg<'a>(
 ) -> Result<ArgValue<MValue>, &'a str> {
     match arg {
         AV::TypeArg(ct) => match arg_con {
-            MWrapped(CTypeArg(c)) => {
+            MWrapped(CTypeArg(c, rattr)) => {
                 add_symbol(resolved, *c, &ct);
                 return Result::Ok(AV::TypeArg((*ct).clone()));
             }
@@ -149,10 +149,10 @@ fn unify_arg<'a>(
         },
         AV::ValueArg(some_val) => {
             let (m, ct): (MValue, ConcreteType) = match arg_con {
-                MWrapped(CTypeArg(_)) => {
+                MWrapped(CTypeArg(_, _)) => {
                     panic!("Unexpected value argument");
                 }
-                MWrapped(CWarg(_)) => {
+                MWrapped(CWarg(_, _)) => {
                     panic!("Unexpected wildcard type encountered");
                 }
                 MWrapped(CTypeArgRef(ref c)) => match resolved.get(&c) {
