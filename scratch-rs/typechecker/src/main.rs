@@ -32,11 +32,13 @@ mod tests {
     use crate::parser::InstructionListParser;
     use crate::parsers::parse_stack;
     use crate::typechecker::typecheck;
-    use crate::Instruction;
     use crate::CompoundInstruction;
+    use crate::Instruction;
     use crate::SomeValue;
     use crate::StackState;
-    fn typecheck_<'a>(instructions: &Vec<CompoundInstruction<SomeValue>>) -> Result<StackState, &'a str> {
+    fn typecheck_<'a>(
+        instructions: &Vec<CompoundInstruction<SomeValue>>,
+    ) -> Result<StackState, &'a str> {
         let mut stack = Vec::new();
         typecheck(instructions, &mut stack)?;
         return Result::Ok(stack);
@@ -66,6 +68,14 @@ mod tests {
 
         assert!(Result::is_err(&typecheck_(&parse(
             "LAMBDA nat (pair nat nat) {DROP; PUSH int 1; DUP;PAIR};PUSH nat 5;EXEC"
+        ))));
+
+        assert!(Result::is_err(&typecheck_(&parse(
+            "PUSH bool True; IF { PUSH nat 5 } { PUSH int 10 }"
+        ))));
+
+        assert!(Result::is_err(&typecheck_(&parse(
+            "PUSH nat 1; IF { PUSH nat 5 } { PUSH nat 10 }"
         ))));
 
         // Stack result tests.
@@ -113,18 +123,12 @@ mod tests {
         );
 
         assert_eq!(
-            typecheck_(&parse(
-                "PUSH bool True"
-            ))
-            .unwrap(),
+            typecheck_(&parse("PUSH bool True")).unwrap(),
             parse_stack("bool")
         );
 
         assert_eq!(
-            typecheck_(&parse(
-                "PUSH bool True; IF { PUSH nat 5 } { PUSH nat 10 }"
-            ))
-            .unwrap(),
+            typecheck_(&parse("PUSH bool True; IF { PUSH nat 5 } { PUSH nat 10 }")).unwrap(),
             parse_stack("nat")
         );
     }

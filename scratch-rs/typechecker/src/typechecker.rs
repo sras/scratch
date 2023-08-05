@@ -343,6 +343,39 @@ pub fn typecheck<'a>(
     return Result::Ok(resolved);
 }
 
+fn ensure_stack_head<'a>(stack: &StackState, t: ConcreteType) -> Result<(), &'a str> {
+    if stack[0] == t {
+        return Result::Ok(());
+    } else {
+        return Result::Err("Unexpected stack head");
+    }
+}
+
+fn ensure_same_instr_type<'a>(
+    stack: &mut StackState,
+    (tb, fb): (
+        &Vec<CompoundInstruction<SomeValue>>,
+        &Vec<CompoundInstruction<SomeValue>>,
+    ),
+) -> Result<
+    (
+        Vec<CompoundInstruction<MValue>>,
+        Vec<CompoundInstruction<MValue>>,
+    ),
+    &'a str,
+> {
+    let mut temp_stack_t: StackState = Vec::from(&stack[1..]);
+    let mut temp_stack_f: StackState = Vec::from(&stack[1..]);
+    let tbtc = typecheck(tb, &mut temp_stack_t)?;
+    let fbtc = typecheck(fb, &mut temp_stack_f)?;
+    if temp_stack_t == temp_stack_f {
+        *stack = temp_stack_t;
+        return Result::Ok((tbtc, fbtc));
+    } else {
+        return Result::Err("Type of branches differ");
+    }
+}
+
 fn typecheck_one<'a>(
     cinstruction: &CompoundInstruction<SomeValue>,
     stack: &mut StackState,
@@ -361,22 +394,10 @@ fn typecheck_one<'a>(
                 return Result::Err("Instruction not found");
             }
         },
-        IF(tb, fb) => match stack[0] {
-            MWrapped(MBool) => {
-                let mut temp_stack_t : StackState = Vec::from(&stack[1..]);
-                let mut temp_stack_f : StackState = Vec::from(&stack[1..]);
-                let tbtc = typecheck(tb, &mut temp_stack_t)?;
-                let fbtc = typecheck(fb, &mut temp_stack_f)?;
-                if temp_stack_t == temp_stack_f {
-                    *stack = temp_stack_t;
-                    return Result::Ok(IF(tbtc, fbtc));
-                } else {
-                    return Result::Err("Type of IF branches differ");
-                }
-            }
-            _ => {
-                return Result::Err("Expecting a bool, but found something else");
-            }
-        },
+        IF(tb, fb) => {
+            ensure_stack_head(stack, MWrapped(MBool))?;
+            let (tbtc, fbtc) = ensure_same_instr_type(stack, (tb, fb))?;
+            return Result::Ok(IF(tbtc, fbtc));
+        }
     };
 }
