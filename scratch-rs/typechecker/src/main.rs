@@ -77,6 +77,9 @@ mod tests {
         assert!(Result::is_err(&typecheck_(&parse(
             "PUSH nat 1; IF { PUSH nat 5 } { PUSH nat 10 }"
         ))));
+        assert!(Result::is_err(&typecheck_(&parse(
+            "LAMBDA_REC nat nat { PUSH nat 1; ADD;};"
+        ))));
 
         // Stack result tests.
 
@@ -135,6 +138,14 @@ mod tests {
         assert_eq!(
             typecheck_(&parse("PUSH bool True; IF { PUSH nat 5 } { PUSH nat 10 }")).unwrap(),
             parse_stack("nat")
+        );
+
+        assert_eq!(
+            typecheck_(&parse(
+                "LAMBDA_REC nat nat { PUSH nat 1; ADD; DIP { DROP }};"
+            ))
+            .unwrap(),
+            parse_stack("lambda nat nat")
         );
     }
 }
