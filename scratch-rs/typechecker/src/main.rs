@@ -33,7 +33,6 @@ mod tests {
     use crate::parsers::parse_stack;
     use crate::typechecker::typecheck;
     use crate::CompoundInstruction;
-    use crate::Instruction;
     use crate::SomeValue;
     use crate::StackState;
     fn typecheck_<'a>(

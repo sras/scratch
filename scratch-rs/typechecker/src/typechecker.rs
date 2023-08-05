@@ -360,7 +360,7 @@ fn ensure_stack_head<'a>(stack: &StackState, t: ConcreteType) -> Result<(), &'a 
     }
 }
 
-fn ensure_same_instr_type<'a>(
+fn ensure_same_lambda_type<'a>(
     stack: &mut StackState,
     (tb, fb): (
         &Vec<CompoundInstruction<SomeValue>>,
@@ -423,7 +423,7 @@ fn typecheck_one<'a>(
         },
         IF(tb, fb) => {
             ensure_stack_head(stack, MWrapped(MBool))?;
-            let (tbtc, fbtc) = ensure_same_instr_type(stack, (tb, fb))?;
+            let (tbtc, fbtc) = ensure_same_lambda_type(stack, (tb, fb))?;
             return Result::Ok(IF(tbtc, fbtc));
         }
         DIP(instr) => {
