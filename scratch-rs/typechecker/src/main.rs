@@ -123,8 +123,13 @@ mod tests {
         );
 
         assert_eq!(
-            typecheck_(&parse("PUSH bool True")).unwrap(),
+            typecheck_(&parse("PUSH bool True;")).unwrap(),
             parse_stack("bool")
+        );
+
+        assert_eq!(
+            typecheck_(&parse("PUSH nat 5;DIP {PUSH bool True;}")).unwrap(),
+            parse_stack("nat;bool")
         );
 
         assert_eq!(

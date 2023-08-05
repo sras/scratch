@@ -343,7 +343,16 @@ pub fn typecheck<'a>(
     return Result::Ok(resolved);
 }
 
+fn ensure_non_empty_stack<'a>(stack: &StackState) -> Result<(), &'a str> {
+    if stack.len() > 0 {
+        return Result::Ok(());
+    } else {
+        return Result::Err("Stack too short.");
+    }
+}
+
 fn ensure_stack_head<'a>(stack: &StackState, t: ConcreteType) -> Result<(), &'a str> {
+    ensure_non_empty_stack(stack)?;
     if stack[0] == t {
         return Result::Ok(());
     } else {
@@ -398,6 +407,29 @@ fn typecheck_one<'a>(
             ensure_stack_head(stack, MWrapped(MBool))?;
             let (tbtc, fbtc) = ensure_same_instr_type(stack, (tb, fb))?;
             return Result::Ok(IF(tbtc, fbtc));
+        }
+        DIP(instr) => {
+            ensure_non_empty_stack(stack)?;
+            let mut temp_stack: StackState = Vec::from(&stack[1..]);
+            let tins = typecheck(instr, &mut temp_stack)?;
+            temp_stack.insert(0, stack[0].clone());
+            *stack = temp_stack;
+            return Result::Ok(DIP(tins));
+        }
+        LAMBDA_REC(it, ot, instr) => {
+            let mut temp_stack: StackState =
+                vec![it.clone(), MLambda(Box::new((it.clone(), ot.clone())))];
+            let tins = typecheck(instr, &mut temp_stack)?;
+            if temp_stack.len() == 1 {
+                if temp_stack[0] == *ot {
+                    stack.insert(0, MLambda(Box::new((it.clone(), ot.clone()))));
+                    return Result::Ok(LAMBDA_REC(it.clone(), ot.clone(), tins));
+                } else {
+                    return Result::Err("Unexpected output stack for lambda rec lambda");
+                }
+            } else {
+                return Result::Err("Output stack too short");
+            }
         }
     };
 }
