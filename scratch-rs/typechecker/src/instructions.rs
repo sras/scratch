@@ -19,10 +19,13 @@ macro_rules! mk_instr {
 
 lazy_static! {
     pub static ref MICHELSON_INSTRUCTIONS: HashMap<String, InstructionDef> = HashMap::from([
+        mk_instr!("APPLY", "", "<w|a>;lambda (pair <r|a> <w|b>) <w|c>", "lambda <r|b> <r|c>"),
+        mk_instr!("CAR", "", "pair <w|a> <w|b>", "<r|a>"),
+        mk_instr!("CDR", "", "pair <w|a> <w|b>", "<r|b>"),
         mk_instr!("SWAP", "", "<w|a>;<w|b>", "<r|b>;<r|a>"),
         mk_instr!("DUP", "", "<w|a>", "<r|a>;<r|a>"),
         mk_instr!("DROP", "", "<w|a>", ""),
-        mk_instr!("ADD", "", "<w|a>;<r|a>", "<r|a>"),
+        mk_instr!("ADD", "", "<a|nat>;<a|nat>", "<a|nat>"),
         mk_instr!("CONS", "", "<w|a>;list <r|a>", "list <r|a>"),
         mk_instr!("PUSH", "<t|a>;<r|a>", "", "<r|a>"),
         mk_instr!("PAIR", "", "<w|a>;<w|b>", "pair <r|a> <r|b>"),

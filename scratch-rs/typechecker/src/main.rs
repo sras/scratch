@@ -147,5 +147,13 @@ mod tests {
             .unwrap(),
             parse_stack("lambda nat nat")
         );
+
+        assert_eq!(
+            typecheck_(&parse(
+                "LAMBDA (pair int nat) int { CAR }; PUSH int 10; APPLY;"
+            ))
+            .unwrap(),
+            parse_stack("lambda nat int")
+        );
     }
 }
