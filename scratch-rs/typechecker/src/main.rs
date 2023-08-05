@@ -155,5 +155,21 @@ mod tests {
             .unwrap(),
             parse_stack("lambda nat int")
         );
+
+        assert_eq!(
+            typecheck_(&parse(
+                "PUSH nat 1; DUP; ADD"
+            ))
+            .unwrap(),
+            parse_stack("nat")
+        );
+
+        assert_eq!(
+            typecheck_(&parse(
+                "PUSH int 1; DUP; ADD"
+            ))
+            .unwrap(),
+            parse_stack("int")
+        );
     }
 }

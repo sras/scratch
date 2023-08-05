@@ -391,13 +391,31 @@ fn typecheck_one<'a>(
 ) -> Result<CompoundInstruction<MValue>, &'a str> {
     match cinstruction {
         Other(instruction) => match MICHELSON_INSTRUCTIONS.get(&instruction.name) {
-            Some(s) => {
-                let (mut resolved, args_) = unify_args(&instruction.args, &s.args)?;
-                unify_stack(&mut resolved, &s.input_stack, &s.output_stack, stack)?;
-                return Result::Ok(Other(Instruction {
-                    args: args_,
-                    name: instruction.name.clone(),
-                }));
+            Some(variants) => {
+                for s in variants {
+                    let mut temp_stack = stack.clone();
+                    match unify_args(&instruction.args, &s.args) {
+                        Result::Ok((mut resolved, args_)) => {
+                            match unify_stack(
+                                &mut resolved,
+                                &s.input_stack,
+                                &s.output_stack,
+                                &mut temp_stack,
+                            ) {
+                                Result::Ok(_) => {
+                                    *stack = temp_stack;
+                                    return Result::Ok(Other(Instruction {
+                                        args: args_,
+                                        name: instruction.name.clone(),
+                                    }));
+                                }
+                                Result::Err(_) => continue,
+                            }
+                        }
+                        Result::Err(_) => continue,
+                    }
+                }
+                return Result::Err("None of the instruction variants matched here.");
             }
             _ => {
                 return Result::Err("Instruction not found");
