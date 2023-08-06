@@ -1,5 +1,8 @@
 use crate::types::MType::*;
+use core::cmp::Eq;
+use core::cmp::Ordering;
 use core::fmt::Debug;
+use std::collections::BTreeMap;
 
 pub type ConcreteType = MType<MAtomic>;
 
@@ -16,6 +19,7 @@ pub enum MType<T> {
     MPair(Box<(MType<T>, MType<T>)>),
     MList(Box<MType<T>>),
     MLambda(Box<(MType<T>, MType<T>)>),
+    MBigMap(Box<(MType<T>, MType<T>)>),
     MWrapped(T),
 }
 
@@ -45,15 +49,53 @@ pub enum MValue {
     VBool(bool),
     VString(String),
     VPair(Box<(MValue, MValue)>),
+    VBigMap(Box<BTreeMap<MValue, MValue>>),
     VList(Vec<MValue>),
     VLambda(Vec<CompoundInstruction<MValue>>),
 }
+
+use MValue::*;
+
+impl Eq for MValue {}
+
+impl PartialEq for MValue {
+    fn eq(&self, m2: &Self) -> bool {
+        match self.partial_cmp(m2) {
+            Some(std::cmp::Ordering::Equal) => true,
+            _ => false,
+        }
+    }
+}
+
+impl PartialOrd for MValue {
+    fn partial_cmp(&self, m2: &Self) -> Option<Ordering> {
+        match (self, m2) {
+            (VNat(u1), VNat(u2)) => u1.partial_cmp(u2),
+            (VInt(i1), VInt(i2)) => i1.partial_cmp(i2),
+            (VBool(b1), VBool(b2)) => b1.partial_cmp(b2),
+            (VString(s1), VString(s2)) => s1.partial_cmp(s2),
+            (VPair(s1), VPair(s2)) => match (s1.as_ref(), s2.as_ref()) {
+                ((l1, r1), (l2, r2)) => l1.partial_cmp(l2).partial_cmp(&r1.partial_cmp(r2)),
+            },
+            _ => panic!("Uncomparable types!"),
+        }
+    }
+}
+
+impl Ord for MValue {
+    fn cmp(&self, m2: &Self) -> Ordering {
+        panic!()
+    }
+}
+
+pub type SomeKeyValue = (SomeValue, SomeValue);
 
 #[derive(Debug, Clone)]
 pub enum CompositeValue {
     CVPair(SomeValue, SomeValue),
     CVLambda(Vec<CompoundInstruction<SomeValue>>),
     CVList(Vec<SomeValue>),
+    CKVList(Vec<SomeKeyValue>),
 }
 
 #[derive(Debug, Clone)]
@@ -79,8 +121,8 @@ pub enum CompoundInstruction<T> {
 #[derive(Debug)]
 pub enum ArgConstraint {
     CAtomic(MAtomic),
-    CWarg(char, Vec<Attribute>),       // An type variable.
-    CTypeArg(char, Vec<Attribute>),    // A argument that accept a type name, like Nat.
+    CWarg(char, Vec<Attribute>),    // An type variable.
+    CTypeArg(char, Vec<Attribute>), // A argument that accept a type name, like Nat.
     CTypeArgRef(char), // A argument that accept a value of a type referred by previously encountered TypeArg.
 }
 
@@ -139,6 +181,7 @@ pub fn map_mtype<T, H, F: Fn(&T) -> H>(ct: &MType<T>, cb: &F) -> MType<H> {
         MPair(b) => MPair(map_mtype_boxed_pair(b, cb)),
         MLambda(b) => MLambda(map_mtype_boxed_pair(b, cb)),
         MList(l) => MList(Box::new(map_mtype(l, cb))),
+        MBigMap(b) => MBigMap(map_mtype_boxed_pair(b, cb)),
         MWrapped(w) => MWrapped(cb(w)),
     }
 }

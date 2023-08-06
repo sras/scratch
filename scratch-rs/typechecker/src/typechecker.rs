@@ -1,13 +1,17 @@
+use std::collections::BTreeMap;
 use std::collections::HashMap;
 use std::convert::TryFrom;
 
 use crate::attributes;
+use crate::attributes::check_attribute;
 use crate::instructions::MICHELSON_INSTRUCTIONS;
 use crate::types::map_mtype;
 use crate::types::ArgConstraint::*;
 use crate::types::ArgValue as AV;
 use crate::types::ArgValue;
 use crate::types::AtomicValue::*;
+use crate::types::Attribute;
+use crate::types::Attribute::*;
 use crate::types::CompositeValue::*;
 use crate::types::CompoundInstruction;
 use crate::types::CompoundInstruction::*;
@@ -87,6 +91,17 @@ fn unify_concrete_arg<'a>(
             }
         },
         MPair(b) => match arg {
+            MPair(b1) => {
+                let (cl, cr) = b.as_ref();
+                let (vl, vr) = b1.as_ref();
+                return unify_concrete_arg(resolved, vl, cl)
+                    .and_then(|_| unify_concrete_arg(resolved, vr, cr));
+            }
+            _ => {
+                return Result::Err("Expecting a pair but got something else...");
+            }
+        },
+        MBigMap(b) => match arg {
             MPair(b1) => {
                 let (cl, cr) = b.as_ref();
                 let (vl, vr) = b1.as_ref();
@@ -220,6 +235,27 @@ fn typecheck_value<'a>(
             }
             _ => Err("Expecting a List but found something else..."),
         },
+        (MBigMap(b), Composite(cv)) => match cv.as_ref() {
+            CKVList(items) => {
+                let mut hm: BTreeMap<MValue, MValue> = BTreeMap::new();
+                let (kt, vt) = b.as_ref();
+                if check_attribute(&Comparable, kt) {
+                    if check_attribute(&BigmapValue, vt) {
+                    for (k, v) in items {
+                        let (mkv, _) = typecheck_value(resolved, k, kt)?;
+                        let (mvv, _) = typecheck_value(resolved, v, vt)?;
+                        hm.insert(mkv, mvv);
+                    }
+                    return Ok((VBigMap(Box::new(hm)), MBigMap(Box::new((kt.clone(), vt.clone())))));
+                    } else {
+                        Err("Type not allowed to be a big_map value")
+                    }
+                } else {
+                    Err("Big map keys should be comparable")
+                }
+            }
+            _ => Err("Expecting a List but found something else..."),
+        },
         (MPair(b), Composite(cv)) => match cv.as_ref() {
             CVPair(sv1, sv2) => {
                 let (c1, c2) = b.as_ref();
@@ -284,6 +320,13 @@ fn stack_result_to_concrete_type(resolved: &mut ResolveCache, sr: &StackResult) 
             resolved,
             l.as_ref(),
         ))),
+        MBigMap(b) => {
+            let (l, r) = b.as_ref();
+            MBigMap(Box::new((
+                stack_result_to_concrete_type(resolved, &l),
+                stack_result_to_concrete_type(resolved, &r),
+            )))
+        }
         MPair(b) => {
             let (l, r) = b.as_ref();
             MPair(Box::new((
