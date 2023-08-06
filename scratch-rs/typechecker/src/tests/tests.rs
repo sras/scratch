@@ -142,4 +142,20 @@ fn test_type_checking_simple() {
         typecheck_(&parse("PUSH (map nat nat) {Elt 2 3};")).unwrap(),
         parse_stack("map nat nat")
     );
+
+
+    assert_eq!(
+        typecheck_(&parse("PUSH nat :a 1;")).unwrap(),
+        parse_stack("nat")
+    );
+
+    assert_eq!(
+        typecheck_(&parse("PUSH %a %b %c nat :a 1;")).unwrap(),
+        parse_stack("nat")
+    );
+
+    assert_eq!(
+        typecheck_(&parse("PUSH %a %b %c (pair :point (nat %x) (nat %y)) (Pair 1 1);")).unwrap(),
+        parse_stack("pair nat nat")
+    );
 }

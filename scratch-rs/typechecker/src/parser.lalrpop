@@ -50,6 +50,7 @@ CompoundInstruction: CompoundInstruction<SomeValue> = {
 }
 
 Instruction: Instruction<SomeValue> = {
+  <s:Identifier> <b:AnnotationList> <a:Args> => Instruction { name : s, args: a },
   <s:Identifier> <a:Args> => Instruction { name : s, args: a },
   <s:Identifier> => Instruction { name : s, args: vec![] },
 }
@@ -109,7 +110,17 @@ pub InstructionList:Vec<CompoundInstruction<SomeValue>> = {
   <i:CompoundInstruction>";" => vec!(i),
 }
 
-AtomicType: MAtomic = {
+pub AtomicType: MAtomic = {
+  <a:AtomicTypeRaw><x:Annotation> => a,
+  <a:AtomicTypeRaw> => a
+}
+
+pub AnnotationList: () = {
+  <a:Annotation><b:AnnotationList> => (),
+  <a:Annotation> => ()
+}
+
+AtomicTypeRaw: MAtomic = {
   "int" => MInt,
   "nat" => MNat,
   "string" => MString,
@@ -129,7 +140,10 @@ pub MDyn: MType<DynMType> = {
   <t:AtomicType> => MWrapped(DMAtomic(t)),
   <t:Dyn> => MWrapped(DMDyn(t)),
   "list" <t1:MDyn> => MList (Box::new(t1)),
+  "pair" <a:AnnotationList> <t1:MDyn> <t2:MDyn> => MPair(Box::new((t1, t2))),
   "pair" <t1:MDyn> <t2:MDyn> => MPair(Box::new((t1, t2))),
+  "or" <a:AnnotationList> <t1:MDyn> <t2:MDyn> => MOr(Box::new((t1, t2))),
+  "or" <t1:MDyn> <t2:MDyn> => MOr(Box::new((t1, t2))),
   "map" <t1:MDyn> <t2:MDyn> => MMap(Box::new((t1, t2))),
   "big_map" <t1:MDyn> <t2:MDyn> => MBigMap(Box::new((t1, t2))),
   "lambda" <t1:MDyn> <t2:MDyn> => MLambda(Box::new((t1, t2))),
@@ -155,6 +169,7 @@ ArgVar: char = <c:r"[a-z]"> => c.chars().next().unwrap();
 Dyn: String = <s:r"<[A-Za-z][A-Za-z0-9|+=>]+>"> => s[1..s.len()-1].into();
 
 Identifier: String = <s:r"[A-Za-z][A-Za-z0-9]+"> => String::from(s);
+Annotation: String = <s:r"@%|@%%|%@|[@:%][_0-9a-zA-Z][_0-9a-zA-Z\.%@]*"> => String::from(s);
 
 McLitBool: bool = {
   "True" => true,

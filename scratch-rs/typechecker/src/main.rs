@@ -12,19 +12,12 @@ mod types;
 use typechecker::typecheck;
 
 fn main() {
-    let mut stack = Vec::new();
 
-    match parser::InstructionListParser::new().parse(
-        "LAMBDA nat (pair nat nat) {DUP;PAIR};PUSH nat 5;PUSH (pair nat int) (Pair 5 10);DROP",
+    match parser::MDynParser::new().parse(
+        "pair (int :a) nat",
     ) {
-        Result::Ok(parsed_instructions) => match typecheck(&parsed_instructions, &mut stack) {
-            Result::Ok(_) => {
-                println!("{:?}", stack);
-            }
-            Err(s) => {
-                println!("{}", s);
-            }
-        },
+        Result::Ok(a) => println!("{:?}", a)
+        ,
         Result::Err(s) => println!("{}", s),
     }
 }
