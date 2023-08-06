@@ -8,19 +8,33 @@ pub type ConcreteType = MType<MAtomic>;
 
 #[derive(Debug, Hash, Eq, Clone, PartialEq)]
 pub enum MAtomic {
+    MChainId,
+    MBytes,
+    MAddress,
     MNat,
     MInt,
     MString,
     MBool,
+    MKey,
+    MKeyHash,
+    MMutez,
+    MTimestamp,
+    MUnit,
+    MOperation,
 }
 
 #[derive(Debug, Eq, PartialEq)]
 pub enum MType<T> {
+    MTicket(Box<MType<T>>),
+    MOption(Box<MType<T>>),
+    MContract(Box<MType<T>>),
     MPair(Box<(MType<T>, MType<T>)>),
+    MOr(Box<(MType<T>, MType<T>)>),
     MList(Box<MType<T>>),
     MLambda(Box<(MType<T>, MType<T>)>),
     MBigMap(Box<(MType<T>, MType<T>)>),
     MMap(Box<(MType<T>, MType<T>)>),
+    MSet(Box<MType<T>>),
     MWrapped(T),
 }
 
@@ -181,8 +195,13 @@ pub fn map_mtype_boxed_pair<T, H, F: Fn(&T) -> H>(
 pub fn map_mtype<T, H, F: Fn(&T) -> H>(ct: &MType<T>, cb: &F) -> MType<H> {
     match ct {
         MPair(b) => MPair(map_mtype_boxed_pair(b, cb)),
+        MOr(b) => MOr(map_mtype_boxed_pair(b, cb)),
         MLambda(b) => MLambda(map_mtype_boxed_pair(b, cb)),
         MList(l) => MList(Box::new(map_mtype(l, cb))),
+        MTicket(l) => MTicket(Box::new(map_mtype(l, cb))),
+        MContract(l) => MContract(Box::new(map_mtype(l, cb))),
+        MOption(l) => MOption(Box::new(map_mtype(l, cb))),
+        MSet(l) => MSet(Box::new(map_mtype(l, cb))),
         MMap(b) => MMap(map_mtype_boxed_pair(b, cb)),
         MBigMap(b) => MBigMap(map_mtype_boxed_pair(b, cb)),
         MWrapped(w) => MWrapped(cb(w)),

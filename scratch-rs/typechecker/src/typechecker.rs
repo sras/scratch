@@ -80,6 +80,42 @@ fn unify_concrete_arg<'a>(
                 return Result::Err("Expecting a list but got something else...");
             }
         },
+        MTicket(ic) => match arg {
+            MTicket(iv) => {
+                return unify_concrete_arg(resolved, iv.as_ref(), ic);
+            }
+
+            _ => {
+                return Result::Err("Expecting a Ticket but got something else...");
+            }
+        },
+        MContract(ic) => match arg {
+            MContract(iv) => {
+                return unify_concrete_arg(resolved, iv.as_ref(), ic);
+            }
+
+            _ => {
+                return Result::Err("Expecting a Ticket but got something else...");
+            }
+        },
+        MOption(ic) => match arg {
+            MOption(iv) => {
+                return unify_concrete_arg(resolved, iv.as_ref(), ic);
+            }
+
+            _ => {
+                return Result::Err("Expecting a Option but got something else...");
+            }
+        },
+        MSet(ic) => match arg {
+            MSet(iv) => {
+                return unify_concrete_arg(resolved, iv.as_ref(), ic);
+            }
+
+            _ => {
+                return Result::Err("Expecting a Option but got something else...");
+            }
+        },
         MLambda(b) => match arg {
             MLambda(b1) => {
                 let (vin, vout) = b.as_ref();
@@ -89,6 +125,17 @@ fn unify_concrete_arg<'a>(
             }
             _ => {
                 return Result::Err("Expecting a lambda but got something else...");
+            }
+        },
+        MOr(b) => match arg {
+            MOr(b1) => {
+                let (cl, cr) = b.as_ref();
+                let (vl, vr) = b1.as_ref();
+                return unify_concrete_arg(resolved, vl, cl)
+                    .and_then(|_| unify_concrete_arg(resolved, vr, cr));
+            }
+            _ => {
+                return Result::Err("Expecting a pair but got something else...");
             }
         },
         MPair(b) => match arg {
@@ -124,37 +171,15 @@ fn unify_concrete_arg<'a>(
                 return Result::Err("Expecting a map but got something else...");
             }
         },
-        MWrapped(CAtomic(MNat)) => match arg {
-            MWrapped(MNat) => {
-                return Result::Ok(());
+        MWrapped(CAtomic(at)) => match arg {
+            MWrapped(cn) => {
+                if at == cn {
+                    Result::Ok(())
+                } else {
+                    Result::Err("Expecting an atomic type, but found something else")
+                }
             }
-            _ => {
-                return Result::Err("Expecting a `Nat`, but found something else...");
-            }
-        },
-        MWrapped(CAtomic(MInt)) => match arg {
-            MWrapped(MInt) => {
-                return Result::Ok(());
-            }
-            _ => {
-                return Result::Err("Expecting a `Int`, but found something else...");
-            }
-        },
-        MWrapped(CAtomic(MString)) => match arg {
-            MWrapped(MString) => {
-                return Result::Ok(());
-            }
-            _ => {
-                return Result::Err("Expecting a `String`, but found something else...");
-            }
-        },
-        MWrapped(CAtomic(MBool)) => match arg {
-            MWrapped(MBool) => {
-                return Result::Ok(());
-            }
-            _ => {
-                return Result::Err("Expecting a `Bool`, but found something else...");
-            }
+            _ => Result::Err("Expecting an atomic type, but found something else"),
         },
     }
 }
@@ -256,21 +281,18 @@ fn typecheck_value<'a>(
                 let mut hm: BTreeMap<MValue, MValue> = BTreeMap::new();
                 let (kt, vt) = b.as_ref();
                 if check_attribute(&Comparable, kt) {
-                        for (k, v) in items {
-                            let (mkv, _) = typecheck_value(resolved, k, kt)?;
-                            let (mvv, _) = typecheck_value(resolved, v, vt)?;
-                            hm.insert(mkv, mvv);
-                        }
-                        return Ok((
-                            VMap(Box::new(hm)),
-                            MMap(Box::new((kt.clone(), vt.clone()))),
-                        ));
+                    for (k, v) in items {
+                        let (mkv, _) = typecheck_value(resolved, k, kt)?;
+                        let (mvv, _) = typecheck_value(resolved, v, vt)?;
+                        hm.insert(mkv, mvv);
+                    }
+                    return Ok((VMap(Box::new(hm)), MMap(Box::new((kt.clone(), vt.clone())))));
                 } else {
                     Err("Big map keys should be comparable")
                 }
             }
             _ => Err("Expecting a map but found something else..."),
-        }
+        },
         (MBigMap(b), Composite(cv)) => match cv.as_ref() {
             CKVList(items) => {
                 let mut hm: BTreeMap<MValue, MValue> = BTreeMap::new();
@@ -340,12 +362,7 @@ fn typecheck_value<'a>(
 fn stack_result_to_concrete_type(resolved: &mut ResolveCache, sr: &StackResult) -> ConcreteType {
     match sr {
         MWrapped(wrp) => match wrp {
-            ElemType(et) => match et {
-                MInt => MWrapped(MInt),
-                MNat => MWrapped(MNat),
-                MString => MWrapped(MString),
-                MBool => MWrapped(MBool),
-            },
+            ElemType(et) => MWrapped(et.clone()),
             TRef(c) => match resolved.get(&c) {
                 Some(ct) => {
                     return (*ct).clone();
@@ -359,6 +376,22 @@ fn stack_result_to_concrete_type(resolved: &mut ResolveCache, sr: &StackResult) 
             resolved,
             l.as_ref(),
         ))),
+        MContract(l) => MContract(Box::new(stack_result_to_concrete_type(
+            resolved,
+            l.as_ref(),
+        ))),
+        MTicket(l) => MTicket(Box::new(stack_result_to_concrete_type(
+            resolved,
+            l.as_ref(),
+        ))),
+        MOption(l) => MOption(Box::new(stack_result_to_concrete_type(
+            resolved,
+            l.as_ref(),
+        ))),
+        MSet(l) => MSet(Box::new(stack_result_to_concrete_type(
+            resolved,
+            l.as_ref(),
+        ))),
         MMap(b) => {
             let (l, r) = b.as_ref();
             MMap(Box::new((
@@ -369,6 +402,13 @@ fn stack_result_to_concrete_type(resolved: &mut ResolveCache, sr: &StackResult) 
         MBigMap(b) => {
             let (l, r) = b.as_ref();
             MBigMap(Box::new((
+                stack_result_to_concrete_type(resolved, &l),
+                stack_result_to_concrete_type(resolved, &r),
+            )))
+        }
+        MOr(b) => {
+            let (l, r) = b.as_ref();
+            MOr(Box::new((
                 stack_result_to_concrete_type(resolved, &l),
                 stack_result_to_concrete_type(resolved, &r),
             )))
