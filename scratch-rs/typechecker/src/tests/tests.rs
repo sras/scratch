@@ -49,6 +49,10 @@ fn test_type_checking_simple() {
         "LAMBDA_REC nat nat { PUSH nat 1; ADD;};"
     ))));
 
+    assert!(Result::is_err(&typecheck_(&parse(
+        "PUSH (big_map nat nat) {Elt 2 3};"
+    ))));
+
     // Stack result tests.
 
     assert_eq!(
@@ -125,18 +129,17 @@ fn test_type_checking_simple() {
     );
 
     assert_eq!(
-        typecheck_(&parse(
-            "PUSH nat 1; DUP; ADD"
-        ))
-        .unwrap(),
+        typecheck_(&parse("PUSH nat 1; DUP; ADD")).unwrap(),
         parse_stack("nat")
     );
 
     assert_eq!(
-        typecheck_(&parse(
-            "PUSH int 1; DUP; ADD"
-        ))
-        .unwrap(),
+        typecheck_(&parse("PUSH int 1; DUP; ADD")).unwrap(),
         parse_stack("int")
+    );
+
+    assert_eq!(
+        typecheck_(&parse("PUSH (map nat nat) {Elt 2 3};")).unwrap(),
+        parse_stack("map nat nat")
     );
 }

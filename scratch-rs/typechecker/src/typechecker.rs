@@ -4,6 +4,7 @@ use std::convert::TryFrom;
 
 use crate::attributes;
 use crate::attributes::check_attribute;
+use crate::attributes::check_attributes;
 use crate::instructions::MICHELSON_INSTRUCTIONS;
 use crate::types::map_mtype;
 use crate::types::ArgConstraint::*;
@@ -102,14 +103,25 @@ fn unify_concrete_arg<'a>(
             }
         },
         MBigMap(b) => match arg {
-            MPair(b1) => {
+            MBigMap(b1) => {
                 let (cl, cr) = b.as_ref();
                 let (vl, vr) = b1.as_ref();
                 return unify_concrete_arg(resolved, vl, cl)
                     .and_then(|_| unify_concrete_arg(resolved, vr, cr));
             }
             _ => {
-                return Result::Err("Expecting a pair but got something else...");
+                return Result::Err("Expecting a big_map but got something else...");
+            }
+        },
+        MMap(b) => match arg {
+            MMap(b1) => {
+                let (cl, cr) = b.as_ref();
+                let (vl, vr) = b1.as_ref();
+                return unify_concrete_arg(resolved, vl, cl)
+                    .and_then(|_| unify_concrete_arg(resolved, vr, cr));
+            }
+            _ => {
+                return Result::Err("Expecting a map but got something else...");
             }
         },
         MWrapped(CAtomic(MNat)) => match arg {
@@ -155,11 +167,15 @@ fn unify_arg<'a>(
     match arg {
         AV::TypeArg(ct) => match arg_con {
             MWrapped(CTypeArg(c, rattr)) => {
-                add_symbol(resolved, *c, &ct);
-                return Result::Ok(AV::TypeArg((*ct).clone()));
+                if check_attributes(rattr, ct) {
+                    add_symbol(resolved, *c, &ct);
+                    return Result::Ok(AV::TypeArg((*ct).clone()));
+                } else {
+                    return Result::Err("Type does not meet the required constraints");
+                }
             }
             _ => {
-                panic!("Unexpected type name argument");
+                return Result::Err("Unexpected type name argument");
             }
         },
         AV::ValueArg(some_val) => {
@@ -235,18 +251,41 @@ fn typecheck_value<'a>(
             }
             _ => Err("Expecting a List but found something else..."),
         },
+        (MMap(b), Composite(cv)) => match cv.as_ref() {
+            CKVList(items) => {
+                let mut hm: BTreeMap<MValue, MValue> = BTreeMap::new();
+                let (kt, vt) = b.as_ref();
+                if check_attribute(&Comparable, kt) {
+                        for (k, v) in items {
+                            let (mkv, _) = typecheck_value(resolved, k, kt)?;
+                            let (mvv, _) = typecheck_value(resolved, v, vt)?;
+                            hm.insert(mkv, mvv);
+                        }
+                        return Ok((
+                            VMap(Box::new(hm)),
+                            MMap(Box::new((kt.clone(), vt.clone()))),
+                        ));
+                } else {
+                    Err("Big map keys should be comparable")
+                }
+            }
+            _ => Err("Expecting a map but found something else..."),
+        }
         (MBigMap(b), Composite(cv)) => match cv.as_ref() {
             CKVList(items) => {
                 let mut hm: BTreeMap<MValue, MValue> = BTreeMap::new();
                 let (kt, vt) = b.as_ref();
                 if check_attribute(&Comparable, kt) {
                     if check_attribute(&BigmapValue, vt) {
-                    for (k, v) in items {
-                        let (mkv, _) = typecheck_value(resolved, k, kt)?;
-                        let (mvv, _) = typecheck_value(resolved, v, vt)?;
-                        hm.insert(mkv, mvv);
-                    }
-                    return Ok((VBigMap(Box::new(hm)), MBigMap(Box::new((kt.clone(), vt.clone())))));
+                        for (k, v) in items {
+                            let (mkv, _) = typecheck_value(resolved, k, kt)?;
+                            let (mvv, _) = typecheck_value(resolved, v, vt)?;
+                            hm.insert(mkv, mvv);
+                        }
+                        return Ok((
+                            VBigMap(Box::new(hm)),
+                            MBigMap(Box::new((kt.clone(), vt.clone()))),
+                        ));
                     } else {
                         Err("Type not allowed to be a big_map value")
                     }
@@ -254,7 +293,7 @@ fn typecheck_value<'a>(
                     Err("Big map keys should be comparable")
                 }
             }
-            _ => Err("Expecting a List but found something else..."),
+            _ => Err("Expecting a map but found something else..."),
         },
         (MPair(b), Composite(cv)) => match cv.as_ref() {
             CVPair(sv1, sv2) => {
@@ -320,6 +359,13 @@ fn stack_result_to_concrete_type(resolved: &mut ResolveCache, sr: &StackResult) 
             resolved,
             l.as_ref(),
         ))),
+        MMap(b) => {
+            let (l, r) = b.as_ref();
+            MMap(Box::new((
+                stack_result_to_concrete_type(resolved, &l),
+                stack_result_to_concrete_type(resolved, &r),
+            )))
+        }
         MBigMap(b) => {
             let (l, r) = b.as_ref();
             MBigMap(Box::new((
@@ -436,6 +482,7 @@ fn typecheck_one<'a>(
     match cinstruction {
         Other(instruction) => match MICHELSON_INSTRUCTIONS.get(&instruction.name) {
             Some(variants) => {
+                let mut last_error: &str;
                 for s in variants {
                     let mut temp_stack = stack.clone();
                     match unify_args(&instruction.args, &s.args) {
@@ -453,10 +500,16 @@ fn typecheck_one<'a>(
                                         name: instruction.name.clone(),
                                     }));
                                 }
-                                Result::Err(_) => continue,
+                                Result::Err(s) => {
+                                    println!("{}", s);
+                                    continue;
+                                }
                             }
                         }
-                        Result::Err(_) => continue,
+                        Result::Err(s) => {
+                            println!("{}", s);
+                            continue;
+                        }
                     }
                 }
                 return Result::Err("None of the instruction variants matched here.");

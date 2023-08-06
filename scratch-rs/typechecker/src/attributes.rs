@@ -9,9 +9,26 @@ use crate::types::MType::*;
 use crate::types::Attribute;
 use crate::types::Attribute::*;
 
+pub fn check_attributes(atrs: &[Attribute], ct: &ConcreteType) -> bool {
+    for atr in atrs {
+        if !check_attribute(atr, ct) {
+            return false;
+        }
+    }
+    return true;
+}
+
 pub fn check_attribute(atr: &Attribute, ct: &ConcreteType) -> bool {
     match ct {
         MWrapped(a) => true,
+        MMap(b) => match b.as_ref() {
+            (_, rt) => match atr {
+                Comparable => {
+                    false
+                },
+                _ => check_attribute(atr, rt)
+            }
+        },
         MBigMap(b) => match b.as_ref() {
             (_, rt) => match atr {
                 Passable => {

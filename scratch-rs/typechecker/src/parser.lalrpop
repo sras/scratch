@@ -78,6 +78,7 @@ AtomicValue: AtomicValue = {
 
 CompositeValue: CompositeValue = {
   "Pair" <l: SomeValue> <r: SomeValue> => CVPair(l, r),
+  "{"<sv:SomeKeyValueList>"}" => CKVList(sv),
   "{"<sv:SomeValueList>"}" => CVList(sv),
   <ins:InstructionBlock> => CVLambda(ins)
 }
@@ -93,7 +94,7 @@ SomeValueList:Vec<SomeValue> = {
 }
 
 SomeKeyValue:(SomeValue, SomeValue) = {
-  "Elt" <svk:SomeValue>" "<svv:SomeValue> => (svk, svv)
+  "Elt" <svk:SomeValue> <svv:SomeValue> => (svk, svv)
 }
 
 SomeKeyValueList:Vec<SomeKeyValue> = {
@@ -128,9 +129,10 @@ pub MDyn: MType<DynMType> = {
   <t:AtomicType> => MWrapped(DMAtomic(t)),
   <t:Dyn> => MWrapped(DMDyn(t)),
   "list" <t1:MDyn> => MList (Box::new(t1)),
-  "pair" <t1:MDyn> <t2:MDyn> => MPair (Box::new((t1, t2))),
-  "big_map" <t1:MDyn> <t2:MDyn> => MPair (Box::new((t1, t2))),
-  "lambda" <t1:MDyn> <t2:MDyn> => MLambda (Box::new((t1, t2))),
+  "pair" <t1:MDyn> <t2:MDyn> => MPair(Box::new((t1, t2))),
+  "map" <t1:MDyn> <t2:MDyn> => MMap(Box::new((t1, t2))),
+  "big_map" <t1:MDyn> <t2:MDyn> => MBigMap(Box::new((t1, t2))),
+  "lambda" <t1:MDyn> <t2:MDyn> => MLambda(Box::new((t1, t2))),
   "("<t:MDyn>")" => t
 };
 

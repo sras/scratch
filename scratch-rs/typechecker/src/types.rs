@@ -20,6 +20,7 @@ pub enum MType<T> {
     MList(Box<MType<T>>),
     MLambda(Box<(MType<T>, MType<T>)>),
     MBigMap(Box<(MType<T>, MType<T>)>),
+    MMap(Box<(MType<T>, MType<T>)>),
     MWrapped(T),
 }
 
@@ -49,6 +50,7 @@ pub enum MValue {
     VBool(bool),
     VString(String),
     VPair(Box<(MValue, MValue)>),
+    VMap(Box<BTreeMap<MValue, MValue>>),
     VBigMap(Box<BTreeMap<MValue, MValue>>),
     VList(Vec<MValue>),
     VLambda(Vec<CompoundInstruction<MValue>>),
@@ -181,6 +183,7 @@ pub fn map_mtype<T, H, F: Fn(&T) -> H>(ct: &MType<T>, cb: &F) -> MType<H> {
         MPair(b) => MPair(map_mtype_boxed_pair(b, cb)),
         MLambda(b) => MLambda(map_mtype_boxed_pair(b, cb)),
         MList(l) => MList(Box::new(map_mtype(l, cb))),
+        MMap(b) => MMap(map_mtype_boxed_pair(b, cb)),
         MBigMap(b) => MBigMap(map_mtype_boxed_pair(b, cb)),
         MWrapped(w) => MWrapped(cb(w)),
     }
