@@ -341,7 +341,7 @@ fn typecheck_value(
                 let (c1, c2) = b.as_ref();
                 let lambda_input = c1.clone();
                 let lambda_output = c2.clone();
-                let mut stack: StackState = OkStack(Vec::from([lambda_input.clone()]));
+                let mut stack: StackState = Vec::from([lambda_input.clone()]);
                 match typecheck(tcenv, instructions, &mut stack) {
                     Ok(tins) => match stack[..] {
                         [ref real_out] => {

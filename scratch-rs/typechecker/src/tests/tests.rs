@@ -6,14 +6,13 @@ use crate::typechecker::typecheck_contract;
 use crate::types::CompoundInstruction;
 use crate::types::SomeValue;
 use crate::types::StackState;
-use crate::types::StackState::*;
 use crate::types::TcEnv;
 use crate::types::MType::*;
 use crate::types::MAtomic::*;
 fn typecheck_<'a>(
     instructions: &Vec<CompoundInstruction<SomeValue>>,
 ) -> Result<StackState, String> {
-    let mut stack = OkStack(Vec::new());
+    let mut stack = Vec::new();
     let tcenv: TcEnv = TcEnv { selfType : MWrapped(MUnit) };
     typecheck(&tcenv, instructions, &mut stack)?;
     return Result::Ok(stack);

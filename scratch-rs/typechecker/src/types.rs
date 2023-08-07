@@ -175,11 +175,7 @@ pub enum StackResultElem {
     ElemType(MAtomic),
 }
 
-#[derive(Eq, PartialEq, Debug, Clone)]
-pub enum StackState {
-    FailedStack,
-    OkStack(Vec<ConcreteType>)
-}
+pub type StackState = Vec<ConcreteType>;
 
 #[derive(Debug)]
 pub struct InstructionDef {
