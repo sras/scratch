@@ -24,6 +24,7 @@ use crate::types::CompoundInstruction;
 use crate::types::Attribute;
 use crate::types::Attribute::*;
 use crate::types::SomeKeyValue;
+use crate::types::Contract;
 
 grammar;
 
@@ -48,6 +49,11 @@ CompoundInstruction: CompoundInstruction<SomeValue> = {
   "LAMBDA_REC" <ty1:ConcreteType> <ty2:ConcreteType> <instr:InstructionBlock> => CompoundInstruction::LAMBDA_REC(ty1, ty2, instr),
   <si:Instruction> => CompoundInstruction::Other(si)
 }
+
+pub Contract: Contract<SomeValue> =  {
+  "parameter" <p:ConcreteType>";" "storage" <s:ConcreteType>";" "code" <c:InstructionBlock> => {
+    Contract { parameter: p, storage: s, code: c }
+  }}
 
 Instruction: Instruction<SomeValue> = {
   <s:Identifier> <b:AnnotationList> <a:Args> => Instruction { name : s, args: a },
@@ -125,6 +131,7 @@ AtomicTypeRaw: MAtomic = {
   "nat" => MNat,
   "string" => MString,
   "bool" => MBool,
+  "operation" => MOperation,
 };
 
 pub ConcreteType: ConcreteType = {

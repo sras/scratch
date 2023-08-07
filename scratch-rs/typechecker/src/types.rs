@@ -104,6 +104,13 @@ impl Ord for MValue {
     }
 }
 
+#[derive(Debug, Clone)]
+pub struct Contract<T> {
+    pub parameter: ConcreteType,
+    pub storage: ConcreteType,
+    pub code: Vec<CompoundInstruction<T>>
+}
+
 pub type SomeKeyValue = (SomeValue, SomeValue);
 
 #[derive(Debug, Clone)]

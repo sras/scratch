@@ -1,6 +1,8 @@
 use crate::parser::InstructionListParser;
 use crate::parsers::parse_stack;
+use crate::parsers::parse_contract;
 use crate::typechecker::typecheck;
+use crate::typechecker::typecheck_contract;
 use crate::types::CompoundInstruction;
 use crate::types::SomeValue;
 use crate::types::StackState;
@@ -103,7 +105,7 @@ fn test_type_checking_simple() {
     );
 
     assert_eq!(
-        typecheck_(&parse("PUSH nat 5;DIP {PUSH bool True;}")).unwrap(),
+        typecheck_(&parse("PUSH nat 5;DIP \n {PUSH bool True;}")).unwrap(),
         parse_stack("nat;bool")
     );
 
@@ -158,4 +160,6 @@ fn test_type_checking_simple() {
         typecheck_(&parse("PUSH %a %b %c (pair :point (nat %x) (nat %y)) (Pair 1 1);")).unwrap(),
         parse_stack("pair nat nat")
     );
+
+    typecheck_contract("parameter int;storage int;code { CDR; PUSH int 1; ADD; NIL operation; PAIR; }");
 }

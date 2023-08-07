@@ -6,6 +6,7 @@ use crate::attributes;
 use crate::attributes::check_attribute;
 use crate::attributes::check_attributes;
 use crate::instructions::MICHELSON_INSTRUCTIONS;
+use crate::parsers::parse_contract;
 use crate::types::map_mtype;
 use crate::types::ArgConstraint::*;
 use crate::types::ArgValue as AV;
@@ -18,6 +19,7 @@ use crate::types::CompoundInstruction;
 use crate::types::CompoundInstruction::*;
 use crate::types::ConcreteType;
 use crate::types::Constraint;
+use crate::types::Contract;
 use crate::types::Instruction;
 use crate::types::MAtomic::*;
 use crate::types::MType::*;
@@ -460,6 +462,30 @@ fn unify_stack<'a>(
     rs.append(&mut stack_state[stack_index..].to_vec());
     *stack_state = rs;
     return Result::Ok(());
+}
+
+pub fn typecheck_contract<'a>(src: &'a str) -> Result<Contract<MValue>, &'a str> {
+    let contract = parse_contract(src);
+    let mut stack = vec![MPair(Box::new((
+        contract.parameter.clone(),
+        contract.storage.clone(),
+    )))];
+    let tins = typecheck(&contract.code, &mut stack)?;
+    let expected_stack = vec![MPair(Box::new((
+            MList(Box::new(MWrapped(MOperation))),
+            contract.storage.clone(),
+        )))];
+    if stack
+        == expected_stack
+    {
+        return Result::Ok(Contract {
+            parameter: contract.parameter.clone(),
+            storage: contract.storage.clone(),
+            code: tins,
+        });
+    } else {
+        panic!("Unexpected stack result {:?} while expecting {:>?}", stack, expected_stack);
+    }
 }
 
 pub fn typecheck<'a>(

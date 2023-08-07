@@ -36,6 +36,7 @@ lazy_static! {
         mk_instr!("SWAP", "", "<w|a>;<w|b>", "<r|b>;<r|a>"),
         mk_instr!("DUP", "", "<w|a>", "<r|a>;<r|a>"),
         mk_instr!("DROP", "", "<w|a>", ""),
+        mk_instr!("NIL", "<t|a>", "", "list <r|a>"),
         mk_instr_poly!(
             "ADD",
             ("", "<a|nat>;<a|nat>", "<a|nat>"),
