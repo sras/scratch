@@ -161,5 +161,5 @@ fn test_type_checking_simple() {
         parse_stack("pair nat nat")
     );
 
-    typecheck_contract("parameter int;storage int;code { CDR; PUSH int 1; ADD; NIL operation; PAIR; }");
+    typecheck_contract("parameter int;storage int #some comment\n;code { CDR; PUSH int 1; ADD; NIL operation; PAIR; }");
 }

@@ -1,3 +1,5 @@
+use regex::Regex;
+
 use crate::parser::ConstraintParser;
 use crate::parser::ContractParser;
 use crate::parser::MDynListParser;
@@ -58,8 +60,10 @@ pub fn parse_constraints(cs: &str) -> Vec<Constraint> {
     return parse_mdyn_to(cs, mdyn_to_constraint);
 }
 
-pub fn parse_contract(cs: &str) -> Contract<SomeValue> {
-    match ContractParser::new().parse(cs) {
+pub fn parse_contract(src: &str) -> Contract<SomeValue> {
+    let re = Regex::new(r"#[^\n\r]*[\n\r]*").unwrap();
+    let src_sans_comments = re.replace_all(src, "");
+    match ContractParser::new().parse(&src_sans_comments) {
         Result::Ok(s) => {
             return s;
         }

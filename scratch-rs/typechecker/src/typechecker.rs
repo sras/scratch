@@ -472,19 +472,20 @@ pub fn typecheck_contract<'a>(src: &'a str) -> Result<Contract<MValue>, &'a str>
     )))];
     let tins = typecheck(&contract.code, &mut stack)?;
     let expected_stack = vec![MPair(Box::new((
-            MList(Box::new(MWrapped(MOperation))),
-            contract.storage.clone(),
-        )))];
-    if stack
-        == expected_stack
-    {
+        MList(Box::new(MWrapped(MOperation))),
+        contract.storage.clone(),
+    )))];
+    if stack == expected_stack {
         return Result::Ok(Contract {
             parameter: contract.parameter.clone(),
             storage: contract.storage.clone(),
             code: tins,
         });
     } else {
-        panic!("Unexpected stack result {:?} while expecting {:>?}", stack, expected_stack);
+        panic!(
+            "Unexpected stack result {:?} while expecting {:>?}",
+            stack, expected_stack
+        );
     }
 }
 
