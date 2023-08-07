@@ -1,5 +1,6 @@
 #[macro_use]
 extern crate lazy_static;
+use std::io;
 use crate::typechecker::typecheck_contract;
 
 mod instructions;
@@ -13,6 +14,8 @@ mod types;
 use typechecker::typecheck;
 
 fn main() {
-    println!("{:?}", typecheck_contract("parameter int;storage int #some comment\n;code { CDR; PUSH int 1; ADD; NIL operation; PAIR; }"));
-    //println!("asdasd");
+    match std::io::read_to_string(io::stdin()) {
+        Result::Ok(i) => println!("{:?}", typecheck_contract(&i)),
+        Result::Err(_) => panic!()
+    }
 }

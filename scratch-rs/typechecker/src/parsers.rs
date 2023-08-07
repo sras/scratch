@@ -63,6 +63,7 @@ pub fn parse_constraints(cs: &str) -> Vec<Constraint> {
 pub fn parse_contract(src: &str) -> Contract<SomeValue> {
     let re = Regex::new(r"#[^\n\r]*[\n\r]*").unwrap();
     let src_sans_comments = re.replace_all(src, "");
+    println!("{}", src_sans_comments);
     match ContractParser::new().parse(&src_sans_comments) {
         Result::Ok(s) => {
             return s;

@@ -21,6 +21,7 @@ pub enum MAtomic {
     MTimestamp,
     MUnit,
     MOperation,
+    MSignature
 }
 
 #[derive(Debug, Eq, PartialEq)]
@@ -55,10 +56,12 @@ pub enum AtomicValue {
     AVNumber(i32),
     AVString(String),
     AVBool(bool),
+    AVUnit,
 }
 
 #[derive(Debug, Clone)]
 pub enum MValue {
+    VUnit,
     VNat(u32),
     VInt(i32),
     VBool(bool),
@@ -136,6 +139,9 @@ pub struct Instruction<T> {
 #[derive(Debug, Clone)]
 pub enum CompoundInstruction<T> {
     IF(Vec<CompoundInstruction<T>>, Vec<CompoundInstruction<T>>),
+    IF_CONS(Vec<CompoundInstruction<T>>, Vec<CompoundInstruction<T>>),
+    IF_SOME(Vec<CompoundInstruction<T>>, Vec<CompoundInstruction<T>>),
+    IF_LEFT(Vec<CompoundInstruction<T>>, Vec<CompoundInstruction<T>>),
     DIP(Vec<CompoundInstruction<T>>),
     LAMBDA_REC(ConcreteType, ConcreteType, Vec<CompoundInstruction<T>>),
     Other(Instruction<T>),

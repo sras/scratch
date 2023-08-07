@@ -583,6 +583,15 @@ fn typecheck_one<'a>(
                 return Result::Err("Instruction not found");
             }
         },
+        IF_CONS(tb, fb) => {
+            panic!()
+        }
+        IF_SOME(tb, fb) => {
+            panic!()
+        }
+        IF_LEFT(tb, fb) => {
+            panic!()
+        }
         IF(tb, fb) => {
             ensure_stack_head(stack, MWrapped(MBool))?;
             let (tbtc, fbtc) = ensure_same_lambda_type(stack, (tb, fb))?;

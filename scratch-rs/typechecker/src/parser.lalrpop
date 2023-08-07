@@ -45,6 +45,9 @@ AttributeList: Vec<Attribute> = {
 
 CompoundInstruction: CompoundInstruction<SomeValue> = {
   "IF" <ibt:InstructionBlock> <ibf:InstructionBlock> => CompoundInstruction::IF(ibt, ibf),
+  "IF_CONS" <ibt:InstructionBlock> <ibf:InstructionBlock> => CompoundInstruction::IF_CONS(ibt, ibf),
+  "IF_SOME" <ibt:InstructionBlock> <ibf:InstructionBlock> => CompoundInstruction::IF_SOME(ibt, ibf),
+  "IF_LEFT" <ibt:InstructionBlock> <ibf:InstructionBlock> => CompoundInstruction::IF_SOME(ibt, ibf),
   "DIP" <instr:InstructionBlock> => CompoundInstruction::DIP(instr),
   "LAMBDA_REC" <ty1:ConcreteType> <ty2:ConcreteType> <instr:InstructionBlock> => CompoundInstruction::LAMBDA_REC(ty1, ty2, instr),
   <si:Instruction> => CompoundInstruction::Other(si)
@@ -58,6 +61,7 @@ pub Contract: Contract<SomeValue> =  {
 Instruction: Instruction<SomeValue> = {
   <s:Identifier> <b:AnnotationList> <a:Args> => Instruction { name : s, args: a },
   <s:Identifier> <a:Args> => Instruction { name : s, args: a },
+  <s:Identifier> <b:AnnotationList> => Instruction { name : s, args: vec![] },
   <s:Identifier> => Instruction { name : s, args: vec![] },
 }
 
@@ -80,7 +84,8 @@ SomeValue: SomeValue = {
 AtomicValue: AtomicValue = {
   <a:McLitNumber> => AVNumber(a),
   <s:McLitString> => AVString(s),
-  <s:McLitBool> => AVBool(s)
+  <s:McLitBool> => AVBool(s),
+  "Unit" => AVUnit
 }
 
 CompositeValue: CompositeValue = {
@@ -129,9 +134,18 @@ pub AnnotationList: () = {
 AtomicTypeRaw: MAtomic = {
   "int" => MInt,
   "nat" => MNat,
+  "key" => MKey,
+  "key_hash" => MKeyHash,
+  "chain_id" => MChainId,
+  "bytes" => MBytes,
   "string" => MString,
   "bool" => MBool,
+  "mutez" => MMutez,
+  "timestamp" => MTimestamp,
+  "address" => MAddress,
   "operation" => MOperation,
+  "signature" => MSignature,
+  "unit" => MUnit,
 };
 
 pub ConcreteType: ConcreteType = {
@@ -146,7 +160,13 @@ pub MDynList: Vec<MType<DynMType>> = {
 pub MDyn: MType<DynMType> = {
   <t:AtomicType> => MWrapped(DMAtomic(t)),
   <t:Dyn> => MWrapped(DMDyn(t)),
+  "list" <a:AnnotationList> <t1:MDyn> => MList (Box::new(t1)),
   "list" <t1:MDyn> => MList (Box::new(t1)),
+  "set" <t1:MDyn> => MSet (Box::new(t1)),
+  "option" <a:AnnotationList> <t1:MDyn> => MOption (Box::new(t1)),
+  "option" <t1:MDyn> => MOption (Box::new(t1)),
+  "contract" <a:AnnotationList> <t1:MDyn> => MContract (Box::new(t1)),
+  "contract" <t1:MDyn> => MContract (Box::new(t1)),
   "pair" <a:AnnotationList> <t1:MDyn> <t2:MDyn> => MPair(Box::new((t1, t2))),
   "pair" <t1:MDyn> <t2:MDyn> => MPair(Box::new((t1, t2))),
   "or" <a:AnnotationList> <t1:MDyn> <t2:MDyn> => MOr(Box::new((t1, t2))),
@@ -175,7 +195,7 @@ ArgVar: char = <c:r"[a-z]"> => c.chars().next().unwrap();
 
 Dyn: String = <s:r"<[A-Za-z][A-Za-z0-9|+=>]+>"> => s[1..s.len()-1].into();
 
-Identifier: String = <s:r"[A-Za-z][A-Za-z0-9]+"> => String::from(s);
+Identifier: String = <s:r"[A-Za-z][A-Za-z0-9_]+"> => String::from(s);
 Annotation: String = <s:r"@%|@%%|%@|[@:%][_0-9a-zA-Z][_0-9a-zA-Z\.%@]*"> => String::from(s);
 
 McLitBool: bool = {
