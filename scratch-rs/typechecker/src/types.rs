@@ -141,10 +141,18 @@ pub enum CompoundInstruction<T> {
     IF(Vec<CompoundInstruction<T>>, Vec<CompoundInstruction<T>>),
     IF_CONS(Vec<CompoundInstruction<T>>, Vec<CompoundInstruction<T>>),
     IF_SOME(Vec<CompoundInstruction<T>>, Vec<CompoundInstruction<T>>),
+    IF_NONE(Vec<CompoundInstruction<T>>, Vec<CompoundInstruction<T>>),
     IF_LEFT(Vec<CompoundInstruction<T>>, Vec<CompoundInstruction<T>>),
-    DIP(Vec<CompoundInstruction<T>>),
+    DIP(usize, Vec<CompoundInstruction<T>>),
+    ITER(Vec<CompoundInstruction<T>>),
     LAMBDA_REC(ConcreteType, ConcreteType, Vec<CompoundInstruction<T>>),
+    SELF,
+    FAIL,
     Other(Instruction<T>),
+}
+
+pub struct TcEnv {
+    pub selfType: ConcreteType
 }
 
 #[derive(Debug)]
@@ -167,7 +175,11 @@ pub enum StackResultElem {
     ElemType(MAtomic),
 }
 
-pub type StackState = Vec<ConcreteType>;
+#[derive(Eq, PartialEq, Debug, Clone)]
+pub enum StackState {
+    FailedStack,
+    OkStack(Vec<ConcreteType>)
+}
 
 #[derive(Debug)]
 pub struct InstructionDef {

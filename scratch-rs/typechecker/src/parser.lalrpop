@@ -44,14 +44,39 @@ AttributeList: Vec<Attribute> = {
 }
 
 CompoundInstruction: CompoundInstruction<SomeValue> = {
+  "FAIL" => CompoundInstruction::FAIL,
+  "SELF" => CompoundInstruction::SELF,
   "IF" <ibt:InstructionBlock> <ibf:InstructionBlock> => CompoundInstruction::IF(ibt, ibf),
+  "ITER" <inst:InstructionBlock> => CompoundInstruction::ITER(inst),
   "IF_CONS" <ibt:InstructionBlock> <ibf:InstructionBlock> => CompoundInstruction::IF_CONS(ibt, ibf),
   "IF_SOME" <ibt:InstructionBlock> <ibf:InstructionBlock> => CompoundInstruction::IF_SOME(ibt, ibf),
+  "IF_NONE" <ibt:InstructionBlock> <ibf:InstructionBlock> => CompoundInstruction::IF_NONE(ibt, ibf),
   "IF_LEFT" <ibt:InstructionBlock> <ibf:InstructionBlock> => CompoundInstruction::IF_SOME(ibt, ibf),
-  "DIP" <instr:InstructionBlock> => CompoundInstruction::DIP(instr),
+  "DIP" <n:McLitNumber> <instr:InstructionBlock> => CompoundInstruction::DIP(usize::try_from(n).unwrap(), instr),
+  "DIP" <instr:InstructionBlock> => CompoundInstruction::DIP(1, instr),
+  <s:r"D[I]+P"> <instr:InstructionBlock> => CompoundInstruction::DIP(s.len() - 2, instr),
   "LAMBDA_REC" <ty1:ConcreteType> <ty2:ConcreteType> <instr:InstructionBlock> => CompoundInstruction::LAMBDA_REC(ty1, ty2, instr),
   <si:Instruction> => CompoundInstruction::Other(si)
 }
+
+match {
+  "IF",
+  "SELF",
+  "LAMBDA_REC",
+  "ITER",
+  "FAIL",
+  "IF_CONS",
+  "IF_SOME",
+  "IF_NONE",
+  "IF_LEFT",
+  "DIP",
+  r"D[I]+P",
+} else {
+  r"[A-Z_]+",
+  _
+}
+
+Identifier: String = <s:r"[A-Z_]+"> => String::from(s);
 
 pub Contract: Contract<SomeValue> =  {
   "parameter" <p:ConcreteType>";" "storage" <s:ConcreteType>";" "code" <c:InstructionBlock> => {
@@ -193,9 +218,8 @@ pub StackResultElem: StackResultElem = {
 
 ArgVar: char = <c:r"[a-z]"> => c.chars().next().unwrap();
 
-Dyn: String = <s:r"<[A-Za-z][A-Za-z0-9|+=>]+>"> => s[1..s.len()-1].into();
+Dyn: String = <s:r"<[A-Za-z][A-Za-z0-9_|+=>]+>"> => s[1..s.len()-1].into();
 
-Identifier: String = <s:r"[A-Za-z][A-Za-z0-9_]+"> => String::from(s);
 Annotation: String = <s:r"@%|@%%|%@|[@:%][_0-9a-zA-Z][_0-9a-zA-Z\.%@]*"> => String::from(s);
 
 McLitBool: bool = {

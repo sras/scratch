@@ -6,11 +6,16 @@ use crate::typechecker::typecheck_contract;
 use crate::types::CompoundInstruction;
 use crate::types::SomeValue;
 use crate::types::StackState;
+use crate::types::StackState::*;
+use crate::types::TcEnv;
+use crate::types::MType::*;
+use crate::types::MAtomic::*;
 fn typecheck_<'a>(
     instructions: &Vec<CompoundInstruction<SomeValue>>,
-) -> Result<StackState, &'a str> {
-    let mut stack = Vec::new();
-    typecheck(instructions, &mut stack)?;
+) -> Result<StackState, String> {
+    let mut stack = OkStack(Vec::new());
+    let tcenv: TcEnv = TcEnv { selfType : MWrapped(MUnit) };
+    typecheck(&tcenv, instructions, &mut stack)?;
     return Result::Ok(stack);
 }
 fn parse(src: &str) -> Vec<CompoundInstruction<SomeValue>> {
@@ -110,6 +115,16 @@ fn test_type_checking_simple() {
     );
 
     assert_eq!(
+        typecheck_(&parse("PUSH nat 5; PUSH int 10; DIP 2 {PUSH bool True;}")).unwrap(),
+        parse_stack("int; nat ; bool")
+    );
+
+    assert_eq!(
+        typecheck_(&parse("PUSH nat 5; PUSH int 10; DIIP {PUSH bool True;}")).unwrap(),
+        parse_stack("int; nat ; bool")
+    );
+
+    assert_eq!(
         typecheck_(&parse("PUSH bool True; IF { PUSH nat 5 } { PUSH nat 10 }")).unwrap(),
         parse_stack("nat")
     );
@@ -154,6 +169,11 @@ fn test_type_checking_simple() {
     assert_eq!(
         typecheck_(&parse("PUSH %a %b %c nat :a 1;")).unwrap(),
         parse_stack("nat")
+    );
+
+    assert_eq!(
+        typecheck_(&parse("SELF;")).unwrap(),
+        parse_stack("contract unit")
     );
 
     assert_eq!(

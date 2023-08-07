@@ -14,6 +14,8 @@ use crate::types::DynMType;
 use crate::types::DynMType::*;
 use crate::types::MType;
 use crate::types::SomeValue;
+use crate::types::StackState;
+use crate::types::StackState::*;
 use crate::types::StackResult;
 use crate::types::StackResultElem;
 
@@ -23,7 +25,7 @@ fn parse_mdyn_to<T, F: Fn(&MType<DynMType>) -> T>(cs: &str, cb: F) -> Vec<T> {
     } else {
         match MDynListParser::new().parse(cs) {
             Result::Ok(s) => return s.iter().map(cb).collect(),
-            Result::Err(s) => panic!("{}", s),
+            Result::Err(s) => panic!("{} when parsing {}", s, cs),
         }
     }
 }
@@ -76,6 +78,6 @@ pub fn parse_stack_results(cs: &str) -> Vec<StackResult> {
     return parse_mdyn_to(cs, mdyn_to_stack_result);
 }
 
-pub fn parse_stack(cs: &str) -> Vec<ConcreteType> {
-    return parse_mdyn_to(cs, mdyn_to_concrete);
+pub fn parse_stack(cs: &str) -> StackState {
+    return OkStack(parse_mdyn_to(cs, mdyn_to_concrete));
 }

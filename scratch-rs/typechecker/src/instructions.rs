@@ -45,6 +45,11 @@ lazy_static! {
         mk_instr!("CONS", "", "<w|a>;list <r|a>", "list <r|a>"),
         mk_instr!("PUSH", "<t|a=>pushable>;<r|a>", "", "<r|a>"),
         mk_instr!("PAIR", "", "<w|a>;<w|b>", "pair <r|a> <r|b>"),
+        mk_instr!("ADDRESS", "", "contract <w|a>", "<a|address>"),
+        mk_instr!("CHAIN_ID", "", "", "<a|chain_id>"),
+        mk_instr!("CHECK_SIGNATURE", "", "<a|key>;<a|signature>;<a|bytes>", "<a|bool>"),
+        mk_instr!("PACK", "", "<w|a>", "<a|bytes>"),
+        mk_instr!("SELF_ADDRESS", "", "<a|address>", ""),
         mk_instr!("UNPAIR", "", "pair <w|a> <w|b>", "<r|a>;<r|b>"),
         mk_instr!(
             "LAMBDA",
@@ -53,5 +58,7 @@ lazy_static! {
             "lambda <r|a> <r|b>"
         ),
         mk_instr!("EXEC", "", "<w|a>;lambda <r|a> <w|b>", "<r|b>"),
+        mk_instr!("ASSERT", "", "<a|bool>", ""),
+        mk_instr!("ASSERT_CMPEQ", "", "<w|a>;<w|b>", ""),
     ]);
 }
