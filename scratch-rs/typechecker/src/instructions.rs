@@ -1,4 +1,4 @@
-use std::collections::HashMap;
+use std::collections::BTreeMap;
 
 use crate::parsers::parse_constraints;
 use crate::parsers::parse_stack_results;
@@ -24,7 +24,7 @@ macro_rules! mk_instr_poly {
 }
 
 lazy_static! {
-    pub static ref MICHELSON_INSTRUCTIONS: HashMap<String, Vec<InstructionDef>> = HashMap::from([
+    pub static ref MICHELSON_INSTRUCTIONS: BTreeMap<String, Vec<InstructionDef>> = BTreeMap::from([
         mk_instr!(
             "APPLY",
             "",

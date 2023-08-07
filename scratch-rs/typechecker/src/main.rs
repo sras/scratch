@@ -1,5 +1,6 @@
 #[macro_use]
 extern crate lazy_static;
+use crate::typechecker::typecheck_contract;
 
 mod instructions;
 mod parser;
@@ -12,12 +13,6 @@ mod types;
 use typechecker::typecheck;
 
 fn main() {
-
-    match parser::MDynParser::new().parse(
-        "pair (int :a) nat",
-    ) {
-        Result::Ok(a) => println!("{:?}", a)
-        ,
-        Result::Err(s) => println!("{}", s),
-    }
+    println!("{:?}", typecheck_contract("parameter int;storage int #some comment\n;code { CDR; PUSH int 1; ADD; NIL operation; PAIR; }"));
+    //println!("asdasd");
 }

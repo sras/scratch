@@ -568,13 +568,11 @@ fn typecheck_one<'a>(
                                     }));
                                 }
                                 Result::Err(s) => {
-                                    println!("{}", s);
                                     continue;
                                 }
                             }
                         }
                         Result::Err(s) => {
-                            println!("{}", s);
                             continue;
                         }
                     }
