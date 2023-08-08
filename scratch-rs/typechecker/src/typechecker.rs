@@ -585,7 +585,10 @@ fn ensure_if_cons_body(
                         return Result::Ok((cbtc, nbtc));
                     }
                     None => {
-                        return Result::Err(format!("Type of IF_CONS branches differ {:?} {:?}", temp_stack_cons, temp_stack_nil));
+                        return Result::Err(format!(
+                            "Type of IF_CONS branches differ {:?} {:?}",
+                            temp_stack_cons, temp_stack_nil
+                        ));
                     }
                 }
             }
@@ -630,12 +633,18 @@ fn ensure_if_left_body(
                         return Result::Ok((lbtc, rbtc));
                     }
                     None => {
-                        return Result::Err(format!("Type of IF_CONS branches differ {:?} {:?}", temp_stack_left, temp_stack_right));
+                        return Result::Err(format!(
+                            "Type of IF_CONS branches differ {:?} {:?}",
+                            temp_stack_left, temp_stack_right
+                        ));
                     }
                 }
             }
             m => {
-                return Result::Err(format!("IF_LEFT requires an or, but found {:?}, {:?} {:?}", m, lb, rb));
+                return Result::Err(format!(
+                    "IF_LEFT requires an or, but found {:?}, {:?} {:?}",
+                    m, lb, rb
+                ));
             }
         },
         None => {
@@ -674,7 +683,10 @@ fn ensure_if_none_body(
                 }
             }
             m => {
-                return Result::Err(format!("IF_NONE requires an option, but found {:?}, {:?} {:?}", m, sb, nb));
+                return Result::Err(format!(
+                    "IF_NONE requires an option, but found {:?}, {:?} {:?}",
+                    m, sb, nb
+                ));
             }
         },
         None => {

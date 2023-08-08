@@ -1,19 +1,21 @@
 use crate::parser::InstructionListParser;
-use crate::parsers::parse_stack;
 use crate::parsers::parse_contract;
+use crate::parsers::parse_stack;
 use crate::typechecker::typecheck;
 use crate::typechecker::typecheck_contract;
 use crate::types::CompoundInstruction;
+use crate::types::MAtomic::*;
+use crate::types::MType::*;
 use crate::types::SomeValue;
 use crate::types::StackState;
 use crate::types::TcEnv;
-use crate::types::MType::*;
-use crate::types::MAtomic::*;
 fn typecheck_<'a>(
     instructions: &Vec<CompoundInstruction<SomeValue>>,
 ) -> Result<StackState, String> {
     let mut stack = StackState::new();
-    let tcenv: TcEnv = TcEnv { selfType : MWrapped(MUnit) };
+    let tcenv: TcEnv = TcEnv {
+        selfType: MWrapped(MUnit),
+    };
     typecheck(&tcenv, instructions, &mut stack)?;
     return Result::Ok(stack);
 }
@@ -159,7 +161,6 @@ fn test_type_checking_simple() {
         parse_stack("map nat nat")
     );
 
-
     assert_eq!(
         typecheck_(&parse("PUSH nat :a 1;")).unwrap(),
         parse_stack("nat")
@@ -176,8 +177,10 @@ fn test_type_checking_simple() {
     );
 
     assert_eq!(
-        typecheck_(&parse("PUSH %a %b %c (pair :point (nat %x) (nat %y)) (Pair 1 1);")).unwrap(),
+        typecheck_(&parse(
+            "PUSH %a %b %c (pair :point (nat %x) (nat %y)) (Pair 1 1);"
+        ))
+        .unwrap(),
         parse_stack("pair nat nat")
     );
-
 }
