@@ -60,5 +60,6 @@ lazy_static! {
         mk_instr!("EXEC", "", "<w|a>;lambda <r|a> <w|b>", "<r|b>"),
         mk_instr!("ASSERT", "", "<a|bool>", ""),
         mk_instr!("ASSERT_CMPEQ", "", "<w|a>;<w|b>", ""),
+        mk_instr!("ASSERT_CMPLE", "", "<w|a>;<w|b>", ""),
     ]);
 }

@@ -579,11 +579,14 @@ fn ensure_if_cons_body(
                 temp_stack_cons.push(x.as_ref().clone());
                 let cbtc = typecheck(tcenv, cs, &mut temp_stack_cons)?;
                 let nbtc = typecheck(tcenv, ns, &mut temp_stack_nil)?;
-                if temp_stack_cons == temp_stack_nil {
-                    *stack_ = temp_stack_cons;
-                    return Result::Ok((cbtc, nbtc));
-                } else {
-                    return Result::Err(String::from("Type of IF_CONS branches differ"));
+                match temp_stack_cons.compare(&temp_stack_nil) {
+                    Some(s) => {
+                        *stack_ = s;
+                        return Result::Ok((cbtc, nbtc));
+                    }
+                    None => {
+                        return Result::Err(format!("Type of IF_CONS branches differ {:?} {:?}", temp_stack_cons, temp_stack_nil));
+                    }
                 }
             }
             m => {
@@ -622,11 +625,11 @@ fn ensure_if_none_body(
                     *stack_ = temp_stack_some;
                     return Result::Ok((nbtc, sbtc));
                 } else {
-                    return Result::Err(String::from("Type of IF_CONS branches differ"));
+                    return Result::Err(String::from("Type of IF_NONE branches differ"));
                 }
             }
             m => {
-                return Result::Err(format!("IF_CONS requires a list, but found {:?}", m));
+                return Result::Err(format!("IF_NONE requires an option, but found {:?}, {:?} {:?}", m, sb, nb));
             }
         },
         None => {
@@ -721,6 +724,7 @@ fn typecheck_one(
                     return Result::Ok(SELF);
                 }
                 FAIL => {
+                    stack.fail();
                     return Result::Ok(FAIL);
                 }
                 ITER(ins) => {

@@ -1,5 +1,5 @@
 // auto-generated: "lalrpop 0.20.0"
-// sha3: 01b6bbfa97a9b6500093997e7fa9b258fa8c06d752412179c8c6d0d528182a02
+// sha3: 6029d08d78a51426998c7b06202140ab2f2cd5743d241f3c64f9676bc1cb930f
 use std::str::FromStr;
 use crate::types::mdyn_to_concrete;
 use crate::types::MType;
@@ -38264,7 +38264,7 @@ fn __action25<
     (_, ibf, _): (usize, Vec<CompoundInstruction<SomeValue>>, usize),
 ) -> CompoundInstruction<SomeValue>
 {
-    CompoundInstruction::IF_SOME(ibt, ibf)
+    CompoundInstruction::IF_LEFT(ibt, ibf)
 }
 
 #[allow(unused_variables)]

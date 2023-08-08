@@ -21,7 +21,7 @@ pub enum MAtomic {
     MTimestamp,
     MUnit,
     MOperation,
-    MSignature
+    MSignature,
 }
 
 #[derive(Debug, Eq, PartialEq)]
@@ -111,7 +111,7 @@ impl Ord for MValue {
 pub struct Contract<T> {
     pub parameter: ConcreteType,
     pub storage: ConcreteType,
-    pub code: Vec<CompoundInstruction<T>>
+    pub code: Vec<CompoundInstruction<T>>,
 }
 
 pub type SomeKeyValue = (SomeValue, SomeValue);
@@ -152,7 +152,7 @@ pub enum CompoundInstruction<T> {
 }
 
 pub struct TcEnv {
-    pub selfType: ConcreteType
+    pub selfType: ConcreteType,
 }
 
 #[derive(Debug)]
@@ -178,7 +178,7 @@ pub enum StackResultElem {
 #[derive(Debug, Clone, Eq, PartialEq)]
 pub enum StackState {
     LiveStack(Vec<ConcreteType>),
-    FailedStack
+    FailedStack,
 }
 
 use StackState::*;
@@ -194,16 +194,14 @@ impl StackState {
     pub fn get_live(&self) -> Option<&Vec<ConcreteType>> {
         match self {
             LiveStack(v) => Some(&v),
-            FailedStack => None
+            FailedStack => None,
         }
     }
 
     pub fn append_stack(&mut self, src: &mut Self) {
         match self {
             LiveStack(v) => match src {
-                LiveStack(ref mut v1) => {
-                    v.append(v1)
-                },
+                LiveStack(ref mut v1) => v.append(v1),
                 FailedStack => {}
             },
             FailedStack => {}
@@ -214,14 +212,30 @@ impl StackState {
         LiveStack(Vec::new())
     }
 
+    pub fn fail(&mut self) {
+        *self = FailedStack;
+    }
+
     pub fn from(v: Vec<ConcreteType>) -> Self {
         LiveStack(Vec::from(v))
     }
 
-    pub fn compare(&self, s: Vec<ConcreteType>) -> bool {
+    pub fn compare(&self, s: &Self) -> Option<Self> {
         match self {
-            FailedStack => true,
-            LiveStack(v) => s == *v
+            FailedStack => match s {
+                FailedStack => Some(FailedStack),
+                _ => Some(s.clone()),
+            },
+            LiveStack(v) => match s {
+                LiveStack(s_) => {
+                    if s_ == v {
+                        Some(self.clone())
+                    } else {
+                        None
+                    }
+                }
+                FailedStack => Some(self.clone()),
+            },
         }
     }
 
@@ -230,35 +244,29 @@ impl StackState {
             FailedStack => true,
             LiveStack(v) => match v[..] {
                 [ref si] => *si == *s,
-                _ => false
-            }
+                _ => false,
+            },
         }
     }
 
     pub fn clone_tail(&self) -> Self {
         match self {
-            LiveStack(v) => {
-                LiveStack(Vec::from(&v[1..]))
-            },
-            FailedStack => FailedStack
+            LiveStack(v) => LiveStack(Vec::from(&v[1..])),
+            FailedStack => FailedStack,
         }
     }
 
     pub fn clone_tail_at(&self, l: usize) -> Self {
         match self {
-            LiveStack(v) => {
-                LiveStack(Vec::from(&v[l..]))
-            },
-            FailedStack => FailedStack
+            LiveStack(v) => LiveStack(Vec::from(&v[l..])),
+            FailedStack => FailedStack,
         }
     }
 
     pub fn clone_head_till(&self, l: usize) -> Self {
         match self {
-            LiveStack(v) => {
-                LiveStack(Vec::from(&v[0..l]))
-            },
-            FailedStack => FailedStack
+            LiveStack(v) => LiveStack(Vec::from(&v[0..l])),
+            FailedStack => FailedStack,
         }
     }
 }

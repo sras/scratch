@@ -14,10 +14,10 @@ use crate::types::DynMType;
 use crate::types::DynMType::*;
 use crate::types::MType;
 use crate::types::SomeValue;
-use crate::types::StackState;
-use crate::types::StackState::*;
 use crate::types::StackResult;
 use crate::types::StackResultElem;
+use crate::types::StackState;
+use crate::types::StackState::*;
 
 fn parse_mdyn_to<T, F: Fn(&MType<DynMType>) -> T>(cs: &str, cb: F) -> Vec<T> {
     if cs.len() == 0 {
