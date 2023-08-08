@@ -12,7 +12,7 @@ use crate::types::MAtomic::*;
 fn typecheck_<'a>(
     instructions: &Vec<CompoundInstruction<SomeValue>>,
 ) -> Result<StackState, String> {
-    let mut stack = Vec::new();
+    let mut stack = StackState::new();
     let tcenv: TcEnv = TcEnv { selfType : MWrapped(MUnit) };
     typecheck(&tcenv, instructions, &mut stack)?;
     return Result::Ok(stack);

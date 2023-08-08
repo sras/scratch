@@ -15,6 +15,7 @@ use crate::types::DynMType::*;
 use crate::types::MType;
 use crate::types::SomeValue;
 use crate::types::StackState;
+use crate::types::StackState::*;
 use crate::types::StackResult;
 use crate::types::StackResultElem;
 
@@ -78,5 +79,5 @@ pub fn parse_stack_results(cs: &str) -> Vec<StackResult> {
 }
 
 pub fn parse_stack(cs: &str) -> StackState {
-    return parse_mdyn_to(cs, mdyn_to_concrete);
+    return LiveStack(parse_mdyn_to(cs, mdyn_to_concrete));
 }

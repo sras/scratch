@@ -175,7 +175,63 @@ pub enum StackResultElem {
     ElemType(MAtomic),
 }
 
-pub type StackState = Vec<ConcreteType>;
+#[derive(Debug, Clone, Eq, PartialEq)]
+pub enum StackState {
+    LiveStack(Vec<ConcreteType>),
+    FailedStack
+}
+
+use StackState::*;
+
+impl StackState {
+    pub fn push(&mut self, t: ConcreteType) {
+        match self {
+            LiveStack(v) => v.insert(0, t),
+            FailedStack => {}
+        }
+    }
+
+    pub fn get_live(&self) -> Option<&Vec<ConcreteType>> {
+        match self {
+            LiveStack(v) => Some(&v),
+            FailedStack => None
+        }
+    }
+
+    pub fn new() -> Self {
+        LiveStack(Vec::new())
+    }
+
+    pub fn from(v: Vec<ConcreteType>) -> Self {
+        LiveStack(Vec::from(v))
+    }
+
+    pub fn compare(&self, s: Vec<ConcreteType>) -> bool {
+        match self {
+            FailedStack => true,
+            LiveStack(v) => s == v
+        }
+    }
+
+    pub fn compare_singleton(&self, s: ConcreteType) -> bool {
+        match self {
+            FailedStack => true,
+            LiveStack(v) => match v[..] {
+                [ref si] => si == v,
+                _ => false
+            }
+        }
+    }
+
+    fn clone_tail(&self) -> Self {
+        match self {
+            LiveStack(v) => {
+                LiveStack(Vec::from(&v[1..]))
+            },
+            FailedStack => FailedStack
+        }
+    }
+}
 
 #[derive(Debug)]
 pub struct InstructionDef {

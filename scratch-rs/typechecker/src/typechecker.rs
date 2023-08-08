@@ -28,6 +28,7 @@ use crate::types::SomeValue;
 use crate::types::StackArg;
 use crate::types::StackResult;
 use crate::types::StackState;
+use crate::types::StackState::*;
 use crate::types::TcEnv;
 
 use crate::types::MValue::*;
@@ -341,27 +342,18 @@ fn typecheck_value(
                 let (c1, c2) = b.as_ref();
                 let lambda_input = c1.clone();
                 let lambda_output = c2.clone();
-                let mut stack: StackState = Vec::from([lambda_input.clone()]);
+                let mut stack: StackState = StackState::from(vec![lambda_input.clone()]);
                 match typecheck(tcenv, instructions, &mut stack) {
-                    Ok(tins) => match stack[..] {
-                        [ref real_out] => {
-                            if (*real_out) == lambda_output {
-                                return Result::Ok((
-                                    VLambda(tins),
-                                    MLambda(Box::new((lambda_input, lambda_output))),
-                                ));
-                            } else {
-                                return Err(String::from(
-                                    "Lambda does not match the expected type",
-                                ));
-                            }
-                        }
-                        _ => {
-                            return Err(String::from(
-                                "Lambda produces more then one element on stack!",
+                    Ok(tins) => {
+                        if stack.compare_singleton(lambda_output) {
+                            return Result::Ok((
+                                VLambda(tins),
+                                MLambda(Box::new((lambda_input, lambda_output))),
                             ));
+                        } else {
+                            return Err(String::from("Lambda does not match the expected type"));
                         }
-                    },
+                    }
                     Err(s) => {
                         return Err(s);
                     }
@@ -449,8 +441,8 @@ fn stack_result_to_concrete_type(resolved: &mut ResolveCache, sr: &StackResult) 
 fn make_resolved_stack<'a>(
     resolved: &mut ResolveCache,
     sem_stack_out: &Vec<StackResult>,
-) -> Result<StackState, &'a str> {
-    let mut resolved_stack: StackState = vec![];
+) -> Result<Vec<ConcreteType>, &'a str> {
+    let mut resolved_stack: Vec<ConcreteType> = Vec::new();
     for i in sem_stack_out {
         resolved_stack.push(stack_result_to_concrete_type(resolved, &i));
     }
@@ -461,38 +453,46 @@ fn unify_stack<'a>(
     resolved: &mut ResolveCache,
     sem_stack_in: &Vec<StackArg>,
     sem_stack_out: &Vec<StackResult>,
-    stack_state: &mut StackState,
+    stack_state_: &mut StackState,
 ) -> Result<(), &'a str> {
-    let mut stack_index: usize = 0;
-    if stack_state.len() < sem_stack_in.len() {
-        return Result::Err("Stack was found too small for the operation");
+    match stack_state_.get_live() {
+        Some(stack_state) => {
+            let mut stack_index: usize = 0;
+            if stack_state.len() < sem_stack_in.len() {
+                return Result::Err("Stack was found too small for the operation");
+            }
+            for constraint in sem_stack_in {
+                let stack_elem = &stack_state[stack_index];
+                unify_concrete_arg(resolved, &stack_elem, &constraint)?;
+                stack_index = stack_index + 1;
+            }
+            let mut rs = make_resolved_stack(resolved, sem_stack_out)?;
+            rs.append(&mut stack_state[stack_index..].to_vec());
+            *stack_state_ = LiveStack(rs);
+            return Result::Ok(());
+        }
+        None => {
+            // failed stack, just return ok result.
+            return Result::Ok(());
+        }
     }
-    for constraint in sem_stack_in {
-        let stack_elem = &stack_state[stack_index];
-        unify_concrete_arg(resolved, &stack_elem, &constraint)?;
-        stack_index = stack_index + 1;
-    }
-    let mut rs = make_resolved_stack(resolved, sem_stack_out)?;
-    rs.append(&mut stack_state[stack_index..].to_vec());
-    *stack_state = rs;
-    return Result::Ok(());
 }
 
 pub fn typecheck_contract<'a>(src: &'a str) -> Result<Contract<MValue>, String> {
     let contract = parse_contract(src);
-    let mut stack = vec![MPair(Box::new((
+    let mut stack = StackState::from(vec![MPair(Box::new((
         contract.parameter.clone(),
         contract.storage.clone(),
-    )))];
+    )))]);
     let tcenv = TcEnv {
         selfType: contract.parameter.clone(),
     };
     let tins = typecheck(&tcenv, &contract.code, &mut stack)?;
-    let expected_stack = vec![MPair(Box::new((
-        MList(Box::new(MWrapped(MOperation))),
-        contract.storage.clone(),
-    )))];
-    if stack == expected_stack {
+    let expected_stack_elem = MPair(Box::new((
+                MList(Box::new(MWrapped(MOperation))),
+                contract.storage.clone(),
+                )));
+    if stack.compare_singleton(expected_stack_elem) {
         return Result::Ok(Contract {
             parameter: contract.parameter.clone(),
             storage: contract.storage.clone(),
@@ -501,7 +501,7 @@ pub fn typecheck_contract<'a>(src: &'a str) -> Result<Contract<MValue>, String> 
     } else {
         panic!(
             "Unexpected stack result {:?} while expecting {:>?}",
-            stack, expected_stack
+            stack, expected_stack_elem
         );
     }
 }
@@ -530,7 +530,7 @@ fn ensure_non_empty_stack<'a>(stack: &StackState) -> Result<(), String> {
     ensure_stack_atleast(stack, 1)
 }
 
-fn ensure_stack_head<'a>(stack: &mut StackState, t: ConcreteType) -> Result<(),String> {
+fn ensure_stack_head<'a>(stack: &mut StackState, t: ConcreteType) -> Result<(), String> {
     ensure_non_empty_stack(stack)?;
     if stack[0] == t {
         return Result::Ok(());
