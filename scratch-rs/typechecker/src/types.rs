@@ -198,6 +198,18 @@ impl StackState {
         }
     }
 
+    pub fn append_stack(&mut self, src: &mut Self) {
+        match self {
+            LiveStack(v) => match src {
+                LiveStack(ref mut v1) => {
+                    v.append(v1)
+                },
+                FailedStack => {}
+            },
+            FailedStack => {}
+        }
+    }
+
     pub fn new() -> Self {
         LiveStack(Vec::new())
     }
@@ -209,24 +221,42 @@ impl StackState {
     pub fn compare(&self, s: Vec<ConcreteType>) -> bool {
         match self {
             FailedStack => true,
-            LiveStack(v) => s == v
+            LiveStack(v) => s == *v
         }
     }
 
-    pub fn compare_singleton(&self, s: ConcreteType) -> bool {
+    pub fn compare_singleton(&self, s: &ConcreteType) -> bool {
         match self {
             FailedStack => true,
             LiveStack(v) => match v[..] {
-                [ref si] => si == v,
+                [ref si] => *si == *s,
                 _ => false
             }
         }
     }
 
-    fn clone_tail(&self) -> Self {
+    pub fn clone_tail(&self) -> Self {
         match self {
             LiveStack(v) => {
                 LiveStack(Vec::from(&v[1..]))
+            },
+            FailedStack => FailedStack
+        }
+    }
+
+    pub fn clone_tail_at(&self, l: usize) -> Self {
+        match self {
+            LiveStack(v) => {
+                LiveStack(Vec::from(&v[l..]))
+            },
+            FailedStack => FailedStack
+        }
+    }
+
+    pub fn clone_head_till(&self, l: usize) -> Self {
+        match self {
+            LiveStack(v) => {
+                LiveStack(Vec::from(&v[0..l]))
             },
             FailedStack => FailedStack
         }
