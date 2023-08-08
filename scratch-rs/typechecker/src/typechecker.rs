@@ -599,6 +599,51 @@ fn ensure_if_cons_body(
     }
 }
 
+fn ensure_if_left_body(
+    tcenv: &TcEnv,
+    stack_: &mut StackState,
+    (lb, rb): (
+        &Vec<CompoundInstruction<SomeValue>>,
+        &Vec<CompoundInstruction<SomeValue>>,
+    ),
+) -> Result<
+    (
+        Vec<CompoundInstruction<MValue>>,
+        Vec<CompoundInstruction<MValue>>,
+    ),
+    String,
+> {
+    match stack_.get_live() {
+        Some(stack) => match stack[0].clone() {
+            MOr(b) => {
+                let mut temp_stack_left: StackState = stack_.clone_tail();
+                let mut temp_stack_right: StackState = stack_.clone_tail();
+                let (lt, rt) = b.as_ref();
+                temp_stack_left.push(lt.clone());
+                temp_stack_right.push(rt.clone());
+                let lbtc = typecheck(tcenv, lb, &mut temp_stack_left)?;
+                let rbtc = typecheck(tcenv, rb, &mut temp_stack_right)?;
+
+                match temp_stack_left.compare(&temp_stack_right) {
+                    Some(s) => {
+                        *stack_ = s;
+                        return Result::Ok((lbtc, rbtc));
+                    }
+                    None => {
+                        return Result::Err(format!("Type of IF_CONS branches differ {:?} {:?}", temp_stack_left, temp_stack_right));
+                    }
+                }
+            }
+            m => {
+                return Result::Err(format!("IF_LEFT requires an or, but found {:?}, {:?} {:?}", m, lb, rb));
+            }
+        },
+        None => {
+            return Result::Ok((vec![], vec![]));
+        }
+    }
+}
+
 fn ensure_if_none_body(
     tcenv: &TcEnv,
     stack_: &mut StackState,
@@ -766,8 +811,9 @@ fn typecheck_one(
                     let (nbtc, sbtc) = ensure_if_none_body(tcenv, stack, (nb, sb))?;
                     return Result::Ok(IF_SOME(sbtc, nbtc));
                 }
-                IF_LEFT(tb, fb) => {
-                    panic!()
+                IF_LEFT(lb, rb) => {
+                    let (lbtc, rbtc) = ensure_if_left_body(tcenv, stack, (lb, rb))?;
+                    return Result::Ok(IF_LEFT(lbtc, rbtc));
                 }
                 IF(tb, fb) => {
                     ensure_stack_head(live_stack, MWrapped(MBool))?;

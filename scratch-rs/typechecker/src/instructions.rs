@@ -51,6 +51,9 @@ lazy_static! {
         mk_instr!("PACK", "", "<w|a>", "<a|bytes>"),
         mk_instr!("SELF_ADDRESS", "", "<a|address>", ""),
         mk_instr!("UNPAIR", "", "pair <w|a> <w|b>", "<r|a>;<r|b>"),
+        mk_instr!("UNIT", "", "", "<a|unit>"),
+        mk_instr!("TRANSFER_TOKENS", "", "<w|a>;<a|mutez>;contract <r|a>", "<a|operation>"),
+        mk_instr!("SET_DELEGATE", "", "option <a|key_hash>", "<a|operation>"),
         mk_instr!(
             "LAMBDA",
             "<t|a>;<t|b>;lambda <r|a> <r|b>",
