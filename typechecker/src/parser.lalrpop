@@ -46,6 +46,7 @@ AttributeList: Vec<Attribute> = {
 
 CompoundInstruction: CompoundInstruction<SomeValue> = {
   "FAIL" => CompoundInstruction::FAIL,
+  "FAILWITH" => CompoundInstruction::FAILWITH,
   "SELF" => CompoundInstruction::SELF,
   "IF" <ibt:InstructionBlock> <ibf:InstructionBlock> => CompoundInstruction::IF(ibt, ibf),
   "ITER" <inst:InstructionBlock> => CompoundInstruction::ITER(inst),
@@ -66,6 +67,7 @@ match {
   "LAMBDA_REC",
   "ITER",
   "FAIL",
+  "FAILWITH",
   "IF_CONS",
   "IF_SOME",
   "IF_NONE",

@@ -55,6 +55,7 @@ lazy_static! {
                 "<a|bool>"
             ),
             mk_instr!("PACK", "", "<w|a>", "<a|bytes>"),
+            mk_instr!("UNPACK", "<t|a>", "<a|bytes>", "option <r|a>"),
             mk_instr!("SELF_ADDRESS", "", "<a|address>", ""),
             mk_instr!("UNPAIR", "", "pair <w|a> <w|b>", "<r|a>;<r|b>"),
             mk_instr!("UNIT", "", "", "<a|unit>"),

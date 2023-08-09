@@ -548,11 +548,14 @@ fn ensure_iter_body(
     let mut start_stack: StackState = expected_stack.clone();
     start_stack.push(iter_item.clone());
     let tinst = typecheck(tcenv, instr, &mut start_stack)?;
-    if start_stack == expected_stack {
-        *stack = start_stack;
-        return Result::Ok(tinst);
-    } else {
-        return Result::Err(String::from("ITER body has unexpected type"));
+    match start_stack.compare(&expected_stack) {
+        Some(s) => {
+            *stack = start_stack;
+            return Result::Ok(tinst);
+        },
+        None => {
+            return Result::Err(String::from("ITER body has unexpected type"));
+        }
     }
 }
 
@@ -675,11 +678,14 @@ fn ensure_if_none_body(
                 temp_stack_some.push(x.as_ref().clone());
                 let sbtc = typecheck(tcenv, sb, &mut temp_stack_some)?;
                 let nbtc = typecheck(tcenv, nb, &mut temp_stack_none)?;
-                if temp_stack_some == temp_stack_none {
-                    *stack_ = temp_stack_some;
-                    return Result::Ok((nbtc, sbtc));
-                } else {
-                    return Result::Err(String::from("Type of IF_NONE branches differ"));
+                match temp_stack_some.compare(&temp_stack_none) {
+                    Some(s) => {
+                        *stack_ = s;
+                        return Result::Ok((nbtc, sbtc));
+                    }
+                    None => {
+                        return Result::Err(String::from("Type of IF_NONE branches differ"));
+                    }
                 }
             }
             m => {
@@ -715,11 +721,15 @@ fn ensure_same_lambda_type(
             let mut temp_stack_f: StackState = stack_.clone_tail();
             let tbtc = typecheck(tcenv, tb, &mut temp_stack_t)?;
             let fbtc = typecheck(tcenv, fb, &mut temp_stack_f)?;
-            if temp_stack_t == temp_stack_f {
-                *stack_ = temp_stack_t;
+
+            match temp_stack_t.compare(&temp_stack_f) {
+                Some(s) => {
+                *stack_ = s;
                 return Result::Ok((tbtc, fbtc));
-            } else {
+                },
+                None => {
                 return Result::Err(String::from("Type of branches differ"));
+                }
             }
         }
 
@@ -740,6 +750,7 @@ fn typecheck_one(
                 Other(instruction) => match MICHELSON_INSTRUCTIONS.get(&instruction.name) {
                     Some(variants) => {
                         let mut last_error: &str;
+                        let mut errors: String = String::new();
                         for s in variants {
                             let mut temp_stack = stack.clone();
                             match unify_args(tcenv, &instruction.args, &s.args) {
@@ -758,18 +769,20 @@ fn typecheck_one(
                                             }));
                                         }
                                         Result::Err(s) => {
+                                            errors = format!("{};\n {}", errors, s);
                                             continue;
                                         }
                                     }
                                 }
                                 Result::Err(s) => {
+                                    errors = format!("{};\n {}", errors, s);
                                     continue;
                                 }
                             }
                         }
                         return Result::Err(format!(
-                            "None of the instruction variants matched here for {} with stack {:?}",
-                            &instruction.name, &stack
+                            "{}; None of the instruction variants matched here for {} with stack {:?}",
+                            errors, &instruction.name, &stack
                         ));
                     }
                     None => {
@@ -781,6 +794,10 @@ fn typecheck_one(
                     return Result::Ok(SELF);
                 }
                 FAIL => {
+                    stack.fail();
+                    return Result::Ok(FAIL);
+                }
+                FAILWITH => {
                     stack.fail();
                     return Result::Ok(FAIL);
                 }

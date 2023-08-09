@@ -15,7 +15,16 @@ use typechecker::typecheck;
 
 fn main() {
     match std::io::read_to_string(io::stdin()) {
-        Result::Ok(i) => println!("{:?}", typecheck_contract(&i)),
-        Result::Err(_) => panic!()
+        Result::Ok(i) => {
+        match typecheck_contract(&i) {
+            Result::Ok(i) => {
+                println!("{:?}", i);
+            }
+            Result::Err(s) => {
+                println!("{}", s);
+            }
+        }
+        }
+        Result::Err(s) => panic!("{}", s)
     }
 }

@@ -148,6 +148,7 @@ pub enum CompoundInstruction<T> {
     LAMBDA_REC(ConcreteType, ConcreteType, Vec<CompoundInstruction<T>>),
     SELF,
     FAIL,
+    FAILWITH,
     Other(Instruction<T>),
 }
 
