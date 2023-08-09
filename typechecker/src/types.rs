@@ -307,6 +307,21 @@ pub fn map_mtype_boxed_pair<T, H, F: Fn(&T) -> H>(
     return Box::new((map_mtype(f, cb), map_mtype(s, cb)));
 }
 
+pub fn mk_pair<A>(mut tl: Vec<MType<A>>) -> MType<A> {
+    tl.reverse();
+    let i1 = tl.remove(0);
+    let i2 = tl.remove(0);
+
+    let mut current_pair = MPair(Box::new((i2, i1)));
+    loop {
+        if tl.len() > 0 {
+            let next = tl.remove(0);
+            current_pair = MPair(Box::new((next, current_pair)));
+        } else { break };
+    }
+    return current_pair;
+}
+
 pub fn map_mtype<T, H, F: Fn(&T) -> H>(ct: &MType<T>, cb: &F) -> MType<H> {
     match ct {
         MPair(b) => MPair(map_mtype_boxed_pair(b, cb)),

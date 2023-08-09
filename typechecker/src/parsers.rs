@@ -19,7 +19,7 @@ use crate::types::StackResultElem;
 use crate::types::StackState;
 use crate::types::StackState::*;
 
-fn parse_mdyn_to<T, F: Fn(&MType<DynMType>) -> T>(cs: &str, cb: F) -> Vec<T> {
+pub fn parse_mdyn_to<T, F: Fn(&MType<DynMType>) -> T>(cs: &str, cb: F) -> Vec<T> {
     if cs.len() == 0 {
         return Vec::new();
     } else {
@@ -65,6 +65,7 @@ pub fn parse_constraints(cs: &str) -> Vec<Constraint> {
 pub fn parse_contract(src: &str) -> Contract<SomeValue> {
     let re = Regex::new(r"#[^\n\r]*[\n\r]*").unwrap();
     let src_sans_comments = re.replace_all(src, "");
+    //println!("{}", src_sans_comments);
     match ContractParser::new().parse(&src_sans_comments) {
         Result::Ok(s) => {
             return s;

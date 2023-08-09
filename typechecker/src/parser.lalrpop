@@ -15,6 +15,7 @@ use crate::types::SomeValue::*;
 use crate::types::AtomicValue;
 use crate::types::AtomicValue::*;
 use crate::types::MAtomic;
+use crate::types::mk_pair;
 use crate::types::MAtomic::*;
 use crate::types::CompositeValue;
 use crate::types::CompositeValue::*;
@@ -72,11 +73,11 @@ match {
   "DIP",
   r"D[I]+P",
 } else {
-  r"[A-Z_]+",
+  r"[A-Z][A-Z_0-9]*",
   _
 }
 
-Identifier: String = <s:r"[A-Z_]+"> => String::from(s);
+Identifier: String = <s:r"[A-Z][A-Z_0-9]*"> => String::from(s);
 
 pub Contract: Contract<SomeValue> =  {
   "parameter" <p:ConcreteType>";" "storage" <s:ConcreteType>";" "code" <c:InstructionBlock> => {
@@ -121,7 +122,8 @@ CompositeValue: CompositeValue = {
 }
 
 InstructionBlock: Vec<CompoundInstruction<SomeValue>> = {
-  "{"<ins:InstructionList>"}" => ins
+  "{"<ins:InstructionList>"}" => ins,
+  "{" "}" => Vec::new()
 }
 
 SomeValueList:Vec<SomeValue> = {
@@ -148,7 +150,7 @@ pub InstructionList:Vec<CompoundInstruction<SomeValue>> = {
 
 pub AtomicType: MAtomic = {
   <a:AtomicTypeRaw><x:Annotation> => a,
-  <a:AtomicTypeRaw> => a
+  <a:AtomicTypeRaw> => a,
 }
 
 pub AnnotationList: () = {
@@ -182,22 +184,39 @@ pub MDynList: Vec<MType<DynMType>> = {
   <s:MDyn> => vec!(s),
   }
 
+pub MDynListForPairStart: Vec<MType<DynMType>> = {
+  <h:MDyn> <mut t:MDynListForPairStart> => { t.insert(0, h); t },
+  <s:MDyn> => vec!(s),
+  }
+
+pub MDynListForPair: Vec<MType<DynMType>> = {
+  <h1:MDyn> <h2:MDyn> <mut t:MDynListForPairStart> => { t.insert(0, h2); t.insert(0, h1); t },
+  }
+
 pub MDyn: MType<DynMType> = {
   <t:AtomicType> => MWrapped(DMAtomic(t)),
   <t:Dyn> => MWrapped(DMDyn(t)),
   "list" <a:AnnotationList> <t1:MDyn> => MList (Box::new(t1)),
   "list" <t1:MDyn> => MList (Box::new(t1)),
+  "set" <a:AnnotationList> <t1:MDyn> => MSet (Box::new(t1)),
   "set" <t1:MDyn> => MSet (Box::new(t1)),
   "option" <a:AnnotationList> <t1:MDyn> => MOption (Box::new(t1)),
   "option" <t1:MDyn> => MOption (Box::new(t1)),
   "contract" <a:AnnotationList> <t1:MDyn> => MContract (Box::new(t1)),
   "contract" <t1:MDyn> => MContract (Box::new(t1)),
+  "(" "pair" <t1:MDynListForPair> ")"=> mk_pair(t1),
+  "(" "pair" <a:AnnotationList> <t1:MDynListForPair> ")"=> mk_pair(t1),
+
   "pair" <a:AnnotationList> <t1:MDyn> <t2:MDyn> => MPair(Box::new((t1, t2))),
   "pair" <t1:MDyn> <t2:MDyn> => MPair(Box::new((t1, t2))),
+
   "or" <a:AnnotationList> <t1:MDyn> <t2:MDyn> => MOr(Box::new((t1, t2))),
   "or" <t1:MDyn> <t2:MDyn> => MOr(Box::new((t1, t2))),
-  "map" <t1:MDyn> <t2:MDyn> => MMap(Box::new((t1, t2))),
+  "map" <a:AnnotationList>   <t1:MDyn> <t2:MDyn> => MMap(Box::new((t1, t2))),
+  "map"  <t1:MDyn> <t2:MDyn> => MMap(Box::new((t1, t2))),
+  "big_map" <a:AnnotationList> <t1:MDyn> <t2:MDyn> => MBigMap(Box::new((t1, t2))),
   "big_map" <t1:MDyn> <t2:MDyn> => MBigMap(Box::new((t1, t2))),
+  "lambda" <a:AnnotationList> <t1:MDyn> <t2:MDyn> => MLambda(Box::new((t1, t2))),
   "lambda" <t1:MDyn> <t2:MDyn> => MLambda(Box::new((t1, t2))),
   "("<t:MDyn>")" => t
 };
@@ -227,5 +246,5 @@ McLitBool: bool = {
   "False" => false,
 }
 
-McLitString: String = <s:r#""[a-z0-9]+""#> => s[1..s.len()-1].into();
+McLitString: String = <s:r#""([^"])*""#> => s[1..s.len()-1].into();
 McLitNumber: i32 = <s:r"([+-]?)[0-9]+"> => i32::from_str(s).unwrap();

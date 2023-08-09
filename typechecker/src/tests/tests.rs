@@ -1,13 +1,17 @@
 use crate::parser::InstructionListParser;
+use crate::parser::MDynListParser;
 use crate::parsers::parse_contract;
 use crate::parsers::parse_stack;
 use crate::typechecker::typecheck;
 use crate::typechecker::typecheck_contract;
+use crate::types::mdyn_to_concrete;
 use crate::types::CompoundInstruction;
+use crate::types::ConcreteType;
 use crate::types::MAtomic::*;
 use crate::types::MType::*;
 use crate::types::SomeValue;
 use crate::types::StackState;
+use crate::types::StackState::*;
 use crate::types::TcEnv;
 fn typecheck_<'a>(
     instructions: &Vec<CompoundInstruction<SomeValue>>,
@@ -27,9 +31,25 @@ fn parse(src: &str) -> Vec<CompoundInstruction<SomeValue>> {
     }
 }
 
+fn parse_type(src: &str) -> ConcreteType {
+    match parse_stack(src).get_live().unwrap()[..] {
+        [ref x] => x.clone(),
+        ref x => panic!("Got many types {:?}", x),
+    }
+}
+
 #[test]
+fn test_paring_behavior() {
+    assert_eq!(parse_type("nat"), MWrapped(MNat));
+    assert_eq!(parse_type("pair nat int"), MPair(Box::new((MWrapped(MNat), MWrapped(MInt)))));
+    assert_eq!(parse_type("(pair nat int string)"), MPair(Box::new((MWrapped(MNat), MPair(Box::new((MWrapped(MInt), MWrapped(MString))))))));
+    parse("PUSH nat 5");
+    parse("PUSH string \"5 3\"");
+    parse("IF { PUSH nat 0} {}");
+}
+
 fn test_type_checking_simple() {
-    // Type check behavior.
+    // Type checking behavior.
 
     assert!(Result::is_err(&typecheck_(&parse("PUSH nat \"asd\""))));
     assert!(Result::is_err(&typecheck_(&parse("PUSH (pair nat nat) 5"))));
