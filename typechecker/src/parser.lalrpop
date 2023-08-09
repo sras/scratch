@@ -11,6 +11,7 @@ use crate::types::ArgValue::*;
 use crate::types::ArgConstraint;
 use crate::types::ArgConstraint::*;
 use crate::types::SomeValue;
+use crate::types::StackState;
 use crate::types::SomeValue::*;
 use crate::types::AtomicValue;
 use crate::types::AtomicValue::*;
@@ -45,19 +46,30 @@ AttributeList: Vec<Attribute> = {
 }
 
 CompoundInstruction: CompoundInstruction<SomeValue> = {
-  "FAIL" => CompoundInstruction::FAIL,
-  "FAILWITH" => CompoundInstruction::FAILWITH,
-  "SELF" => CompoundInstruction::SELF,
-  "IF" <ibt:InstructionBlock> <ibf:InstructionBlock> => CompoundInstruction::IF(ibt, ibf),
-  "ITER" <inst:InstructionBlock> => CompoundInstruction::ITER(inst),
-  "IF_CONS" <ibt:InstructionBlock> <ibf:InstructionBlock> => CompoundInstruction::IF_CONS(ibt, ibf),
-  "IF_SOME" <ibt:InstructionBlock> <ibf:InstructionBlock> => CompoundInstruction::IF_SOME(ibt, ibf),
-  "IF_NONE" <ibt:InstructionBlock> <ibf:InstructionBlock> => CompoundInstruction::IF_NONE(ibt, ibf),
-  "IF_LEFT" <ibt:InstructionBlock> <ibf:InstructionBlock> => CompoundInstruction::IF_LEFT(ibt, ibf),
-  "DIP" <n:McLitNumber> <instr:InstructionBlock> => CompoundInstruction::DIP(usize::try_from(n).unwrap(), instr),
-  "DIP" <instr:InstructionBlock> => CompoundInstruction::DIP(1, instr),
-  <s:r"D[I]+P"> <instr:InstructionBlock> => CompoundInstruction::DIP(s.len() - 2, instr),
-  "LAMBDA_REC" <ty1:ConcreteType> <ty2:ConcreteType> <instr:InstructionBlock> => CompoundInstruction::LAMBDA_REC(ty1, ty2, instr),
+  "FAIL" <b:AnnotationList?>  => CompoundInstruction::FAIL,
+  "FAILWITH" <b:AnnotationList?> => CompoundInstruction::FAILWITH,
+  "SELF"<b:AnnotationList?> => CompoundInstruction::SELF,
+  "IF" <b:AnnotationList?> <ibt:InstructionBlock> <ibf:InstructionBlock> => CompoundInstruction::IF(ibt, ibf),
+  "ITER" <b:AnnotationList?> <inst:InstructionBlock> => CompoundInstruction::ITER(inst),
+  "LOOP" <b:AnnotationList?> <inst:InstructionBlock> => CompoundInstruction::LOOP(inst),
+  "LOOP_LEFT" <b:AnnotationList?> <inst:InstructionBlock> => CompoundInstruction::LOOP_LEFT(inst),
+  "IF_CONS" <b:AnnotationList?> <ibt:InstructionBlock> <ibf:InstructionBlock> => CompoundInstruction::IF_CONS(ibt, ibf),
+  "IF_SOME" <b:AnnotationList?> <ibt:InstructionBlock> <ibf:InstructionBlock> => CompoundInstruction::IF_SOME(ibt, ibf),
+  "IF_NONE" <b:AnnotationList?> <ibt:InstructionBlock> <ibf:InstructionBlock> => CompoundInstruction::IF_NONE(ibt, ibf),
+  "IF_LEFT" <b:AnnotationList?> <ibt:InstructionBlock> <ibf:InstructionBlock> => CompoundInstruction::IF_LEFT(ibt, ibf),
+  "DIP" <b:AnnotationList?> <n:McLitNumber?> <instr:InstructionBlock> => CompoundInstruction::DIP(usize::try_from(n.unwrap_or(1)).unwrap(), instr),
+  "PAIR" <b:AnnotationList?><n:McLitNumber?> => CompoundInstruction::PAIR(usize::try_from(n.unwrap_or(2)).unwrap()),
+  "DROP" <b:AnnotationList?> <n:McLitNumber?> => CompoundInstruction::DROP(usize::try_from(n.unwrap_or(1)).unwrap()),
+  "UNPAIR" <b:AnnotationList?> <n:McLitNumber?> => CompoundInstruction::UNPAIR(usize::try_from(n.unwrap_or(2)).unwrap()),
+  "DUP" <b:AnnotationList?><n:McLitNumber?> => CompoundInstruction::DUP(usize::try_from(n.unwrap_or(1)).unwrap()),
+  "DIG" <b:AnnotationList?><n:McLitNumber?> => CompoundInstruction::DIG(usize::try_from(n.unwrap_or(1)).unwrap()),
+  "DUG" <b:AnnotationList?><n:McLitNumber?> => CompoundInstruction::DUG(usize::try_from(n.unwrap_or(1)).unwrap()),
+  "GET" <b:AnnotationList?><n:McLitNumber> => CompoundInstruction::GET(usize::try_from(n).unwrap()),
+  <loc:@L>"GET" <b:AnnotationList?> => CompoundInstruction::Other(Instruction { location: loc, name: "GET".to_string(), args: vec![]}),
+  "UPDATE" <b:AnnotationList?> <n:McLitNumber> => CompoundInstruction::UPDATE(usize::try_from(n).unwrap()),
+  <loc:@L>"UPDATE" <b:AnnotationList?> => CompoundInstruction::Other(Instruction { location: loc, name: "UPDATE".to_string(), args: vec![]}),
+  <s:r"D[I]+P"> <b:AnnotationList?> <instr:InstructionBlock> => CompoundInstruction::DIP(s.len() - 2, instr),
+  "LAMBDA_REC" <b:AnnotationList?> <ty1:ConcreteType> <ty2:ConcreteType> <instr:InstructionBlock> => CompoundInstruction::LAMBDA_REC(ty1, ty2, instr),
   <si:Instruction> => CompoundInstruction::Other(si)
 }
 
@@ -66,13 +78,23 @@ match {
   "SELF",
   "LAMBDA_REC",
   "ITER",
+  "LOOP",
+  "LOOP_LEFT",
   "FAIL",
   "FAILWITH",
   "IF_CONS",
   "IF_SOME",
   "IF_NONE",
   "IF_LEFT",
+  "PAIR",
+  "UNPAIR",
+  "UPDATE",
   "DIP",
+  "DUP",
+  "DUG",
+  "DIG",
+  "DROP",
+  "GET",
   r"D[I]+P",
 } else {
   r"[A-Z][A-Z_0-9]*",
@@ -87,10 +109,10 @@ pub Contract: Contract<SomeValue> =  {
   }}
 
 Instruction: Instruction<SomeValue> = {
-  <s:Identifier> <b:AnnotationList> <a:Args> => Instruction { name : s, args: a },
-  <s:Identifier> <a:Args> => Instruction { name : s, args: a },
-  <s:Identifier> <b:AnnotationList> => Instruction { name : s, args: vec![] },
-  <s:Identifier> => Instruction { name : s, args: vec![] },
+  <loc:@L><s:Identifier> <b:AnnotationList> <a:Args> => Instruction { location: loc, name : s, args: a },
+  <loc:@L><s:Identifier> <a:Args> => Instruction { location: loc, name : s, args: a },
+  <loc:@L><s:Identifier> <b:AnnotationList> => Instruction {location: loc,  name : s, args: vec![] },
+  <loc:@L><s:Identifier> => Instruction { location: loc, name : s, args: vec![] },
 }
 
 Arg: ArgValue<SomeValue> = {
@@ -117,6 +139,10 @@ AtomicValue: AtomicValue = {
 }
 
 CompositeValue: CompositeValue = {
+  "Left" <l:SomeValue> => CVLeft(l),
+  "Right" <l:SomeValue> => CVRight(l),
+  "None" => CVNone,
+  "Some" <l: SomeValue> => CVSome(l),
   "Pair" <l: SomeValue> <r: SomeValue> => CVPair(l, r),
   "{"<sv:SomeKeyValueList>"}" => CKVList(sv),
   "{"<sv:SomeValueList>"}" => CVList(sv),
@@ -188,7 +214,7 @@ pub MDynList: Vec<MType<DynMType>> = {
 
 pub MDynListForPairStart: Vec<MType<DynMType>> = {
   <h:MDyn> <mut t:MDynListForPairStart> => { t.insert(0, h); t },
-  <s:MDyn> => vec!(s),
+  <s:MDyn> => vec![s],
   }
 
 pub MDynListForPair: Vec<MType<DynMType>> = {
@@ -206,8 +232,8 @@ pub MDyn: MType<DynMType> = {
   "option" <t1:MDyn> => MOption (Box::new(t1)),
   "contract" <a:AnnotationList> <t1:MDyn> => MContract (Box::new(t1)),
   "contract" <t1:MDyn> => MContract (Box::new(t1)),
-  "(" "pair" <t1:MDynListForPair> ")"=> mk_pair(t1),
-  "(" "pair" <a:AnnotationList> <t1:MDynListForPair> ")"=> mk_pair(t1),
+  "(" "pair" <t1:MDynListForPair> ")"=> mk_pair(&mut StackState::from(t1.clone()), t1.len()).unwrap(),
+  "(" "pair" <a:AnnotationList> <t1:MDynListForPair> ")"=> mk_pair(&mut StackState::from(t1.clone()), t1.len()).unwrap(),
 
   "pair" <a:AnnotationList> <t1:MDyn> <t2:MDyn> => MPair(Box::new((t1, t2))),
   "pair" <t1:MDyn> <t2:MDyn> => MPair(Box::new((t1, t2))),

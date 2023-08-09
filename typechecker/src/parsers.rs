@@ -1,4 +1,5 @@
 use regex::Regex;
+use std::collections::VecDeque;
 
 use crate::parser::ConstraintParser;
 use crate::parser::ContractParser;
@@ -12,6 +13,7 @@ use crate::types::Constraint;
 use crate::types::Contract;
 use crate::types::DynMType;
 use crate::types::DynMType::*;
+use crate::types::MAtomic;
 use crate::types::MType;
 use crate::types::SomeValue;
 use crate::types::StackResult;
@@ -78,6 +80,6 @@ pub fn parse_stack_results(cs: &str) -> Vec<StackResult> {
     return parse_mdyn_to(cs, mdyn_to_stack_result);
 }
 
-pub fn parse_stack(cs: &str) -> StackState {
-    return LiveStack(parse_mdyn_to(cs, mdyn_to_concrete));
+pub fn parse_stack(cs: &str) -> StackState<MAtomic> {
+    return LiveStack(VecDeque::from(parse_mdyn_to(cs, mdyn_to_concrete)));
 }

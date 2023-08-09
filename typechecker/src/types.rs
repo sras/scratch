@@ -3,6 +3,8 @@ use core::cmp::Eq;
 use core::cmp::Ordering;
 use core::fmt::Debug;
 use std::collections::BTreeMap;
+use std::collections::BTreeSet;
+use std::collections::VecDeque;
 
 pub type ConcreteType = MType<MAtomic>;
 
@@ -67,9 +69,14 @@ pub enum MValue {
     VBool(bool),
     VString(String),
     VPair(Box<(MValue, MValue)>),
+    VRight(Box<MValue>),
+    VLeft(Box<MValue>),
+    VSome(Box<MValue>),
+    VMutez(u32),
     VMap(Box<BTreeMap<MValue, MValue>>),
     VBigMap(Box<BTreeMap<MValue, MValue>>),
     VList(Vec<MValue>),
+    VSet(BTreeSet<MValue>),
     VLambda(Vec<CompoundInstruction<MValue>>),
 }
 
@@ -103,7 +110,10 @@ impl PartialOrd for MValue {
 
 impl Ord for MValue {
     fn cmp(&self, m2: &Self) -> Ordering {
-        panic!()
+        match self.partial_cmp(m2) {
+            Some(x) => x,
+            None => panic!("Uncomparable types!"),
+        }
     }
 }
 
@@ -122,6 +132,10 @@ pub enum CompositeValue {
     CVLambda(Vec<CompoundInstruction<SomeValue>>),
     CVList(Vec<SomeValue>),
     CKVList(Vec<SomeKeyValue>),
+    CVLeft(SomeValue),
+    CVRight(SomeValue),
+    CVSome(SomeValue),
+    CVNone,
 }
 
 #[derive(Debug, Clone)]
@@ -132,6 +146,7 @@ pub enum ArgValue<T> {
 
 #[derive(Debug, Clone)]
 pub struct Instruction<T> {
+    pub location: usize,
     pub name: String,
     pub args: Vec<ArgValue<T>>,
 }
@@ -143,8 +158,18 @@ pub enum CompoundInstruction<T> {
     IF_SOME(Vec<CompoundInstruction<T>>, Vec<CompoundInstruction<T>>),
     IF_NONE(Vec<CompoundInstruction<T>>, Vec<CompoundInstruction<T>>),
     IF_LEFT(Vec<CompoundInstruction<T>>, Vec<CompoundInstruction<T>>),
+    PAIR(usize),
+    UNPAIR(usize),
     DIP(usize, Vec<CompoundInstruction<T>>),
+    DUP(usize),
+    DIG(usize),
+    DUG(usize),
+    DROP(usize),
+    GET(usize),
+    UPDATE(usize),
     ITER(Vec<CompoundInstruction<T>>),
+    LOOP(Vec<CompoundInstruction<T>>),
+    LOOP_LEFT(Vec<CompoundInstruction<T>>),
     LAMBDA_REC(ConcreteType, ConcreteType, Vec<CompoundInstruction<T>>),
     SELF,
     FAIL,
@@ -177,25 +202,155 @@ pub enum StackResultElem {
 }
 
 #[derive(Debug, Clone, Eq, PartialEq)]
-pub enum StackState {
-    LiveStack(Vec<ConcreteType>),
+pub enum StackState<T> {
+    LiveStack(VecDeque<MType<T>>),
     FailedStack,
 }
 
 use StackState::*;
 
-impl StackState {
-    pub fn push(&mut self, t: ConcreteType) {
+pub enum StackDerived<T> {
+    SdOk(T),
+    SdFailed,
+    SdEmpty,
+}
+
+impl<T: Clone> StackDerived<T> {
+    pub fn unwrap(self) -> T {
         match self {
-            LiveStack(v) => v.insert(0, t),
+            SdOk(t) => t,
+            _ => panic!("Stack derived unwrapping failed!"),
+        }
+    }
+}
+
+use StackDerived::*;
+
+#[macro_export]
+macro_rules! get_stack_derived {
+    ($n:expr, $f: expr) => {{
+        match $n {
+            StackDerived::SdOk(a) => a,
+            StackDerived::SdFailed => {
+                return Result::Ok($f);
+            }
+            StackDerived::SdEmpty => {
+                return Result::Err("Stack was found to be empty, unexpectedly".to_string());
+            }
+        }
+    }};
+}
+
+#[macro_export]
+macro_rules! get_stack_derived_2 {
+    ($n:expr) => {{
+        match $n {
+            StackDerived::SdOk(a) => a,
+            a => {
+                return a;
+            }
+        }
+    }};
+}
+
+pub enum StackCompResult {
+    LeftFailed,
+    RightFailed,
+    BothFailed,
+    NoMatch,
+    Match,
+}
+
+use StackCompResult::*;
+
+pub type ConcreteStack = StackState<MAtomic>;
+
+impl<T: Eq + Clone> StackState<T> {
+    pub fn ensure_non_empty(&self) -> StackDerived<()> {
+        return self.ensure_stack_atleast(1);
+    }
+    pub fn len(&self) -> usize {
+        match self {
+            LiveStack(v) => {
+                return v.len();
+            }
+            _ => { return 0; }
+        }
+    }
+    pub fn ensure_stack_atleast(&self, l: usize) -> StackDerived<()> {
+        match self {
+            LiveStack(v) => {
+                if v.len() < l {
+                    return SdEmpty;
+                } else {
+                    return SdOk(());
+                }
+            }
+            FailedStack => return SdFailed,
+        }
+    }
+    pub fn get_index(&self, i: usize) -> StackDerived<&MType<T>> {
+        match self {
+            LiveStack(v) => {
+                if v.len() == 0 {
+                    return SdEmpty;
+                } else {
+                    return SdOk(&v[i]);
+                }
+            }
+            FailedStack => return SdFailed,
+        }
+    }
+    pub fn push(&mut self, t: MType<T>) {
+        match self {
+            LiveStack(v) => v.push_front(t),
             FailedStack => {}
         }
     }
 
-    pub fn get_live(&self) -> Option<&Vec<ConcreteType>> {
+    pub fn pop(&mut self) -> StackDerived<MType<T>> {
         match self {
-            LiveStack(v) => Some(&v),
+            LiveStack(v) => match v.pop_front() {
+                Some(a) => {
+                    return SdOk(a);
+                }
+                None => {
+                    return SdEmpty;
+                }
+            },
+            FailedStack => {
+                return SdFailed;
+            }
+        }
+    }
+
+    pub fn move_element(&mut self, f: usize, t: usize) {
+        match self {
+            LiveStack(v) => match v.remove(f) {
+                Some(a) => {
+                    v.insert(t, a);
+                }
+                None => {
+                    panic!("Failed to move stack element!");
+                }
+            },
+            FailedStack => {}
+        }
+    }
+
+    pub fn get_live(&mut self) -> Option<&VecDeque<MType<T>>> {
+        match self {
+            LiveStack(ref v) => Some(v),
             FailedStack => None,
+        }
+    }
+
+    pub fn replace_index(&mut self, i: usize, t: MType<T>) {
+        match self {
+            LiveStack(v) => {
+                v[i] = t;
+            }
+            FailedStack => {}
         }
     }
 
@@ -210,64 +365,90 @@ impl StackState {
     }
 
     pub fn new() -> Self {
-        LiveStack(Vec::new())
+        LiveStack(VecDeque::new())
     }
 
     pub fn fail(&mut self) {
         *self = FailedStack;
     }
 
-    pub fn from(v: Vec<ConcreteType>) -> Self {
-        LiveStack(Vec::from(v))
+    pub fn from(v: Vec<MType<T>>) -> Self {
+        LiveStack(VecDeque::from(v))
     }
 
-    pub fn compare(&self, s: &Self) -> Option<Self> {
+    pub fn compare<'a>(&'a self, s: &'a Self) -> StackCompResult {
         match self {
             FailedStack => match s {
-                FailedStack => Some(FailedStack),
-                _ => Some(s.clone()),
+                FailedStack => BothFailed,
+                _ => LeftFailed,
             },
             LiveStack(v) => match s {
                 LiveStack(s_) => {
-                    if s_ == v {
-                        Some(self.clone())
+                    if *s_ == *v {
+                        Match
                     } else {
-                        None
+                        NoMatch
                     }
                 }
-                FailedStack => Some(self.clone()),
+                FailedStack => RightFailed,
             },
         }
     }
 
-    pub fn compare_singleton(&self, s: &ConcreteType) -> bool {
+    pub fn compare_singleton(&self, s: &MType<T>) -> bool {
         match self {
             FailedStack => true,
-            LiveStack(v) => match v[..] {
-                [ref si] => *si == *s,
-                _ => false,
-            },
+            LiveStack(v) => v[0] == *s,
         }
     }
 
-    pub fn clone_tail(&self) -> Self {
+    pub fn clone_tail(&mut self) -> Self {
         match self {
-            LiveStack(v) => LiveStack(Vec::from(&v[1..])),
+            LiveStack(v) => {
+                let mut slice = v.clone();
+                slice.pop_front();
+                return LiveStack(slice);
+            }
             FailedStack => FailedStack,
         }
     }
 
     pub fn clone_tail_at(&self, l: usize) -> Self {
         match self {
-            LiveStack(v) => LiveStack(Vec::from(&v[l..])),
+            LiveStack(v) => LiveStack(v.iter().skip(l).cloned().collect()),
             FailedStack => FailedStack,
         }
     }
 
     pub fn clone_head_till(&self, l: usize) -> Self {
         match self {
-            LiveStack(v) => LiveStack(Vec::from(&v[0..l])),
+            LiveStack(v) => LiveStack(v.iter().take(l).cloned().collect()),
             FailedStack => FailedStack,
+        }
+    }
+
+    pub fn pop_front(&mut self) -> StackDerived<MType<T>> {
+        match self {
+            LiveStack(v) => match v.pop_front() {
+                Some(x) => {
+                    return SdOk(x);
+                }
+                None => {
+                    return SdEmpty;
+                }
+            },
+            FailedStack => {
+                return SdFailed;
+            }
+        }
+    }
+
+    pub fn push_front(&mut self, t: MType<T>) {
+        match self {
+            LiveStack(v) => {
+                v.push_front(t);
+            }
+            FailedStack => {}
         }
     }
 }
@@ -292,7 +473,7 @@ pub enum Attribute {
 
 // Parser helpers
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Eq, PartialEq)]
 pub enum DynMType {
     DMAtomic(MAtomic),
     DMDyn(String),
@@ -308,19 +489,117 @@ pub fn map_mtype_boxed_pair<T, H, F: Fn(&T) -> H>(
     return Box::new((map_mtype(f, cb), map_mtype(s, cb)));
 }
 
-pub fn mk_pair<A>(mut tl: Vec<MType<A>>) -> MType<A> {
-    tl.reverse();
-    let i1 = tl.remove(0);
-    let i2 = tl.remove(0);
-
-    let mut current_pair = MPair(Box::new((i2, i1)));
-    loop {
-        if tl.len() > 0 {
-            let next = tl.remove(0);
-            current_pair = MPair(Box::new((next, current_pair)));
-        } else { break };
+pub fn update_n_pair<A: Clone>(
+    n: &usize,
+    src: &MType<A>,
+    t: &mut MType<A>,
+) -> Result<MType<A>, String> {
+    let mut cb: bool = false;
+    let mut cn: &mut MType<A> = t;
+    for i in 0..*n {
+        if cb {
+            match cn {
+                MPair(ref mut b) => {
+                    let (f, s) = b.as_mut();
+                    cn = s;
+                    cb = false;
+                }
+                _ => {
+                    return Result::Err(
+                        "Expected a Pair but got something else during GET n typecheck".to_string(),
+                    );
+                }
+            }
+        } else {
+            cb = true;
+        }
     }
-    return current_pair;
+    if cb {
+        match cn {
+            MPair(ref mut b) => {
+                let (f, s) = b.as_mut();
+                *f = src.clone();
+                return Result::Ok(f.clone());
+            }
+            _ => {
+                return Result::Err("Expected a Pair but got something else".to_string());
+            }
+        }
+    } else {
+        return Result::Ok(cn.clone());
+    }
+}
+
+pub fn get_n_pair<'a, A: Clone>(n: &usize, t: &'a MType<A>) -> Result<&'a MType<A>, String> {
+    let mut cb: bool = false;
+    let mut cn: &MType<A> = t;
+    for i in 0..*n {
+        if cb {
+            match cn {
+                MPair(b) => {
+                    let (f, s) = b.as_ref();
+                    cn = s;
+                    cb = false;
+                }
+                _ => {
+                    return Result::Err(
+                        "Expected a Pair but got something else during GET n typecheck".to_string(),
+                    );
+                }
+            }
+        } else {
+            cb = true;
+        }
+    }
+    if cb {
+        match cn {
+            MPair(b) => {
+                let (f, s) = b.as_ref();
+                return Result::Ok(f);
+            }
+            _ => {
+                return Result::Err("Expected a Pair but got something else".to_string());
+            }
+        }
+    } else {
+        return Result::Ok(cn);
+    }
+}
+
+pub fn mk_pair<A: Clone + Eq>(tl: &mut StackState<A>, n: usize) -> StackDerived<MType<A>> {
+    if n == 2 {
+        let i1 = get_stack_derived_2!(tl.pop_front());
+        let i2 = get_stack_derived_2!(tl.pop_front());
+        return SdOk(MPair(Box::new((i1, i2))));
+    } else {
+        let i1 = get_stack_derived_2!(tl.pop_front());
+        return SdOk(MPair(Box::new((i1, mk_pair(tl, n - 1).unwrap()))));
+    }
+}
+
+pub fn unmk_pair<A: Eq + Clone>(
+    t: &MType<A>,
+    n: usize,
+    stack: &mut StackState<A>,
+) -> Result<(), String> {
+    if n == 1 {
+        stack.push(t.clone());
+        return Result::Ok(());
+    } else {
+        match t {
+            MPair(b) => {
+                let (le, rp) = b.as_ref();
+                let r = unmk_pair(rp, n - 1, stack);
+                stack.push(le.clone());
+                return r;
+            }
+            _ => {
+                return Result::Err(
+                    "Expecting a pair for UNPAIR but got something else".to_string(),
+                );
+            }
+        }
+    }
 }
 
 pub fn map_mtype<T, H, F: Fn(&T) -> H>(ct: &MType<T>, cb: &F) -> MType<H> {

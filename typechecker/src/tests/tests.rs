@@ -7,6 +7,7 @@ use crate::typechecker::typecheck_contract;
 use crate::types::mdyn_to_concrete;
 use crate::types::CompoundInstruction;
 use crate::types::ConcreteType;
+use crate::types::MAtomic;
 use crate::types::MAtomic::*;
 use crate::types::MType::*;
 use crate::types::SomeValue;
@@ -15,7 +16,7 @@ use crate::types::StackState::*;
 use crate::types::TcEnv;
 fn typecheck_<'a>(
     instructions: &Vec<CompoundInstruction<SomeValue>>,
-) -> Result<StackState, String> {
+) -> Result<StackState<MAtomic>, String> {
     let mut stack = StackState::new();
     let tcenv: TcEnv = TcEnv {
         selfType: MWrapped(MUnit),
@@ -32,22 +33,245 @@ fn parse(src: &str) -> Vec<CompoundInstruction<SomeValue>> {
 }
 
 fn parse_type(src: &str) -> ConcreteType {
-    match parse_stack(src).get_live().unwrap()[..] {
-        [ref x] => x.clone(),
-        ref x => panic!("Got many types {:?}", x),
+    match parse_stack(src).get_live().unwrap()[0] {
+        ref x => x.clone(),
+    }
+}
+
+#[test]
+fn dummy() {
+    let r = typecheck_(&parse(" LAMBDA
+         (pair (pair (lambda (pair nat nat) nat)
+                     (lambda (pair nat (pair nat nat) nat nat) (pair (pair nat nat) nat nat))
+                     (lambda (pair nat (pair nat nat) nat nat) (pair (pair nat nat) nat nat)))
+               (pair (pair nat address)
+                     nat
+                     (pair (pair (pair (pair address (pair (pair (pair (pair nat nat) int int) (pair int nat) nat nat) int))
+                                       (big_map (pair address address) unit)
+                                       (pair (pair (pair (pair nat nat) nat mutez)
+                                                   (pair mutez (set address))
+                                                   (big_map string string)
+                                                   (big_map string bytes))
+                                             nat
+                                             nat))
+                                 (pair (big_map address (pair (pair nat nat) nat nat)) nat)
+                                 nat
+                                 (pair address nat))
+                           (pair (pair address (big_map string bytes))
+                                 (option (pair bytes bytes (big_map (pair bytes bool) bytes)))
+                                 address)
+                           (pair nat
+                                 (big_map bytes (pair (pair (pair nat bytes) address nat) (pair nat nat) nat nat)))
+                           (pair (pair nat nat) nat)
+                           (big_map (pair address bytes) nat))
+                     nat))
+         (pair (pair (pair (pair (pair address (pair (pair (pair (pair nat nat) int int) (pair int nat) nat nat) int))
+                                 (big_map (pair address address) unit)
+                                 (pair (pair (pair (pair nat nat) nat mutez)
+                                             (pair mutez (set address))
+                                             (big_map string string)
+                                             (big_map string bytes))
+                                       nat
+                                       nat))
+                           (pair (big_map address (pair (pair nat nat) nat nat)) nat)
+                           nat
+                           (pair address nat))
+                     (pair (pair address (big_map string bytes))
+                           (option (pair bytes bytes (big_map (pair bytes bool) bytes)))
+                           address)
+                     (pair nat
+                           (big_map bytes (pair (pair (pair nat bytes) address nat) (pair nat nat) nat nat)))
+                     (pair (pair nat nat) nat)
+                     (big_map (pair address bytes) nat))
+               nat)
+         { UNPAIR ;
+           UNPAIR 3 ;
+           DIG 3 ;
+           UNPAIR ;
+           UNPAIR ;
+           DIG 2 ;
+           UNPAIR ;
+           DUP 2 ;
+           CDR ;
+           PAIR ;
+           DIG 4 ;
+           SWAP ;
+           EXEC ;
+           DUP 3 ;
+           DUP 3 ;
+           CAR ;
+           CDR ;
+           CDR ;
+           CDR ;
+           CAR ;
+           CDR ;
+           ADD ;
+           DUP 3 ;
+           CAR ;
+           CAR ;
+           CDR ;
+           CAR ;
+           CAR ;
+           DUP 6 ;
+           GET ;
+           IF_NONE
+             { SWAP ;
+               DIG 4 ;
+               DIG 5 ;
+               DIG 6 ;
+               DROP 4 ;
+               PUSH nat 0 ;
+               DIG 3 ;
+               COMPARE ;
+               EQ ;
+               IF { DUP 2 ; CAR ; CAR ; CDR ; CAR ; CAR } { PUSH nat 114 ; FAILWITH } }
+             { DIG 2 ;
+               PAIR ;
+               DIG 5 ;
+               SWAP ;
+               EXEC ;
+               DUP 4 ;
+               PAIR ;
+               DIG 5 ;
+               SWAP ;
+               EXEC ;
+               DIG 3 ;
+               DUP 2 ;
+               CDR ;
+               CDR ;
+               ADD ;
+               DUP 2 ;
+               CDR ;
+               CAR ;
+               PAIR ;
+               SWAP ;
+               CAR ;
+               PAIR ;
+               DUP 3 ;
+               CAR ;
+               CAR ;
+               CDR ;
+               CAR ;
+               CAR ;
+               SWAP ;
+               SOME ;
+               DIG 4 ;
+               UPDATE } ;
+           DUP 3 ;
+           CDR ;
+           DUP 4 ;
+           CAR ;
+           CDR ;
+           DUP 5 ;
+           CAR ;
+           CAR ;
+           CDR ;
+           CDR ;
+           DUP 6 ;
+           CAR ;
+           CAR ;
+           CDR ;
+           CAR ;
+           CDR ;
+           DIG 4 ;
+           PAIR ;
+           PAIR ;
+           DUP 5 ;
+           CAR ;
+           CAR ;
+           CAR ;
+           PAIR ;
+           PAIR ;
+           PAIR ;
+           DUP ;
+           CDR ;
+           DUP 2 ;
+           CAR ;
+           CDR ;
+           CDR ;
+           CDR ;
+           CDR ;
+           DIG 3 ;
+           DIG 4 ;
+           CAR ;
+           CDR ;
+           CDR ;
+           CDR ;
+           CAR ;
+           CAR ;
+           PAIR ;
+           PAIR ;
+           DUP 3 ;
+           CAR ;
+           CDR ;
+           CDR ;
+           CAR ;
+           PAIR ;
+           DUP 3 ;
+           CAR ;
+           CDR ;
+           CAR ;
+           PAIR ;
+           DIG 2 ;
+           CAR ;
+           CAR ;
+           PAIR ;
+           PAIR }"));
+    match r {
+        Ok(_) => {}
+        Err(s) => println!("{}", s),
     }
 }
 
 #[test]
 fn test_paring_behavior() {
     assert_eq!(parse_type("nat"), MWrapped(MNat));
-    assert_eq!(parse_type("pair nat int"), MPair(Box::new((MWrapped(MNat), MWrapped(MInt)))));
-    assert_eq!(parse_type("(pair nat int string)"), MPair(Box::new((MWrapped(MNat), MPair(Box::new((MWrapped(MInt), MWrapped(MString))))))));
+    assert_eq!(
+        parse_type("pair nat int"),
+        MPair(Box::new((MWrapped(MNat), MWrapped(MInt))))
+    );
+    assert_eq!(
+        parse_type("(pair nat int string)"),
+        MPair(Box::new((
+            MWrapped(MNat),
+            MPair(Box::new((MWrapped(MInt), MWrapped(MString))))
+        )))
+    );
     parse("PUSH nat 5");
     parse("PUSH string \"5 3\"");
+    parse("PUSH %something string \"5 3\"");
+    parse("UNPAIR");
+    parse("CAR %something 2");
+    parse("UNPAIR %something %something 2");
+    parse("DUP");
+    parse("DUP 2");
     parse("IF { PUSH nat 0} {}");
+    parse(
+        r#"LAMBDA (pair (pair (set address) (list address)) (lambda (pair (set address) address) (set address))) (set address) {}"#,
+    );
+    parse_type("(pair nat int string)");
+    parse_type("(nat %counter)");
+    assert_eq!(
+        parse_type(
+            r#"(pair (pair (set address) (list address)) (lambda (pair (set address) address) (set address)))"#
+        ),
+        MPair(Box::new((
+            MPair(Box::new((
+                MSet(Box::new(MWrapped(MAddress))),
+                MList(Box::new(MWrapped(MAddress)))
+            ))),
+            MLambda(Box::new((
+                MPair(Box::new((
+                    MSet(Box::new(MWrapped(MAddress))),
+                    MWrapped(MAddress)
+                ))),
+                MSet(Box::new(MWrapped(MAddress)))
+            )))
+        )))
+    );
 }
 
+#[test]
 fn test_type_checking_simple() {
     // Type checking behavior.
 
@@ -86,6 +310,11 @@ fn test_type_checking_simple() {
     assert_eq!(
         typecheck_(&parse("PUSH nat 5")).unwrap(),
         parse_stack("nat")
+    );
+
+    assert_eq!(
+        typecheck_(&parse("SELF_ADDRESS")).unwrap(),
+        parse_stack("address")
     );
     assert_eq!(
         typecheck_(&parse("PUSH (pair nat nat) (Pair 2 3)")).unwrap(),
@@ -202,5 +431,153 @@ fn test_type_checking_simple() {
         ))
         .unwrap(),
         parse_stack("pair nat nat")
+    );
+
+    assert_eq!(
+        typecheck_(&parse("PUSH bool True; IF { PUSH int 1 } { PUSH int 5 }")).unwrap(),
+        parse_stack("int")
+    );
+
+    assert_eq!(
+        typecheck_(&parse("PUSH bool False; IF { PUSH int 1 } { FAIL }")).unwrap(),
+        parse_stack("int")
+    );
+
+    assert!(Result::is_err(&typecheck_(&parse(
+        "PUSH int 1; IF { PUSH int 1 } { FAIL }"
+    ))));
+
+    assert_eq!(
+        typecheck_(&parse(
+            "PUSH (option nat) (Some 1); IF_SOME { DROP; PUSH int 1 } { PUSH int 5 }"
+        ))
+        .unwrap(),
+        parse_stack("int")
+    );
+
+    assert_eq!(
+        typecheck_(&parse(
+            "PUSH (option nat) (Some 1); IF_NONE  { PUSH int 5 } { DROP; PUSH int 1 }"
+        ))
+        .unwrap(),
+        parse_stack("int")
+    );
+
+    assert_eq!(
+        typecheck_(&parse("PUSH (or int nat) (Left 1); IF_LEFT  { PUSH int 1; ADD; DROP; PUSH int 1; } { PUSH nat 1; ADD; DROP; PUSH int 2; }")).unwrap(),
+        parse_stack("int")
+    );
+
+    assert_eq!(
+        typecheck_(&parse(
+            "PUSH int 1; PUSH (list nat) {1;2;3}; ITER { PUSH nat 1; ADD; DROP; } "
+        ))
+        .unwrap(),
+        parse_stack("int")
+    );
+
+    assert_eq!(
+        typecheck_(&parse(
+            "PUSH int 1; PUSH (set nat) {1;2;3}; ITER { PUSH nat 1; ADD; DROP; } "
+        ))
+        .unwrap(),
+        parse_stack("int")
+    );
+
+    assert_eq!(
+        typecheck_(&parse("PUSH int 1; PUSH nat 1; PUSH mutez 0;DIG 2;")).unwrap(),
+        parse_stack("int;mutez;nat")
+    );
+
+    assert_eq!(
+        typecheck_(&parse(r#"PUSH int 1; PUSH (map nat string) {Elt 1 "one";Elt 2 "two";Elt 3 "Three"}; ITER { CAR; PUSH nat 1; ADD; DROP; } "#)).unwrap(),
+        parse_stack("int")
+    );
+
+    assert_eq!(typecheck_(&parse("LAMBDA
+         (pair (pair (set address) (list address)) (lambda (pair (set address) address) (set address)))
+         (set address)
+         { UNPAIR @counter ;
+           UNPAIR ;
+           SWAP ;
+           ITER { SWAP ; PAIR ; DUP 2 ; SWAP ; EXEC } ;
+           SWAP ;
+           DROP }")).unwrap(), parse_stack("lambda (pair (pair (set address) (list address)) (lambda (pair (set address) address) (set address))) (set address)"));
+
+    assert_eq!(
+        typecheck_(&parse(
+            "PUSH nat 1; PUSH int 1; PUSH mutez 0; PUSH nat 5; PAIR 3;"
+        ))
+        .unwrap(),
+        parse_stack("pair nat (pair mutez int);nat")
+    );
+
+    assert_eq!(
+        typecheck_(&parse(
+            r#"PUSH (pair nat (pair int (pair string mutez))) (Pair 0 (Pair 1 (Pair "some" 2))); UNPAIR 2;"#
+        ))
+        .unwrap(),
+        parse_stack("nat; pair int (pair string mutez)")
+    );
+
+    assert_eq!(
+        typecheck_(&parse(
+            r#"PUSH (pair nat  (pair int (pair string mutez))) (Pair 0 (Pair 1 (Pair "some" 2))); UNPAIR 3;"#
+        ))
+        .unwrap(),
+        parse_stack("nat; int; pair string mutez")
+    );
+
+    assert_eq!(
+        typecheck_(&parse("PUSH nat 1; PUSH int 1; PUSH mutez 0; DROP 1;")).unwrap(),
+        parse_stack("int; nat")
+    );
+
+    assert_eq!(
+        typecheck_(&parse("PUSH nat 1; PUSH int 1; PUSH mutez 0; DROP 2;")).unwrap(),
+        parse_stack("nat")
+    );
+
+    assert_eq!(
+        typecheck_(&parse(r#"PUSH (pair nat (pair int (pair string mutez))) (Pair 0 (Pair 1 (Pair "some" 2))); GET 0"#)).unwrap(),
+        parse_stack("pair nat (pair int (pair string mutez))")
+    );
+
+    assert_eq!(
+        typecheck_(&parse(r#"PUSH (pair nat (pair int (pair string mutez))) (Pair 0 (Pair 1 (Pair "some" 2))); GET 1"#)).unwrap(),
+        parse_stack("nat")
+    );
+
+    assert_eq!(
+        typecheck_(&parse(r#"PUSH (pair nat (pair int (pair string mutez))) (Pair 0 (Pair 1 (Pair "some" 2))); GET 2"#)).unwrap(),
+        parse_stack("pair int (pair string mutez)")
+    );
+
+    assert_eq!(
+        typecheck_(&parse(r#"PUSH (pair nat (pair int (pair string mutez))) (Pair 0 (Pair 1 (Pair "some" 2))); GET 3"#)).unwrap(),
+        parse_stack("int")
+    );
+
+    assert_eq!(
+        typecheck_(&parse(r#"PUSH (pair nat (pair int (pair string mutez))) (Pair 0 (Pair 1 (Pair "some" 2))); GET 4"#)).unwrap(),
+        parse_stack("pair string mutez")
+    );
+
+    assert_eq!(
+        typecheck_(&parse(r#"PUSH (pair nat (pair int (pair string mutez))) (Pair 0 (Pair 1 (Pair "some" 2))); GET 5"#)).unwrap(),
+        parse_stack("string")
+    );
+
+    assert_eq!(
+        typecheck_(&parse(r#"PUSH (pair nat (pair int (pair string mutez))) (Pair 0 (Pair 1 (Pair "some" 2))); GET 6"#)).unwrap(),
+        parse_stack("mutez")
+    );
+
+    assert_eq!(
+        typecheck_(&parse(
+            r#"PUSH (or nat int) (Left 10); LOOP_LEFT {DROP; PUSH int 10; RIGHT nat;}"#
+        ))
+        .unwrap(),
+        parse_stack("int")
     );
 }
