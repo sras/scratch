@@ -7,6 +7,8 @@ use crate::types::MType::*;
 use crate::types::ConcreteType;
 use crate::types::Instruction;
 use crate::types::ArgValue;
+use crate::types::SeqItem;
+use crate::types::SeqItem::*;
 use crate::types::ArgValue::*;
 use crate::types::ArgConstraint;
 use crate::types::ArgConstraint::*;
@@ -147,8 +149,8 @@ CompositeValue: CompositeValue = {
   "Some" <l: SomeValue> => CVSome(l),
   "Pair" <l: SomeValue> <r: SomeValue> => CVPair(l, r),
   "{"<sv:SomeKeyValueList>"}" => CKVList(sv),
-  "{"<sv:SomeValueList>"}" => CVList(sv),
-  <ins:InstructionBlock> => CVLambda(ins)
+  "{"<sv:SomeValueList>"}" => CVSeq(SqValue(sv)),
+  <ins:InstructionBlock> => CVSeq(SqInstr(ins))
 }
 
 InstructionBlock: Vec<CompoundInstruction<SomeValue>> = {

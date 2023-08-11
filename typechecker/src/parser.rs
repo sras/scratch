@@ -1,5 +1,5 @@
 // auto-generated: "lalrpop 0.20.0"
-// sha3: aeea32b76eeaf03a0c782da495904f8c27ccfa06e3a2462ddd653bf4a281fac8
+// sha3: a91bcd77b3ba73b7bb7cec88fee8888c7a7985dbf94e05cac92fd7d262818571
 use std::str::FromStr;
 use crate::types::mdyn_to_concrete;
 use crate::types::MType;
@@ -9,6 +9,8 @@ use crate::types::MType::*;
 use crate::types::ConcreteType;
 use crate::types::Instruction;
 use crate::types::ArgValue;
+use crate::types::SeqItem;
+use crate::types::SeqItem::*;
 use crate::types::ArgValue::*;
 use crate::types::ArgConstraint;
 use crate::types::ArgConstraint::*;
@@ -49,6 +51,8 @@ mod __parse__AnnotationList {
     use crate::types::ConcreteType;
     use crate::types::Instruction;
     use crate::types::ArgValue;
+    use crate::types::SeqItem;
+    use crate::types::SeqItem::*;
     use crate::types::ArgValue::*;
     use crate::types::ArgConstraint;
     use crate::types::ArgConstraint::*;
@@ -6098,6 +6102,8 @@ mod __parse__AtomicType {
     use crate::types::ConcreteType;
     use crate::types::Instruction;
     use crate::types::ArgValue;
+    use crate::types::SeqItem;
+    use crate::types::SeqItem::*;
     use crate::types::ArgValue::*;
     use crate::types::ArgConstraint;
     use crate::types::ArgConstraint::*;
@@ -12201,6 +12207,8 @@ mod __parse__ConcreteType {
     use crate::types::ConcreteType;
     use crate::types::Instruction;
     use crate::types::ArgValue;
+    use crate::types::SeqItem;
+    use crate::types::SeqItem::*;
     use crate::types::ArgValue::*;
     use crate::types::ArgConstraint;
     use crate::types::ArgConstraint::*;
@@ -18639,6 +18647,8 @@ mod __parse__Constraint {
     use crate::types::ConcreteType;
     use crate::types::Instruction;
     use crate::types::ArgValue;
+    use crate::types::SeqItem;
+    use crate::types::SeqItem::*;
     use crate::types::ArgValue::*;
     use crate::types::ArgConstraint;
     use crate::types::ArgConstraint::*;
@@ -24846,6 +24856,8 @@ mod __parse__Contract {
     use crate::types::ConcreteType;
     use crate::types::Instruction;
     use crate::types::ArgValue;
+    use crate::types::SeqItem;
+    use crate::types::SeqItem::*;
     use crate::types::ArgValue::*;
     use crate::types::ArgConstraint;
     use crate::types::ArgConstraint::*;
@@ -32088,6 +32100,8 @@ mod __parse__InstructionList {
     use crate::types::ConcreteType;
     use crate::types::Instruction;
     use crate::types::ArgValue;
+    use crate::types::SeqItem;
+    use crate::types::SeqItem::*;
     use crate::types::ArgValue::*;
     use crate::types::ArgConstraint;
     use crate::types::ArgConstraint::*;
@@ -39295,6 +39309,8 @@ mod __parse__MDyn {
     use crate::types::ConcreteType;
     use crate::types::Instruction;
     use crate::types::ArgValue;
+    use crate::types::SeqItem;
+    use crate::types::SeqItem::*;
     use crate::types::ArgValue::*;
     use crate::types::ArgConstraint;
     use crate::types::ArgConstraint::*;
@@ -45728,6 +45744,8 @@ mod __parse__MDynList {
     use crate::types::ConcreteType;
     use crate::types::Instruction;
     use crate::types::ArgValue;
+    use crate::types::SeqItem;
+    use crate::types::SeqItem::*;
     use crate::types::ArgValue::*;
     use crate::types::ArgConstraint;
     use crate::types::ArgConstraint::*;
@@ -52177,6 +52195,8 @@ mod __parse__MDynListForPair {
     use crate::types::ConcreteType;
     use crate::types::Instruction;
     use crate::types::ArgValue;
+    use crate::types::SeqItem;
+    use crate::types::SeqItem::*;
     use crate::types::ArgValue::*;
     use crate::types::ArgConstraint;
     use crate::types::ArgConstraint::*;
@@ -58620,6 +58640,8 @@ mod __parse__MDynListForPairStart {
     use crate::types::ConcreteType;
     use crate::types::Instruction;
     use crate::types::ArgValue;
+    use crate::types::SeqItem;
+    use crate::types::SeqItem::*;
     use crate::types::ArgValue::*;
     use crate::types::ArgConstraint;
     use crate::types::ArgConstraint::*;
@@ -65053,6 +65075,8 @@ mod __parse__StackResultElem {
     use crate::types::ConcreteType;
     use crate::types::Instruction;
     use crate::types::ArgValue;
+    use crate::types::SeqItem;
+    use crate::types::SeqItem::*;
     use crate::types::ArgValue::*;
     use crate::types::ArgConstraint;
     use crate::types::ArgConstraint::*;
@@ -71176,6 +71200,8 @@ mod __intern_token {
     use crate::types::ConcreteType;
     use crate::types::Instruction;
     use crate::types::ArgValue;
+    use crate::types::SeqItem;
+    use crate::types::SeqItem::*;
     use crate::types::ArgValue::*;
     use crate::types::ArgConstraint;
     use crate::types::ArgConstraint::*;
@@ -72215,7 +72241,7 @@ fn __action69<
     (_, _, _): (usize, &'input str, usize),
 ) -> CompositeValue
 {
-    CVList(sv)
+    CVSeq(SqValue(sv))
 }
 
 #[allow(unused_variables)]
@@ -72227,7 +72253,7 @@ fn __action70<
     (_, ins, _): (usize, Vec<CompoundInstruction<SomeValue>>, usize),
 ) -> CompositeValue
 {
-    CVLambda(ins)
+    CVSeq(SqInstr(ins))
 }
 
 #[allow(unused_variables)]

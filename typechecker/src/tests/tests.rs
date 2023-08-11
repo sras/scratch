@@ -582,7 +582,17 @@ fn test_type_checking_simple() {
     );
 
     assert_eq!(
-        typecheck_(&parse(r#"PUSH (map nat nat) {}; MAP {DROP;PUSH int 1;}"#)).unwrap(),
-        parse_stack("map nat int")
+        typecheck_(&parse(r#"PUSH nat 5; PUSH (map nat nat) {}; MAP {DROP;PUSH int 1;}"#)).unwrap(),
+        parse_stack("map nat int; nat")
+    );
+
+    assert_eq!(
+        typecheck_(&parse(r#"PUSH nat 5; PUSH (option nat) (Some 2); MAP {DROP;PUSH int 1;}"#)).unwrap(),
+        parse_stack("option int; nat")
+    );
+
+    assert_eq!(
+        typecheck_(&parse(r#"PUSH nat 5; PUSH (list nat) ({}); MAP {DROP;PUSH int 1;}"#)).unwrap(),
+        parse_stack("list int; nat")
     );
 }

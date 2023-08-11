@@ -127,10 +127,26 @@ pub struct Contract<T> {
 pub type SomeKeyValue = (SomeValue, SomeValue);
 
 #[derive(Debug, Clone)]
+pub enum SeqItem {
+    SqValue(Vec<SomeValue>),
+    SqInstr(Vec<CompoundInstruction<SomeValue>>)
+}
+
+use SeqItem::*;
+
+impl SeqItem {
+    pub fn len(&self) -> usize {
+        match self {
+            SqValue(s) => s.len(),
+            SqInstr(s) => s.len()
+        }
+    }
+}
+
+#[derive(Debug, Clone)]
 pub enum CompositeValue {
     CVPair(SomeValue, SomeValue),
-    CVLambda(Vec<CompoundInstruction<SomeValue>>),
-    CVList(Vec<SomeValue>),
+    CVSeq(SeqItem),
     CKVList(Vec<SomeKeyValue>),
     CVLeft(SomeValue),
     CVRight(SomeValue),
