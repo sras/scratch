@@ -4,3 +4,4 @@ dist-newstyle
 *~
 target
 tags
+typechecker/test-contracts

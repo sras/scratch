@@ -167,6 +167,7 @@ pub enum CompoundInstruction<T> {
     DROP(usize),
     GET(usize),
     UPDATE(usize),
+    MAP(Vec<CompoundInstruction<T>>),
     ITER(Vec<CompoundInstruction<T>>),
     LOOP(Vec<CompoundInstruction<T>>),
     LOOP_LEFT(Vec<CompoundInstruction<T>>),

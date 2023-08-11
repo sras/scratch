@@ -580,4 +580,9 @@ fn test_type_checking_simple() {
         .unwrap(),
         parse_stack("int")
     );
+
+    assert_eq!(
+        typecheck_(&parse(r#"PUSH (map nat nat) {}; MAP {DROP;PUSH int 1;}"#)).unwrap(),
+        parse_stack("map nat int")
+    );
 }

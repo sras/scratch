@@ -1,8 +1,8 @@
 use std::collections::BTreeMap;
 use std::collections::BTreeSet;
 use std::collections::VecDeque;
-use std::time::{Duration, Instant};
 use std::convert::TryFrom;
+use std::time::{Duration, Instant};
 
 use crate::attributes;
 use crate::attributes::check_attribute;
@@ -15,7 +15,6 @@ use crate::types::get_n_pair;
 use crate::types::map_mtype;
 use crate::types::mk_pair;
 use crate::types::unmk_pair;
-use crate::types::Contract;
 use crate::types::update_n_pair;
 use crate::types::ArgConstraint::*;
 use crate::types::ArgValue as AV;
@@ -29,6 +28,7 @@ use crate::types::CompoundInstruction::*;
 use crate::types::ConcreteStack;
 use crate::types::ConcreteType;
 use crate::types::Constraint;
+use crate::types::Contract;
 use crate::types::Instruction;
 use crate::types::MAtomic;
 use crate::types::MAtomic::*;
@@ -637,6 +637,32 @@ fn ensure_iter_body(
     }
 }
 
+fn ensure_map_body<F: (Fn(ConcreteType) -> ConcreteType)>(
+    tcenv: &TcEnv,
+    stack: &mut StackState<MAtomic>,
+    iter_item: &ConcreteType,
+    to_result: F,
+    instr: &Vec<CompoundInstruction<SomeValue>>,
+) -> Result<Vec<CompoundInstruction<MValue>>, String> {
+    let expected_stack = stack.clone_tail();
+    let mut start_stack: ConcreteStack = expected_stack.clone();
+    start_stack.push(iter_item.clone());
+    let tinst = typecheck(tcenv, instr, &mut start_stack)?;
+    let start_stack_head = get_stack_derived!(start_stack.pop_front(), vec![FAIL]);
+    match start_stack.compare(&expected_stack) {
+        NoMatch => {
+            return Result::Err(String::from(
+                "MAP body cannot mutated the tail of the stack.",
+            ));
+        }
+        _ => {
+            start_stack.push(to_result(start_stack_head));
+            *stack = start_stack;
+            return Result::Ok(tinst);
+        }
+    }
+}
+
 fn ensure_loop_body(
     tcenv: &TcEnv,
     stack: &mut StackState<MAtomic>,
@@ -915,12 +941,8 @@ fn typecheck_one(
                 for s in variants {
                     match unify_args(tcenv, &instruction.args, &s.args) {
                         Result::Ok((mut resolved, args_)) => {
-                            match unify_stack(
-                                &mut resolved,
-                                &s.input_stack,
-                                &s.output_stack,
-                                stack,
-                            ) {
+                            match unify_stack(&mut resolved, &s.input_stack, &s.output_stack, stack)
+                            {
                                 Result::Ok(_) => {
                                     return Result::Ok(Other(Instruction {
                                         location: instruction.location.clone(),
@@ -983,6 +1005,39 @@ fn typecheck_one(
                 }
                 m => {
                     return Result::Err(format!("LOOP_LEFT requires an or, but found {:?}", m));
+                }
+            }
+        }
+
+        MAP(ins) => {
+            let stack_head = get_stack_derived!(stack.get_index(0), FAIL).clone();
+            match stack_head {
+                MList(t) => {
+                    let tinst =
+                        ensure_map_body(tcenv, stack, &(t.clone()), |x| MList(Box::new(x)), ins)?;
+                    return Result::Ok(MAP(tinst));
+                }
+                MOption(t) => {
+                    let tinst =
+                        ensure_map_body(tcenv, stack, &(t.clone()), |x| MOption(Box::new(x)), ins)?;
+                    return Result::Ok(MAP(tinst));
+                }
+                MMap(t) => {
+                    let (k, v) = t.as_ref();
+                    let tinst = ensure_map_body(
+                        tcenv,
+                        stack,
+                        &MPair(t.clone()),
+                        |x| MMap(Box::new((k.clone(), x))),
+                        ins,
+                    )?;
+                    return Result::Ok(MAP(tinst));
+                }
+                m => {
+                    return Result::Err(format!(
+                        "ITER requires a list, option or map, but found {:?}",
+                        m
+                    ));
                 }
             }
         }
