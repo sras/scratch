@@ -1,9 +1,4 @@
-use std::collections::HashMap;
-
 use crate::types::ConcreteType;
-use crate::types::MAtomic;
-use crate::types::MAtomic::*;
-use crate::types::MType;
 use crate::types::MType::*;
 
 use crate::types::Attribute;
@@ -15,40 +10,30 @@ pub fn check_attributes(atrs: &[Attribute], ct: &ConcreteType) -> bool {
             return false;
         }
     }
-    return true;
+    true
 }
 
 pub fn check_attribute(atr: &Attribute, ct: &ConcreteType) -> bool {
     match ct {
-        MWrapped(a) => true,
+        MWrapped(_) => true,
 
-        MMap(b) => match b.as_ref() {
-            (_, rt) => match atr {
-                Comparable => false,
-                _ => check_attribute(atr, rt),
-            },
-        },
-        MBigMap(b) => match b.as_ref() {
-            (_, rt) => match atr {
-                Passable => check_attribute(atr, rt),
-                Storable => check_attribute(atr, rt),
-                Duplicable => check_attribute(atr, rt),
-                _ => false,
-            },
-        },
-        MPair(b) => match b.as_ref() {
-            (lt, rt) => check_attribute(atr, lt) && check_attribute(atr, rt),
-        },
-        MOr(b) => match b.as_ref() {
-            (lt, rt) => check_attribute(atr, lt) && check_attribute(atr, rt),
-        },
-        MTicket(b) => match atr {
+        MMap(b) => match atr {
             Comparable => false,
-            Duplicable => false,
-            Pushable => false,
-            Passable => false,
-            _ => true,
+            _ => check_attribute(atr, &b.1),
         },
+        MBigMap(b) => match atr {
+            Passable => check_attribute(atr, &b.1),
+            Storable => check_attribute(atr, &b.1),
+            Duplicable => check_attribute(atr, &b.1),
+            _ => false,
+        },
+        MPair(b) =>  {
+            check_attribute(atr, &b.0) && check_attribute(atr, &b.1)
+        },
+        MOr(b) => {
+            check_attribute(atr, &b.0) && check_attribute(atr, &b.1)
+        },
+        MTicket(_) => !matches!(atr, Comparable | Duplicable | Pushable | Passable),
         MList(b) => match atr {
             Comparable => false,
             _ => check_attribute(atr, b.as_ref()),
@@ -59,17 +44,8 @@ pub fn check_attribute(atr: &Attribute, ct: &ConcreteType) -> bool {
         },
 
         MOption(b) => check_attribute(atr, b.as_ref()),
-        MContract(b) => match atr {
-            Comparable => false,
-            Storable => false,
-            Pushable => false,
-            BigmapValue => false,
-            _ => true,
-        },
+        MContract(_) => !matches!(atr, Comparable | Storable | Pushable | BigmapValue),
 
-        MLambda(b) => match atr {
-            Comparable => false,
-            _ => true,
-        },
+        MLambda(_) => !matches!(atr, Comparable),
     }
 }

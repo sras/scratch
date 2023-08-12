@@ -1,5 +1,8 @@
 // auto-generated: "lalrpop 0.20.0"
-// sha3: b4c5603ec64489e99951811be0639fb1846147ffa795b3c63b07bd671e0f6d15
+// sha3: 203c43ccac9a9c2485189d14cbe7f61478e08ccb580b2bc3fde2f9c7ff842153
+#![allow(non_camel_case_types)]
+#![allow(clippy::all)]
+#![allow(dead_code)]
 use std::str::FromStr;
 use crate::types::mdyn_to_concrete;
 use crate::types::MType;
@@ -9,7 +12,6 @@ use crate::types::MType::*;
 use crate::types::ConcreteType;
 use crate::types::Instruction;
 use crate::types::ArgValue;
-use crate::types::SeqItem;
 use crate::types::SeqItem::*;
 use crate::types::ArgValue::*;
 use crate::types::ArgConstraint;
@@ -51,7 +53,6 @@ mod __parse__AnnotationList {
     use crate::types::ConcreteType;
     use crate::types::Instruction;
     use crate::types::ArgValue;
-    use crate::types::SeqItem;
     use crate::types::SeqItem::*;
     use crate::types::ArgValue::*;
     use crate::types::ArgConstraint;
@@ -6102,7 +6103,6 @@ mod __parse__AtomicType {
     use crate::types::ConcreteType;
     use crate::types::Instruction;
     use crate::types::ArgValue;
-    use crate::types::SeqItem;
     use crate::types::SeqItem::*;
     use crate::types::ArgValue::*;
     use crate::types::ArgConstraint;
@@ -12207,7 +12207,6 @@ mod __parse__ConcreteType {
     use crate::types::ConcreteType;
     use crate::types::Instruction;
     use crate::types::ArgValue;
-    use crate::types::SeqItem;
     use crate::types::SeqItem::*;
     use crate::types::ArgValue::*;
     use crate::types::ArgConstraint;
@@ -18647,7 +18646,6 @@ mod __parse__Constraint {
     use crate::types::ConcreteType;
     use crate::types::Instruction;
     use crate::types::ArgValue;
-    use crate::types::SeqItem;
     use crate::types::SeqItem::*;
     use crate::types::ArgValue::*;
     use crate::types::ArgConstraint;
@@ -24856,7 +24854,6 @@ mod __parse__Contract {
     use crate::types::ConcreteType;
     use crate::types::Instruction;
     use crate::types::ArgValue;
-    use crate::types::SeqItem;
     use crate::types::SeqItem::*;
     use crate::types::ArgValue::*;
     use crate::types::ArgConstraint;
@@ -32100,7 +32097,6 @@ mod __parse__InstructionList {
     use crate::types::ConcreteType;
     use crate::types::Instruction;
     use crate::types::ArgValue;
-    use crate::types::SeqItem;
     use crate::types::SeqItem::*;
     use crate::types::ArgValue::*;
     use crate::types::ArgConstraint;
@@ -39309,7 +39305,6 @@ mod __parse__MDyn {
     use crate::types::ConcreteType;
     use crate::types::Instruction;
     use crate::types::ArgValue;
-    use crate::types::SeqItem;
     use crate::types::SeqItem::*;
     use crate::types::ArgValue::*;
     use crate::types::ArgConstraint;
@@ -45744,7 +45739,6 @@ mod __parse__MDynList {
     use crate::types::ConcreteType;
     use crate::types::Instruction;
     use crate::types::ArgValue;
-    use crate::types::SeqItem;
     use crate::types::SeqItem::*;
     use crate::types::ArgValue::*;
     use crate::types::ArgConstraint;
@@ -52195,7 +52189,6 @@ mod __parse__MDynListForPair {
     use crate::types::ConcreteType;
     use crate::types::Instruction;
     use crate::types::ArgValue;
-    use crate::types::SeqItem;
     use crate::types::SeqItem::*;
     use crate::types::ArgValue::*;
     use crate::types::ArgConstraint;
@@ -58640,7 +58633,6 @@ mod __parse__MDynListForPairStart {
     use crate::types::ConcreteType;
     use crate::types::Instruction;
     use crate::types::ArgValue;
-    use crate::types::SeqItem;
     use crate::types::SeqItem::*;
     use crate::types::ArgValue::*;
     use crate::types::ArgConstraint;
@@ -65075,7 +65067,6 @@ mod __parse__StackResultElem {
     use crate::types::ConcreteType;
     use crate::types::Instruction;
     use crate::types::ArgValue;
-    use crate::types::SeqItem;
     use crate::types::SeqItem::*;
     use crate::types::ArgValue::*;
     use crate::types::ArgConstraint;
@@ -71200,7 +71191,6 @@ mod __intern_token {
     use crate::types::ConcreteType;
     use crate::types::Instruction;
     use crate::types::ArgValue;
-    use crate::types::SeqItem;
     use crate::types::SeqItem::*;
     use crate::types::ArgValue::*;
     use crate::types::ArgConstraint;

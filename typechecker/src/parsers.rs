@@ -8,7 +8,6 @@ use crate::parser::StackResultElemParser;
 use crate::types::map_mtype;
 use crate::types::mdyn_to_concrete;
 use crate::types::ArgConstraint;
-use crate::types::ConcreteType;
 use crate::types::Constraint;
 use crate::types::Contract;
 use crate::types::DynMType;
@@ -22,8 +21,8 @@ use crate::types::StackState;
 use crate::types::StackState::*;
 
 pub fn parse_mdyn_to<T, F: Fn(&MType<DynMType>) -> T>(cs: &str, cb: F) -> Vec<T> {
-    if cs.len() == 0 {
-        return Vec::new();
+    if cs.is_empty() {
+        Vec::new()
     } else {
         match MDynListParser::new().parse(cs) {
             Result::Ok(s) => return s.iter().map(cb).collect(),
@@ -53,15 +52,15 @@ pub fn dynm_to_stack_result(d: DynMType) -> StackResultElem {
 }
 
 pub fn mdyn_to_constraint(m: &MType<DynMType>) -> Constraint {
-    return map_mtype(m, &|x| dynm_to_arg_constraint(x.clone()));
+    map_mtype(m, &|x| dynm_to_arg_constraint(x.clone()))
 }
 
 pub fn mdyn_to_stack_result(m: &MType<DynMType>) -> StackResult {
-    return map_mtype(m, &|x| dynm_to_stack_result(x.clone()));
+    map_mtype(m, &|x| dynm_to_stack_result(x.clone()))
 }
 
 pub fn parse_constraints(cs: &str) -> Vec<Constraint> {
-    return parse_mdyn_to(cs, mdyn_to_constraint);
+    parse_mdyn_to(cs, mdyn_to_constraint)
 }
 
 pub fn parse_contract(src: &str) -> Contract<SomeValue> {
@@ -70,16 +69,16 @@ pub fn parse_contract(src: &str) -> Contract<SomeValue> {
     //println!("{}", src_sans_comments);
     match ContractParser::new().parse(&src_sans_comments) {
         Result::Ok(s) => {
-            return s;
+            s
         }
         Result::Err(s) => panic!("{}", s),
     }
 }
 
 pub fn parse_stack_results(cs: &str) -> Vec<StackResult> {
-    return parse_mdyn_to(cs, mdyn_to_stack_result);
+    parse_mdyn_to(cs, mdyn_to_stack_result)
 }
 
 pub fn parse_stack(cs: &str) -> StackState<MAtomic> {
-    return LiveStack(VecDeque::from(parse_mdyn_to(cs, mdyn_to_concrete)));
+    LiveStack(VecDeque::from(parse_mdyn_to(cs, mdyn_to_concrete)))
 }

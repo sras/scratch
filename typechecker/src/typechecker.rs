@@ -1,18 +1,12 @@
 use std::collections::BTreeMap;
 use std::collections::BTreeSet;
-use std::collections::VecDeque;
 use std::convert::TryFrom;
-use std::time::{Duration, Instant};
 
-use crate::attributes;
 use crate::attributes::check_attribute;
 use crate::attributes::check_attributes;
 use crate::ensure_stack_derived;
-//use crate::get_stack_derived;
-use crate::get_stack_derived_result;
 use crate::get_stack_derived_result_handle_failed;
 use crate::instructions::MICHELSON_INSTRUCTIONS;
-use crate::parsers::parse_contract;
 use crate::types::get_n_pair;
 use crate::types::map_mtype;
 use crate::types::mk_pair;
@@ -22,7 +16,6 @@ use crate::types::ArgConstraint::*;
 use crate::types::ArgValue as AV;
 use crate::types::ArgValue;
 use crate::types::AtomicValue::*;
-use crate::types::Attribute;
 use crate::types::Attribute::*;
 use crate::types::CompositeValue::*;
 use crate::types::CompoundInstruction;
@@ -54,21 +47,21 @@ use crate::types::StackResultElem::*;
 
 type ResolveCache = BTreeMap<char, ConcreteType>;
 
-fn add_symbol<'ka>(resolved: &mut ResolveCache, arg_con: char, type_: &ConcreteType) {
+fn add_symbol(resolved: &mut ResolveCache, arg_con: char, type_: &ConcreteType) {
     resolved.insert(arg_con, type_.clone());
 }
 
 fn unify_args(
     tcenv: &TcEnv,
-    args: &Vec<ArgValue<SomeValue>>,
-    arg_cons: &Vec<Constraint>,
+    args: &[ArgValue<SomeValue>],
+    arg_cons: &[Constraint],
 ) -> Result<(ResolveCache, Vec<ArgValue<MValue>>), String> {
     let mut resolved = BTreeMap::new();
     let mut args_ = Vec::new();
     for (arg, con) in args.iter().zip(arg_cons.iter()) {
-        args_.push(unify_arg(tcenv, &mut resolved, arg, con.clone())?);
+        args_.push(unify_arg(tcenv, &mut resolved, arg, con)?);
     }
-    return Result::Ok((resolved, args_));
+    Result::Ok((resolved, args_))
 }
 
 fn unify_concrete_arg(
@@ -77,120 +70,86 @@ fn unify_concrete_arg(
     arg_con: &Constraint,
 ) -> Result<(), String> {
     match arg_con {
-        MWrapped(CWarg(c, rattr)) => {
-            add_symbol(resolved, c.clone(), arg);
-            return Result::Ok(());
+        MWrapped(CWarg(c, _)) => {
+            add_symbol(resolved, *c, arg);
+            Result::Ok(())
         }
-        MWrapped(CTypeArg(c, rattr)) => {
-            add_symbol(resolved, c.clone(), arg);
-            return Result::Ok(());
+        MWrapped(CTypeArg(c, _)) => {
+            add_symbol(resolved, *c, arg);
+            Result::Ok(())
         }
-        MWrapped(CTypeArgRef(c)) => match resolved.get(&c) {
-            Some(tt) => {
-                return unify_concrete_arg(resolved, arg, &map_mtype(tt, &|x| CAtomic(x.clone())));
-            }
-            _ => {
-                return Result::Err(String::from("Unknown type ref"));
-            }
+        MWrapped(CTypeArgRef(c)) => match resolved.get(c) {
+            Some(tt) => unify_concrete_arg(resolved, arg, &map_mtype(tt, &|x| CAtomic(x.clone()))),
+            _ => Result::Err(String::from("Unknown type ref")),
         },
         MList(ic) => match arg {
-            MList(iv) => {
-                return unify_concrete_arg(resolved, iv, ic);
-            }
+            MList(iv) => unify_concrete_arg(resolved, iv, ic),
 
-            _ => {
-                return Result::Err(String::from("Expecting a list but got something else..."));
-            }
+            _ => Result::Err(String::from("Expecting a list but got something else...")),
         },
         MTicket(ic) => match arg {
-            MTicket(iv) => {
-                return unify_concrete_arg(resolved, iv, ic);
-            }
+            MTicket(iv) => unify_concrete_arg(resolved, iv, ic),
 
-            x => {
-                return Result::Err(format!("Expecting a Ticket but got something else.{:?}", x));
-            }
+            x => Result::Err(format!("Expecting a Ticket but got something else.{:?}", x)),
         },
         MContract(ic) => match arg {
-            MContract(iv) => {
-                return unify_concrete_arg(resolved, iv, ic);
-            }
+            MContract(iv) => unify_concrete_arg(resolved, iv, ic),
 
-            c => {
-                return Result::Err(format!(
-                    "Expecting a Contract but got something else {:?}",
-                    c
-                ))
-            }
+            c => Result::Err(format!(
+                "Expecting a Contract but got something else {:?}",
+                c
+            )),
         },
         MOption(ic) => match arg {
-            MOption(iv) => {
-                return unify_concrete_arg(resolved, iv, ic);
-            }
+            MOption(iv) => unify_concrete_arg(resolved, iv, ic),
 
-            x => {
-                return Result::Err(format!(
-                    "Expecting a Option but got something else: {:?}",
-                    x
-                ));
-            }
+            x => Result::Err(format!(
+                "Expecting a Option but got something else: {:?}",
+                x
+            )),
         },
         MSet(ic) => match arg {
-            MSet(iv) => {
-                return unify_concrete_arg(resolved, iv, ic);
-            }
+            MSet(iv) => unify_concrete_arg(resolved, iv, ic),
 
-            _ => {
-                return Result::Err(String::from("Expecting a Option but got something else..."));
-            }
+            _ => Result::Err(String::from("Expecting a Option but got something else...")),
         },
         MLambda(b) => match arg {
             MLambda(b1) => {
                 unify_concrete_arg(resolved, &b1.0, &b.0)?;
-                return unify_concrete_arg(resolved, &b1.1, &b.1);
+                unify_concrete_arg(resolved, &b1.1, &b.1)
             }
-            _ => {
-                return Result::Err(String::from("Expecting a lambda but got something else..."));
-            }
+            _ => Result::Err(String::from("Expecting a lambda but got something else...")),
         },
         MOr(b) => match arg {
             MOr(b1) => {
                 unify_concrete_arg(resolved, &b1.0, &b.0)?;
-                return unify_concrete_arg(resolved, &b1.1, &b.1);
+                unify_concrete_arg(resolved, &b1.1, &b.1)
             }
-            _ => {
-                return Result::Err(String::from("Expecting a pair but got something else..."));
-            }
+            _ => Result::Err(String::from("Expecting a pair but got something else...")),
         },
         MPair(b) => match arg {
             MPair(b1) => {
                 unify_concrete_arg(resolved, &b1.0, &b.0)?;
-                return unify_concrete_arg(resolved, &b1.1, &b.1);
+                unify_concrete_arg(resolved, &b1.1, &b.1)
             }
-            _ => {
-                return Result::Err(String::from("Expecting a pair but got something else..."));
-            }
+            _ => Result::Err(String::from("Expecting a pair but got something else...")),
         },
         MBigMap(b) => match arg {
             MBigMap(b1) => {
                 unify_concrete_arg(resolved, &b1.0, &b.0)?;
-                return unify_concrete_arg(resolved, &b1.1, &b.1);
+                unify_concrete_arg(resolved, &b1.1, &b.1)
             }
-            _ => {
-                return Result::Err(String::from(
-                    "Expecting a big_map but got something else...",
-                ));
-            }
+            _ => Result::Err(String::from(
+                "Expecting a big_map but got something else...",
+            )),
         },
         MMap(b) => match arg {
             MMap(b1) => {
-                let (cl, cr) = b.as_ref();
-                let (vl, vr) = b1.as_ref();
-                return unify_concrete_arg(resolved, &b1.0, &b.0)
-                    .and_then(|_| unify_concrete_arg(resolved, &b1.1, &b.1));
+                unify_concrete_arg(resolved, &b1.0, &b.0)?;
+                unify_concrete_arg(resolved, &b1.1, &b.1)
             }
             _ => {
-                return Result::Err(String::from("Expecting a map but got something else..."));
+                Result::Err(String::from("Expecting a map but got something else..."))
             }
         },
         MWrapped(CAtomic(at)) => match arg {
@@ -221,16 +180,16 @@ fn unify_arg(
         AV::TypeArg(ct) => match arg_con {
             MWrapped(CTypeArg(c, rattr)) => {
                 if check_attributes(rattr, ct) {
-                    add_symbol(resolved, *c, &ct);
-                    return Result::Ok(AV::TypeArg((*ct).clone()));
+                    add_symbol(resolved, *c, ct);
+                    Result::Ok(AV::TypeArg((*ct).clone()))
                 } else {
-                    return Result::Err(String::from(
+                    Result::Err(String::from(
                         "Type does not meet the required constraints",
-                    ));
+                    ))
                 }
             }
             _ => {
-                return Result::Err(String::from("Unexpected type name argument"));
+                Result::Err(String::from("Unexpected type name argument"))
             }
         },
         AV::ValueArg(some_val) => {
@@ -241,50 +200,43 @@ fn unify_arg(
                 MWrapped(CWarg(_, _)) => {
                     panic!("Unexpected wildcard type encountered");
                 }
-                MWrapped(CTypeArgRef(ref c)) => match resolved.get(&c) {
-                    Some(ct) => typecheck_value(tcenv, resolved, &some_val, ct)?,
+                MWrapped(CTypeArgRef(ref c)) => match resolved.get(c) {
+                    Some(ct) => typecheck_value(tcenv, resolved, some_val, ct)?,
                     None => panic!("Symbol resolution failed! {:?}", c),
                 },
-                _ => match constraint_to_concrete(resolved, &arg_con) {
+                _ => match constraint_to_concrete(resolved, arg_con) {
                     Some(concrete_type) => {
-                        typecheck_value(tcenv, resolved, &some_val, &concrete_type)?
+                        typecheck_value(tcenv, resolved, some_val, &concrete_type)?
                     }
                     None => panic!("Couldnt resolve type"),
                 },
             };
-            unify_concrete_arg(resolved, &ct, &arg_con)?;
-            return Ok(AV::ValueArg(m));
+            unify_concrete_arg(resolved, &ct, arg_con)?;
+            Ok(AV::ValueArg(m))
         }
     }
 }
 
 fn constraint_to_concrete(resolved: &ResolveCache, c: &Constraint) -> Option<ConcreteType> {
     match c {
-        MWrapped(CTypeArgRef(c)) => match resolved.get(&c) {
-            Some(ct) => Some(ct.clone()),
-            None => None,
-        },
+        MWrapped(CTypeArgRef(c)) => { resolved.get(c).cloned() }
         MWrapped(CAtomic(x)) => Some(MWrapped(x.clone())),
-        MPair(b) => {
-            Some(MPair(Box::new((
-                constraint_to_concrete(resolved, &b.0)?,
-                constraint_to_concrete(resolved, &b.1)?,
-            ))))
-        }
+        MPair(b) => Some(MPair(Box::new((
+            constraint_to_concrete(resolved, &b.0)?,
+            constraint_to_concrete(resolved, &b.1)?,
+        )))),
         MList(l) => Some(MList(Box::new(constraint_to_concrete(resolved, l)?))),
-        MLambda(b) => {
-            Some(MLambda(Box::new((
-                constraint_to_concrete(resolved, &b.0)?,
-                constraint_to_concrete(resolved, &b.1)?,
-            ))))
-        }
+        MLambda(b) => Some(MLambda(Box::new((
+            constraint_to_concrete(resolved, &b.0)?,
+            constraint_to_concrete(resolved, &b.1)?,
+        )))),
         _ => None,
     }
 }
 
 fn typecheck_value(
     tcenv: &TcEnv,
-    resolved: &ResolveCache,
+    _resolved: &ResolveCache,
     some_val: &SomeValue,
     target: &ConcreteType,
 ) -> Result<(MValue, ConcreteType), String> {
@@ -305,10 +257,10 @@ fn typecheck_value(
             CVSeq(SqValue(items)) => {
                 let mut il: BTreeSet<MValue> = BTreeSet::new();
                 for i in items {
-                    let (mv, _) = typecheck_value(tcenv, resolved, i, c.as_ref())?;
+                    let (mv, _) = typecheck_value(tcenv, _resolved, i, c.as_ref())?;
                     il.insert(mv);
                 }
-                return Ok((VSet(il), MSet(c.clone())));
+                Ok((VSet(il), MSet(c.clone())))
             }
             _ => Err(String::from(
                 "Expecting a Sequence but found something else...",
@@ -317,18 +269,18 @@ fn typecheck_value(
         (MList(c), Composite(cv)) => match cv.as_ref() {
             CVSeq(items) => {
                 if items.len() == 0 {
-                    return Ok((VList(vec![]), MList(c.clone())));
+                    Ok((VList(vec![]), MList(c.clone())))
                 } else {
                     match items {
                         SqValue(items) => {
                             let mut il: Vec<MValue> = vec![];
                             for i in items {
-                                let (mv, _) = typecheck_value(tcenv, resolved, i, c.as_ref())?;
+                                let (mv, _) = typecheck_value(tcenv, _resolved, i, c.as_ref())?;
                                 il.push(mv);
                             }
-                            return Ok((VList(il), MList(c.clone())));
+                            Ok((VList(il), MList(c.clone())))
                         }
-                        SqInstr(items) => Err(String::from(
+                        SqInstr(_) => Err(String::from(
                             "Expecting a list of values but found instructions..",
                         )),
                     }
@@ -340,14 +292,14 @@ fn typecheck_value(
             CVSeq(x) => {
                 if x.len() == 0 {
                     let (kt, vt) = b.as_ref();
-                    return Ok((
-                        VMap(Box::new(BTreeMap::new())),
+                    Ok((
+                        VMap(Box::default()),
                         MMap(Box::new((kt.clone(), vt.clone()))),
-                    ));
+                    ))
                 } else {
-                    return Err(String::from(
+                    Err(String::from(
                         "Expecting a key/value list but found value list...",
-                    ));
+                    ))
                 }
             }
             CKVList(items) => {
@@ -355,11 +307,11 @@ fn typecheck_value(
                 let (kt, vt) = b.as_ref();
                 if check_attribute(&Comparable, kt) {
                     for (k, v) in items {
-                        let (mkv, _) = typecheck_value(tcenv, resolved, k, kt)?;
-                        let (mvv, _) = typecheck_value(tcenv, resolved, v, vt)?;
+                        let (mkv, _) = typecheck_value(tcenv, _resolved, k, kt)?;
+                        let (mvv, _) = typecheck_value(tcenv, _resolved, v, vt)?;
                         hm.insert(mkv, mvv);
                     }
-                    return Ok((VMap(Box::new(hm)), MMap(Box::new((kt.clone(), vt.clone())))));
+                    Ok((VMap(Box::new(hm)), MMap(Box::new((kt.clone(), vt.clone())))))
                 } else {
                     Err(String::from("Big map keys should be comparable"))
                 }
@@ -373,14 +325,14 @@ fn typecheck_value(
                 if check_attribute(&Comparable, kt) {
                     if check_attribute(&BigmapValue, vt) {
                         for (k, v) in items {
-                            let (mkv, _) = typecheck_value(tcenv, resolved, k, kt)?;
-                            let (mvv, _) = typecheck_value(tcenv, resolved, v, vt)?;
+                            let (mkv, _) = typecheck_value(tcenv, _resolved, k, kt)?;
+                            let (mvv, _) = typecheck_value(tcenv, _resolved, v, vt)?;
                             hm.insert(mkv, mvv);
                         }
-                        return Ok((
+                        Ok((
                             VBigMap(Box::new(hm)),
                             MBigMap(Box::new((kt.clone(), vt.clone()))),
-                        ));
+                        ))
                     } else {
                         Err(String::from("Type not allowed to be a big_map value"))
                     }
@@ -393,9 +345,9 @@ fn typecheck_value(
         (MPair(b), Composite(cv)) => match cv.as_ref() {
             CVPair(sv1, sv2) => {
                 let (c1, c2) = b.as_ref();
-                let (mv1, ct1) = typecheck_value(tcenv, resolved, sv1, c1)?;
-                let (mv2, ct2) = typecheck_value(tcenv, resolved, sv2, c2)?;
-                return Result::Ok((VPair(Box::new((mv1, mv2))), MPair(Box::new((ct1, ct2)))));
+                let (mv1, ct1) = typecheck_value(tcenv, _resolved, sv1, c1)?;
+                let (mv2, ct2) = typecheck_value(tcenv, _resolved, sv2, c2)?;
+                Result::Ok((VPair(Box::new((mv1, mv2))), MPair(Box::new((ct1, ct2)))))
             }
             _ => Err(String::from("Expecting a Pair but found something else...")),
         },
@@ -403,12 +355,12 @@ fn typecheck_value(
             let (c1, c2) = b.as_ref();
             match cv.as_ref() {
                 CVLeft(sv1) => {
-                    let (mv1, ct1) = typecheck_value(tcenv, resolved, sv1, c1)?;
-                    return Result::Ok((VLeft(Box::new(mv1)), MOr(b.clone())));
+                    let (mv1, _) = typecheck_value(tcenv, _resolved, sv1, c1)?;
+                    Result::Ok((VLeft(Box::new(mv1)), MOr(b.clone())))
                 }
                 CVRight(sv1) => {
-                    let (mv1, ct1) = typecheck_value(tcenv, resolved, sv1, c2)?;
-                    return Result::Ok((VRight(Box::new(mv1)), MOr(b.clone())));
+                    let (mv1, _) = typecheck_value(tcenv, _resolved, sv1, c2)?;
+                    Result::Ok((VRight(Box::new(mv1)), MOr(b.clone())))
                 }
                 _ => Err(String::from(
                     "Expecting a Left/Right value but found something else...",
@@ -424,16 +376,16 @@ fn typecheck_value(
                 match typecheck(tcenv, instructions, &mut stack) {
                     Ok(tins) => {
                         if stack.compare_singleton(&lambda_output) {
-                            return Result::Ok((
+                            Result::Ok((
                                 VLambda(tins),
                                 MLambda(Box::new((lambda_input, lambda_output))),
-                            ));
+                            ))
                         } else {
-                            return Err(String::from("Lambda does not match the expected type"));
+                            Err(String::from("Lambda does not match the expected type"))
                         }
                     }
                     Err(s) => {
-                        return Err(s);
+                        Err(s)
                     }
                 }
             }
@@ -444,8 +396,8 @@ fn typecheck_value(
 
         (MOption(b), Composite(cv)) => match cv.as_ref() {
             CVSome(v) => {
-                let (tv, vt) = typecheck_value(tcenv, resolved, v, b.as_ref())?;
-                return Result::Ok((VSome(Box::new(tv)), MOption(Box::new(vt))));
+                let (tv, vt) = typecheck_value(tcenv, _resolved, v, b.as_ref())?;
+                Result::Ok((VSome(Box::new(tv)), MOption(Box::new(vt))))
             }
             x => Err(format!(
                 "Expecting an Option value but found something else: {:?}",
@@ -460,9 +412,9 @@ fn stack_result_to_concrete_type(resolved: &mut ResolveCache, sr: &StackResult) 
     match sr {
         MWrapped(wrp) => match wrp {
             ElemType(et) => MWrapped(et.clone()),
-            TRef(c) => match resolved.get(&c) {
+            TRef(c) => match resolved.get(c) {
                 Some(ct) => {
-                    return (*ct).clone();
+                    (*ct).clone()
                 }
                 None => {
                     panic!("Symbol resolution failed! {:?}", c)
@@ -490,63 +442,47 @@ fn stack_result_to_concrete_type(resolved: &mut ResolveCache, sr: &StackResult) 
             l.as_ref(),
         ))),
         MMap(b) => {
-            let (l, r) = b.as_ref();
             MMap(Box::new((
-                stack_result_to_concrete_type(resolved, &l),
-                stack_result_to_concrete_type(resolved, &r),
+                stack_result_to_concrete_type(resolved, &b.0),
+                stack_result_to_concrete_type(resolved, &b.1),
             )))
         }
         MBigMap(b) => {
-            let (l, r) = b.as_ref();
             MBigMap(Box::new((
-                stack_result_to_concrete_type(resolved, &l),
-                stack_result_to_concrete_type(resolved, &r),
+                stack_result_to_concrete_type(resolved, &b.0),
+                stack_result_to_concrete_type(resolved, &b.1),
             )))
         }
         MOr(b) => {
-            let (l, r) = b.as_ref();
             MOr(Box::new((
-                stack_result_to_concrete_type(resolved, &l),
-                stack_result_to_concrete_type(resolved, &r),
+                stack_result_to_concrete_type(resolved, &b.0),
+                stack_result_to_concrete_type(resolved, &b.1),
             )))
         }
         MPair(b) => {
-            let (l, r) = b.as_ref();
             MPair(Box::new((
-                stack_result_to_concrete_type(resolved, &l),
-                stack_result_to_concrete_type(resolved, &r),
+                stack_result_to_concrete_type(resolved, &b.0),
+                stack_result_to_concrete_type(resolved, &b.1),
             )))
         }
         MLambda(b) => {
-            let (l, r) = b.as_ref();
             MLambda(Box::new((
-                stack_result_to_concrete_type(resolved, &l),
-                stack_result_to_concrete_type(resolved, &r),
+                stack_result_to_concrete_type(resolved, &b.0),
+                stack_result_to_concrete_type(resolved, &b.1),
             )))
         }
     }
-}
-
-fn make_resolved_stack<'a>(
-    resolved: &mut ResolveCache,
-    sem_stack_out: &Vec<StackResult>,
-) -> Result<VecDeque<ConcreteType>, &'a str> {
-    let mut resolved_stack: VecDeque<ConcreteType> = VecDeque::new();
-    for i in sem_stack_out {
-        resolved_stack.push_front(stack_result_to_concrete_type(resolved, &i));
-    }
-    return Result::Ok(resolved_stack);
 }
 
 fn unify_stack(
     resolved: &mut ResolveCache,
     sem_stack_in: &Vec<StackArg>,
-    sem_stack_out: &Vec<StackResult>,
+    sem_stack_out: &[StackResult],
     stack_state: &mut StackState<MAtomic>,
 ) -> Result<(), String> {
     match stack_state.len() {
         SdFailed => {
-            return Result::Ok(());
+            Result::Ok(())
         }
         SdOk(sslen) => {
             if sslen < sem_stack_in.len() {
@@ -559,7 +495,7 @@ fn unify_stack(
             for constraint in sem_stack_in {
                 match stack_state.pop_front() {
                     SdOk(Result::Ok(stack_elem)) => {
-                        unify_concrete_arg(resolved, &stack_elem, &constraint)?;
+                        unify_concrete_arg(resolved, &stack_elem, constraint)?;
                     }
                     SdOk(Result::Err(_)) => {
                         return Result::Err("Too few values in stack".to_string());
@@ -571,10 +507,10 @@ fn unify_stack(
             }
 
             for i in sem_stack_out.iter().rev() {
-                stack_state.push_front(stack_result_to_concrete_type(resolved, &i));
+                stack_state.push_front(stack_result_to_concrete_type(resolved, i));
             }
 
-            return Result::Ok(());
+            Result::Ok(())
         }
     }
 }
@@ -585,7 +521,7 @@ pub fn typecheck_contract(contract: Contract<SomeValue>) -> Result<Contract<MVal
         contract.storage.clone(),
     )))]);
     let tcenv = TcEnv {
-        selfType: contract.parameter.clone(),
+        self_type: contract.parameter.clone(),
     };
     let tins = typecheck(&tcenv, &contract.code, &mut stack)?;
     let expected_stack_elem = MPair(Box::new((
@@ -593,11 +529,11 @@ pub fn typecheck_contract(contract: Contract<SomeValue>) -> Result<Contract<MVal
         contract.storage.clone(),
     )));
     if stack.compare_singleton(&expected_stack_elem) {
-        return Result::Ok(Contract {
+        Result::Ok(Contract {
             parameter: contract.parameter.clone(),
             storage: contract.storage.clone(),
             code: tins,
-        });
+        })
     } else {
         panic!(
             "Unexpected stack result {:?} while expecting {:>?}",
@@ -618,29 +554,9 @@ pub fn typecheck(
         resolved.push(typecheck_one(tcenv, instruction, stack)?);
         //println!("Stack out: {:?}", stack);
     }
-    return Result::Ok(resolved);
+    Result::Ok(resolved)
 }
 
-fn ensure_stack_atleast<'a>(stack: &Vec<ConcreteType>, l: usize) -> Result<(), String> {
-    if stack.len() >= l {
-        return Result::Ok(());
-    } else {
-        return Result::Err(format!("Stack too short, req {} got {}", l, stack.len()));
-    }
-}
-
-fn ensure_non_empty_stack<'a>(stack: &Vec<ConcreteType>) -> Result<(), String> {
-    ensure_stack_atleast(stack, 1)
-}
-
-fn ensure_stack_head<'a>(stack: &Vec<ConcreteType>, t: ConcreteType) -> Result<(), String> {
-    ensure_non_empty_stack(stack)?;
-    if stack[0] == t {
-        return Result::Ok(());
-    } else {
-        return Result::Err(String::from("Unexpected stack head"));
-    }
-}
 fn ensure_iter_body(
     tcenv: &TcEnv,
     stack: &mut StackState<MAtomic>,
@@ -651,7 +567,7 @@ fn ensure_iter_body(
         None => {
             let tinst = typecheck(tcenv, instr, &mut FailedStack)?;
             stack.fail();
-            return Result::Ok(tinst);
+            Result::Ok(tinst)
         }
         Some(iter_item) => {
             let expected_stack = stack.clone_tail();
@@ -660,11 +576,11 @@ fn ensure_iter_body(
             let tinst = typecheck(tcenv, instr, &mut start_stack)?;
             match start_stack.compare(&expected_stack) {
                 NoMatch => {
-                    return Result::Err(String::from("ITER body has unexpected type"));
+                    Result::Err(String::from("ITER body has unexpected type"))
                 }
                 _ => {
                     *stack = start_stack;
-                    return Result::Ok(tinst);
+                    Result::Ok(tinst)
                 }
             }
         }
@@ -679,7 +595,7 @@ fn ensure_map_body<F: (Fn(ConcreteType) -> ConcreteType)>(
     match iter_item_info {
         SdFailed => {
             let tinst = typecheck(tcenv, instr, &mut FailedStack)?;
-            return Result::Ok(tinst);
+            Result::Ok(tinst)
         }
         SdOk((iter_item, to_result)) => {
             let expected_stack = stack.clone_tail();
@@ -689,21 +605,21 @@ fn ensure_map_body<F: (Fn(ConcreteType) -> ConcreteType)>(
             match start_stack.pop_front() {
                 SdFailed => {
                     *stack = start_stack;
-                    return Result::Ok(tinst);
+                    Result::Ok(tinst)
                 }
                 SdOk(Result::Err(_)) => {
-                    return Result::Err("Map body returned too few values on stack.".to_string())
+                    Result::Err("Map body returned too few values on stack.".to_string())
                 }
                 SdOk(Result::Ok(start_stack_head)) => match start_stack.compare(&expected_stack) {
                     NoMatch => {
-                        return Result::Err(String::from(
+                        Result::Err(String::from(
                             "MAP body cannot mutated the tail of the stack.",
-                        ));
+                        ))
                     }
                     _ => {
                         start_stack.push(to_result(start_stack_head));
                         *stack = start_stack;
-                        return Result::Ok(tinst);
+                        Result::Ok(tinst)
                     }
                 },
             }
@@ -721,11 +637,11 @@ fn ensure_loop_body(
     let tinst = typecheck(tcenv, instr, &mut start_stack)?;
     match start_stack.compare(&expected_stack) {
         NoMatch => {
-            return Result::Err(String::from("LOOP body has unexpected type"));
+            Result::Err(String::from("LOOP body has unexpected type"))
         }
         _ => {
             *stack = expected_stack;
-            return Result::Ok(tinst);
+            Result::Ok(tinst)
         }
     }
 }
@@ -742,23 +658,23 @@ fn ensure_loop_left_body(
             let mut expected_stack = stack.clone_tail();
             let mut start_stack: ConcreteStack = expected_stack.clone();
             start_stack.push(left.clone());
-            expected_stack.push(MOr(Box::new((left.clone(), right.clone()))));
+            expected_stack.push(MOr(Box::new((left, right.clone()))));
             let tinst = typecheck(tcenv, instr, &mut start_stack)?;
             match start_stack.compare(&expected_stack) {
                 NoMatch => {
-                    return Result::Err(String::from("LOOP_LEFT body has unexpected type"));
+                    Result::Err(String::from("LOOP_LEFT body has unexpected type"))
                 }
                 _ => {
                     expected_stack.pop();
-                    expected_stack.push(right.clone());
+                    expected_stack.push(right);
                     *stack = expected_stack;
-                    return Result::Ok(tinst);
+                    Result::Ok(tinst)
                 }
             }
         }
         _ => {
             let tinst = typecheck(tcenv, instr, stack)?;
-            return Result::Ok(tinst);
+            Result::Ok(tinst)
         }
     }
 }
@@ -789,31 +705,31 @@ fn ensure_if_cons_body(
             let nbtc = typecheck(tcenv, ns, &mut temp_stack_nil)?;
             match temp_stack_cons.compare(&temp_stack_nil) {
                 NoMatch => {
-                    return Result::Err(format!(
+                    Result::Err(format!(
                         "Type of IF_CONS branches differ {:?} {:?}",
                         temp_stack_cons, temp_stack_nil
-                    ));
+                    ))
                 }
                 RightFailed => {
                     *stack_ = temp_stack_cons;
-                    return Result::Ok((cbtc, nbtc));
+                    Result::Ok((cbtc, nbtc))
                 }
                 LeftFailed => {
                     *stack_ = temp_stack_nil;
-                    return Result::Ok((cbtc, nbtc));
+                    Result::Ok((cbtc, nbtc))
                 }
                 Match => {
                     *stack_ = temp_stack_cons;
-                    return Result::Ok((cbtc, nbtc));
+                    Result::Ok((cbtc, nbtc))
                 }
                 BothFailed => {
                     stack_.fail();
-                    return Result::Ok((vec![FAIL], vec![FAIL]));
+                    Result::Ok((vec![FAIL], vec![FAIL]))
                 }
             }
         }
         m => {
-            return Result::Err(format!("IF_CONS requires a list, but found {:?}", m));
+            Result::Err(format!("IF_CONS requires a list, but found {:?}", m))
         }
     }
 }
@@ -846,33 +762,33 @@ fn ensure_if_left_body(
             match temp_stack_left.compare(&temp_stack_right) {
                 RightFailed => {
                     *stack_ = temp_stack_left;
-                    return Result::Ok((lbtc, rbtc));
+                    Result::Ok((lbtc, rbtc))
                 }
                 LeftFailed => {
                     *stack_ = temp_stack_right;
-                    return Result::Ok((lbtc, rbtc));
+                    Result::Ok((lbtc, rbtc))
                 }
                 Match => {
                     *stack_ = temp_stack_right;
-                    return Result::Ok((lbtc, rbtc));
+                    Result::Ok((lbtc, rbtc))
                 }
                 NoMatch => {
-                    return Result::Err(format!(
+                    Result::Err(format!(
                         "Type of IF_LEFT branches differ {:?} {:?}",
                         temp_stack_left, temp_stack_right
-                    ));
+                    ))
                 }
                 BothFailed => {
                     stack_.fail();
-                    return Result::Ok((vec![FAIL], vec![FAIL]));
+                    Result::Ok((vec![FAIL], vec![FAIL]))
                 }
             }
         }
         m => {
-            return Result::Err(format!(
+            Result::Err(format!(
                 "IF_LEFT requires an or, but found {:?}, {:?} {:?}",
                 m, lb, rb
-            ));
+            ))
         }
     }
 }
@@ -897,36 +813,36 @@ fn ensure_if_none_body(
         MOption(x) => {
             let mut temp_stack_none: ConcreteStack = stack_.clone_tail();
             let mut temp_stack_some: ConcreteStack = stack_.clone_tail();
-            temp_stack_some.push(*x.clone());
+            temp_stack_some.push(*x);
             let sbtc = typecheck(tcenv, sb, &mut temp_stack_some)?;
             let nbtc = typecheck(tcenv, nb, &mut temp_stack_none)?;
             match temp_stack_some.compare(&temp_stack_none) {
                 LeftFailed => {
                     *stack_ = temp_stack_none;
-                    return Result::Ok((nbtc, sbtc));
+                    Result::Ok((nbtc, sbtc))
                 }
                 RightFailed => {
                     *stack_ = temp_stack_some;
-                    return Result::Ok((nbtc, sbtc));
+                    Result::Ok((nbtc, sbtc))
                 }
                 Match => {
                     *stack_ = temp_stack_some;
-                    return Result::Ok((nbtc, sbtc));
+                    Result::Ok((nbtc, sbtc))
                 }
                 NoMatch => {
-                    return Result::Err(String::from("Type of IF_NONE branches differ"));
+                    Result::Err(String::from("Type of IF_NONE branches differ"))
                 }
                 BothFailed => {
                     stack_.fail();
-                    return Result::Ok((vec![FAIL], vec![FAIL]));
+                    Result::Ok((vec![FAIL], vec![FAIL]))
                 }
             }
         }
         m => {
-            return Result::Err(format!(
+            Result::Err(format!(
                 "IF_NONE requires an option, but found {:?}, {:?} {:?}",
                 m, sb, nb
-            ));
+            ))
         }
     }
 }
@@ -953,22 +869,22 @@ fn ensure_same_lambda_type(
     match temp_stack_t.compare(&temp_stack_f) {
         RightFailed => {
             *stack_ = temp_stack_t;
-            return Result::Ok((tbtc, fbtc));
+            Result::Ok((tbtc, fbtc))
         }
         LeftFailed => {
             *stack_ = temp_stack_f;
-            return Result::Ok((tbtc, fbtc));
+            Result::Ok((tbtc, fbtc))
         }
         Match => {
             *stack_ = temp_stack_f;
-            return Result::Ok((tbtc, fbtc));
+            Result::Ok((tbtc, fbtc))
         }
         NoMatch => {
-            return Result::Err(String::from("Type of branches differ"));
+            Result::Err(String::from("Type of branches differ"))
         }
         BothFailed => {
             stack_.fail();
-            return Result::Ok((vec![FAIL], vec![FAIL]));
+            Result::Ok((vec![FAIL], vec![FAIL]))
         }
     }
 }
@@ -981,7 +897,6 @@ fn typecheck_one(
     match cinstruction {
         Other(instruction) => match MICHELSON_INSTRUCTIONS.get(&instruction.name) {
             Some(variants) => {
-                let mut last_error: &str;
                 let mut errors: String = String::new();
                 for s in variants {
                     match unify_args(tcenv, &instruction.args, &s.args) {
@@ -1006,7 +921,7 @@ fn typecheck_one(
                             match r {
                                 Result::Ok(_) => {
                                     return Result::Ok(Other(Instruction {
-                                        location: instruction.location.clone(),
+                                        location: instruction.location,
                                         args: args_,
                                         name: instruction.name.clone(),
                                     }));
@@ -1023,61 +938,66 @@ fn typecheck_one(
                         }
                     }
                 }
-                return Result::Err(format!(
+                Result::Err(format!(
                     "{}; None of the instruction variants matched here for {:?} with stack {:?}",
                     errors, &instruction, &stack
-                ));
+                ))
             }
             None => {
-                return Result::Err(format!("Instruction {} not found", &instruction.name));
+                Result::Err(format!("Instruction {} not found", &instruction.name))
             }
         },
         SELF => {
-            stack.push(MContract(Box::new(tcenv.selfType.clone())));
-            return Result::Ok(SELF);
+            stack.push(MContract(Box::new(tcenv.self_type.clone())));
+            Result::Ok(SELF)
         }
         FAIL => {
             stack.fail();
-            return Result::Ok(FAIL);
+            Result::Ok(FAIL)
         }
         FAILWITH => {
             stack.fail();
-            return Result::Ok(FAIL);
+            Result::Ok(FAIL)
         }
         LOOP(ins) => match stack.get_index(0) {
             SdOk(Result::Ok(MWrapped(MBool))) => {
                 let tinst = ensure_loop_body(tcenv, stack, ins)?;
-                return Result::Ok(LOOP(tinst));
+                Result::Ok(LOOP(tinst))
             }
             SdOk(Result::Ok(m)) => {
-                return Result::Err(format!("LOOP requires a bool, but found {:?}", m));
+                Result::Err(format!("LOOP requires a bool, but found {:?}", m))
             }
             SdOk(Result::Err(_)) => {
-                return Result::Err(format!("Stack can't be empty for LOOP"));
+                Result::Err("Stack can't be empty for LOOP".to_string())
             }
             SdFailed => {
                 let tinst = ensure_loop_body(tcenv, stack, ins)?;
-                return Result::Ok(LOOP(tinst));
+                Result::Ok(LOOP(tinst))
             }
         },
         LOOP_LEFT(ins) => match stack.get_index(0) {
             SdOk(Result::Ok(stack_head)) => match stack_head {
                 MOr(b) => {
-                    let tinst =
-                        ensure_loop_left_body(tcenv, stack, SdOk(b.0.clone()), SdOk(b.1.clone()), ins)?;
-                    return Result::Ok(LOOP_LEFT(tinst));
+                    let tinst = ensure_loop_left_body(
+                        tcenv,
+                        stack,
+                        SdOk(b.0.clone()),
+                        SdOk(b.1.clone()),
+                        ins,
+                    )?;
+                    Result::Ok(LOOP_LEFT(tinst))
                 }
                 m => {
-                    return Result::Err(format!("LOOP_LEFT requires an or, but found {:?}", m));
+                    Result::Err(format!("LOOP_LEFT requires an or, but found {:?}", m))
                 }
             },
             SdOk(Result::Err(_)) => {
-                return Result::Err(format!("LOOP_LEFT stack cannot be empty!"));
+                Result::Err("LOOP_LEFT stack cannot be empty!".to_string())
             }
 
             SdFailed => {
                 let tinst = ensure_loop_left_body(tcenv, stack, SdFailed, SdFailed, ins)?;
-                return Result::Ok(LOOP_LEFT(tinst));
+                Result::Ok(LOOP_LEFT(tinst))
             }
         },
         MAP(ins) => match stack.get_index(0) {
@@ -1086,19 +1006,19 @@ fn typecheck_one(
                     let tinst = ensure_map_body(
                         tcenv,
                         stack,
-                        SdOk((&(t.clone()), |x| MList(Box::new(x)))),
+                        SdOk((&t, |x| MList(Box::new(x)))),
                         ins,
                     )?;
-                    return Result::Ok(MAP(tinst));
+                    Result::Ok(MAP(tinst))
                 }
                 MOption(t) => {
                     let tinst = ensure_map_body(
                         tcenv,
                         stack,
-                        SdOk((&(t.clone()), |x| MOption(Box::new(x)))),
+                        SdOk((&t, |x| MOption(Box::new(x)))),
                         ins,
                     )?;
-                    return Result::Ok(MAP(tinst));
+                    Result::Ok(MAP(tinst))
                 }
                 MMap(t) => {
                     let tinst = ensure_map_body(
@@ -1107,41 +1027,41 @@ fn typecheck_one(
                         SdOk((&MPair(t.clone()), |x| MMap(Box::new((t.0.clone(), x))))),
                         ins,
                     )?;
-                    return Result::Ok(MAP(tinst));
+                    Result::Ok(MAP(tinst))
                 }
                 m => {
-                    return Result::Err(format!(
+                    Result::Err(format!(
                         "Map requires a list, option or map, but found {:?}",
                         m
-                    ));
+                    ))
                 }
             },
             SdOk(Result::Err(_)) => {
-                return Result::Err(format!("Map cannot work with Empty list"));
+                Result::Err("Map cannot work with Empty list".to_string())
             }
             SdFailed => {
-                return Result::Ok(FAIL);
+                Result::Ok(FAIL)
             }
         },
         ITER(ins) => {
             match get_stack_derived_result_handle_failed!(stack.get_index(0), FAIL).clone() {
                 MList(t) => {
-                    let tinst = ensure_iter_body(tcenv, stack, Some(&(t.clone())), ins)?;
-                    return Result::Ok(ITER(tinst));
+                    let tinst = ensure_iter_body(tcenv, stack, Some(&t), ins)?;
+                    Result::Ok(ITER(tinst))
                 }
                 MSet(t) => {
-                    let tinst = ensure_iter_body(tcenv, stack, Some(&(t.clone())), ins)?;
-                    return Result::Ok(ITER(tinst));
+                    let tinst = ensure_iter_body(tcenv, stack, Some(&t), ins)?;
+                    Result::Ok(ITER(tinst))
                 }
                 MMap(t) => {
-                    let tinst = ensure_iter_body(tcenv, stack, Some(&MPair(t.clone())), ins)?;
-                    return Result::Ok(ITER(tinst));
+                    let tinst = ensure_iter_body(tcenv, stack, Some(&MPair(t)), ins)?;
+                    Result::Ok(ITER(tinst))
                 }
                 m => {
-                    return Result::Err(format!(
+                    Result::Err(format!(
                         "ITER requires a list, set or map, but found {:?}",
                         m
-                    ));
+                    ))
                 }
             }
         }
@@ -1152,7 +1072,7 @@ fn typecheck_one(
                 FAIL
             );
             let (cbtc, nbtc) = ensure_if_cons_body(tcenv, stack, (tb, fb))?;
-            return Result::Ok(IF_CONS(cbtc, nbtc));
+            Result::Ok(IF_CONS(cbtc, nbtc))
         }
         IF_NONE(nb, sb) => {
             ensure_stack_derived!(
@@ -1161,7 +1081,7 @@ fn typecheck_one(
                 FAIL
             );
             let (nbtc, sbtc) = ensure_if_none_body(tcenv, stack, (nb, sb))?;
-            return Result::Ok(IF_NONE(nbtc, sbtc));
+            Result::Ok(IF_NONE(nbtc, sbtc))
         }
         IF_SOME(sb, nb) => {
             ensure_stack_derived!(
@@ -1170,7 +1090,7 @@ fn typecheck_one(
                 FAIL
             );
             let (nbtc, sbtc) = ensure_if_none_body(tcenv, stack, (nb, sb))?;
-            return Result::Ok(IF_SOME(sbtc, nbtc));
+            Result::Ok(IF_SOME(sbtc, nbtc))
         }
 
         IF_LEFT(lb, rb) => {
@@ -1180,7 +1100,7 @@ fn typecheck_one(
                 FAIL
             );
             let (lbtc, rbtc) = ensure_if_left_body(tcenv, stack, (lb, rb))?;
-            return Result::Ok(IF_LEFT(lbtc, rbtc));
+            Result::Ok(IF_LEFT(lbtc, rbtc))
         }
         IF(tb, fb) => {
             match get_stack_derived_result_handle_failed!(stack.get_index(0), FAIL) {
@@ -1192,13 +1112,13 @@ fn typecheck_one(
                 }
             }
             let (tbtc, fbtc) = ensure_same_lambda_type(tcenv, stack, (tb, fb))?;
-            return Result::Ok(IF(tbtc, fbtc));
+            Result::Ok(IF(tbtc, fbtc))
         }
         GET(n) => {
             let stack_head = get_stack_derived_result_handle_failed!(stack.get_index(0), FAIL);
             let r = get_n_pair(&n, stack_head)?;
             stack.replace_index(0, r.clone());
-            return Result::Ok(GET(*n));
+            Result::Ok(GET(*n))
         }
 
         UPDATE(n) => {
@@ -1215,7 +1135,7 @@ fn typecheck_one(
             update_n_pair(&n, &stack_head, &mut update_target)?;
             stack.pop();
             stack.replace_index(0, update_target);
-            return Result::Ok(UPDATE(*n));
+            Result::Ok(UPDATE(*n))
         }
         DUP(n) => {
             if *n > 0 {
@@ -1226,9 +1146,9 @@ fn typecheck_one(
                 );
                 let target = get_stack_derived_result_handle_failed!(stack.get_index(n - 1), FAIL);
                 stack.push(target.clone());
-                return Result::Ok(DUP(*n));
+                Result::Ok(DUP(*n))
             } else {
-                return Result::Err("DUP(0) is forbidden".to_string());
+                Result::Err("DUP(0) is forbidden".to_string())
             }
         }
         PAIR(n) => {
@@ -1239,7 +1159,7 @@ fn typecheck_one(
             );
             let pair = get_stack_derived_result_handle_failed!(mk_pair(stack, *n), FAIL);
             stack.push(pair);
-            return Result::Ok(PAIR(*n));
+            Result::Ok(PAIR(*n))
         }
         UNPAIR(n) => {
             if *n >= 2 {
@@ -1249,10 +1169,10 @@ fn typecheck_one(
                     FAIL
                 );
                 let stack_head = get_stack_derived_result_handle_failed!(stack.pop(), FAIL);
-                unmk_pair(&stack_head, *n, stack);
-                return Result::Ok(UNPAIR(*n));
+                unmk_pair(&stack_head, *n, stack)?;
+                Result::Ok(UNPAIR(*n))
             } else {
-                return Result::Err("PAIR(<2) is forbidden".to_string());
+                Result::Err("PAIR(<2) is forbidden".to_string())
             }
         }
         DIG(n) => {
@@ -1262,7 +1182,7 @@ fn typecheck_one(
                 FAIL
             );
             stack.move_element(*n, 0);
-            return Result::Ok(DIG(*n));
+            Result::Ok(DIG(*n))
         }
 
         DUG(n) => {
@@ -1272,7 +1192,7 @@ fn typecheck_one(
                 FAIL
             );
             stack.move_element(0, *n);
-            return Result::Ok(DUG(*n));
+            Result::Ok(DUG(*n))
         }
 
         DROP(n) => {
@@ -1281,10 +1201,10 @@ fn typecheck_one(
                 "Stack too small!".to_string(),
                 FAIL
             );
-            for i in 1..=*n {
+            for _ in 1..=*n {
                 stack.pop();
             }
-            return Result::Ok(DROP(*n));
+            Result::Ok(DROP(*n))
         }
         DIP(n, instr) => {
             if n > &0 {
@@ -1298,9 +1218,9 @@ fn typecheck_one(
                 let mut result_stack = stack.clone_head_till(*n);
                 result_stack.append_stack(&mut temp_stack);
                 *stack = result_stack;
-                return Result::Ok(DIP(*n, tins));
+                Result::Ok(DIP(*n, tins))
             } else {
-                return Result::Err("DIP instruction's argument cannot be zero".to_string());
+                Result::Err("DIP instruction's argument cannot be zero".to_string())
             }
         }
         LAMBDA_REC(it, ot, instr) => {
@@ -1315,21 +1235,17 @@ fn typecheck_one(
                 (SdOk(l), SdOk(Result::Ok(sh))) => {
                     if sh == ot && l == 1 {
                         stack.push(MLambda(Box::new((it.clone(), ot.clone()))));
-                        return Result::Ok(LAMBDA_REC(it.clone(), ot.clone(), tins));
+                        Result::Ok(LAMBDA_REC(it.clone(), ot.clone(), tins))
                     } else {
-                        return Result::Err(String::from(
+                        Result::Err(String::from(
                             "Unexpected output stack for lambda rec lambda",
-                        ));
+                        ))
                     }
                 }
                 _ => {
-                    return Result::Ok(LAMBDA_REC(it.clone(), ot.clone(), tins));
+                    Result::Ok(LAMBDA_REC(it.clone(), ot.clone(), tins))
                 }
             }
         }
-
-        _ => {
-            return Result::Err(format!("Instruction {} not found", ""));
-        }
-    };
+    }
 }

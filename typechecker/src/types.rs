@@ -1,3 +1,4 @@
+#![allow(non_camel_case_types)]
 use crate::types::MType::*;
 use core::cmp::Eq;
 use core::cmp::Ordering;
@@ -195,7 +196,7 @@ pub enum CompoundInstruction<T> {
 }
 
 pub struct TcEnv {
-    pub selfType: ConcreteType,
+    pub self_type: ConcreteType,
 }
 
 #[derive(Debug)]
@@ -515,12 +516,11 @@ pub fn update_n_pair<A: Clone>(
 ) -> Result<MType<A>, String> {
     let mut cb: bool = false;
     let mut cn: &mut MType<A> = t;
-    for i in 0..*n {
+    for _ in 0..*n {
         if cb {
             match cn {
                 MPair(b) => {
-                    let (f, s) = b.as_mut();
-                    cn = s;
+                    cn = &mut b.1;
                     cb = false;
                 }
                 _ => {
@@ -536,7 +536,7 @@ pub fn update_n_pair<A: Clone>(
     if cb {
         match cn {
             MPair(ref mut b) => {
-                let (f, s) = b.as_mut();
+                let (f, _) = b.as_mut();
                 *f = src.clone();
                 return Result::Ok(f.clone());
             }
@@ -552,11 +552,11 @@ pub fn update_n_pair<A: Clone>(
 pub fn get_n_pair<'a, A: Clone>(n: &usize, t: &'a MType<A>) -> Result<&'a MType<A>, String> {
     let mut cb: bool = false;
     let mut cn: &MType<A> = t;
-    for i in 0..*n {
+    for _ in 0..*n {
         if cb {
             match cn {
                 MPair(b) => {
-                    let (f, s) = b.as_ref();
+                    let (_, s) = b.as_ref();
                     cn = s;
                     cb = false;
                 }
@@ -573,7 +573,7 @@ pub fn get_n_pair<'a, A: Clone>(n: &usize, t: &'a MType<A>) -> Result<&'a MType<
     if cb {
         match cn {
             MPair(b) => {
-                let (f, s) = b.as_ref();
+                let (f, _) = b.as_ref();
                 return Result::Ok(f);
             }
             _ => {

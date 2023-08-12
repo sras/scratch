@@ -3,7 +3,7 @@ extern crate lazy_static;
 use crate::instructions::MICHELSON_INSTRUCTIONS;
 use crate::typechecker::typecheck_contract;
 use std::io;
-use std::time::{Duration, Instant};
+use std::time::{Instant};
 
 mod attributes;
 mod instructions;
@@ -13,8 +13,6 @@ mod tests;
 mod typechecker;
 mod types;
 use crate::parsers::parse_contract;
-
-use typechecker::typecheck;
 
 fn main() {
     // Force the evaluation of instructions.
@@ -32,7 +30,7 @@ fn main() {
             );
             start_time = Instant::now();
             match typecheck_contract(contract) {
-                Result::Ok(i) => {
+                Result::Ok(_) => {
                     println!(
                         "Successful typecheck in {} millis..",
                         Instant::now().duration_since(start_time).as_millis()

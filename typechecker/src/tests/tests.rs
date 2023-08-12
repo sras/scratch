@@ -1,10 +1,6 @@
 use crate::parser::InstructionListParser;
-use crate::parser::MDynListParser;
-use crate::parsers::parse_contract;
 use crate::parsers::parse_stack;
 use crate::typechecker::typecheck;
-use crate::typechecker::typecheck_contract;
-use crate::types::mdyn_to_concrete;
 use crate::types::CompoundInstruction;
 use crate::types::ConcreteType;
 use crate::types::MAtomic;
@@ -13,17 +9,16 @@ use crate::types::MType::*;
 use crate::types::SomeValue;
 use crate::types::StackDerived::*;
 use crate::types::StackState;
-use crate::types::StackState::*;
 use crate::types::TcEnv;
-fn typecheck_<'a>(
+fn typecheck_(
     instructions: &Vec<CompoundInstruction<SomeValue>>,
 ) -> Result<StackState<MAtomic>, String> {
     let mut stack = StackState::new();
     let tcenv: TcEnv = TcEnv {
-        selfType: MWrapped(MUnit),
+        self_type: MWrapped(MUnit),
     };
     typecheck(&tcenv, instructions, &mut stack)?;
-    return Result::Ok(stack);
+    Result::Ok(stack)
 }
 fn parse(src: &str) -> Vec<CompoundInstruction<SomeValue>> {
     let p = InstructionListParser::new();
