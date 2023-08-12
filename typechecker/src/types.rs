@@ -253,18 +253,18 @@ macro_rules! get_stack_derived {
         }
     }};
 }
-
-#[macro_export]
-macro_rules! get_stack_derived_2 {
-    ($n:expr) => {{
-        match $n {
-            StackDerived::SdOk(a) => a,
-            a => {
-                return a;
-            }
-        }
-    }};
-}
+//
+//#[macro_export]
+//macro_rules! get_stack_derived_2 {
+//    ($n:expr) => {{
+//        match $n {
+//            StackDerived::SdOk(a) => a,
+//            a => {
+//                return a;
+//            }
+//        }
+//    }};
+//}
 
 pub enum StackCompResult {
     LeftFailed,
@@ -279,7 +279,7 @@ use StackCompResult::*;
 pub type ConcreteStack = StackState<MAtomic>;
 
 impl<T: Eq + Clone> StackState<T> {
-    pub fn ensure_non_empty(&self) -> StackDerived<()> {
+    pub fn ensure_non_empty(&self) -> StackDerived<bool> {
         return self.ensure_stack_atleast(1);
     }
     pub fn len(&self) -> StackDerived<usize> {
@@ -571,14 +571,15 @@ pub fn get_n_pair<'a, A: Clone>(n: &usize, t: &'a MType<A>) -> Result<&'a MType<
 }
 
 pub fn mk_pair<A: Clone + Eq>(tl: &mut StackState<A>, n: usize) -> StackDerived<MType<A>> {
-    if n == 2 {
-        let i1 = get_stack_derived_2!(tl.pop_front());
-        let i2 = get_stack_derived_2!(tl.pop_front());
-        return SdOk(MPair(Box::new((i1, i2))));
-    } else {
-        let i1 = get_stack_derived_2!(tl.pop_front());
-        return SdOk(MPair(Box::new((i1, mk_pair(tl, n - 1).unwrap()))));
-    }
+    panic!()
+    //if n == 2 {
+    //    let i1 = get_stack_derived_2!(tl.pop_front());
+    //    let i2 = get_stack_derived_2!(tl.pop_front());
+    //    return SdOk(MPair(Box::new((i1, i2))));
+    //} else {
+    //    let i1 = get_stack_derived_2!(tl.pop_front());
+    //    return SdOk(MPair(Box::new((i1, mk_pair(tl, n - 1).unwrap()))));
+    //}
 }
 
 pub fn unmk_pair<A: Eq + Clone>(
