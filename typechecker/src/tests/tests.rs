@@ -7,11 +7,11 @@ use crate::typechecker::typecheck_contract;
 use crate::types::mdyn_to_concrete;
 use crate::types::CompoundInstruction;
 use crate::types::ConcreteType;
-use crate::types::StackDerived::*;
 use crate::types::MAtomic;
 use crate::types::MAtomic::*;
 use crate::types::MType::*;
 use crate::types::SomeValue;
+use crate::types::StackDerived::*;
 use crate::types::StackState;
 use crate::types::StackState::*;
 use crate::types::TcEnv;
@@ -36,7 +36,7 @@ fn parse(src: &str) -> Vec<CompoundInstruction<SomeValue>> {
 fn parse_type(src: &str) -> ConcreteType {
     match parse_stack(src).get_index(0) {
         SdOk(Result::Ok(x)) => x.clone(),
-        _ => panic!("Unexpected stack after parsing")
+        _ => panic!("Unexpected stack after parsing"),
     }
 }
 
@@ -47,7 +47,6 @@ fn dummy_2() {
         parse_stack("nat")
     );
 }
-
 
 #[test]
 fn dummy() {

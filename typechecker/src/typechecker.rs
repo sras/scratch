@@ -1159,23 +1159,39 @@ fn typecheck_one(
             }
         }
         IF_CONS(tb, fb) => {
-            ensure_stack_derived!(stack.ensure_non_empty(), "stack too short!".to_string(), FAIL);
+            ensure_stack_derived!(
+                stack.ensure_non_empty(),
+                "stack too short!".to_string(),
+                FAIL
+            );
             let (cbtc, nbtc) = ensure_if_cons_body(tcenv, stack, (tb, fb))?;
             return Result::Ok(IF_CONS(cbtc, nbtc));
         }
         IF_NONE(nb, sb) => {
-            ensure_stack_derived!(stack.ensure_non_empty(), "stack too short!".to_string(), FAIL);
+            ensure_stack_derived!(
+                stack.ensure_non_empty(),
+                "stack too short!".to_string(),
+                FAIL
+            );
             let (nbtc, sbtc) = ensure_if_none_body(tcenv, stack, (nb, sb))?;
             return Result::Ok(IF_NONE(nbtc, sbtc));
         }
         IF_SOME(sb, nb) => {
-            ensure_stack_derived!(stack.ensure_non_empty(), "stack too short!".to_string(), FAIL);
+            ensure_stack_derived!(
+                stack.ensure_non_empty(),
+                "stack too short!".to_string(),
+                FAIL
+            );
             let (nbtc, sbtc) = ensure_if_none_body(tcenv, stack, (nb, sb))?;
             return Result::Ok(IF_SOME(sbtc, nbtc));
         }
 
         IF_LEFT(lb, rb) => {
-            ensure_stack_derived!(stack.ensure_non_empty(), "stack too short!".to_string(), FAIL);
+            ensure_stack_derived!(
+                stack.ensure_non_empty(),
+                "stack too short!".to_string(),
+                FAIL
+            );
             let (lbtc, rbtc) = ensure_if_left_body(tcenv, stack, (lb, rb))?;
             return Result::Ok(IF_LEFT(lbtc, rbtc));
         }

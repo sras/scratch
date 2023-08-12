@@ -246,7 +246,12 @@ use StackDerived::*;
 macro_rules! ensure_stack_derived {
     ($n:expr, $s: expr, $f: expr) => {{
         match $n {
-            StackDerived::SdOk(x) => if x {} else {return Result::Err($s)},
+            StackDerived::SdOk(x) => {
+                if x {
+                } else {
+                    return Result::Err($s);
+                }
+            }
             StackDerived::SdFailed => {
                 return Result::Ok($f);
             }
@@ -580,7 +585,10 @@ pub fn get_n_pair<'a, A: Clone>(n: &usize, t: &'a MType<A>) -> Result<&'a MType<
     }
 }
 
-pub fn mk_pair<A: Clone + Eq>(tl: &mut StackState<A>, n: usize) -> StackDerived<Result<MType<A>, String>> {
+pub fn mk_pair<A: Clone + Eq>(
+    tl: &mut StackState<A>,
+    n: usize,
+) -> StackDerived<Result<MType<A>, String>> {
     if n == 2 {
         let i1 = get_stack_derived_result!(tl.pop_front());
         let i2 = get_stack_derived_result!(tl.pop_front());
