@@ -7,6 +7,7 @@ use crate::typechecker::typecheck_contract;
 use crate::types::mdyn_to_concrete;
 use crate::types::CompoundInstruction;
 use crate::types::ConcreteType;
+use crate::types::StackDerived::*;
 use crate::types::MAtomic;
 use crate::types::MAtomic::*;
 use crate::types::MType::*;
@@ -33,10 +34,20 @@ fn parse(src: &str) -> Vec<CompoundInstruction<SomeValue>> {
 }
 
 fn parse_type(src: &str) -> ConcreteType {
-    match parse_stack(src).get_live().unwrap()[0] {
-        ref x => x.clone(),
+    match parse_stack(src).get_index(0) {
+        SdOk(Some(x)) => x.clone(),
+        _ => panic!("Unexpected stack after parsing")
     }
 }
+
+//#[test]
+fn dummy_2() {
+    assert_eq!(
+        typecheck_(&parse("PUSH nat 5; PUSH nat 5;ADD")).unwrap(),
+        parse_stack("nat")
+    );
+}
+
 
 #[test]
 fn dummy() {
@@ -324,6 +335,11 @@ fn test_type_checking_simple() {
         typecheck_(&parse("PUSH (pair nat nat) (Pair 2 3);DROP")).unwrap(),
         parse_stack("")
     );
+
+    assert_eq!(
+        typecheck_(&parse("PUSH nat 5; PUSH nat 5")).unwrap(),
+        parse_stack("nat; nat")
+    );
     assert_eq!(
         typecheck_(&parse("PUSH nat 5; PUSH nat 5;ADD")).unwrap(),
         parse_stack("nat")
@@ -582,17 +598,26 @@ fn test_type_checking_simple() {
     );
 
     assert_eq!(
-        typecheck_(&parse(r#"PUSH nat 5; PUSH (map nat nat) {}; MAP {DROP;PUSH int 1;}"#)).unwrap(),
+        typecheck_(&parse(
+            r#"PUSH nat 5; PUSH (map nat nat) {}; MAP {DROP;PUSH int 1;}"#
+        ))
+        .unwrap(),
         parse_stack("map nat int; nat")
     );
 
     assert_eq!(
-        typecheck_(&parse(r#"PUSH nat 5; PUSH (option nat) (Some 2); MAP {DROP;PUSH int 1;}"#)).unwrap(),
+        typecheck_(&parse(
+            r#"PUSH nat 5; PUSH (option nat) (Some 2); MAP {DROP;PUSH int 1;}"#
+        ))
+        .unwrap(),
         parse_stack("option int; nat")
     );
 
     assert_eq!(
-        typecheck_(&parse(r#"PUSH nat 5; PUSH (list nat) ({}); MAP {DROP;PUSH int 1;}"#)).unwrap(),
+        typecheck_(&parse(
+            r#"PUSH nat 5; PUSH (list nat) ({}); MAP {DROP;PUSH int 1;}"#
+        ))
+        .unwrap(),
         parse_stack("list int; nat")
     );
 }

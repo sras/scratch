@@ -129,7 +129,7 @@ pub type SomeKeyValue = (SomeValue, SomeValue);
 #[derive(Debug, Clone)]
 pub enum SeqItem {
     SqValue(Vec<SomeValue>),
-    SqInstr(Vec<CompoundInstruction<SomeValue>>)
+    SqInstr(Vec<CompoundInstruction<SomeValue>>),
 }
 
 use SeqItem::*;
@@ -138,7 +138,7 @@ impl SeqItem {
     pub fn len(&self) -> usize {
         match self {
             SqValue(s) => s.len(),
-            SqInstr(s) => s.len()
+            SqInstr(s) => s.len(),
         }
     }
 }
@@ -229,7 +229,6 @@ use StackState::*;
 pub enum StackDerived<T> {
     SdOk(T),
     SdFailed,
-    SdEmpty,
 }
 
 impl<T: Clone> StackDerived<T> {
@@ -250,9 +249,6 @@ macro_rules! get_stack_derived {
             StackDerived::SdOk(a) => a,
             StackDerived::SdFailed => {
                 return Result::Ok($f);
-            }
-            StackDerived::SdEmpty => {
-                return Result::Err("Stack was found to be empty, unexpectedly".to_string());
             }
         }
     }};
@@ -286,33 +282,31 @@ impl<T: Eq + Clone> StackState<T> {
     pub fn ensure_non_empty(&self) -> StackDerived<()> {
         return self.ensure_stack_atleast(1);
     }
-    pub fn len(&self) -> usize {
+    pub fn len(&self) -> StackDerived<usize> {
         match self {
             LiveStack(v) => {
-                return v.len();
+                return SdOk(v.len());
             }
-            _ => { return 0; }
+            _ => {
+                return SdFailed;
+            }
         }
     }
-    pub fn ensure_stack_atleast(&self, l: usize) -> StackDerived<()> {
+    pub fn ensure_stack_atleast(&self, l: usize) -> StackDerived<bool> {
         match self {
             LiveStack(v) => {
-                if v.len() < l {
-                    return SdEmpty;
-                } else {
-                    return SdOk(());
-                }
+                return SdOk(v.len() < l);
             }
             FailedStack => return SdFailed,
         }
     }
-    pub fn get_index(&self, i: usize) -> StackDerived<&MType<T>> {
+    pub fn get_index(&self, i: usize) -> StackDerived<Option<&MType<T>>> {
         match self {
             LiveStack(v) => {
                 if v.len() == 0 {
-                    return SdEmpty;
+                    return SdOk(None);
                 } else {
-                    return SdOk(&v[i]);
+                    return SdOk(Some(&v[i]));
                 }
             }
             FailedStack => return SdFailed,
@@ -325,14 +319,14 @@ impl<T: Eq + Clone> StackState<T> {
         }
     }
 
-    pub fn pop(&mut self) -> StackDerived<MType<T>> {
+    pub fn pop(&mut self) -> StackDerived<Option<MType<T>>> {
         match self {
             LiveStack(v) => match v.pop_front() {
                 Some(a) => {
-                    return SdOk(a);
+                    return SdOk(Some(a));
                 }
                 None => {
-                    return SdEmpty;
+                    return SdOk(None);
                 }
             },
             FailedStack => {
@@ -352,13 +346,6 @@ impl<T: Eq + Clone> StackState<T> {
                 }
             },
             FailedStack => {}
-        }
-    }
-
-    pub fn get_live(&mut self) -> Option<&VecDeque<MType<T>>> {
-        match self {
-            LiveStack(ref v) => Some(v),
-            FailedStack => None,
         }
     }
 
@@ -444,14 +431,14 @@ impl<T: Eq + Clone> StackState<T> {
         }
     }
 
-    pub fn pop_front(&mut self) -> StackDerived<MType<T>> {
+    pub fn pop_front(&mut self) -> StackDerived<Option<MType<T>>> {
         match self {
             LiveStack(v) => match v.pop_front() {
                 Some(x) => {
-                    return SdOk(x);
+                    return SdOk(Some(x));
                 }
                 None => {
-                    return SdEmpty;
+                    return SdOk(None);
                 }
             },
             FailedStack => {
@@ -516,7 +503,7 @@ pub fn update_n_pair<A: Clone>(
     for i in 0..*n {
         if cb {
             match cn {
-                MPair(ref mut b) => {
+                MPair(b) => {
                     let (f, s) = b.as_mut();
                     cn = s;
                     cb = false;

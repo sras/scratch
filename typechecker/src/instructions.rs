@@ -39,7 +39,12 @@ lazy_static! {
             mk_instr!("SWAP", "", "<w|a>;<w|b>", "<r|b>;<r|a>"),
             mk_instr!("NIL", "<t|a>", "", "list <r|a>"),
             mk_instr!("CAST", "", "", ""),
-            mk_instr!("VIEW", "<a|string>;<t|a>", "<w|b>;<a|address>", "option <r|a>"),
+            mk_instr!(
+                "VIEW",
+                "<a|string>;<t|a>",
+                "<w|b>;<a|address>",
+                "option <r|a>"
+            ),
             mk_instr!("SENDER", "", "", "<a|address>"),
             mk_instr!("EMPTY_BIG_MAP", "<t|a>;<t|b>", "", "big_map <r|a> <r|b>"),
             mk_instr_poly!(

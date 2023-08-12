@@ -59,14 +59,13 @@ pub fn check_attribute(atr: &Attribute, ct: &ConcreteType) -> bool {
         },
 
         MOption(b) => check_attribute(atr, b.as_ref()),
-        MContract(b) => { match atr {
+        MContract(b) => match atr {
             Comparable => false,
             Storable => false,
             Pushable => false,
             BigmapValue => false,
-            _ => true
-        }
-        }
+            _ => true,
+        },
 
         MLambda(b) => match atr {
             Comparable => false,
