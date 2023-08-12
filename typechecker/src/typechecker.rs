@@ -649,55 +649,75 @@ fn ensure_stack_head<'a>(stack: &Vec<ConcreteType>, t: ConcreteType) -> Result<(
         return Result::Err(String::from("Unexpected stack head"));
     }
 }
-//fn ensure_iter_body(
-//    tcenv: &TcEnv,
-//    stack: &mut StackState<MAtomic>,
-//    iter_item: &ConcreteType,
-//    instr: &Vec<CompoundInstruction<SomeValue>>,
-//) -> Result<Vec<CompoundInstruction<MValue>>, String> {
-//    let expected_stack = stack.clone_tail();
-//    let mut start_stack: ConcreteStack = expected_stack.clone();
-//    start_stack.push(iter_item.clone());
-//    let tinst = typecheck(tcenv, instr, &mut start_stack)?;
-//    match start_stack.compare(&expected_stack) {
-//        NoMatch => {
-//            return Result::Err(String::from("ITER body has unexpected type"));
-//        }
-//        _ => {
-//            *stack = start_stack;
-//            return Result::Ok(tinst);
-//        }
-//    }
-//}
-//
-//fn ensure_map_body<F: (Fn(ConcreteType) -> ConcreteType)>(
-//    tcenv: &TcEnv,
-//    stack: &mut StackState<MAtomic>,
-//    iter_item: &ConcreteType,
-//    to_result: F,
-//    instr: &Vec<CompoundInstruction<SomeValue>>,
-//) -> Result<Vec<CompoundInstruction<MValue>>, String> {
-//    let expected_stack = stack.clone_tail();
-//    let mut start_stack: ConcreteStack = expected_stack.clone();
-//    start_stack.push(iter_item.clone());
-//    let tinst = typecheck(tcenv, instr, &mut start_stack)?;
-//    match get_stack_derived!(start_stack.pop_front(), vec![FAIL]) {
-//        None => return Result::Err("Map body returned too few values on stack.".to_string()),
-//        Some(start_stack_head) => match start_stack.compare(&expected_stack) {
-//            NoMatch => {
-//                return Result::Err(String::from(
-//                    "MAP body cannot mutated the tail of the stack.",
-//                ));
-//            }
-//            _ => {
-//                start_stack.push(to_result(start_stack_head));
-//                *stack = start_stack;
-//                return Result::Ok(tinst);
-//            }
-//        },
-//    }
-//}
-//
+fn ensure_iter_body(
+    tcenv: &TcEnv,
+    stack: &mut StackState<MAtomic>,
+    m_iter_item: Option<&ConcreteType>,
+    instr: &Vec<CompoundInstruction<SomeValue>>,
+) -> Result<Vec<CompoundInstruction<MValue>>, String> {
+    match m_iter_item {
+        None => {
+            let tinst = typecheck(tcenv, instr, &mut FailedStack)?;
+            stack.fail();
+            return Result::Ok(tinst);
+        }
+        Some(iter_item) => {
+            let expected_stack = stack.clone_tail();
+            let mut start_stack: ConcreteStack = expected_stack.clone();
+            start_stack.push(iter_item.clone());
+            let tinst = typecheck(tcenv, instr, &mut start_stack)?;
+            match start_stack.compare(&expected_stack) {
+                NoMatch => {
+                    return Result::Err(String::from("ITER body has unexpected type"));
+                }
+                _ => {
+                    *stack = start_stack;
+                    return Result::Ok(tinst);
+                }
+            }
+        }
+    }
+}
+fn ensure_map_body<F: (Fn(ConcreteType) -> ConcreteType)>(
+    tcenv: &TcEnv,
+    stack: &mut StackState<MAtomic>,
+    iter_item_info: StackDerived<(&ConcreteType, F)>,
+    instr: &Vec<CompoundInstruction<SomeValue>>,
+) -> Result<Vec<CompoundInstruction<MValue>>, String> {
+    match iter_item_info {
+        SdFailed => {
+            let tinst = typecheck(tcenv, instr, &mut FailedStack)?;
+            return Result::Ok(tinst);
+        }
+        SdOk((iter_item, to_result)) => {
+            let expected_stack = stack.clone_tail();
+            let mut start_stack: ConcreteStack = expected_stack.clone();
+            start_stack.push(iter_item.clone());
+            let tinst = typecheck(tcenv, instr, &mut start_stack)?;
+            match start_stack.pop_front() {
+                SdFailed => {
+                    *stack = start_stack;
+                    return Result::Ok(tinst);
+                }
+                SdOk(None) => {
+                    return Result::Err("Map body returned too few values on stack.".to_string())
+                }
+                SdOk(Some(start_stack_head)) => match start_stack.compare(&expected_stack) {
+                    NoMatch => {
+                        return Result::Err(String::from(
+                            "MAP body cannot mutated the tail of the stack.",
+                        ));
+                    }
+                    _ => {
+                        start_stack.push(to_result(start_stack_head));
+                        *stack = start_stack;
+                        return Result::Ok(tinst);
+                    }
+                },
+            }
+        }
+    }
+}
 fn ensure_loop_body(
     tcenv: &TcEnv,
     stack: &mut StackState<MAtomic>,
@@ -717,7 +737,7 @@ fn ensure_loop_body(
         }
     }
 }
-//
+
 fn ensure_loop_left_body(
     tcenv: &TcEnv,
     stack: &mut StackState<MAtomic>,
@@ -743,226 +763,231 @@ fn ensure_loop_left_body(
                     return Result::Ok(tinst);
                 }
             }
-        },
+        }
         _ => {
             let tinst = typecheck(tcenv, instr, stack)?;
             return Result::Ok(tinst);
         }
-
-
     }
 }
-//
-//fn ensure_if_cons_body(
-//    tcenv: &TcEnv,
-//    stack_: &mut StackState<MAtomic>,
-//    (cs, ns): (
-//        &Vec<CompoundInstruction<SomeValue>>,
-//        &Vec<CompoundInstruction<SomeValue>>,
-//    ),
-//) -> Result<
-//    (
-//        Vec<CompoundInstruction<MValue>>,
-//        Vec<CompoundInstruction<MValue>>,
-//    ),
-//    String,
-//> {
-//    match get_stack_derived!(stack_.get_index(0), (vec![FAIL], vec![FAIL])) {
-//        Some(stack_head) => match stack_head.clone() {
-//            MList(x) => {
-//                let mut temp_stack_nil: ConcreteStack = stack_.clone_tail();
-//                let mut temp_stack_cons: ConcreteStack = stack_.clone_tail();
-//                temp_stack_cons.push(MList(x.clone()));
-//                temp_stack_cons.push(x.as_ref().clone());
-//                let cbtc = typecheck(tcenv, cs, &mut temp_stack_cons)?;
-//                let nbtc = typecheck(tcenv, ns, &mut temp_stack_nil)?;
-//                match temp_stack_cons.compare(&temp_stack_nil) {
-//                    NoMatch => {
-//                        return Result::Err(format!(
-//                            "Type of IF_CONS branches differ {:?} {:?}",
-//                            temp_stack_cons, temp_stack_nil
-//                        ));
-//                    }
-//                    RightFailed => {
-//                        *stack_ = temp_stack_cons;
-//                        return Result::Ok((cbtc, nbtc));
-//                    }
-//                    LeftFailed => {
-//                        *stack_ = temp_stack_nil;
-//                        return Result::Ok((cbtc, nbtc));
-//                    }
-//                    Match => {
-//                        *stack_ = temp_stack_cons;
-//                        return Result::Ok((cbtc, nbtc));
-//                    }
-//                    BothFailed => {
-//                        stack_.fail();
-//                        return Result::Ok((vec![FAIL], vec![FAIL]));
-//                    }
-//                }
-//            }
-//            m => {
-//                return Result::Err(format!("IF_CONS requires a list, but found {:?}", m));
-//            }
-//        },
-//    }
-//}
-//
-//fn ensure_if_left_body(
-//    tcenv: &TcEnv,
-//    stack_: &mut ConcreteStack,
-//    (lb, rb): (
-//        &Vec<CompoundInstruction<SomeValue>>,
-//        &Vec<CompoundInstruction<SomeValue>>,
-//    ),
-//) -> Result<
-//    (
-//        Vec<CompoundInstruction<MValue>>,
-//        Vec<CompoundInstruction<MValue>>,
-//    ),
-//    String,
-//> {
-//    match get_stack_derived!(stack_.get_index(0), (vec![FAIL], vec![FAIL])) {
-//        Some(stack_head) => match stack_head.clone() {
-//            MOr(b) => {
-//                let mut temp_stack_left: ConcreteStack = stack_.clone_tail();
-//                let mut temp_stack_right: ConcreteStack = stack_.clone_tail();
-//                let (lt, rt) = b.as_ref();
-//                temp_stack_left.push(lt.clone());
-//                temp_stack_right.push(rt.clone());
-//                let lbtc = typecheck(tcenv, lb, &mut temp_stack_left)?;
-//                let rbtc = typecheck(tcenv, rb, &mut temp_stack_right)?;
-//
-//                match temp_stack_left.compare(&temp_stack_right) {
-//                    RightFailed => {
-//                        *stack_ = temp_stack_left;
-//                        return Result::Ok((lbtc, rbtc));
-//                    }
-//                    LeftFailed => {
-//                        *stack_ = temp_stack_right;
-//                        return Result::Ok((lbtc, rbtc));
-//                    }
-//                    Match => {
-//                        *stack_ = temp_stack_right;
-//                        return Result::Ok((lbtc, rbtc));
-//                    }
-//                    NoMatch => {
-//                        return Result::Err(format!(
-//                            "Type of IF_LEFT branches differ {:?} {:?}",
-//                            temp_stack_left, temp_stack_right
-//                        ));
-//                    }
-//                    BothFailed => {
-//                        stack_.fail();
-//                        return Result::Ok((vec![FAIL], vec![FAIL]));
-//                    }
-//                }
-//            }
-//            m => {
-//                return Result::Err(format!(
-//                    "IF_LEFT requires an or, but found {:?}, {:?} {:?}",
-//                    m, lb, rb
-//                ));
-//            }
-//        },
-//    }
-//}
-//
-//fn ensure_if_none_body(
-//    tcenv: &TcEnv,
-//    stack_: &mut ConcreteStack,
-//    (nb, sb): (
-//        &Vec<CompoundInstruction<SomeValue>>,
-//        &Vec<CompoundInstruction<SomeValue>>,
-//    ),
-//) -> Result<
-//    (
-//        Vec<CompoundInstruction<MValue>>,
-//        Vec<CompoundInstruction<MValue>>,
-//    ),
-//    String,
-//> {
-//    match get_stack_derived!(stack_.get_index(0), (vec![FAIL], vec![FAIL])) {
-//        Some(stack_head) => match stack_head.clone() {
-//            MOption(x) => {
-//                let mut temp_stack_none: ConcreteStack = stack_.clone_tail();
-//                let mut temp_stack_some: ConcreteStack = stack_.clone_tail();
-//                temp_stack_some.push(x.as_ref().clone());
-//                let sbtc = typecheck(tcenv, sb, &mut temp_stack_some)?;
-//                let nbtc = typecheck(tcenv, nb, &mut temp_stack_none)?;
-//                match temp_stack_some.compare(&temp_stack_none) {
-//                    LeftFailed => {
-//                        *stack_ = temp_stack_none;
-//                        return Result::Ok((nbtc, sbtc));
-//                    }
-//                    RightFailed => {
-//                        *stack_ = temp_stack_some;
-//                        return Result::Ok((nbtc, sbtc));
-//                    }
-//                    Match => {
-//                        *stack_ = temp_stack_some;
-//                        return Result::Ok((nbtc, sbtc));
-//                    }
-//                    NoMatch => {
-//                        return Result::Err(String::from("Type of IF_NONE branches differ"));
-//                    }
-//                    BothFailed => {
-//                        stack_.fail();
-//                        return Result::Ok((vec![FAIL], vec![FAIL]));
-//                    }
-//                }
-//            }
-//            m => {
-//                return Result::Err(format!(
-//                    "IF_NONE requires an option, but found {:?}, {:?} {:?}",
-//                    m, sb, nb
-//                ));
-//            }
-//        },
-//    }
-//}
-//
-//fn ensure_same_lambda_type(
-//    tcenv: &TcEnv,
-//    stack_: &mut ConcreteStack,
-//    (tb, fb): (
-//        &Vec<CompoundInstruction<SomeValue>>,
-//        &Vec<CompoundInstruction<SomeValue>>,
-//    ),
-//) -> Result<
-//    (
-//        Vec<CompoundInstruction<MValue>>,
-//        Vec<CompoundInstruction<MValue>>,
-//    ),
-//    String,
-//> {
-//    let mut temp_stack_t: ConcreteStack = stack_.clone_tail();
-//    let mut temp_stack_f: ConcreteStack = stack_.clone_tail();
-//    let tbtc = typecheck(tcenv, tb, &mut temp_stack_t)?;
-//    let fbtc = typecheck(tcenv, fb, &mut temp_stack_f)?;
-//
-//    match temp_stack_t.compare(&temp_stack_f) {
-//        RightFailed => {
-//            *stack_ = temp_stack_t;
-//            return Result::Ok((tbtc, fbtc));
-//        }
-//        LeftFailed => {
-//            *stack_ = temp_stack_f;
-//            return Result::Ok((tbtc, fbtc));
-//        }
-//        Match => {
-//            *stack_ = temp_stack_f;
-//            return Result::Ok((tbtc, fbtc));
-//        }
-//        NoMatch => {
-//            return Result::Err(String::from("Type of branches differ"));
-//        }
-//        BothFailed => {
-//            stack_.fail();
-//            return Result::Ok((vec![FAIL], vec![FAIL]));
-//        }
-//    }
-//}
+
+fn ensure_if_cons_body(
+    tcenv: &TcEnv,
+    stack_: &mut StackState<MAtomic>,
+    (cs, ns): (
+        &Vec<CompoundInstruction<SomeValue>>,
+        &Vec<CompoundInstruction<SomeValue>>,
+    ),
+) -> Result<
+    (
+        Vec<CompoundInstruction<MValue>>,
+        Vec<CompoundInstruction<MValue>>,
+    ),
+    String,
+> {
+    match get_stack_derived!(stack_.get_index(0), (vec![FAIL], vec![FAIL])) {
+        None => {
+            return Result::Err("Empty stack found for IF_CONS body".to_string());
+        }
+        Some(stack_head) => match stack_head.clone() {
+            MList(x) => {
+                let mut temp_stack_nil: ConcreteStack = stack_.clone_tail();
+                let mut temp_stack_cons: ConcreteStack = stack_.clone_tail();
+                temp_stack_cons.push(MList(x.clone()));
+                temp_stack_cons.push(x.as_ref().clone());
+                let cbtc = typecheck(tcenv, cs, &mut temp_stack_cons)?;
+                let nbtc = typecheck(tcenv, ns, &mut temp_stack_nil)?;
+                match temp_stack_cons.compare(&temp_stack_nil) {
+                    NoMatch => {
+                        return Result::Err(format!(
+                            "Type of IF_CONS branches differ {:?} {:?}",
+                            temp_stack_cons, temp_stack_nil
+                        ));
+                    }
+                    RightFailed => {
+                        *stack_ = temp_stack_cons;
+                        return Result::Ok((cbtc, nbtc));
+                    }
+                    LeftFailed => {
+                        *stack_ = temp_stack_nil;
+                        return Result::Ok((cbtc, nbtc));
+                    }
+                    Match => {
+                        *stack_ = temp_stack_cons;
+                        return Result::Ok((cbtc, nbtc));
+                    }
+                    BothFailed => {
+                        stack_.fail();
+                        return Result::Ok((vec![FAIL], vec![FAIL]));
+                    }
+                }
+            }
+            m => {
+                return Result::Err(format!("IF_CONS requires a list, but found {:?}", m));
+            }
+        },
+    }
+}
+
+fn ensure_if_left_body(
+    tcenv: &TcEnv,
+    stack_: &mut ConcreteStack,
+    (lb, rb): (
+        &Vec<CompoundInstruction<SomeValue>>,
+        &Vec<CompoundInstruction<SomeValue>>,
+    ),
+) -> Result<
+    (
+        Vec<CompoundInstruction<MValue>>,
+        Vec<CompoundInstruction<MValue>>,
+    ),
+    String,
+> {
+    match get_stack_derived!(stack_.get_index(0), (vec![FAIL], vec![FAIL])) {
+        None => {
+            return Result::Err("Expecting a bool on stack top, but found empty stack".to_string());
+        }
+        Some(stack_head) => match stack_head.clone() {
+            MOr(b) => {
+                let mut temp_stack_left: ConcreteStack = stack_.clone_tail();
+                let mut temp_stack_right: ConcreteStack = stack_.clone_tail();
+                let (lt, rt) = b.as_ref();
+                temp_stack_left.push(lt.clone());
+                temp_stack_right.push(rt.clone());
+                let lbtc = typecheck(tcenv, lb, &mut temp_stack_left)?;
+                let rbtc = typecheck(tcenv, rb, &mut temp_stack_right)?;
+
+                match temp_stack_left.compare(&temp_stack_right) {
+                    RightFailed => {
+                        *stack_ = temp_stack_left;
+                        return Result::Ok((lbtc, rbtc));
+                    }
+                    LeftFailed => {
+                        *stack_ = temp_stack_right;
+                        return Result::Ok((lbtc, rbtc));
+                    }
+                    Match => {
+                        *stack_ = temp_stack_right;
+                        return Result::Ok((lbtc, rbtc));
+                    }
+                    NoMatch => {
+                        return Result::Err(format!(
+                            "Type of IF_LEFT branches differ {:?} {:?}",
+                            temp_stack_left, temp_stack_right
+                        ));
+                    }
+                    BothFailed => {
+                        stack_.fail();
+                        return Result::Ok((vec![FAIL], vec![FAIL]));
+                    }
+                }
+            }
+            m => {
+                return Result::Err(format!(
+                    "IF_LEFT requires an or, but found {:?}, {:?} {:?}",
+                    m, lb, rb
+                ));
+            }
+        },
+    }
+}
+
+fn ensure_if_none_body(
+    tcenv: &TcEnv,
+    stack_: &mut ConcreteStack,
+    (nb, sb): (
+        &Vec<CompoundInstruction<SomeValue>>,
+        &Vec<CompoundInstruction<SomeValue>>,
+    ),
+) -> Result<
+    (
+        Vec<CompoundInstruction<MValue>>,
+        Vec<CompoundInstruction<MValue>>,
+    ),
+    String,
+> {
+    match get_stack_derived!(stack_.get_index(0), (vec![FAIL], vec![FAIL])) {
+        None => return Result::Err("Empty stack found for IF_NONE body!".to_string()),
+        Some(stack_head) => match stack_head.clone() {
+            MOption(x) => {
+                let mut temp_stack_none: ConcreteStack = stack_.clone_tail();
+                let mut temp_stack_some: ConcreteStack = stack_.clone_tail();
+                temp_stack_some.push(x.as_ref().clone());
+                let sbtc = typecheck(tcenv, sb, &mut temp_stack_some)?;
+                let nbtc = typecheck(tcenv, nb, &mut temp_stack_none)?;
+                match temp_stack_some.compare(&temp_stack_none) {
+                    LeftFailed => {
+                        *stack_ = temp_stack_none;
+                        return Result::Ok((nbtc, sbtc));
+                    }
+                    RightFailed => {
+                        *stack_ = temp_stack_some;
+                        return Result::Ok((nbtc, sbtc));
+                    }
+                    Match => {
+                        *stack_ = temp_stack_some;
+                        return Result::Ok((nbtc, sbtc));
+                    }
+                    NoMatch => {
+                        return Result::Err(String::from("Type of IF_NONE branches differ"));
+                    }
+                    BothFailed => {
+                        stack_.fail();
+                        return Result::Ok((vec![FAIL], vec![FAIL]));
+                    }
+                }
+            }
+            m => {
+                return Result::Err(format!(
+                    "IF_NONE requires an option, but found {:?}, {:?} {:?}",
+                    m, sb, nb
+                ));
+            }
+        },
+    }
+}
+
+fn ensure_same_lambda_type(
+    tcenv: &TcEnv,
+    stack_: &mut ConcreteStack,
+    (tb, fb): (
+        &Vec<CompoundInstruction<SomeValue>>,
+        &Vec<CompoundInstruction<SomeValue>>,
+    ),
+) -> Result<
+    (
+        Vec<CompoundInstruction<MValue>>,
+        Vec<CompoundInstruction<MValue>>,
+    ),
+    String,
+> {
+    let mut temp_stack_t: ConcreteStack = stack_.clone_tail();
+    let mut temp_stack_f: ConcreteStack = stack_.clone_tail();
+    let tbtc = typecheck(tcenv, tb, &mut temp_stack_t)?;
+    let fbtc = typecheck(tcenv, fb, &mut temp_stack_f)?;
+
+    match temp_stack_t.compare(&temp_stack_f) {
+        RightFailed => {
+            *stack_ = temp_stack_t;
+            return Result::Ok((tbtc, fbtc));
+        }
+        LeftFailed => {
+            *stack_ = temp_stack_f;
+            return Result::Ok((tbtc, fbtc));
+        }
+        Match => {
+            *stack_ = temp_stack_f;
+            return Result::Ok((tbtc, fbtc));
+        }
+        NoMatch => {
+            return Result::Err(String::from("Type of branches differ"));
+        }
+        BothFailed => {
+            stack_.fail();
+            return Result::Ok((vec![FAIL], vec![FAIL]));
+        }
+    }
+}
 
 fn typecheck_one(
     tcenv: &TcEnv,
@@ -1055,7 +1080,8 @@ fn typecheck_one(
             SdOk(Some(stack_head)) => match stack_head {
                 MOr(b) => {
                     let (l, r) = b.as_ref();
-                    let tinst = ensure_loop_left_body(tcenv, stack, SdOk(l.clone()), SdOk(r.clone()), ins)?;
+                    let tinst =
+                        ensure_loop_left_body(tcenv, stack, SdOk(l.clone()), SdOk(r.clone()), ins)?;
                     return Result::Ok(LOOP_LEFT(tinst));
                 }
                 m => {
@@ -1071,207 +1097,229 @@ fn typecheck_one(
                 return Result::Ok(LOOP_LEFT(tinst));
             }
         },
+        MAP(ins) => match stack.get_index(0) {
+            SdOk(Some(stack_head)) => match stack_head.clone() {
+                MList(t) => {
+                    let tinst = ensure_map_body(
+                        tcenv,
+                        stack,
+                        SdOk((&(t.clone()), |x| MList(Box::new(x)))),
+                        ins,
+                    )?;
+                    return Result::Ok(MAP(tinst));
+                }
+                MOption(t) => {
+                    let tinst = ensure_map_body(
+                        tcenv,
+                        stack,
+                        SdOk((&(t.clone()), |x| MOption(Box::new(x)))),
+                        ins,
+                    )?;
+                    return Result::Ok(MAP(tinst));
+                }
+                MMap(t) => {
+                    let (k, v) = t.as_ref();
+                    let tinst = ensure_map_body(
+                        tcenv,
+                        stack,
+                        SdOk((&MPair(t.clone()), |x| MMap(Box::new((k.clone(), x))))),
+                        ins,
+                    )?;
+                    return Result::Ok(MAP(tinst));
+                }
+                m => {
+                    return Result::Err(format!(
+                        "Map requires a list, option or map, but found {:?}",
+                        m
+                    ));
+                }
+            },
+            SdOk(None) => {
+                return Result::Err(format!("Map cannot work with Empty list"));
+            }
+            SdFailed => {
+                return Result::Ok(FAIL);
+            }
+        },
+        ITER(ins) => match get_stack_derived!(stack.get_index(0), FAIL) {
+            None => {
+                let tinst = ensure_iter_body(tcenv, stack, None, ins)?;
+                return Result::Ok(ITER(tinst));
+            }
+            Some(stack_head) => match stack_head {
+                MList(t) => {
+                    let tinst = ensure_iter_body(tcenv, stack, Some(&(t.clone())), ins)?;
+                    return Result::Ok(ITER(tinst));
+                }
+                MSet(t) => {
+                    let tinst = ensure_iter_body(tcenv, stack, Some(&(t.clone())), ins)?;
+                    return Result::Ok(ITER(tinst));
+                }
+                MMap(t) => {
+                    let tinst = ensure_iter_body(tcenv, stack, Some(&MPair(t.clone())), ins)?;
+                    return Result::Ok(ITER(tinst));
+                }
+                m => {
+                    return Result::Err(format!(
+                        "ITER requires a list, set or map, but found {:?}",
+                        m
+                    ));
+                }
+            },
+        },
+        IF_CONS(tb, fb) => {
+            get_stack_derived!(stack.ensure_non_empty(), FAIL);
+            let stack_head = get_stack_derived!(stack.get_index(0), FAIL);
+            let (cbtc, nbtc) = ensure_if_cons_body(tcenv, stack, (tb, fb))?;
+            return Result::Ok(IF_CONS(cbtc, nbtc));
+        }
+        IF_NONE(nb, sb) => {
+            get_stack_derived!(stack.ensure_non_empty(), FAIL);
+            let (nbtc, sbtc) = ensure_if_none_body(tcenv, stack, (nb, sb))?;
+            return Result::Ok(IF_NONE(nbtc, sbtc));
+        }
+        IF_SOME(sb, nb) => {
+            get_stack_derived!(stack.ensure_non_empty(), FAIL);
+            let (nbtc, sbtc) = ensure_if_none_body(tcenv, stack, (nb, sb))?;
+            return Result::Ok(IF_SOME(sbtc, nbtc));
+        }
+
+        IF_LEFT(lb, rb) => {
+            get_stack_derived!(stack.ensure_non_empty(), FAIL);
+            let (lbtc, rbtc) = ensure_if_left_body(tcenv, stack, (lb, rb))?;
+            return Result::Ok(IF_LEFT(lbtc, rbtc));
+        }
+        IF(tb, fb) => {
+            match get_stack_derived!(stack.get_index(0), FAIL) {
+                Some(MWrapped(MBool)) => {}
+                _ => {
+                    return Result::Err(
+                        "Expecting a bool on stack top, but found something else".to_string(),
+                    );
+                }
+            }
+            let (tbtc, fbtc) = ensure_same_lambda_type(tcenv, stack, (tb, fb))?;
+            return Result::Ok(IF(tbtc, fbtc));
+        }
+        GET(n) => match get_stack_derived!(stack.get_index(0), FAIL) {
+            Some(stack_head) => {
+                let r = get_n_pair(&n, stack_head)?;
+                stack.replace_index(0, r.clone());
+                return Result::Ok(GET(*n));
+            }
+            _ => return Result::Ok(GET(*n)),
+        },
+        UPDATE(n) => {
+            get_stack_derived!(stack.ensure_stack_atleast(2), FAIL);
+            match get_stack_derived!(stack.get_index(0), FAIL).clone() {
+                Some(stack_head) => match get_stack_derived!(stack.get_index(1), FAIL).clone() {
+                    Some(u) => {
+                        let mut update_target = u.clone();
+                        update_n_pair(&n, &stack_head, &mut update_target)?;
+                        stack.pop();
+                        stack.replace_index(0, update_target);
+                        return Result::Ok(UPDATE(*n));
+                    }
+                    None => {
+                        return Result::Err("Stack unexpectedly found empty".to_string());
+                    }
+                },
+                None => return Result::Ok(UPDATE(*n)),
+            }
+        }
+        DUP(n) => {
+            if *n > 0 {
+                get_stack_derived!(stack.ensure_stack_atleast(*n), FAIL);
+                match get_stack_derived!(stack.get_index(n - 1), FAIL) {
+                    Some(target) => {
+                        stack.push(target.clone());
+                        return Result::Ok(DUP(*n));
+                    }
+                    None => { panic!() }
+                }
+            } else {
+                return Result::Err("DUP(0) is forbidden".to_string());
+            }
+        }
+        PAIR(n) => {
+            get_stack_derived!(stack.ensure_stack_atleast(*n), FAIL);
+            let pair = get_stack_derived!(mk_pair(stack, *n), FAIL);
+            stack.push(pair);
+            return Result::Ok(PAIR(*n));
+        }
+        UNPAIR(n) => {
+            if *n >= 2 {
+                get_stack_derived!(stack.ensure_stack_atleast(1), FAIL);
+                match get_stack_derived!(stack.pop(), FAIL) {
+                    Some(stack_head) => {
+                        unmk_pair(&stack_head, *n, stack);
+                        return Result::Ok(UNPAIR(*n));
+                    }
+                    None => { panic!() }
+                }
+            } else {
+                return Result::Err("PAIR(<2) is forbidden".to_string());
+            }
+        }
+        DIG(n) => {
+            get_stack_derived!(stack.ensure_stack_atleast(*n + 1), FAIL);
+            stack.move_element(*n, 0);
+            return Result::Ok(DIG(*n));
+        }
+
+        DUG(n) => {
+            get_stack_derived!(stack.ensure_stack_atleast(*n + 1), FAIL);
+            stack.move_element(0, *n);
+            return Result::Ok(DUG(*n));
+        }
+
+        DROP(n) => {
+            get_stack_derived!(stack.ensure_stack_atleast(*n), FAIL);
+            for i in 1..=*n {
+                stack.pop();
+            }
+            return Result::Ok(DROP(*n));
+        }
+        DIP(n, instr) => {
+            if n > &0 {
+                get_stack_derived!(stack.ensure_stack_atleast(*n), FAIL);
+                let mut temp_stack = stack.clone_tail_at(*n);
+                let tins = typecheck(tcenv, instr, &mut temp_stack)?;
+                let mut result_stack = stack.clone_head_till(*n);
+                result_stack.append_stack(&mut temp_stack);
+                *stack = result_stack;
+                return Result::Ok(DIP(*n, tins));
+            } else {
+                return Result::Err("DIP instruction's argument cannot be zero".to_string());
+            }
+        }
+        LAMBDA_REC(it, ot, instr) => {
+            let mut temp_stack = StackState::from(vec![
+                it.clone(),
+                MLambda(Box::new((it.clone(), ot.clone()))),
+            ]);
+            let tins = typecheck(tcenv, instr, &mut temp_stack)?;
+            let temp_stack_len = temp_stack.len();
+            let temp_stack_head = temp_stack.get_index(0);
+            match (temp_stack_len, temp_stack_head) {
+                (SdOk(l), SdOk(Some(sh))) => {
+                    if sh == ot && l == 1 {
+                        stack.push(MLambda(Box::new((it.clone(), ot.clone()))));
+                        return Result::Ok(LAMBDA_REC(it.clone(), ot.clone(), tins));
+                    } else {
+                        return Result::Err(String::from(
+                            "Unexpected output stack for lambda rec lambda",
+                        ));
+                    }
+                }
+                _ => {
+                    return Result::Ok(LAMBDA_REC(it.clone(), ot.clone(), tins));
+                }
+            }
+        }
+
         _ => {
             return Result::Err(format!("Instruction {} not found", ""));
-        } // MAP(ins) => match get_stack_derived!(stack.get_index(0), FAIL).clone() {
-          //     Some(stack_head) => match stack_head {
-          //         MList(t) => {
-          //             let tinst =
-          //                 ensure_map_body(tcenv, stack, &(t.clone()), |x| MList(Box::new(x)), ins)?;
-          //             return Result::Ok(MAP(tinst));
-          //         }
-          //         MOption(t) => {
-          //             let tinst =
-          //                 ensure_map_body(tcenv, stack, &(t.clone()), |x| MOption(Box::new(x)), ins)?;
-          //             return Result::Ok(MAP(tinst));
-          //         }
-          //         MMap(t) => {
-          //             let (k, v) = t.as_ref();
-          //             let tinst = ensure_map_body(
-          //                 tcenv,
-          //                 stack,
-          //                 &MPair(t.clone()),
-          //                 |x| MMap(Box::new((k.clone(), x))),
-          //                 ins,
-          //             )?;
-          //             return Result::Ok(MAP(tinst));
-          //         }
-          //         m => {
-          //             return Result::Err(format!(
-          //                 "ITER requires a list, option or map, but found {:?}",
-          //                 m
-          //             ));
-          //         }
-          //     },
-          // },
-
-          // ITER(ins) => match get_stack_derived!(stack.get_index(0), FAIL) {
-          //     Some(stack_head) => match stack_head {
-          //         MList(t) => {
-          //             let tinst = ensure_iter_body(tcenv, stack, &(t.clone()), ins)?;
-          //             return Result::Ok(ITER(tinst));
-          //         }
-          //         MSet(t) => {
-          //             let tinst = ensure_iter_body(tcenv, stack, &(t.clone()), ins)?;
-          //             return Result::Ok(ITER(tinst));
-          //         }
-          //         MMap(t) => {
-          //             let tinst = ensure_iter_body(tcenv, stack, &MPair(t.clone()), ins)?;
-          //             return Result::Ok(ITER(tinst));
-          //         }
-          //         m => {
-          //             return Result::Err(format!(
-          //                 "ITER requires a list, set or map, but found {:?}",
-          //                 m
-          //             ));
-          //         }
-          //     },
-          // },
-          // IF_CONS(tb, fb) => {
-          //     get_stack_derived!(stack.ensure_non_empty(), FAIL);
-          //     let stack_head = get_stack_derived!(stack.get_index(0), FAIL);
-          //     let (cbtc, nbtc) = ensure_if_cons_body(tcenv, stack, (tb, fb))?;
-          //     return Result::Ok(IF_CONS(cbtc, nbtc));
-          // }
-          // IF_NONE(nb, sb) => {
-          //     get_stack_derived!(stack.ensure_non_empty(), FAIL);
-          //     let (nbtc, sbtc) = ensure_if_none_body(tcenv, stack, (nb, sb))?;
-          //     return Result::Ok(IF_NONE(nbtc, sbtc));
-          // }
-          // IF_SOME(sb, nb) => {
-          //     get_stack_derived!(stack.ensure_non_empty(), FAIL);
-          //     let (nbtc, sbtc) = ensure_if_none_body(tcenv, stack, (nb, sb))?;
-          //     return Result::Ok(IF_SOME(sbtc, nbtc));
-          // }
-
-          // IF_LEFT(lb, rb) => {
-          //     get_stack_derived!(stack.ensure_non_empty(), FAIL);
-          //     let (lbtc, rbtc) = ensure_if_left_body(tcenv, stack, (lb, rb))?;
-          //     return Result::Ok(IF_LEFT(lbtc, rbtc));
-          // }
-          // IF(tb, fb) => {
-          //     match get_stack_derived!(stack.get_index(0), FAIL) {
-          //         Some(MWrapped(MBool)) => {}
-          //         _ => {
-          //             return Result::Err(
-          //                 "Expecting a bool on stack top, but found something else".to_string(),
-          //             );
-          //         }
-          //     }
-          //     let (tbtc, fbtc) = ensure_same_lambda_type(tcenv, stack, (tb, fb))?;
-          //     return Result::Ok(IF(tbtc, fbtc));
-          // }
-          // GET(n) => match get_stack_derived!(stack.get_index(0), FAIL) {
-          //     Some(stack_head) => {
-          //         let r = get_n_pair(&n, stack_head)?;
-          //         stack.replace_index(0, r.clone());
-          //         return Result::Ok(GET(*n));
-          //     }
-          //     _ => return Result::Ok(GET(*n)),
-          // },
-          // UPDATE(n) => {
-          //     get_stack_derived!(stack.ensure_stack_atleast(2), FAIL);
-          //     match get_stack_derived!(stack.get_index(0), FAIL) {
-          //         Some(stack_head) => match get_stack_derived!(stack.get_index(1), FAIL).clone() {
-          //             Some(mut update_target) => {
-          //                 update_n_pair(&n, &stack_head, &mut update_target)?;
-          //                 stack.pop();
-          //                 stack.replace_index(0, *update_target);
-          //                 return Result::Ok(UPDATE(*n));
-          //             }
-          //         },
-          //         _ => return Result::Ok(UPDATE(*n)),
-          //     }
-          // }
-          // DUP(n) => {
-          //     if *n > 0 {
-          //         get_stack_derived!(stack.ensure_stack_atleast(*n), FAIL);
-          //         match get_stack_derived!(stack.get_index(n - 1), FAIL) {
-          //             Some(target) => {
-          //                 stack.push(target.clone());
-          //                 return Result::Ok(DUP(*n));
-          //             }
-          //         }
-          //     } else {
-          //         return Result::Err("DUP(0) is forbidden".to_string());
-          //     }
-          // }
-          // PAIR(n) => {
-          //     get_stack_derived!(stack.ensure_stack_atleast(*n), FAIL);
-          //     let pair = get_stack_derived!(mk_pair(stack, *n), FAIL);
-          //     stack.push(pair);
-          //     return Result::Ok(PAIR(*n));
-          // }
-          // UNPAIR(n) => {
-          //     if *n >= 2 {
-          //         get_stack_derived!(stack.ensure_stack_atleast(1), FAIL);
-          //         match get_stack_derived!(stack.pop(), FAIL) {
-          //             Some(stack_head) => {
-          //                 unmk_pair(&stack_head, *n, stack);
-          //                 return Result::Ok(UNPAIR(*n));
-          //             }
-          //         }
-          //     } else {
-          //         return Result::Err("PAIR(<2) is forbidden".to_string());
-          //     }
-          // }
-          // DIG(n) => {
-          //     get_stack_derived!(stack.ensure_stack_atleast(*n + 1), FAIL);
-          //     stack.move_element(*n, 0);
-          //     return Result::Ok(DIG(*n));
-          // }
-
-          // DUG(n) => {
-          //     get_stack_derived!(stack.ensure_stack_atleast(*n + 1), FAIL);
-          //     stack.move_element(0, *n);
-          //     return Result::Ok(DUG(*n));
-          // }
-
-          // DROP(n) => {
-          //     get_stack_derived!(stack.ensure_stack_atleast(*n), FAIL);
-          //     for i in 1..=*n {
-          //         stack.pop();
-          //     }
-          //     return Result::Ok(DROP(*n));
-          // }
-          // DIP(n, instr) => {
-          //     if n > &0 {
-          //         get_stack_derived!(stack.ensure_stack_atleast(*n), FAIL);
-          //         let mut temp_stack = stack.clone_tail_at(*n);
-          //         let tins = typecheck(tcenv, instr, &mut temp_stack)?;
-          //         let mut result_stack = stack.clone_head_till(*n);
-          //         result_stack.append_stack(&mut temp_stack);
-          //         *stack = result_stack;
-          //         return Result::Ok(DIP(*n, tins));
-          //     } else {
-          //         return Result::Err("DIP instruction's argument cannot be zero".to_string());
-          //     }
-          // }
-          // //_ => { return Result::Err(format!("Instruction {} not found", "")); }
-
-          // LAMBDA_REC(it, ot, instr) => {
-          //     let mut temp_stack = StackState::from(vec![
-          //         it.clone(),
-          //         MLambda(Box::new((it.clone(), ot.clone()))),
-          //     ]);
-          //     let tins = typecheck(tcenv, instr, &mut temp_stack)?;
-          //     let temp_stack_len = temp_stack.len();
-          //     let temp_stack_head = temp_stack.get_index(0);
-          //     match (temp_stack_len, temp_stack_head) {
-          //         (SdOk(l), SdOk(Some(sh))) => {
-          //             if sh == ot && l == 1 {
-          //                 stack.push(MLambda(Box::new((it.clone(), ot.clone()))));
-          //                 return Result::Ok(LAMBDA_REC(it.clone(), ot.clone(), tins));
-          //             } else {
-          //                 return Result::Err(String::from(
-          //                     "Unexpected output stack for lambda rec lambda",
-          //                 ));
-          //             }
-          //         }
-          //         _ => {
-          //             return Result::Ok(LAMBDA_REC(it.clone(), ot.clone(), tins));
-          //         }
-          //     }
-          // }
+        }
     };
 }

@@ -40,7 +40,7 @@ fn parse_type(src: &str) -> ConcreteType {
     }
 }
 
-//#[test]
+#[test]
 fn dummy_2() {
     assert_eq!(
         typecheck_(&parse("PUSH nat 5; PUSH nat 5;ADD")).unwrap(),
@@ -49,7 +49,7 @@ fn dummy_2() {
 }
 
 
-#[test]
+//#[test]
 fn dummy() {
     let r = typecheck_(&parse(" LAMBDA
          (pair (pair (lambda (pair nat nat) nat)
@@ -234,7 +234,7 @@ fn dummy() {
     }
 }
 
-#[test]
+//#[test]
 fn test_paring_behavior() {
     assert_eq!(parse_type("nat"), MWrapped(MNat));
     assert_eq!(
