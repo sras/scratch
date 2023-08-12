@@ -35,7 +35,7 @@ fn parse(src: &str) -> Vec<CompoundInstruction<SomeValue>> {
 
 fn parse_type(src: &str) -> ConcreteType {
     match parse_stack(src).get_index(0) {
-        SdOk(Some(x)) => x.clone(),
+        SdOk(Result::Ok(x)) => x.clone(),
         _ => panic!("Unexpected stack after parsing")
     }
 }
@@ -49,7 +49,7 @@ fn dummy_2() {
 }
 
 
-//#[test]
+#[test]
 fn dummy() {
     let r = typecheck_(&parse(" LAMBDA
          (pair (pair (lambda (pair nat nat) nat)
@@ -234,7 +234,7 @@ fn dummy() {
     }
 }
 
-//#[test]
+#[test]
 fn test_paring_behavior() {
     assert_eq!(parse_type("nat"), MWrapped(MNat));
     assert_eq!(

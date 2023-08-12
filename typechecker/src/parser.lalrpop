@@ -236,8 +236,8 @@ pub MDyn: MType<DynMType> = {
   "option" <t1:MDyn> => MOption (Box::new(t1)),
   "contract" <a:AnnotationList> <t1:MDyn> => MContract (Box::new(t1)),
   "contract" <t1:MDyn> => MContract (Box::new(t1)),
-  "(" "pair" <t1:MDynListForPair> ")"=> mk_pair(&mut StackState::from(t1.clone()), t1.len()).unwrap(),
-  "(" "pair" <a:AnnotationList> <t1:MDynListForPair> ")"=> mk_pair(&mut StackState::from(t1.clone()), t1.len()).unwrap(),
+  "(" "pair" <t1:MDynListForPair> ")"=> mk_pair(&mut StackState::from(t1.clone()), t1.len()).unwrap().unwrap(),
+  "(" "pair" <a:AnnotationList> <t1:MDynListForPair> ")"=> mk_pair(&mut StackState::from(t1.clone()), t1.len()).unwrap().unwrap(),
 
   "pair" <a:AnnotationList> <t1:MDyn> <t2:MDyn> => MPair(Box::new((t1, t2))),
   "pair" <t1:MDyn> <t2:MDyn> => MPair(Box::new((t1, t2))),

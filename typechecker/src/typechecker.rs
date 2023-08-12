@@ -7,8 +7,10 @@ use std::time::{Duration, Instant};
 use crate::attributes;
 use crate::attributes::check_attribute;
 use crate::attributes::check_attributes;
-use crate::get_stack_derived;
-//use crate::get_stack_derived_2;
+use crate::ensure_stack_derived;
+//use crate::get_stack_derived;
+use crate::get_stack_derived_result;
+use crate::get_stack_derived_result_handle_failed;
 use crate::instructions::MICHELSON_INSTRUCTIONS;
 use crate::parsers::parse_contract;
 use crate::types::get_n_pair;
@@ -566,10 +568,10 @@ fn unify_stack(
             }
             for constraint in sem_stack_in {
                 match stack_state.pop_front() {
-                    SdOk(Some(stack_elem)) => {
+                    SdOk(Result::Ok(stack_elem)) => {
                         unify_concrete_arg(resolved, &stack_elem, &constraint)?;
                     }
-                    SdOk(None) => {
+                    SdOk(Result::Err(_)) => {
                         return Result::Err("Too few values in stack".to_string());
                     }
                     SdFailed => {
@@ -699,10 +701,10 @@ fn ensure_map_body<F: (Fn(ConcreteType) -> ConcreteType)>(
                     *stack = start_stack;
                     return Result::Ok(tinst);
                 }
-                SdOk(None) => {
+                SdOk(Result::Err(_)) => {
                     return Result::Err("Map body returned too few values on stack.".to_string())
                 }
-                SdOk(Some(start_stack_head)) => match start_stack.compare(&expected_stack) {
+                SdOk(Result::Ok(start_stack_head)) => match start_stack.compare(&expected_stack) {
                     NoMatch => {
                         return Result::Err(String::from(
                             "MAP body cannot mutated the tail of the stack.",
@@ -785,47 +787,44 @@ fn ensure_if_cons_body(
     ),
     String,
 > {
-    match get_stack_derived!(stack_.get_index(0), (vec![FAIL], vec![FAIL])) {
-        None => {
-            return Result::Err("Empty stack found for IF_CONS body".to_string());
-        }
-        Some(stack_head) => match stack_head.clone() {
-            MList(x) => {
-                let mut temp_stack_nil: ConcreteStack = stack_.clone_tail();
-                let mut temp_stack_cons: ConcreteStack = stack_.clone_tail();
-                temp_stack_cons.push(MList(x.clone()));
-                temp_stack_cons.push(x.as_ref().clone());
-                let cbtc = typecheck(tcenv, cs, &mut temp_stack_cons)?;
-                let nbtc = typecheck(tcenv, ns, &mut temp_stack_nil)?;
-                match temp_stack_cons.compare(&temp_stack_nil) {
-                    NoMatch => {
-                        return Result::Err(format!(
-                            "Type of IF_CONS branches differ {:?} {:?}",
-                            temp_stack_cons, temp_stack_nil
-                        ));
-                    }
-                    RightFailed => {
-                        *stack_ = temp_stack_cons;
-                        return Result::Ok((cbtc, nbtc));
-                    }
-                    LeftFailed => {
-                        *stack_ = temp_stack_nil;
-                        return Result::Ok((cbtc, nbtc));
-                    }
-                    Match => {
-                        *stack_ = temp_stack_cons;
-                        return Result::Ok((cbtc, nbtc));
-                    }
-                    BothFailed => {
-                        stack_.fail();
-                        return Result::Ok((vec![FAIL], vec![FAIL]));
-                    }
+    let stack_head =
+        get_stack_derived_result_handle_failed!(stack_.get_index(0), (vec![FAIL], vec![FAIL]));
+    match stack_head.clone() {
+        MList(x) => {
+            let mut temp_stack_nil: ConcreteStack = stack_.clone_tail();
+            let mut temp_stack_cons: ConcreteStack = stack_.clone_tail();
+            temp_stack_cons.push(MList(x.clone()));
+            temp_stack_cons.push(x.as_ref().clone());
+            let cbtc = typecheck(tcenv, cs, &mut temp_stack_cons)?;
+            let nbtc = typecheck(tcenv, ns, &mut temp_stack_nil)?;
+            match temp_stack_cons.compare(&temp_stack_nil) {
+                NoMatch => {
+                    return Result::Err(format!(
+                        "Type of IF_CONS branches differ {:?} {:?}",
+                        temp_stack_cons, temp_stack_nil
+                    ));
+                }
+                RightFailed => {
+                    *stack_ = temp_stack_cons;
+                    return Result::Ok((cbtc, nbtc));
+                }
+                LeftFailed => {
+                    *stack_ = temp_stack_nil;
+                    return Result::Ok((cbtc, nbtc));
+                }
+                Match => {
+                    *stack_ = temp_stack_cons;
+                    return Result::Ok((cbtc, nbtc));
+                }
+                BothFailed => {
+                    stack_.fail();
+                    return Result::Ok((vec![FAIL], vec![FAIL]));
                 }
             }
-            m => {
-                return Result::Err(format!("IF_CONS requires a list, but found {:?}", m));
-            }
-        },
+        }
+        m => {
+            return Result::Err(format!("IF_CONS requires a list, but found {:?}", m));
+        }
     }
 }
 
@@ -843,52 +842,49 @@ fn ensure_if_left_body(
     ),
     String,
 > {
-    match get_stack_derived!(stack_.get_index(0), (vec![FAIL], vec![FAIL])) {
-        None => {
-            return Result::Err("Expecting a bool on stack top, but found empty stack".to_string());
-        }
-        Some(stack_head) => match stack_head.clone() {
-            MOr(b) => {
-                let mut temp_stack_left: ConcreteStack = stack_.clone_tail();
-                let mut temp_stack_right: ConcreteStack = stack_.clone_tail();
-                let (lt, rt) = b.as_ref();
-                temp_stack_left.push(lt.clone());
-                temp_stack_right.push(rt.clone());
-                let lbtc = typecheck(tcenv, lb, &mut temp_stack_left)?;
-                let rbtc = typecheck(tcenv, rb, &mut temp_stack_right)?;
+    let stack_head =
+        get_stack_derived_result_handle_failed!(stack_.get_index(0), (vec![FAIL], vec![FAIL]));
+    match stack_head.clone() {
+        MOr(b) => {
+            let mut temp_stack_left: ConcreteStack = stack_.clone_tail();
+            let mut temp_stack_right: ConcreteStack = stack_.clone_tail();
+            let (lt, rt) = b.as_ref();
+            temp_stack_left.push(lt.clone());
+            temp_stack_right.push(rt.clone());
+            let lbtc = typecheck(tcenv, lb, &mut temp_stack_left)?;
+            let rbtc = typecheck(tcenv, rb, &mut temp_stack_right)?;
 
-                match temp_stack_left.compare(&temp_stack_right) {
-                    RightFailed => {
-                        *stack_ = temp_stack_left;
-                        return Result::Ok((lbtc, rbtc));
-                    }
-                    LeftFailed => {
-                        *stack_ = temp_stack_right;
-                        return Result::Ok((lbtc, rbtc));
-                    }
-                    Match => {
-                        *stack_ = temp_stack_right;
-                        return Result::Ok((lbtc, rbtc));
-                    }
-                    NoMatch => {
-                        return Result::Err(format!(
-                            "Type of IF_LEFT branches differ {:?} {:?}",
-                            temp_stack_left, temp_stack_right
-                        ));
-                    }
-                    BothFailed => {
-                        stack_.fail();
-                        return Result::Ok((vec![FAIL], vec![FAIL]));
-                    }
+            match temp_stack_left.compare(&temp_stack_right) {
+                RightFailed => {
+                    *stack_ = temp_stack_left;
+                    return Result::Ok((lbtc, rbtc));
+                }
+                LeftFailed => {
+                    *stack_ = temp_stack_right;
+                    return Result::Ok((lbtc, rbtc));
+                }
+                Match => {
+                    *stack_ = temp_stack_right;
+                    return Result::Ok((lbtc, rbtc));
+                }
+                NoMatch => {
+                    return Result::Err(format!(
+                        "Type of IF_LEFT branches differ {:?} {:?}",
+                        temp_stack_left, temp_stack_right
+                    ));
+                }
+                BothFailed => {
+                    stack_.fail();
+                    return Result::Ok((vec![FAIL], vec![FAIL]));
                 }
             }
-            m => {
-                return Result::Err(format!(
-                    "IF_LEFT requires an or, but found {:?}, {:?} {:?}",
-                    m, lb, rb
-                ));
-            }
-        },
+        }
+        m => {
+            return Result::Err(format!(
+                "IF_LEFT requires an or, but found {:?}, {:?} {:?}",
+                m, lb, rb
+            ));
+        }
     }
 }
 
@@ -906,44 +902,43 @@ fn ensure_if_none_body(
     ),
     String,
 > {
-    match get_stack_derived!(stack_.get_index(0), (vec![FAIL], vec![FAIL])) {
-        None => return Result::Err("Empty stack found for IF_NONE body!".to_string()),
-        Some(stack_head) => match stack_head.clone() {
-            MOption(x) => {
-                let mut temp_stack_none: ConcreteStack = stack_.clone_tail();
-                let mut temp_stack_some: ConcreteStack = stack_.clone_tail();
-                temp_stack_some.push(x.as_ref().clone());
-                let sbtc = typecheck(tcenv, sb, &mut temp_stack_some)?;
-                let nbtc = typecheck(tcenv, nb, &mut temp_stack_none)?;
-                match temp_stack_some.compare(&temp_stack_none) {
-                    LeftFailed => {
-                        *stack_ = temp_stack_none;
-                        return Result::Ok((nbtc, sbtc));
-                    }
-                    RightFailed => {
-                        *stack_ = temp_stack_some;
-                        return Result::Ok((nbtc, sbtc));
-                    }
-                    Match => {
-                        *stack_ = temp_stack_some;
-                        return Result::Ok((nbtc, sbtc));
-                    }
-                    NoMatch => {
-                        return Result::Err(String::from("Type of IF_NONE branches differ"));
-                    }
-                    BothFailed => {
-                        stack_.fail();
-                        return Result::Ok((vec![FAIL], vec![FAIL]));
-                    }
+    let stack_head =
+        get_stack_derived_result_handle_failed!(stack_.get_index(0), (vec![FAIL], vec![FAIL]));
+    match stack_head.clone() {
+        MOption(x) => {
+            let mut temp_stack_none: ConcreteStack = stack_.clone_tail();
+            let mut temp_stack_some: ConcreteStack = stack_.clone_tail();
+            temp_stack_some.push(x.as_ref().clone());
+            let sbtc = typecheck(tcenv, sb, &mut temp_stack_some)?;
+            let nbtc = typecheck(tcenv, nb, &mut temp_stack_none)?;
+            match temp_stack_some.compare(&temp_stack_none) {
+                LeftFailed => {
+                    *stack_ = temp_stack_none;
+                    return Result::Ok((nbtc, sbtc));
+                }
+                RightFailed => {
+                    *stack_ = temp_stack_some;
+                    return Result::Ok((nbtc, sbtc));
+                }
+                Match => {
+                    *stack_ = temp_stack_some;
+                    return Result::Ok((nbtc, sbtc));
+                }
+                NoMatch => {
+                    return Result::Err(String::from("Type of IF_NONE branches differ"));
+                }
+                BothFailed => {
+                    stack_.fail();
+                    return Result::Ok((vec![FAIL], vec![FAIL]));
                 }
             }
-            m => {
-                return Result::Err(format!(
-                    "IF_NONE requires an option, but found {:?}, {:?} {:?}",
-                    m, sb, nb
-                ));
-            }
-        },
+        }
+        m => {
+            return Result::Err(format!(
+                "IF_NONE requires an option, but found {:?}, {:?} {:?}",
+                m, sb, nb
+            ));
+        }
     }
 }
 
@@ -1061,14 +1056,14 @@ fn typecheck_one(
             return Result::Ok(FAIL);
         }
         LOOP(ins) => match stack.get_index(0) {
-            SdOk(Some(MWrapped(MBool))) => {
+            SdOk(Result::Ok(MWrapped(MBool))) => {
                 let tinst = ensure_loop_body(tcenv, stack, ins)?;
                 return Result::Ok(LOOP(tinst));
             }
-            SdOk(Some(m)) => {
+            SdOk(Result::Ok(m)) => {
                 return Result::Err(format!("LOOP requires a bool, but found {:?}", m));
             }
-            SdOk(None) => {
+            SdOk(Result::Err(_)) => {
                 return Result::Err(format!("Stack can't be empty for LOOP"));
             }
             SdFailed => {
@@ -1077,7 +1072,7 @@ fn typecheck_one(
             }
         },
         LOOP_LEFT(ins) => match stack.get_index(0) {
-            SdOk(Some(stack_head)) => match stack_head {
+            SdOk(Result::Ok(stack_head)) => match stack_head {
                 MOr(b) => {
                     let (l, r) = b.as_ref();
                     let tinst =
@@ -1088,7 +1083,7 @@ fn typecheck_one(
                     return Result::Err(format!("LOOP_LEFT requires an or, but found {:?}", m));
                 }
             },
-            SdOk(None) => {
+            SdOk(Result::Err(_)) => {
                 return Result::Err(format!("LOOP_LEFT stack cannot be empty!"));
             }
 
@@ -1098,7 +1093,7 @@ fn typecheck_one(
             }
         },
         MAP(ins) => match stack.get_index(0) {
-            SdOk(Some(stack_head)) => match stack_head.clone() {
+            SdOk(Result::Ok(stack_head)) => match stack_head.clone() {
                 MList(t) => {
                     let tinst = ensure_map_body(
                         tcenv,
@@ -1134,19 +1129,15 @@ fn typecheck_one(
                     ));
                 }
             },
-            SdOk(None) => {
+            SdOk(Result::Err(_)) => {
                 return Result::Err(format!("Map cannot work with Empty list"));
             }
             SdFailed => {
                 return Result::Ok(FAIL);
             }
         },
-        ITER(ins) => match get_stack_derived!(stack.get_index(0), FAIL) {
-            None => {
-                let tinst = ensure_iter_body(tcenv, stack, None, ins)?;
-                return Result::Ok(ITER(tinst));
-            }
-            Some(stack_head) => match stack_head {
+        ITER(ins) => {
+            match get_stack_derived_result_handle_failed!(stack.get_index(0), FAIL).clone() {
                 MList(t) => {
                     let tinst = ensure_iter_body(tcenv, stack, Some(&(t.clone())), ins)?;
                     return Result::Ok(ITER(tinst));
@@ -1165,33 +1156,32 @@ fn typecheck_one(
                         m
                     ));
                 }
-            },
-        },
+            }
+        }
         IF_CONS(tb, fb) => {
-            get_stack_derived!(stack.ensure_non_empty(), FAIL);
-            let stack_head = get_stack_derived!(stack.get_index(0), FAIL);
+            ensure_stack_derived!(stack.ensure_non_empty(), "stack too short!".to_string(), FAIL);
             let (cbtc, nbtc) = ensure_if_cons_body(tcenv, stack, (tb, fb))?;
             return Result::Ok(IF_CONS(cbtc, nbtc));
         }
         IF_NONE(nb, sb) => {
-            get_stack_derived!(stack.ensure_non_empty(), FAIL);
+            ensure_stack_derived!(stack.ensure_non_empty(), "stack too short!".to_string(), FAIL);
             let (nbtc, sbtc) = ensure_if_none_body(tcenv, stack, (nb, sb))?;
             return Result::Ok(IF_NONE(nbtc, sbtc));
         }
         IF_SOME(sb, nb) => {
-            get_stack_derived!(stack.ensure_non_empty(), FAIL);
+            ensure_stack_derived!(stack.ensure_non_empty(), "stack too short!".to_string(), FAIL);
             let (nbtc, sbtc) = ensure_if_none_body(tcenv, stack, (nb, sb))?;
             return Result::Ok(IF_SOME(sbtc, nbtc));
         }
 
         IF_LEFT(lb, rb) => {
-            get_stack_derived!(stack.ensure_non_empty(), FAIL);
+            ensure_stack_derived!(stack.ensure_non_empty(), "stack too short!".to_string(), FAIL);
             let (lbtc, rbtc) = ensure_if_left_body(tcenv, stack, (lb, rb))?;
             return Result::Ok(IF_LEFT(lbtc, rbtc));
         }
         IF(tb, fb) => {
-            match get_stack_derived!(stack.get_index(0), FAIL) {
-                Some(MWrapped(MBool)) => {}
+            match get_stack_derived_result_handle_failed!(stack.get_index(0), FAIL) {
+                MWrapped(MBool) => {}
                 _ => {
                     return Result::Err(
                         "Expecting a bool on stack top, but found something else".to_string(),
@@ -1201,80 +1191,93 @@ fn typecheck_one(
             let (tbtc, fbtc) = ensure_same_lambda_type(tcenv, stack, (tb, fb))?;
             return Result::Ok(IF(tbtc, fbtc));
         }
-        GET(n) => match get_stack_derived!(stack.get_index(0), FAIL) {
-            Some(stack_head) => {
-                let r = get_n_pair(&n, stack_head)?;
-                stack.replace_index(0, r.clone());
-                return Result::Ok(GET(*n));
-            }
-            _ => return Result::Ok(GET(*n)),
-        },
+        GET(n) => {
+            let stack_head = get_stack_derived_result_handle_failed!(stack.get_index(0), FAIL);
+            let r = get_n_pair(&n, stack_head)?;
+            stack.replace_index(0, r.clone());
+            return Result::Ok(GET(*n));
+        }
+
         UPDATE(n) => {
-            get_stack_derived!(stack.ensure_stack_atleast(2), FAIL);
-            match get_stack_derived!(stack.get_index(0), FAIL).clone() {
-                Some(stack_head) => match get_stack_derived!(stack.get_index(1), FAIL).clone() {
-                    Some(u) => {
-                        let mut update_target = u.clone();
-                        update_n_pair(&n, &stack_head, &mut update_target)?;
-                        stack.pop();
-                        stack.replace_index(0, update_target);
-                        return Result::Ok(UPDATE(*n));
-                    }
-                    None => {
-                        return Result::Err("Stack unexpectedly found empty".to_string());
-                    }
-                },
-                None => return Result::Ok(UPDATE(*n)),
-            }
+            ensure_stack_derived!(
+                stack.ensure_stack_atleast(2),
+                "Stack too small!".to_string(),
+                FAIL
+            );
+
+            let stack_head =
+                get_stack_derived_result_handle_failed!(stack.get_index(0), FAIL).clone();
+            let mut update_target =
+                get_stack_derived_result_handle_failed!(stack.get_index(1), FAIL).clone();
+            update_n_pair(&n, &stack_head, &mut update_target)?;
+            stack.pop();
+            stack.replace_index(0, update_target);
+            return Result::Ok(UPDATE(*n));
         }
         DUP(n) => {
             if *n > 0 {
-                get_stack_derived!(stack.ensure_stack_atleast(*n), FAIL);
-                match get_stack_derived!(stack.get_index(n - 1), FAIL) {
-                    Some(target) => {
-                        stack.push(target.clone());
-                        return Result::Ok(DUP(*n));
-                    }
-                    None => { panic!() }
-                }
+                ensure_stack_derived!(
+                    stack.ensure_stack_atleast(*n),
+                    "Stack too small!".to_string(),
+                    FAIL
+                );
+                let target = get_stack_derived_result_handle_failed!(stack.get_index(n - 1), FAIL);
+                stack.push(target.clone());
+                return Result::Ok(DUP(*n));
             } else {
                 return Result::Err("DUP(0) is forbidden".to_string());
             }
         }
         PAIR(n) => {
-            get_stack_derived!(stack.ensure_stack_atleast(*n), FAIL);
-            let pair = get_stack_derived!(mk_pair(stack, *n), FAIL);
+            ensure_stack_derived!(
+                stack.ensure_stack_atleast(*n),
+                "Stack too small!".to_string(),
+                FAIL
+            );
+            let pair = get_stack_derived_result_handle_failed!(mk_pair(stack, *n), FAIL);
             stack.push(pair);
             return Result::Ok(PAIR(*n));
         }
         UNPAIR(n) => {
             if *n >= 2 {
-                get_stack_derived!(stack.ensure_stack_atleast(1), FAIL);
-                match get_stack_derived!(stack.pop(), FAIL) {
-                    Some(stack_head) => {
-                        unmk_pair(&stack_head, *n, stack);
-                        return Result::Ok(UNPAIR(*n));
-                    }
-                    None => { panic!() }
-                }
+                ensure_stack_derived!(
+                    stack.ensure_stack_atleast(1),
+                    "Stack too small!".to_string(),
+                    FAIL
+                );
+                let stack_head = get_stack_derived_result_handle_failed!(stack.pop(), FAIL);
+                unmk_pair(&stack_head, *n, stack);
+                return Result::Ok(UNPAIR(*n));
             } else {
                 return Result::Err("PAIR(<2) is forbidden".to_string());
             }
         }
         DIG(n) => {
-            get_stack_derived!(stack.ensure_stack_atleast(*n + 1), FAIL);
+            ensure_stack_derived!(
+                stack.ensure_stack_atleast(*n + 1),
+                "Stack too small!".to_string(),
+                FAIL
+            );
             stack.move_element(*n, 0);
             return Result::Ok(DIG(*n));
         }
 
         DUG(n) => {
-            get_stack_derived!(stack.ensure_stack_atleast(*n + 1), FAIL);
+            ensure_stack_derived!(
+                stack.ensure_stack_atleast(*n + 1),
+                "Stack too small!".to_string(),
+                FAIL
+            );
             stack.move_element(0, *n);
             return Result::Ok(DUG(*n));
         }
 
         DROP(n) => {
-            get_stack_derived!(stack.ensure_stack_atleast(*n), FAIL);
+            ensure_stack_derived!(
+                stack.ensure_stack_atleast(*n),
+                "Stack too small!".to_string(),
+                FAIL
+            );
             for i in 1..=*n {
                 stack.pop();
             }
@@ -1282,7 +1285,11 @@ fn typecheck_one(
         }
         DIP(n, instr) => {
             if n > &0 {
-                get_stack_derived!(stack.ensure_stack_atleast(*n), FAIL);
+                ensure_stack_derived!(
+                    stack.ensure_stack_atleast(*n),
+                    "Stack too small!".to_string(),
+                    FAIL
+                );
                 let mut temp_stack = stack.clone_tail_at(*n);
                 let tins = typecheck(tcenv, instr, &mut temp_stack)?;
                 let mut result_stack = stack.clone_head_till(*n);
@@ -1302,7 +1309,7 @@ fn typecheck_one(
             let temp_stack_len = temp_stack.len();
             let temp_stack_head = temp_stack.get_index(0);
             match (temp_stack_len, temp_stack_head) {
-                (SdOk(l), SdOk(Some(sh))) => {
+                (SdOk(l), SdOk(Result::Ok(sh))) => {
                     if sh == ot && l == 1 {
                         stack.push(MLambda(Box::new((it.clone(), ot.clone()))));
                         return Result::Ok(LAMBDA_REC(it.clone(), ot.clone(), tins));

@@ -243,28 +243,38 @@ impl<T: Clone> StackDerived<T> {
 use StackDerived::*;
 
 #[macro_export]
-macro_rules! get_stack_derived {
-    ($n:expr, $f: expr) => {{
+macro_rules! ensure_stack_derived {
+    ($n:expr, $s: expr, $f: expr) => {{
         match $n {
-            StackDerived::SdOk(a) => a,
+            StackDerived::SdOk(x) => if x {} else {return Result::Err($s)},
             StackDerived::SdFailed => {
                 return Result::Ok($f);
             }
         }
     }};
 }
-//
-//#[macro_export]
-//macro_rules! get_stack_derived_2 {
-//    ($n:expr) => {{
-//        match $n {
-//            StackDerived::SdOk(a) => a,
-//            a => {
-//                return a;
-//            }
-//        }
-//    }};
-//}
+
+#[macro_export]
+macro_rules! get_stack_derived_result {
+    ($n:expr) => {{
+        match $n {
+            StackDerived::SdOk(Result::Ok(a)) => a,
+            a => {
+                return a;
+            }
+        }
+    }};
+}
+#[macro_export]
+macro_rules! get_stack_derived_result_handle_failed {
+    ($n:expr, $f: expr) => {{
+        match $n {
+            StackDerived::SdOk(Result::Ok(a)) => a,
+            StackDerived::SdOk(Result::Err(a)) => return Result::Err(a),
+            StackDerived::SdFailed => return Result::Ok($f),
+        }
+    }};
+}
 
 pub enum StackCompResult {
     LeftFailed,
@@ -295,18 +305,18 @@ impl<T: Eq + Clone> StackState<T> {
     pub fn ensure_stack_atleast(&self, l: usize) -> StackDerived<bool> {
         match self {
             LiveStack(v) => {
-                return SdOk(v.len() < l);
+                return SdOk(v.len() >= l);
             }
             FailedStack => return SdFailed,
         }
     }
-    pub fn get_index(&self, i: usize) -> StackDerived<Option<&MType<T>>> {
+    pub fn get_index(&self, i: usize) -> StackDerived<Result<&MType<T>, String>> {
         match self {
             LiveStack(v) => {
                 if v.len() == 0 {
-                    return SdOk(None);
+                    return SdOk(Result::Err("Stack too short..".to_string()));
                 } else {
-                    return SdOk(Some(&v[i]));
+                    return SdOk(Result::Ok(&v[i]));
                 }
             }
             FailedStack => return SdFailed,
@@ -319,14 +329,14 @@ impl<T: Eq + Clone> StackState<T> {
         }
     }
 
-    pub fn pop(&mut self) -> StackDerived<Option<MType<T>>> {
+    pub fn pop(&mut self) -> StackDerived<Result<MType<T>, String>> {
         match self {
             LiveStack(v) => match v.pop_front() {
                 Some(a) => {
-                    return SdOk(Some(a));
+                    return SdOk(Result::Ok(a));
                 }
                 None => {
-                    return SdOk(None);
+                    return SdOk(Result::Err("Stack is empty".to_string()));
                 }
             },
             FailedStack => {
@@ -431,14 +441,14 @@ impl<T: Eq + Clone> StackState<T> {
         }
     }
 
-    pub fn pop_front(&mut self) -> StackDerived<Option<MType<T>>> {
+    pub fn pop_front(&mut self) -> StackDerived<Result<MType<T>, String>> {
         match self {
             LiveStack(v) => match v.pop_front() {
                 Some(x) => {
-                    return SdOk(Some(x));
+                    return SdOk(Result::Ok(x));
                 }
                 None => {
-                    return SdOk(None);
+                    return SdOk(Result::Err("Stack is empty".to_string()));
                 }
             },
             FailedStack => {
@@ -570,16 +580,16 @@ pub fn get_n_pair<'a, A: Clone>(n: &usize, t: &'a MType<A>) -> Result<&'a MType<
     }
 }
 
-pub fn mk_pair<A: Clone + Eq>(tl: &mut StackState<A>, n: usize) -> StackDerived<MType<A>> {
-    panic!()
-    //if n == 2 {
-    //    let i1 = get_stack_derived_2!(tl.pop_front());
-    //    let i2 = get_stack_derived_2!(tl.pop_front());
-    //    return SdOk(MPair(Box::new((i1, i2))));
-    //} else {
-    //    let i1 = get_stack_derived_2!(tl.pop_front());
-    //    return SdOk(MPair(Box::new((i1, mk_pair(tl, n - 1).unwrap()))));
-    //}
+pub fn mk_pair<A: Clone + Eq>(tl: &mut StackState<A>, n: usize) -> StackDerived<Result<MType<A>, String>> {
+    if n == 2 {
+        let i1 = get_stack_derived_result!(tl.pop_front());
+        let i2 = get_stack_derived_result!(tl.pop_front());
+        return SdOk(Result::Ok(MPair(Box::new((i1, i2)))));
+    } else {
+        let i1 = get_stack_derived_result!(tl.pop_front());
+        let l2 = get_stack_derived_result!(mk_pair(tl, n - 1));
+        return SdOk(Result::Ok(MPair(Box::new((i1, l2)))));
+    }
 }
 
 pub fn unmk_pair<A: Eq + Clone>(

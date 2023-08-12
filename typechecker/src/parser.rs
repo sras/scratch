@@ -1,5 +1,5 @@
 // auto-generated: "lalrpop 0.20.0"
-// sha3: a91bcd77b3ba73b7bb7cec88fee8888c7a7985dbf94e05cac92fd7d262818571
+// sha3: b4c5603ec64489e99951811be0639fb1846147ffa795b3c63b07bd671e0f6d15
 use std::str::FromStr;
 use crate::types::mdyn_to_concrete;
 use crate::types::MType;
@@ -72851,7 +72851,7 @@ fn __action117<
     (_, _, _): (usize, &'input str, usize),
 ) -> MType<DynMType>
 {
-    mk_pair(&mut StackState::from(t1.clone()), t1.len()).unwrap()
+    mk_pair(&mut StackState::from(t1.clone()), t1.len()).unwrap().unwrap()
 }
 
 #[allow(unused_variables)]
@@ -72867,7 +72867,7 @@ fn __action118<
     (_, _, _): (usize, &'input str, usize),
 ) -> MType<DynMType>
 {
-    mk_pair(&mut StackState::from(t1.clone()), t1.len()).unwrap()
+    mk_pair(&mut StackState::from(t1.clone()), t1.len()).unwrap().unwrap()
 }
 
 #[allow(unused_variables)]
