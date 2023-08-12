@@ -95,7 +95,7 @@ fn unify_concrete_arg(
         },
         MList(ic) => match arg {
             MList(iv) => {
-                return unify_concrete_arg(resolved, iv.as_ref(), ic);
+                return unify_concrete_arg(resolved, iv, ic);
             }
 
             _ => {
@@ -104,7 +104,7 @@ fn unify_concrete_arg(
         },
         MTicket(ic) => match arg {
             MTicket(iv) => {
-                return unify_concrete_arg(resolved, iv.as_ref(), ic);
+                return unify_concrete_arg(resolved, iv, ic);
             }
 
             x => {
@@ -113,7 +113,7 @@ fn unify_concrete_arg(
         },
         MContract(ic) => match arg {
             MContract(iv) => {
-                return unify_concrete_arg(resolved, iv.as_ref(), ic);
+                return unify_concrete_arg(resolved, iv, ic);
             }
 
             c => {
@@ -125,7 +125,7 @@ fn unify_concrete_arg(
         },
         MOption(ic) => match arg {
             MOption(iv) => {
-                return unify_concrete_arg(resolved, iv.as_ref(), ic);
+                return unify_concrete_arg(resolved, iv, ic);
             }
 
             x => {
@@ -137,7 +137,7 @@ fn unify_concrete_arg(
         },
         MSet(ic) => match arg {
             MSet(iv) => {
-                return unify_concrete_arg(resolved, iv.as_ref(), ic);
+                return unify_concrete_arg(resolved, iv, ic);
             }
 
             _ => {
@@ -146,10 +146,8 @@ fn unify_concrete_arg(
         },
         MLambda(b) => match arg {
             MLambda(b1) => {
-                let (vin, vout) = b.as_ref();
-                let (cin, cout) = b1.as_ref();
-                return unify_concrete_arg(resolved, cin, vin)
-                    .and_then(|_| unify_concrete_arg(resolved, cout, vout));
+                unify_concrete_arg(resolved, &b1.0, &b.0)?;
+                return unify_concrete_arg(resolved, &b1.1, &b.1);
             }
             _ => {
                 return Result::Err(String::from("Expecting a lambda but got something else..."));
@@ -157,10 +155,8 @@ fn unify_concrete_arg(
         },
         MOr(b) => match arg {
             MOr(b1) => {
-                let (cl, cr) = b.as_ref();
-                let (vl, vr) = b1.as_ref();
-                return unify_concrete_arg(resolved, vl, cl)
-                    .and_then(|_| unify_concrete_arg(resolved, vr, cr));
+                unify_concrete_arg(resolved, &b1.0, &b.0)?;
+                return unify_concrete_arg(resolved, &b1.1, &b.1);
             }
             _ => {
                 return Result::Err(String::from("Expecting a pair but got something else..."));
@@ -168,10 +164,8 @@ fn unify_concrete_arg(
         },
         MPair(b) => match arg {
             MPair(b1) => {
-                let (cl, cr) = b.as_ref();
-                let (vl, vr) = b1.as_ref();
-                return unify_concrete_arg(resolved, vl, cl)
-                    .and_then(|_| unify_concrete_arg(resolved, vr, cr));
+                unify_concrete_arg(resolved, &b1.0, &b.0)?;
+                return unify_concrete_arg(resolved, &b1.1, &b.1);
             }
             _ => {
                 return Result::Err(String::from("Expecting a pair but got something else..."));
@@ -179,10 +173,8 @@ fn unify_concrete_arg(
         },
         MBigMap(b) => match arg {
             MBigMap(b1) => {
-                let (cl, cr) = b.as_ref();
-                let (vl, vr) = b1.as_ref();
-                return unify_concrete_arg(resolved, vl, cl)
-                    .and_then(|_| unify_concrete_arg(resolved, vr, cr));
+                unify_concrete_arg(resolved, &b1.0, &b.0)?;
+                return unify_concrete_arg(resolved, &b1.1, &b.1);
             }
             _ => {
                 return Result::Err(String::from(
@@ -194,8 +186,8 @@ fn unify_concrete_arg(
             MMap(b1) => {
                 let (cl, cr) = b.as_ref();
                 let (vl, vr) = b1.as_ref();
-                return unify_concrete_arg(resolved, vl, cl)
-                    .and_then(|_| unify_concrete_arg(resolved, vr, cr));
+                return unify_concrete_arg(resolved, &b1.0, &b.0)
+                    .and_then(|_| unify_concrete_arg(resolved, &b1.1, &b.1));
             }
             _ => {
                 return Result::Err(String::from("Expecting a map but got something else..."));
@@ -274,18 +266,16 @@ fn constraint_to_concrete(resolved: &ResolveCache, c: &Constraint) -> Option<Con
         },
         MWrapped(CAtomic(x)) => Some(MWrapped(x.clone())),
         MPair(b) => {
-            let (l, r) = b.as_ref();
             Some(MPair(Box::new((
-                constraint_to_concrete(resolved, l)?,
-                constraint_to_concrete(resolved, r)?,
+                constraint_to_concrete(resolved, &b.0)?,
+                constraint_to_concrete(resolved, &b.1)?,
             ))))
         }
         MList(l) => Some(MList(Box::new(constraint_to_concrete(resolved, l)?))),
         MLambda(b) => {
-            let (l, r) = b.as_ref();
             Some(MLambda(Box::new((
-                constraint_to_concrete(resolved, l)?,
-                constraint_to_concrete(resolved, r)?,
+                constraint_to_concrete(resolved, &b.0)?,
+                constraint_to_concrete(resolved, &b.1)?,
             ))))
         }
         _ => None,
@@ -848,9 +838,8 @@ fn ensure_if_left_body(
         MOr(b) => {
             let mut temp_stack_left: ConcreteStack = stack_.clone_tail();
             let mut temp_stack_right: ConcreteStack = stack_.clone_tail();
-            let (lt, rt) = b.as_ref();
-            temp_stack_left.push(lt.clone());
-            temp_stack_right.push(rt.clone());
+            temp_stack_left.push(b.0.clone());
+            temp_stack_right.push(b.1.clone());
             let lbtc = typecheck(tcenv, lb, &mut temp_stack_left)?;
             let rbtc = typecheck(tcenv, rb, &mut temp_stack_right)?;
 
@@ -908,7 +897,7 @@ fn ensure_if_none_body(
         MOption(x) => {
             let mut temp_stack_none: ConcreteStack = stack_.clone_tail();
             let mut temp_stack_some: ConcreteStack = stack_.clone_tail();
-            temp_stack_some.push(x.as_ref().clone());
+            temp_stack_some.push(*x.clone());
             let sbtc = typecheck(tcenv, sb, &mut temp_stack_some)?;
             let nbtc = typecheck(tcenv, nb, &mut temp_stack_none)?;
             match temp_stack_some.compare(&temp_stack_none) {
@@ -1074,9 +1063,8 @@ fn typecheck_one(
         LOOP_LEFT(ins) => match stack.get_index(0) {
             SdOk(Result::Ok(stack_head)) => match stack_head {
                 MOr(b) => {
-                    let (l, r) = b.as_ref();
                     let tinst =
-                        ensure_loop_left_body(tcenv, stack, SdOk(l.clone()), SdOk(r.clone()), ins)?;
+                        ensure_loop_left_body(tcenv, stack, SdOk(b.0.clone()), SdOk(b.1.clone()), ins)?;
                     return Result::Ok(LOOP_LEFT(tinst));
                 }
                 m => {
@@ -1113,11 +1101,10 @@ fn typecheck_one(
                     return Result::Ok(MAP(tinst));
                 }
                 MMap(t) => {
-                    let (k, v) = t.as_ref();
                     let tinst = ensure_map_body(
                         tcenv,
                         stack,
-                        SdOk((&MPair(t.clone()), |x| MMap(Box::new((k.clone(), x))))),
+                        SdOk((&MPair(t.clone()), |x| MMap(Box::new((t.0.clone(), x))))),
                         ins,
                     )?;
                     return Result::Ok(MAP(tinst));
