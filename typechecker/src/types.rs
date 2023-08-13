@@ -1,4 +1,6 @@
 #![allow(non_camel_case_types)]
+#![allow(clippy::enum_variant_names)]
+#![allow(clippy::upper_case_acronyms)]
 use crate::types::MType::*;
 use core::cmp::Eq;
 use core::cmp::Ordering;
@@ -44,7 +46,7 @@ pub enum MType<T> {
 
 impl<T: Clone> Clone for MType<T> {
     fn clone(&self) -> Self {
-        return map_mtype(self, &|x| x.clone());
+        map_mtype(self, &|x| x.clone())
     }
 }
 
@@ -74,8 +76,8 @@ pub enum MValue {
     VLeft(Box<MValue>),
     VSome(Box<MValue>),
     VMutez(u32),
-    VMap(Box<BTreeMap<MValue, MValue>>),
-    VBigMap(Box<BTreeMap<MValue, MValue>>),
+    VMap(BTreeMap<MValue, MValue>),
+    VBigMap(BTreeMap<MValue, MValue>),
     VList(Vec<MValue>),
     VSet(BTreeSet<MValue>),
     VLambda(Vec<CompoundInstruction<MValue>>),
@@ -87,10 +89,7 @@ impl Eq for MValue {}
 
 impl PartialEq for MValue {
     fn eq(&self, m2: &Self) -> bool {
-        match self.partial_cmp(m2) {
-            Some(std::cmp::Ordering::Equal) => true,
-            _ => false,
-        }
+        matches!(self.partial_cmp(m2), Some(std::cmp::Ordering::Equal))
     }
 }
 
@@ -101,8 +100,8 @@ impl PartialOrd for MValue {
             (VInt(i1), VInt(i2)) => i1.partial_cmp(i2),
             (VBool(b1), VBool(b2)) => b1.partial_cmp(b2),
             (VString(s1), VString(s2)) => s1.partial_cmp(s2),
-            (VPair(s1), VPair(s2)) => match (s1.as_ref(), s2.as_ref()) {
-                ((l1, r1), (l2, r2)) => l1.partial_cmp(l2).partial_cmp(&r1.partial_cmp(r2)),
+            (VPair(s1), VPair(s2)) => {
+                s1.0.partial_cmp(&s2.0).partial_cmp(&(s1.1).partial_cmp(&s2.1))
             },
             _ => panic!("Uncomparable types!"),
         }
@@ -296,36 +295,36 @@ pub type ConcreteStack = StackState<MAtomic>;
 
 impl<T: Eq + Clone> StackState<T> {
     pub fn ensure_non_empty(&self) -> StackDerived<bool> {
-        return self.ensure_stack_atleast(1);
+        self.ensure_stack_atleast(1)
     }
     pub fn len(&self) -> StackDerived<usize> {
         match self {
             LiveStack(v) => {
-                return SdOk(v.len());
+                SdOk(v.len())
             }
             _ => {
-                return SdFailed;
+                SdFailed
             }
         }
     }
     pub fn ensure_stack_atleast(&self, l: usize) -> StackDerived<bool> {
         match self {
             LiveStack(v) => {
-                return SdOk(v.len() >= l);
+                SdOk(v.len() >= l)
             }
-            FailedStack => return SdFailed,
+            FailedStack => SdFailed,
         }
     }
     pub fn get_index(&self, i: usize) -> StackDerived<Result<&MType<T>, String>> {
         match self {
             LiveStack(v) => {
-                if v.len() == 0 {
-                    return SdOk(Result::Err("Stack too short..".to_string()));
+                if v.is_empty() {
+                    SdOk(Result::Err("Stack too short..".to_string()))
                 } else {
-                    return SdOk(Result::Ok(&v[i]));
+                    SdOk(Result::Ok(&v[i]))
                 }
             }
-            FailedStack => return SdFailed,
+            FailedStack => SdFailed,
         }
     }
     pub fn push(&mut self, t: MType<T>) {
@@ -339,14 +338,14 @@ impl<T: Eq + Clone> StackState<T> {
         match self {
             LiveStack(v) => match v.pop_front() {
                 Some(a) => {
-                    return SdOk(Result::Ok(a));
+                    SdOk(Result::Ok(a))
                 }
                 None => {
-                    return SdOk(Result::Err("Stack is empty".to_string()));
+                    SdOk(Result::Err("Stack is empty".to_string()))
                 }
             },
             FailedStack => {
-                return SdFailed;
+                SdFailed
             }
         }
     }
@@ -427,7 +426,7 @@ impl<T: Eq + Clone> StackState<T> {
             LiveStack(v) => {
                 let mut slice = v.clone();
                 slice.pop_front();
-                return LiveStack(slice);
+                LiveStack(slice)
             }
             FailedStack => FailedStack,
         }
@@ -451,14 +450,14 @@ impl<T: Eq + Clone> StackState<T> {
         match self {
             LiveStack(v) => match v.pop_front() {
                 Some(x) => {
-                    return SdOk(Result::Ok(x));
+                    SdOk(Result::Ok(x))
                 }
                 None => {
-                    return SdOk(Result::Err("Stack is empty".to_string()));
+                    SdOk(Result::Err("Stack is empty".to_string()))
                 }
             },
             FailedStack => {
-                return SdFailed;
+                SdFailed
             }
         }
     }
@@ -502,18 +501,18 @@ pub enum DynMType {
 use DynMType::*;
 
 pub fn map_mtype_boxed_pair<T, H, F: Fn(&T) -> H>(
-    b: &Box<(MType<T>, MType<T>)>,
+    b: &(MType<T>, MType<T>),
     cb: &F,
-) -> Box<(MType<H>, MType<H>)> {
-    let (f, s) = b.as_ref();
-    return Box::new((map_mtype(f, cb), map_mtype(s, cb)));
+    ) -> Box<(MType<H>, MType<H>)> {
+    let (f, s) = b;
+    Box::new((map_mtype(f, cb), map_mtype(s, cb)))
 }
 
 pub fn update_n_pair<A: Clone>(
     n: &usize,
     src: &MType<A>,
     t: &mut MType<A>,
-) -> Result<MType<A>, String> {
+    ) -> Result<MType<A>, String> {
     let mut cb: bool = false;
     let mut cn: &mut MType<A> = t;
     for _ in 0..*n {
@@ -526,7 +525,7 @@ pub fn update_n_pair<A: Clone>(
                 _ => {
                     return Result::Err(
                         "Expected a Pair but got something else during GET n typecheck".to_string(),
-                    );
+                        );
                 }
             }
         } else {
@@ -538,14 +537,14 @@ pub fn update_n_pair<A: Clone>(
             MPair(ref mut b) => {
                 let (f, _) = b.as_mut();
                 *f = src.clone();
-                return Result::Ok(f.clone());
+                Result::Ok(f.clone())
             }
             _ => {
-                return Result::Err("Expected a Pair but got something else".to_string());
+                Result::Err("Expected a Pair but got something else".to_string())
             }
         }
     } else {
-        return Result::Ok(cn.clone());
+        Result::Ok(cn.clone())
     }
 }
 
@@ -563,7 +562,7 @@ pub fn get_n_pair<'a, A: Clone>(n: &usize, t: &'a MType<A>) -> Result<&'a MType<
                 _ => {
                     return Result::Err(
                         "Expected a Pair but got something else during GET n typecheck".to_string(),
-                    );
+                        );
                 }
             }
         } else {
@@ -574,29 +573,29 @@ pub fn get_n_pair<'a, A: Clone>(n: &usize, t: &'a MType<A>) -> Result<&'a MType<
         match cn {
             MPair(b) => {
                 let (f, _) = b.as_ref();
-                return Result::Ok(f);
+                Result::Ok(f)
             }
             _ => {
-                return Result::Err("Expected a Pair but got something else".to_string());
+                Result::Err("Expected a Pair but got something else".to_string())
             }
         }
     } else {
-        return Result::Ok(cn);
+        Result::Ok(cn)
     }
 }
 
 pub fn mk_pair<A: Clone + Eq>(
     tl: &mut StackState<A>,
     n: usize,
-) -> StackDerived<Result<MType<A>, String>> {
+    ) -> StackDerived<Result<MType<A>, String>> {
     if n == 2 {
         let i1 = get_stack_derived_result!(tl.pop_front());
         let i2 = get_stack_derived_result!(tl.pop_front());
-        return SdOk(Result::Ok(MPair(Box::new((i1, i2)))));
+        SdOk(Result::Ok(MPair(Box::new((i1, i2)))))
     } else {
         let i1 = get_stack_derived_result!(tl.pop_front());
         let l2 = get_stack_derived_result!(mk_pair(tl, n - 1));
-        return SdOk(Result::Ok(MPair(Box::new((i1, l2)))));
+        SdOk(Result::Ok(MPair(Box::new((i1, l2)))))
     }
 }
 
@@ -604,22 +603,22 @@ pub fn unmk_pair<A: Eq + Clone>(
     t: &MType<A>,
     n: usize,
     stack: &mut StackState<A>,
-) -> Result<(), String> {
+    ) -> Result<(), String> {
     if n == 1 {
         stack.push(t.clone());
-        return Result::Ok(());
+        Result::Ok(())
     } else {
         match t {
             MPair(b) => {
                 let (le, rp) = b.as_ref();
                 let r = unmk_pair(rp, n - 1, stack);
                 stack.push(le.clone());
-                return r;
+                r
             }
             _ => {
-                return Result::Err(
+                Result::Err(
                     "Expecting a pair for UNPAIR but got something else".to_string(),
-                );
+                    )
             }
         }
     }
@@ -641,7 +640,7 @@ pub fn map_mtype<T, H, F: Fn(&T) -> H>(ct: &MType<T>, cb: &F) -> MType<H> {
     }
 }
 pub fn mdyn_to_concrete(m: &MType<DynMType>) -> ConcreteType {
-    return map_mtype(m, &|x| dynm_to_matomic(x.clone()));
+    map_mtype(m, &|x| dynm_to_matomic(x.clone()))
 }
 
 fn dynm_to_matomic(d: DynMType) -> MAtomic {

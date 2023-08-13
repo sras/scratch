@@ -16,10 +16,7 @@ use crate::parsers::parse_contract;
 
 fn main() {
     // Force the evaluation of instructions.
-    match MICHELSON_INSTRUCTIONS.get("PUSH") {
-        Some(_) => {}
-        None => {}
-    }
+    let _ = MICHELSON_INSTRUCTIONS.get("PUSH");
     match std::io::read_to_string(io::stdin()) {
         Result::Ok(i) => {
             let mut start_time = Instant::now();

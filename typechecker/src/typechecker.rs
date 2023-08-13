@@ -1,3 +1,4 @@
+#![allow(clippy::type_complexity)]
 use std::collections::BTreeMap;
 use std::collections::BTreeSet;
 use std::convert::TryFrom;
@@ -293,7 +294,7 @@ fn typecheck_value(
                 if x.len() == 0 {
                     let (kt, vt) = b.as_ref();
                     Ok((
-                        VMap(Box::default()),
+                        VMap(BTreeMap::default()),
                         MMap(Box::new((kt.clone(), vt.clone()))),
                     ))
                 } else {
@@ -311,7 +312,7 @@ fn typecheck_value(
                         let (mvv, _) = typecheck_value(tcenv, _resolved, v, vt)?;
                         hm.insert(mkv, mvv);
                     }
-                    Ok((VMap(Box::new(hm)), MMap(Box::new((kt.clone(), vt.clone())))))
+                    Ok((VMap(hm), MMap(Box::new((kt.clone(), vt.clone())))))
                 } else {
                     Err(String::from("Big map keys should be comparable"))
                 }
@@ -330,7 +331,7 @@ fn typecheck_value(
                             hm.insert(mkv, mvv);
                         }
                         Ok((
-                            VBigMap(Box::new(hm)),
+                            VBigMap(hm),
                             MBigMap(Box::new((kt.clone(), vt.clone()))),
                         ))
                     } else {
@@ -1116,7 +1117,7 @@ fn typecheck_one(
         }
         GET(n) => {
             let stack_head = get_stack_derived_result_handle_failed!(stack.get_index(0), FAIL);
-            let r = get_n_pair(&n, stack_head)?;
+            let r = get_n_pair(n, stack_head)?;
             stack.replace_index(0, r.clone());
             Result::Ok(GET(*n))
         }
@@ -1132,7 +1133,7 @@ fn typecheck_one(
                 get_stack_derived_result_handle_failed!(stack.get_index(0), FAIL).clone();
             let mut update_target =
                 get_stack_derived_result_handle_failed!(stack.get_index(1), FAIL).clone();
-            update_n_pair(&n, &stack_head, &mut update_target)?;
+            update_n_pair(n, &stack_head, &mut update_target)?;
             stack.pop();
             stack.replace_index(0, update_target);
             Result::Ok(UPDATE(*n))
