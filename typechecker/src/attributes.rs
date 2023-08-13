@@ -27,12 +27,8 @@ pub fn check_attribute(atr: &Attribute, ct: &ConcreteType) -> bool {
             Duplicable => check_attribute(atr, &b.1),
             _ => false,
         },
-        MPair(b) =>  {
-            check_attribute(atr, &b.0) && check_attribute(atr, &b.1)
-        },
-        MOr(b) => {
-            check_attribute(atr, &b.0) && check_attribute(atr, &b.1)
-        },
+        MPair(b) => check_attribute(atr, &b.0) && check_attribute(atr, &b.1),
+        MOr(b) => check_attribute(atr, &b.0) && check_attribute(atr, &b.1),
         MTicket(_) => !matches!(atr, Comparable | Duplicable | Pushable | Passable),
         MList(b) => match atr {
             Comparable => false,

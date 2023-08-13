@@ -3,7 +3,7 @@ extern crate lazy_static;
 use crate::instructions::MICHELSON_INSTRUCTIONS;
 use crate::typechecker::typecheck_contract;
 use std::io;
-use std::time::{Instant};
+use std::time::Instant;
 
 mod attributes;
 mod instructions;

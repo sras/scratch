@@ -149,9 +149,7 @@ fn unify_concrete_arg(
                 unify_concrete_arg(resolved, &b1.0, &b.0)?;
                 unify_concrete_arg(resolved, &b1.1, &b.1)
             }
-            _ => {
-                Result::Err(String::from("Expecting a map but got something else..."))
-            }
+            _ => Result::Err(String::from("Expecting a map but got something else...")),
         },
         MWrapped(CAtomic(at)) => match arg {
             MWrapped(cn) => {
@@ -184,14 +182,10 @@ fn unify_arg(
                     add_symbol(resolved, *c, ct);
                     Result::Ok(AV::TypeArg((*ct).clone()))
                 } else {
-                    Result::Err(String::from(
-                        "Type does not meet the required constraints",
-                    ))
+                    Result::Err(String::from("Type does not meet the required constraints"))
                 }
             }
-            _ => {
-                Result::Err(String::from("Unexpected type name argument"))
-            }
+            _ => Result::Err(String::from("Unexpected type name argument")),
         },
         AV::ValueArg(some_val) => {
             let (m, ct): (MValue, ConcreteType) = match arg_con {
@@ -220,7 +214,7 @@ fn unify_arg(
 
 fn constraint_to_concrete(resolved: &ResolveCache, c: &Constraint) -> Option<ConcreteType> {
     match c {
-        MWrapped(CTypeArgRef(c)) => { resolved.get(c).cloned() }
+        MWrapped(CTypeArgRef(c)) => resolved.get(c).cloned(),
         MWrapped(CAtomic(x)) => Some(MWrapped(x.clone())),
         MPair(b) => Some(MPair(Box::new((
             constraint_to_concrete(resolved, &b.0)?,
@@ -330,10 +324,7 @@ fn typecheck_value(
                             let (mvv, _) = typecheck_value(tcenv, _resolved, v, vt)?;
                             hm.insert(mkv, mvv);
                         }
-                        Ok((
-                            VBigMap(hm),
-                            MBigMap(Box::new((kt.clone(), vt.clone()))),
-                        ))
+                        Ok((VBigMap(hm), MBigMap(Box::new((kt.clone(), vt.clone())))))
                     } else {
                         Err(String::from("Type not allowed to be a big_map value"))
                     }
@@ -385,9 +376,7 @@ fn typecheck_value(
                             Err(String::from("Lambda does not match the expected type"))
                         }
                     }
-                    Err(s) => {
-                        Err(s)
-                    }
+                    Err(s) => Err(s),
                 }
             }
             _ => Err(String::from(
@@ -414,9 +403,7 @@ fn stack_result_to_concrete_type(resolved: &mut ResolveCache, sr: &StackResult) 
         MWrapped(wrp) => match wrp {
             ElemType(et) => MWrapped(et.clone()),
             TRef(c) => match resolved.get(c) {
-                Some(ct) => {
-                    (*ct).clone()
-                }
+                Some(ct) => (*ct).clone(),
                 None => {
                     panic!("Symbol resolution failed! {:?}", c)
                 }
@@ -442,36 +429,26 @@ fn stack_result_to_concrete_type(resolved: &mut ResolveCache, sr: &StackResult) 
             resolved,
             l.as_ref(),
         ))),
-        MMap(b) => {
-            MMap(Box::new((
-                stack_result_to_concrete_type(resolved, &b.0),
-                stack_result_to_concrete_type(resolved, &b.1),
-            )))
-        }
-        MBigMap(b) => {
-            MBigMap(Box::new((
-                stack_result_to_concrete_type(resolved, &b.0),
-                stack_result_to_concrete_type(resolved, &b.1),
-            )))
-        }
-        MOr(b) => {
-            MOr(Box::new((
-                stack_result_to_concrete_type(resolved, &b.0),
-                stack_result_to_concrete_type(resolved, &b.1),
-            )))
-        }
-        MPair(b) => {
-            MPair(Box::new((
-                stack_result_to_concrete_type(resolved, &b.0),
-                stack_result_to_concrete_type(resolved, &b.1),
-            )))
-        }
-        MLambda(b) => {
-            MLambda(Box::new((
-                stack_result_to_concrete_type(resolved, &b.0),
-                stack_result_to_concrete_type(resolved, &b.1),
-            )))
-        }
+        MMap(b) => MMap(Box::new((
+            stack_result_to_concrete_type(resolved, &b.0),
+            stack_result_to_concrete_type(resolved, &b.1),
+        ))),
+        MBigMap(b) => MBigMap(Box::new((
+            stack_result_to_concrete_type(resolved, &b.0),
+            stack_result_to_concrete_type(resolved, &b.1),
+        ))),
+        MOr(b) => MOr(Box::new((
+            stack_result_to_concrete_type(resolved, &b.0),
+            stack_result_to_concrete_type(resolved, &b.1),
+        ))),
+        MPair(b) => MPair(Box::new((
+            stack_result_to_concrete_type(resolved, &b.0),
+            stack_result_to_concrete_type(resolved, &b.1),
+        ))),
+        MLambda(b) => MLambda(Box::new((
+            stack_result_to_concrete_type(resolved, &b.0),
+            stack_result_to_concrete_type(resolved, &b.1),
+        ))),
     }
 }
 
@@ -482,9 +459,7 @@ fn unify_stack(
     stack_state: &mut StackState<MAtomic>,
 ) -> Result<(), String> {
     match stack_state.len() {
-        SdFailed => {
-            Result::Ok(())
-        }
+        SdFailed => Result::Ok(()),
         SdOk(sslen) => {
             if sslen < sem_stack_in.len() {
                 return Result::Err(format!(
@@ -576,9 +551,7 @@ fn ensure_iter_body(
             start_stack.push(iter_item.clone());
             let tinst = typecheck(tcenv, instr, &mut start_stack)?;
             match start_stack.compare(&expected_stack) {
-                NoMatch => {
-                    Result::Err(String::from("ITER body has unexpected type"))
-                }
+                NoMatch => Result::Err(String::from("ITER body has unexpected type")),
                 _ => {
                     *stack = start_stack;
                     Result::Ok(tinst)
@@ -612,11 +585,9 @@ fn ensure_map_body<F: (Fn(ConcreteType) -> ConcreteType)>(
                     Result::Err("Map body returned too few values on stack.".to_string())
                 }
                 SdOk(Result::Ok(start_stack_head)) => match start_stack.compare(&expected_stack) {
-                    NoMatch => {
-                        Result::Err(String::from(
-                            "MAP body cannot mutated the tail of the stack.",
-                        ))
-                    }
+                    NoMatch => Result::Err(String::from(
+                        "MAP body cannot mutated the tail of the stack.",
+                    )),
                     _ => {
                         start_stack.push(to_result(start_stack_head));
                         *stack = start_stack;
@@ -637,9 +608,7 @@ fn ensure_loop_body(
     start_stack.push(MWrapped(MBool));
     let tinst = typecheck(tcenv, instr, &mut start_stack)?;
     match start_stack.compare(&expected_stack) {
-        NoMatch => {
-            Result::Err(String::from("LOOP body has unexpected type"))
-        }
+        NoMatch => Result::Err(String::from("LOOP body has unexpected type")),
         _ => {
             *stack = expected_stack;
             Result::Ok(tinst)
@@ -662,9 +631,7 @@ fn ensure_loop_left_body(
             expected_stack.push(MOr(Box::new((left, right.clone()))));
             let tinst = typecheck(tcenv, instr, &mut start_stack)?;
             match start_stack.compare(&expected_stack) {
-                NoMatch => {
-                    Result::Err(String::from("LOOP_LEFT body has unexpected type"))
-                }
+                NoMatch => Result::Err(String::from("LOOP_LEFT body has unexpected type")),
                 _ => {
                     expected_stack.pop();
                     expected_stack.push(right);
@@ -705,12 +672,10 @@ fn ensure_if_cons_body(
             let cbtc = typecheck(tcenv, cs, &mut temp_stack_cons)?;
             let nbtc = typecheck(tcenv, ns, &mut temp_stack_nil)?;
             match temp_stack_cons.compare(&temp_stack_nil) {
-                NoMatch => {
-                    Result::Err(format!(
-                        "Type of IF_CONS branches differ {:?} {:?}",
-                        temp_stack_cons, temp_stack_nil
-                    ))
-                }
+                NoMatch => Result::Err(format!(
+                    "Type of IF_CONS branches differ {:?} {:?}",
+                    temp_stack_cons, temp_stack_nil
+                )),
                 RightFailed => {
                     *stack_ = temp_stack_cons;
                     Result::Ok((cbtc, nbtc))
@@ -729,9 +694,7 @@ fn ensure_if_cons_body(
                 }
             }
         }
-        m => {
-            Result::Err(format!("IF_CONS requires a list, but found {:?}", m))
-        }
+        m => Result::Err(format!("IF_CONS requires a list, but found {:?}", m)),
     }
 }
 
@@ -773,24 +736,20 @@ fn ensure_if_left_body(
                     *stack_ = temp_stack_right;
                     Result::Ok((lbtc, rbtc))
                 }
-                NoMatch => {
-                    Result::Err(format!(
-                        "Type of IF_LEFT branches differ {:?} {:?}",
-                        temp_stack_left, temp_stack_right
-                    ))
-                }
+                NoMatch => Result::Err(format!(
+                    "Type of IF_LEFT branches differ {:?} {:?}",
+                    temp_stack_left, temp_stack_right
+                )),
                 BothFailed => {
                     stack_.fail();
                     Result::Ok((vec![FAIL], vec![FAIL]))
                 }
             }
         }
-        m => {
-            Result::Err(format!(
-                "IF_LEFT requires an or, but found {:?}, {:?} {:?}",
-                m, lb, rb
-            ))
-        }
+        m => Result::Err(format!(
+            "IF_LEFT requires an or, but found {:?}, {:?} {:?}",
+            m, lb, rb
+        )),
     }
 }
 
@@ -830,21 +789,17 @@ fn ensure_if_none_body(
                     *stack_ = temp_stack_some;
                     Result::Ok((nbtc, sbtc))
                 }
-                NoMatch => {
-                    Result::Err(String::from("Type of IF_NONE branches differ"))
-                }
+                NoMatch => Result::Err(String::from("Type of IF_NONE branches differ")),
                 BothFailed => {
                     stack_.fail();
                     Result::Ok((vec![FAIL], vec![FAIL]))
                 }
             }
         }
-        m => {
-            Result::Err(format!(
-                "IF_NONE requires an option, but found {:?}, {:?} {:?}",
-                m, sb, nb
-            ))
-        }
+        m => Result::Err(format!(
+            "IF_NONE requires an option, but found {:?}, {:?} {:?}",
+            m, sb, nb
+        )),
     }
 }
 
@@ -880,9 +835,7 @@ fn ensure_same_lambda_type(
             *stack_ = temp_stack_f;
             Result::Ok((tbtc, fbtc))
         }
-        NoMatch => {
-            Result::Err(String::from("Type of branches differ"))
-        }
+        NoMatch => Result::Err(String::from("Type of branches differ")),
         BothFailed => {
             stack_.fail();
             Result::Ok((vec![FAIL], vec![FAIL]))
@@ -944,9 +897,7 @@ fn typecheck_one(
                     errors, &instruction, &stack
                 ))
             }
-            None => {
-                Result::Err(format!("Instruction {} not found", &instruction.name))
-            }
+            None => Result::Err(format!("Instruction {} not found", &instruction.name)),
         },
         SELF => {
             stack.push(MContract(Box::new(tcenv.self_type.clone())));
@@ -965,12 +916,8 @@ fn typecheck_one(
                 let tinst = ensure_loop_body(tcenv, stack, ins)?;
                 Result::Ok(LOOP(tinst))
             }
-            SdOk(Result::Ok(m)) => {
-                Result::Err(format!("LOOP requires a bool, but found {:?}", m))
-            }
-            SdOk(Result::Err(_)) => {
-                Result::Err("Stack can't be empty for LOOP".to_string())
-            }
+            SdOk(Result::Ok(m)) => Result::Err(format!("LOOP requires a bool, but found {:?}", m)),
+            SdOk(Result::Err(_)) => Result::Err("Stack can't be empty for LOOP".to_string()),
             SdFailed => {
                 let tinst = ensure_loop_body(tcenv, stack, ins)?;
                 Result::Ok(LOOP(tinst))
@@ -988,13 +935,9 @@ fn typecheck_one(
                     )?;
                     Result::Ok(LOOP_LEFT(tinst))
                 }
-                m => {
-                    Result::Err(format!("LOOP_LEFT requires an or, but found {:?}", m))
-                }
+                m => Result::Err(format!("LOOP_LEFT requires an or, but found {:?}", m)),
             },
-            SdOk(Result::Err(_)) => {
-                Result::Err("LOOP_LEFT stack cannot be empty!".to_string())
-            }
+            SdOk(Result::Err(_)) => Result::Err("LOOP_LEFT stack cannot be empty!".to_string()),
 
             SdFailed => {
                 let tinst = ensure_loop_left_body(tcenv, stack, SdFailed, SdFailed, ins)?;
@@ -1004,21 +947,13 @@ fn typecheck_one(
         MAP(ins) => match stack.get_index(0) {
             SdOk(Result::Ok(stack_head)) => match stack_head.clone() {
                 MList(t) => {
-                    let tinst = ensure_map_body(
-                        tcenv,
-                        stack,
-                        SdOk((&t, |x| MList(Box::new(x)))),
-                        ins,
-                    )?;
+                    let tinst =
+                        ensure_map_body(tcenv, stack, SdOk((&t, |x| MList(Box::new(x)))), ins)?;
                     Result::Ok(MAP(tinst))
                 }
                 MOption(t) => {
-                    let tinst = ensure_map_body(
-                        tcenv,
-                        stack,
-                        SdOk((&t, |x| MOption(Box::new(x)))),
-                        ins,
-                    )?;
+                    let tinst =
+                        ensure_map_body(tcenv, stack, SdOk((&t, |x| MOption(Box::new(x)))), ins)?;
                     Result::Ok(MAP(tinst))
                 }
                 MMap(t) => {
@@ -1030,19 +965,13 @@ fn typecheck_one(
                     )?;
                     Result::Ok(MAP(tinst))
                 }
-                m => {
-                    Result::Err(format!(
-                        "Map requires a list, option or map, but found {:?}",
-                        m
-                    ))
-                }
+                m => Result::Err(format!(
+                    "Map requires a list, option or map, but found {:?}",
+                    m
+                )),
             },
-            SdOk(Result::Err(_)) => {
-                Result::Err("Map cannot work with Empty list".to_string())
-            }
-            SdFailed => {
-                Result::Ok(FAIL)
-            }
+            SdOk(Result::Err(_)) => Result::Err("Map cannot work with Empty list".to_string()),
+            SdFailed => Result::Ok(FAIL),
         },
         ITER(ins) => {
             match get_stack_derived_result_handle_failed!(stack.get_index(0), FAIL).clone() {
@@ -1058,12 +987,10 @@ fn typecheck_one(
                     let tinst = ensure_iter_body(tcenv, stack, Some(&MPair(t)), ins)?;
                     Result::Ok(ITER(tinst))
                 }
-                m => {
-                    Result::Err(format!(
-                        "ITER requires a list, set or map, but found {:?}",
-                        m
-                    ))
-                }
+                m => Result::Err(format!(
+                    "ITER requires a list, set or map, but found {:?}",
+                    m
+                )),
             }
         }
         IF_CONS(tb, fb) => {
@@ -1243,9 +1170,7 @@ fn typecheck_one(
                         ))
                     }
                 }
-                _ => {
-                    Result::Ok(LAMBDA_REC(it.clone(), ot.clone(), tins))
-                }
+                _ => Result::Ok(LAMBDA_REC(it.clone(), ot.clone(), tins)),
             }
         }
     }
