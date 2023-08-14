@@ -1,18 +1,12 @@
-#[macro_use]
-extern crate lazy_static;
-use crate::instructions::MICHELSON_INSTRUCTIONS;
-use crate::typechecker::typecheck_contract;
 use std::io;
 use std::time::Instant;
 
-mod attributes;
-mod instructions;
-mod parser;
-mod parsers;
-mod tests;
-mod typechecker;
-mod types;
-use crate::parsers::parse_contract;
+use typechecker::attributes::*;
+use typechecker::types::*;
+use typechecker::instructions::*;
+use typechecker::parser::*;
+use typechecker::parsers::*;
+use typechecker::typechecker::*;
 
 fn main() {
     // Force the evaluation of instructions.

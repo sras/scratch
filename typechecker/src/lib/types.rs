@@ -247,13 +247,13 @@ use StackDerived::*;
 macro_rules! ensure_stack_derived {
     ($n:expr, $s: expr, $f: expr) => {{
         match $n {
-            StackDerived::SdOk(x) => {
+            SdOk(x) => {
                 if x {
                 } else {
                     return Result::Err($s);
                 }
             }
-            StackDerived::SdFailed => {
+            SdFailed => {
                 return Result::Ok($f);
             }
         }
@@ -275,9 +275,9 @@ macro_rules! get_stack_derived_result {
 macro_rules! get_stack_derived_result_handle_failed {
     ($n:expr, $f: expr) => {{
         match $n {
-            StackDerived::SdOk(Result::Ok(a)) => a,
-            StackDerived::SdOk(Result::Err(a)) => return Result::Err(a),
-            StackDerived::SdFailed => return Result::Ok($f),
+            SdOk(Result::Ok(a)) => a,
+            SdOk(Result::Err(a)) => return Result::Err(a),
+            SdFailed => return Result::Ok($f),
         }
     }};
 }
