@@ -1,10 +1,7 @@
 use std::io;
 use std::time::Instant;
 
-use typechecker::attributes::*;
-use typechecker::types::*;
 use typechecker::instructions::*;
-use typechecker::parser::*;
 use typechecker::parsers::*;
 use typechecker::typechecker::*;
 

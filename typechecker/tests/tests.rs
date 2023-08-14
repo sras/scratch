@@ -1,15 +1,5 @@
-use crate::parser::InstructionListParser;
-use crate::parsers::parse_stack;
-use crate::typechecker::typecheck;
-use crate::types::CompoundInstruction;
-use crate::types::ConcreteType;
-use crate::types::MAtomic;
-use crate::types::MAtomic::*;
-use crate::types::MType::*;
-use crate::types::SomeValue;
-use crate::types::StackDerived::*;
-use crate::types::StackState;
-use crate::types::TcEnv;
+use ::typechecker::*;
+
 fn typecheck_(
     instructions: &Vec<CompoundInstruction<SomeValue>>,
 ) -> Result<StackState<MAtomic>, String> {
