@@ -365,7 +365,7 @@ impl<T: Eq + Clone> StackState<T> {
     pub fn append_stack(&mut self, src: &mut Self) {
         match self {
             LiveStack(v) => match src {
-                LiveStack(ref mut v1) => v.append(v1),
+                LiveStack(v1) => v.append(v1),
                 FailedStack => {}
             },
             FailedStack => {}

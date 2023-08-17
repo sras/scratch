@@ -3,8 +3,8 @@ use std::collections::BTreeMap;
 use std::collections::BTreeSet;
 use std::convert::TryFrom;
 
-use crate::*;
 use crate::types::ArgValue as AV;
+use crate::*;
 
 type ResolveCache = BTreeMap<char, ConcreteType>;
 
@@ -175,17 +175,34 @@ fn unify_arg(
 fn constraint_to_concrete(resolved: &ResolveCache, c: &Constraint) -> Option<ConcreteType> {
     match c {
         MWrapped(CTypeArgRef(c)) => resolved.get(c).cloned(),
-        MWrapped(CAtomic(x)) => Some(MWrapped(x.clone())),
         MPair(b) => Some(MPair(Box::new((
             constraint_to_concrete(resolved, &b.0)?,
             constraint_to_concrete(resolved, &b.1)?,
         )))),
+        MOr(b) => Some(MOr(Box::new((
+            constraint_to_concrete(resolved, &b.0)?,
+            constraint_to_concrete(resolved, &b.1)?,
+        )))),
+        MMap(b) => Some(MMap(Box::new((
+            constraint_to_concrete(resolved, &b.0)?,
+            constraint_to_concrete(resolved, &b.1)?,
+        )))),
+        MBigMap(b) => Some(MBigMap(Box::new((
+            constraint_to_concrete(resolved, &b.0)?,
+            constraint_to_concrete(resolved, &b.1)?,
+        )))),
+        MSet(l) => Some(MSet(Box::new(constraint_to_concrete(resolved, l)?))),
         MList(l) => Some(MList(Box::new(constraint_to_concrete(resolved, l)?))),
+        MTicket(l) => Some(MTicket(Box::new(constraint_to_concrete(resolved, l)?))),
+        MOption(l) => Some(MOption(Box::new(constraint_to_concrete(resolved, l)?))),
+        MContract(l) => Some(MContract(Box::new(constraint_to_concrete(resolved, l)?))),
         MLambda(b) => Some(MLambda(Box::new((
             constraint_to_concrete(resolved, &b.0)?,
             constraint_to_concrete(resolved, &b.1)?,
         )))),
-        _ => None,
+        MWrapped(CWarg(_, _)) => None,
+        MWrapped(CTypeArg(_, _)) => None,
+        MWrapped(CAtomic(_)) => None
     }
 }
 
